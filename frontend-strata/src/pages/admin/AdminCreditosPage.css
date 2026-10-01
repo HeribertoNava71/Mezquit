@@ -1,0 +1,8 @@
+.admincred { display: flex; flex-direction: column; gap: var(--sp-6); }
+.admincred__title { font-size: var(--text-3xl); color: var(--color-brunswick); }
+.admincred__table { width: 100%; border-collapse: collapse; }
+.admincred__table th, .admincred__table td { text-align: left; padding: var(--sp-3) var(--sp-4); border-bottom: 1px solid var(--color-timberwolf); font-size: var(--text-sm); }
+.admincred__actions { display: flex; gap: var(--sp-3); }
+.admincred__approve { color: var(--color-success); font-weight: 600; background: none; }
+.admincred__reject { color: var(--color-error); font-weight: 600; background: none; }
+.admincred__empty { opacity: 0.7; }

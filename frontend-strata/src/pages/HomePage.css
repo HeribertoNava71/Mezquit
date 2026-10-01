@@ -1,0 +1,14 @@
+/* Reconstrucción: ningún plan crea este archivo ni define .home-cta y .home-cta--tinted; se derivan de los estilos inline de HomePage en 2026-09-10-multipage-site.md. */
+.home-cta { text-align: center; padding-bottom: var(--section-py); }
+.home-cta--tinted { background: var(--color-timberwolf); }
+
+.home-catalog { padding-block: var(--section-py); }
+.home-catalog__inner { max-width: var(--max-width); margin-inline: auto; padding-inline: var(--section-px); display: flex; flex-direction: column; gap: var(--sp-8); }
+.home-catalog__title { font-size: var(--text-3xl); }
+.home-catalog__grid { display: grid; grid-template-columns: 1fr; gap: var(--sp-4); }
+@media (min-width: 640px) { .home-catalog__grid { grid-template-columns: 1fr 1fr; } }
+@media (min-width: 1024px) { .home-catalog__grid { grid-template-columns: repeat(4, 1fr); } }
+.home-catalog__cat { display: flex; flex-direction: column; gap: var(--sp-2); padding: var(--sp-6); border: 1px solid var(--color-timberwolf); border-radius: var(--radius-md); transition: border-color var(--t-fast); }
+.home-catalog__cat:hover { border-color: var(--color-hunter); }
+.home-catalog__cat-name { font-family: var(--font-display); font-size: var(--text-xl); font-weight: 600; color: var(--color-brunswick); }
+.home-catalog__cat-count { font-size: var(--text-sm); color: var(--color-hunter); font-weight: 600; font-variant-numeric: tabular-nums; }

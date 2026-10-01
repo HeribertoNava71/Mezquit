@@ -1,0 +1,28 @@
+.report { display: flex; flex-direction: column; gap: var(--sp-8); }
+.report__header { display: flex; flex-wrap: wrap; justify-content: space-between; gap: var(--sp-4); align-items: baseline; }
+.report__candidate { font-family: var(--font-display); font-size: var(--text-2xl); color: var(--color-brunswick); }
+.report__meta { font-size: var(--text-sm); color: var(--color-ink); opacity: 0.75; }
+.report__badge { font-size: var(--text-xs); font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--color-ink); background: var(--color-surface-secondary); border: 1px solid var(--color-border); border-radius: var(--radius-sm); padding: var(--sp-1) var(--sp-3); }
+.report__test { display: flex; flex-direction: column; gap: var(--sp-4); }
+.report__test-title { font-family: var(--font-display); font-size: var(--text-xl); color: var(--color-brunswick); }
+.report__scale { display: flex; flex-direction: column; gap: var(--sp-2); padding-block: var(--sp-3); border-top: 1px solid var(--color-timberwolf); }
+.report__scale-head { display: flex; justify-content: space-between; gap: var(--sp-3); align-items: baseline; }
+.report__scale-name { font-weight: 600; color: var(--color-brunswick); }
+.report__scale-cat { font-size: var(--text-sm); font-weight: 600; font-variant-numeric: tabular-nums; }
+.report__bar-track { height: 8px; background: var(--color-timberwolf); border-radius: 99px; overflow: hidden; }
+.report__bar-fill { height: 100%; border-radius: 99px; }
+.report__interp { font-size: var(--text-sm); color: var(--color-ink); opacity: 0.85; }
+.report__questions { display: flex; flex-direction: column; gap: var(--sp-2); }
+.report__q { font-size: var(--text-sm); color: var(--color-ink); }
+.report__foot { font-size: var(--text-xs); color: var(--color-ink); opacity: 0.7; line-height: 1.6; border-top: 1px solid var(--color-timberwolf); padding-top: var(--sp-4); }
+
+@media print {
+  .report__badge { border-color: #000; }
+}
+
+@media print {
+  .no-print, .header, .applayout__bar, .footer { display: none !important; }
+  body { padding-top: 0 !important; }
+  .applayout__main { padding: 0 !important; }
+  .report { gap: 1rem; }
+}

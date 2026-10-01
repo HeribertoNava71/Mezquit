@@ -1,0 +1,5 @@
+.admin { min-height: 100svh; display: flex; flex-direction: column; }
+.admin__bar { height: var(--header-h); border-bottom: 1px solid var(--color-timberwolf); display: flex; align-items: center; justify-content: space-between; padding-inline: var(--section-px); }
+.admin__brand { font-family: var(--font-display); font-size: var(--text-xl); color: var(--color-brunswick); font-weight: 600; }
+.admin__tag { font-size: var(--text-xs); color: var(--color-ink); opacity: 0.6; }
+.admin__main { flex: 1; padding: var(--sp-8) var(--section-px); max-width: 960px; margin-inline: auto; width: 100%; }

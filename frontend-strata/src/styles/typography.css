@@ -1,0 +1,15 @@
+/* Cormorant Garamond — pesos usados: 400, 600, 700 */
+@import '@fontsource/cormorant-garamond/400.css';
+@import '@fontsource/cormorant-garamond/600.css';
+@import '@fontsource/cormorant-garamond/700.css';
+@import '@fontsource/cormorant-garamond/400-italic.css';
+@import '@fontsource/cormorant-garamond/600-italic.css';
+
+/* DM Sans — variable font (incluye todos los pesos) */
+@import '@fontsource-variable/dm-sans';
+
+/* Variables de fuente */
+:root {
+  --font-display: 'Cormorant Garamond', Georgia, serif;
+  --font-body:    'DM Sans Variable', 'DM Sans', system-ui, sans-serif;
+}

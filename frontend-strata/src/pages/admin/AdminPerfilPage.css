@@ -1,0 +1,4 @@
+.adminperfil { display: flex; flex-direction: column; gap: var(--sp-6); max-width: 480px; }
+.adminperfil__title { font-size: var(--text-3xl); color: var(--color-brunswick); }
+.adminperfil__ok { font-size: var(--text-sm); color: var(--color-success); animation: fadeIn 300ms ease; }
+.adminperfil__error { font-size: var(--text-sm); color: var(--color-error); }

@@ -1,0 +1,12 @@
+.evdet { display: flex; flex-direction: column; gap: var(--sp-6); }
+.evdet__head { display: flex; justify-content: space-between; align-items: baseline; gap: var(--sp-4); flex-wrap: wrap; }
+.evdet__title { font-size: var(--text-3xl); color: var(--color-brunswick); }
+.evdet__sub { font-size: var(--text-sm); opacity: 0.7; }
+.evdet__table { width: 100%; border-collapse: collapse; }
+.evdet__table th, .evdet__table td { text-align: left; padding: var(--sp-3) var(--sp-4); border-bottom: 1px solid var(--color-timberwolf); font-size: var(--text-sm); }
+.evdet__table th { opacity: 0.6; font-weight: 600; }
+.evdet__status { display: inline-flex; align-items: center; gap: var(--sp-1); font-weight: 600; }
+.evdet__actions { display: flex; gap: var(--sp-3); flex-wrap: wrap; }
+.evdet__btn { font-size: var(--text-sm); color: var(--color-hunter); background: none; }
+.evdet__btn:disabled { opacity: 0.4; }
+.evdet__link { font-size: var(--text-sm); color: var(--color-hunter); font-weight: 500; }

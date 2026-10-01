@@ -1,0 +1,15 @@
+.creditos { display: flex; flex-direction: column; gap: var(--sp-8); }
+.creditos__title { font-size: var(--text-3xl); color: var(--color-brunswick); }
+.creditos__balance { font-family: var(--font-display); font-size: var(--text-4xl); color: var(--color-brunswick); font-variant-numeric: tabular-nums; }
+.creditos__section-title { font-family: var(--font-display); font-size: var(--text-xl); color: var(--color-brunswick); }
+.creditos__table { width: 100%; border-collapse: collapse; }
+.creditos__table th, .creditos__table td { text-align: left; padding: var(--sp-3) var(--sp-4); border-bottom: 1px solid var(--color-timberwolf); font-size: var(--text-sm); }
+.creditos__amount { font-variant-numeric: tabular-nums; font-weight: 600; }
+.creditos__amount--pos { color: var(--color-success); }
+.creditos__amount--neg { color: var(--color-ink); }
+.creditos__form { display: flex; flex-direction: column; gap: var(--sp-4); max-width: 420px; }
+.creditos__field { display: flex; flex-direction: column; gap: var(--sp-2); }
+.creditos__label { font-size: var(--text-sm); font-weight: 500; color: var(--color-brunswick); }
+.creditos__input, .creditos__textarea { padding: var(--sp-3) var(--sp-4); border: 1.5px solid var(--color-border); border-radius: var(--radius-sm); font-family: var(--font-body); font-size: var(--text-base); }
+.creditos__input:focus, .creditos__textarea:focus { border-color: var(--color-hunter); outline: none; }
+.creditos__ok { color: var(--color-success); font-size: var(--text-sm); }

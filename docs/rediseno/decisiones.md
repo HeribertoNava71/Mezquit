@@ -36,6 +36,11 @@ Decisiones tomadas a partir del brief, decisiones abiertas que necesitan aprobac
 
 Necesitan aprobación del dueño (PROMPT_CLAUDE_CODE.md:54).
 
+> **Estado (2026-10-01).** El dueño aprobó todas las recomendaciones y pidió ejecutar las fases sin más preguntas («dale con las fases a full, no preguntes solo ejecuta»). La columna «Recomendación» pasa a ser la decisión vigente, con dos ajustes:
+>
+> - **D-04 se resuelve con la opción B.** No se pudo verificar que la licencia de Fontshare permita publicar los archivos de Satoshi y General Sans en un repo público. Por eso se cargan desde el CDN de Fontshare. JetBrains Mono se autohospeda con `@fontsource/jetbrains-mono` (licencia OFL).
+> - **D-26 (nueva) · Frontend reconstruido como base.** PB-01 sigue abierto: el código real no apareció en el remoto ni en la máquina. Para no detener el rediseño, el frontend se reconstruye desde los planes de `docs/superpowers/plans` en la carpeta nueva `frontend-strata/`, en un commit separado (`chore(frontend): reconstruir…`), y el rediseño se construye encima. No se usa `frontend/` porque quitar su gitlink necesita aprobación explícita; reemplazarlo queda para la migración final (D-01). Las desviaciones de la reconstrucción quedan en [reconstruccion.md](reconstruccion.md). Cuando llegue el código real: diff contra ese commit base y portar las diferencias. El gitlink de `backend/` no se toca (regla 1).
+
 | ID | Tema | Recomendación | Bloquea |
 |---|---|---|---|
 | D-01 | Código real | Monorepo | Fase 1 |

@@ -1,0 +1,64 @@
+.float {
+  position: relative;
+}
+
+.float__input {
+  width: 100%;
+  padding: var(--sp-5) var(--sp-4) var(--sp-2);
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  color: var(--color-ink);
+  background: var(--color-surface);
+  transition: border-color var(--t-base);
+  appearance: none;
+}
+
+.float__input:focus {
+  border-color: var(--color-hunter);
+  outline: none;
+}
+
+.float__input.float__input--error {
+  border-color: var(--color-error);
+  animation: shake 0.35s ease;
+}
+
+.float__label {
+  position: absolute;
+  left: var(--sp-4);
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: var(--text-base);
+  color: var(--color-border);
+  pointer-events: none;
+  transform-origin: left top;
+  transition: transform 180ms ease, font-size 180ms ease, color 180ms ease, top 180ms ease;
+}
+
+/* Label flotante: cuando tiene foco o valor */
+.float__input:focus + .float__label,
+.float__input:not(:placeholder-shown) + .float__label {
+  top: var(--sp-2);
+  transform: translateY(0) scale(0.75);
+  font-size: var(--text-xs);
+  color: var(--color-hunter);
+}
+
+.float__input--error:focus + .float__label,
+.float__input--error:not(:placeholder-shown) + .float__label {
+  color: var(--color-error);
+}
+
+.float__error {
+  font-size: var(--text-xs);
+  color: var(--color-error);
+  margin-top: var(--sp-1);
+  animation: fadeIn 200ms ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .float__label { transition: none; }
+  .float__input--error { animation: none; }
+}

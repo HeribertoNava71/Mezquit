@@ -1,0 +1,48 @@
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+  padding: var(--sp-3) var(--sp-6);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  font-weight: 500;
+  line-height: 1;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background-color var(--t-base), color var(--t-base), opacity var(--t-base);
+  text-decoration: none;
+  border: none;
+}
+
+.btn:disabled,
+.btn--loading {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+/* Variante primaria */
+.btn--primary {
+  background-color: var(--color-hunter);
+  color: #ffffff;
+}
+.btn--primary:hover:not(:disabled) {
+  background-color: var(--color-fern);
+}
+
+/* Variante ghost (sin relleno, solo borde) */
+.btn--ghost {
+  background-color: transparent;
+  color: var(--color-hunter);
+  border: 1.5px solid var(--color-hunter);
+}
+.btn--ghost:hover:not(:disabled) {
+  background-color: var(--color-hunter);
+  color: #ffffff;
+}
+
+/* Tamaño large */
+.btn--lg {
+  padding: var(--sp-4) var(--sp-8);
+  font-size: var(--text-lg);
+}

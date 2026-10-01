@@ -1,0 +1,107 @@
+.contact {
+  background-color: var(--color-timberwolf);
+  padding-block: var(--section-py);
+}
+
+.contact__inner {
+  max-width: var(--max-width);
+  margin-inline: auto;
+  padding-inline: var(--section-px);
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--sp-12);
+}
+
+@media (min-width: 1024px) {
+  .contact__inner { grid-template-columns: 1fr 1fr; }
+}
+
+/* Formulario */
+.contact__form-side { display: flex; flex-direction: column; gap: var(--sp-8); }
+.contact__title { font-size: var(--text-4xl); }
+
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-5);
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+}
+
+.form-label {
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--color-brunswick);
+}
+
+.form-input,
+.form-select {
+  width: 100%;
+  padding: var(--sp-3) var(--sp-4);
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background-color: var(--color-surface);
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  color: var(--color-ink);
+  transition: border-color var(--t-fast);
+  appearance: none;
+}
+
+.form-input:focus,
+.form-select:focus { border-color: var(--color-hunter); outline: none; }
+
+.form-input.form-input--error,
+.form-select.form-input--error { border-color: var(--color-error); }
+
+.form-error {
+  font-size: var(--text-xs);
+  color: var(--color-error);
+  display: flex;
+  align-items: center;
+  gap: var(--sp-1);
+}
+
+.contact__reply-note {
+  font-size: var(--text-sm);
+  color: var(--color-ink);
+  opacity: 0.7;
+}
+
+/* Estado de éxito */
+.contact__success {
+  padding: var(--sp-8);
+  background-color: var(--color-surface);
+  border-radius: var(--radius-md);
+  border-left: 3px solid var(--color-success);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+}
+.contact__success-title {
+  font-family: var(--font-display);
+  font-size: var(--text-2xl);
+  color: var(--color-brunswick);
+}
+
+/* Lado agenda */
+.contact__agenda-side {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: var(--sp-6);
+}
+
+.contact__agenda-title {
+  font-size: var(--text-3xl);
+}
+
+.contact__agenda-desc {
+  font-size: var(--text-base);
+  color: var(--color-ink);
+  opacity: 0.8;
+}

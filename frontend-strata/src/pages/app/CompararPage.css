@@ -1,0 +1,11 @@
+.comparar { display: flex; flex-direction: column; gap: var(--sp-6); }
+.comparar__head { display: flex; justify-content: space-between; align-items: baseline; gap: var(--sp-4); flex-wrap: wrap; }
+.comparar__title { font-size: var(--text-3xl); color: var(--color-brunswick); }
+.comparar__wrap { overflow-x: auto; }
+.comparar__table { width: 100%; border-collapse: collapse; min-width: 480px; }
+.comparar__table th, .comparar__table td { text-align: left; padding: var(--sp-3) var(--sp-4); border-bottom: 1px solid var(--color-timberwolf); font-size: var(--text-sm); white-space: nowrap; }
+.comparar__th { cursor: pointer; user-select: none; color: var(--color-brunswick); font-weight: 600; }
+.comparar__th:hover { color: var(--color-hunter); }
+.comparar__cell { font-variant-numeric: tabular-nums; }
+.comparar__cat { font-weight: 600; }
+.comparar__empty { opacity: 0.7; }

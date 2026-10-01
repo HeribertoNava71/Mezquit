@@ -1,0 +1,7 @@
+.evaluar-landing { min-height: 100svh; display: grid; place-items: center; padding: var(--sp-6); background: var(--color-surface); }
+.evaluar-landing__card { width: 100%; max-width: 440px; display: flex; flex-direction: column; gap: var(--sp-5); }
+.evaluar-landing__title { font-size: var(--text-3xl); color: var(--color-brunswick); }
+.evaluar-landing__text { font-size: var(--text-base); color: var(--color-ink); opacity: 0.85; }
+.evaluar-landing__input { padding: var(--sp-3) var(--sp-4); border: 1.5px solid var(--color-border); border-radius: var(--radius-sm); font-family: var(--font-body); font-size: var(--text-base); }
+.evaluar-landing__input:focus { border-color: var(--color-hunter); outline: none; }
+.evaluar-landing__error { font-size: var(--text-sm); color: var(--color-error); }
