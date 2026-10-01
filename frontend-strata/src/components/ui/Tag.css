@@ -13,7 +13,9 @@
   align-items: center;
   gap: var(--space-7);
   max-width: 100%;
-  padding: var(--space-5) var(--space-11);
+  /* El borde de 1 px (transparente salvo en bordered) cuenta en la medida: con él,
+     el tag mide como el de Strata.dc.html:240 (5 × 11 sin borde). */
+  padding: var(--space-4) var(--space-10);
   border: var(--border-width) solid var(--st-tag-border);
   border-radius: var(--radius-pill);
   background-color: var(--st-tag-bg);
@@ -66,13 +68,15 @@
   border-radius: var(--radius-tag);
 }
 
+/* Etiqueta de tipo, dimensión y peso (Strata.dc.html:460-462): 8 px de lado con el
+   borde; el alto ya cuadra porque el interlineado 1.3 es menor que el normal. */
 .st-tag--square.st-tag--sm {
   padding: var(--space-3) var(--space-7);
 }
 
-/* Chip de código del saldo (Strata.dc.html:795): radio de 5 px */
+/* Chip de código del saldo (Strata.dc.html:795): 2 × 5 con el borde y radio de 5 px */
 .st-tag--square.st-tag--xs {
-  padding: var(--space-2) var(--space-5);
+  padding: var(--space-1) var(--space-4);
   border-radius: var(--radius-code);
 }
 
@@ -81,6 +85,11 @@
   font-family: var(--font-mono);
   font-weight: var(--fw-regular);
   letter-spacing: normal;
+}
+
+/* El peso del reactivo (navy mono, «×1.2») va en negrita (Strata.dc.html:462) */
+.st-tag--navy.st-tag--mono {
+  font-weight: var(--fw-bold);
 }
 
 /* Punto: hereda el color del tono */

@@ -111,8 +111,11 @@ export function SeccionEstadisticas() {
           <StatCard key={r.label} layout="inline" tone={r.tone} value={r.n} label={r.label} help={r.help} />
         ))}
       </div>
-      <Muestra titulo="StatCard · cifra mono y sin barra">
-        <StatCard label="Puntaje de prueba" value={76} valueFont="mono" unit="de 100" help="Índice global" />
+      <Muestra titulo="StatCard · cifra Satoshi (heading) y mono, sin barra">
+        <Pila separacion="sm">
+          <StatCard label="Índice global" value={76} valueFont="heading" unit="de 100" help="Cifra de marca en Satoshi" />
+          <StatCard label="Puntaje de prueba" value={76} valueFont="mono" unit="de 100" help="Índice global" />
+        </Pila>
       </Muestra>
       <Muestra titulo="ProgressBar · tamaños y tonos">
         <Pila separacion="sm">

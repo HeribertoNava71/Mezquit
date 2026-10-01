@@ -23,12 +23,14 @@
   color: var(--color-on-dark-eyebrow);
 }
 
+/* Interlineado 1.3: la línea mide unos 39 px, como el código del prototipo
+   (JetBrains Mono con line-height normal, Strata.dc.html:1335). */
 .st-code-display__code {
   margin: var(--space-12) 0 0;
   font-family: var(--font-mono);
   font-size: var(--fs-code-xl);
   font-weight: var(--fw-bold);
-  line-height: var(--lh-heading);
+  line-height: var(--lh-title);
   letter-spacing: var(--tracking-code-xl);
   color: var(--color-on-dark);
   overflow-wrap: anywhere;

@@ -157,6 +157,12 @@
   min-height: var(--size-target);
 }
 
+/* Secundario y neutro medianos en 13 px, como el prototipo (Strata.dc.html:343,
+   :613, :782, :1369, :1413); el primario conserva 13.5 px (:344, :690, :783). */
+.st-btn--md:is(.st-btn--secondary, .st-btn--neutral) {
+  font-size: var(--fs-ui-sm);
+}
+
 /* Chico: acción de tabla (Strata.dc.html:757). Interlineado 1.3 para medir
    unos 32 px, como el prototipo con su interlineado normal. */
 .st-btn--sm {
@@ -217,6 +223,13 @@
 /* La tinta es pastilla en todos los tamaños */
 .st-btn.st-btn--ink {
   border-radius: var(--radius-pill);
+}
+
+/* Ghost es un enlace de texto en el prototipo (Strata.dc.html:149, :228, :884,
+   :1117): sin padding lateral, el texto queda a la distancia del gap de su fila.
+   El alto mínimo y el padding vertical conservan el objetivo táctil. */
+.st-btn.st-btn--ghost {
+  padding-inline: 0;
 }
 
 /* ── Ancho completo (Strata.dc.html:671, :1313) ────────────────────────── */

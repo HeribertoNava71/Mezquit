@@ -10,6 +10,9 @@ import './StatCard.css'
  */
 export type StatCardTone = 'navy' | 'sky' | 'sky-soft' | 'neutral'
 
+/** Familia de la cifra: text (General Sans), heading (Satoshi) o mono (JetBrains Mono). */
+export type StatCardValueFont = 'text' | 'heading' | 'mono'
+
 export interface StatCardProgress {
   /** Valor de la barra. */
   value: number
@@ -37,8 +40,12 @@ export interface StatCardProps extends Omit<CardProps, 'children' | 'padding' | 
   help?: ReactNode
   /** Elemento de la esquina superior derecha, por ejemplo un Tag mono con el código. */
   meta?: ReactNode
-  /** Familia de la cifra: heading (Satoshi 800, por defecto) o mono (JetBrains Mono). */
-  valueFont?: 'heading' | 'mono'
+  /**
+   * Familia de la cifra: text (General Sans, por defecto, como el saldo y el resumen
+   * del prototipo), heading (Satoshi, cifras de marca como el precio de la home) o
+   * mono (JetBrains Mono).
+   */
+  valueFont?: StatCardValueFont
   /** Barra opcional bajo la cifra (Strata.dc.html:801-803). */
   progress?: StatCardProgress
   /**
@@ -52,8 +59,9 @@ export interface StatCardProps extends Omit<CardProps, 'children' | 'padding' | 
 }
 
 /**
- * Tarjeta de estadística sobre vidrio (padding 16). La cifra usa números tabulares.
- * La barra es role="progressbar" si lleva label; si no, es decorativa.
+ * Tarjeta de estadística sobre vidrio (padding 16). La cifra usa números
+ * proporcionales, como el prototipo. La barra es role="progressbar" si lleva
+ * label; si no, es decorativa.
  */
 export function StatCard({
   label,
@@ -61,19 +69,19 @@ export function StatCard({
   unit,
   help,
   meta,
-  valueFont = 'heading',
+  valueFont = 'text',
   progress,
   layout = 'stacked',
   tone = 'navy',
   className,
   ...rest
 }: StatCardProps) {
-  const valueClass = cx('st-stat__value', valueFont === 'mono' && 'st-stat__value--mono')
+  const valueClass = cx('st-stat__value', valueFont !== 'text' && `st-stat__value--${valueFont}`)
 
   if (layout === 'inline') {
     return (
       <Card padding="sm" className={cx('st-stat', 'st-stat--inline', className)} {...rest}>
-        <span className={cx('st-stat__badge', `st-stat__badge--${tone}`, valueFont === 'mono' && 'st-stat__badge--mono')}>
+        <span className={cx('st-stat__badge', `st-stat__badge--${tone}`, valueFont !== 'text' && `st-stat__badge--${valueFont}`)}>
           {value}
         </span>
         <div className="st-stat__body">

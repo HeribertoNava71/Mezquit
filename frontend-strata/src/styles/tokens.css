@@ -222,7 +222,8 @@
   --fs-h4:       1.03125rem; /* 16.5 px: título de tarjeta y de paso */
   --fs-h5:       0.96875rem; /* 15.5 px: título compacto (builder, reporte) */
 
-  /* Tipografía · cifras (Satoshi 700–800, números tabulares) */
+  /* Tipografía · cifras (peso 800, que se pinta en 700). Las de datos van en General
+     Sans, como el prototipo; Satoshi solo en cifras de marca (precio de la home). */
   --fs-figure-xl: 1.8125rem; /* 29 px: precio de la home, índice */
   --fs-figure-lg: 1.6875rem; /* 27 px: saldo */
   --fs-figure:    1.4375rem; /* 23 px: precio del catálogo */

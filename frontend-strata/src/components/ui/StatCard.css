@@ -32,14 +32,21 @@
   margin: var(--space-11) 0 var(--space-9);
 }
 
+/* Cifra en General Sans 800 con números proporcionales, como el prototipo
+   (Strata.dc.html:798 la hereda del body). Fontshare sirve General Sans hasta 700,
+   así que el 800 se pinta en 700, igual que allí. */
 .st-stat__value {
-  font-family: var(--font-heading);
+  font-family: var(--font-text);
   font-size: var(--fs-figure-lg);
   font-weight: var(--fw-extrabold);
   line-height: var(--lh-none);
   letter-spacing: var(--tracking-heading);
   color: var(--color-text);
-  font-variant-numeric: tabular-nums;
+}
+
+/* Satoshi, para cifras de marca como el precio de la home (Strata.dc.html:251) */
+.st-stat__value--heading {
+  font-family: var(--font-heading);
 }
 
 .st-stat__value--mono {
@@ -83,11 +90,14 @@
   border-radius: var(--radius-control-candidate);
   background-color: var(--st-stat-badge-bg);
   color: var(--st-stat-badge-fg);
-  font-family: var(--font-heading);
+  font-family: var(--font-text);
   font-size: var(--fs-body-sm);
   font-weight: var(--fw-extrabold);
   line-height: var(--lh-none);
-  font-variant-numeric: tabular-nums;
+}
+
+.st-stat__badge--heading {
+  font-family: var(--font-heading);
 }
 
 .st-stat__badge--mono {

@@ -36,7 +36,7 @@ Sistema de diseño del rediseño STRATA, definido en la Fase 1. Reemplaza la pal
 12. **Datos.** Las barras y el radar siempre llevan su valor en texto, y el texto de cada nivel usa `--color-data-*-text`, nunca el color de la barra. Los puntos decorativos (`--color-dot*`) nunca son lo único que transmite la información.
 13. **Texto sobre halos.** Los mensajes de estado van dentro de una superficie (vidrio, blanca o Callout), no directo sobre un halo. En el centro del halo coral, por ejemplo, #157A3A baja a 4.21:1.
 14. **Tipografía.**
-    - Títulos con `--font-heading` (Satoshi), texto con `--font-text` (General Sans) y códigos con `--font-mono` (JetBrains Mono). El peso 800 solo existe en Satoshi.
+    - Títulos con `--font-heading` (Satoshi), texto con `--font-text` (General Sans) y códigos con `--font-mono` (JetBrains Mono). Las cifras de datos (saldo, resumen, totales) van en General Sans, como en el prototipo, que las hereda del body; Satoshi solo en cifras de marca como el precio de la home (Strata.dc.html:251). Fontshare no sirve el peso 800 de ninguna de las dos: se pinta en 700, igual que en el prototipo.
     - Los cuatro títulos mayores (`--fs-display`, `--fs-h1`, `--fs-h2` y `--fs-h2-sm`) son fluidos: desde unos 1100 px valen lo del prototipo y a 360 px bajan a 34, 32, 26 y 24 px.
 15. **Movimiento.**
     - Las entradas usan los `--anim-*`, con fill «backwards» para no fijar `transform` y no romper el hover.
@@ -295,8 +295,8 @@ Son ejemplos; los nombres de clase son ilustrativos.
 
 | Token | Valor | Uso |
 |---|---|---|
-| `--font-heading` | `'Satoshi', 'General Sans', system-ui, -apple-system, 'Segoe UI', sans-serif` | Satoshi: títulos (h1–h4), marca y cifras |
-| `--font-text` | `'General Sans', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif` | General Sans: cuerpo y controles |
+| `--font-heading` | `'Satoshi', 'General Sans', system-ui, -apple-system, 'Segoe UI', sans-serif` | Satoshi: títulos (h1–h4), marca y cifras de marca (precio de la home) |
+| `--font-text` | `'General Sans', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif` | General Sans: cuerpo, controles y cifras de datos (StatCard) |
 | `--font-mono` | `'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace` | JetBrains Mono: códigos, contadores y reloj |
 
 ### Tipografía · tamaños
@@ -709,6 +709,6 @@ Los nombres del sistema anterior siguen definidos, pero apuntan a su equivalente
 - FloatingInput (login y registro) usa `--color-border` como color de la etiqueta en reposo: da 3.68:1, menos de 4.5:1. Ya fallaba antes (3.57:1). Se corrige cuando esas pantallas pasen al Input nuevo (Fase 7).
 - polyCycle con movimiento reducido deja visibles los tres polígonos del radar de la home; la Fase 6 debe ocultar dos.
 - Halos de la home (Fase 6). En el centro del halo coral de la home (rgba(255,107,107,.26) sobre #FAF8F5, que compone #FBD3D1), el texto terciario baja a 4.24:1, el de éxito a 3.97:1 y el foco a 3.00:1. El secundario se mantiene en 5.44:1. Esos textos van dentro de una superficie o en secundario (regla 13).
-- Pesos de Satoshi. El CDN de Fontshare solo trae 300, 400, 500, 700 y 900, así que `--fw-semibold` y `--fw-extrabold` se pintan en 700 en los títulos, igual que en el prototipo. Si se quiere un peso más grueso para las cifras, hay que pedir 900 (decisión del dueño).
+- Pesos de Satoshi. El CDN de Fontshare solo trae 300, 400, 500, 700 y 900, así que `--fw-semibold` y `--fw-extrabold` se pintan en 700 en los títulos, igual que en el prototipo. Las cifras de datos van en General Sans, que llega hasta 700 (QA visual de la Fase 1). Si se quiere un peso más grueso para las cifras, hay que pedir Satoshi 900 (decisión del dueño).
 - El enlace para saltar al contenido ya tiene estilos (`.st-skip-link`), pero el elemento se agrega a los layouts en la Fase 2.
 - `--header-h` y el padding-top del body se retiran en la Fase 2. Los alias, las fuentes Cormorant Garamond y DM Sans y los `--disc-*` se retiran en la Fase 8.

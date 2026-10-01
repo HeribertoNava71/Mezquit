@@ -1,5 +1,5 @@
 // Galería · controles: botones, campos, selección, filtros y stepper.
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import {
   Button,
   Card,
@@ -147,6 +147,15 @@ export function SeccionBotones() {
 
 export function SeccionCampos() {
   const [nombre, setNombre] = useState('Valentina Ríos')
+  const conFoco = useRef<HTMLInputElement>(null)
+
+  // Muestra el estado de foco sin desplazar la página: con autoFocus el navegador
+  // bajaba hasta el campo y, en las capturas de página completa, Chromium pintaba
+  // los halos fijos respecto a ese desplazamiento (a media página).
+  useEffect(() => {
+    conFoco.current?.focus({ preventScroll: true })
+  }, [])
+
   return (
     <Seccion
       id="campos"
@@ -156,7 +165,7 @@ export function SeccionCampos() {
       <Muestra titulo="Input md · reposo, foco y ayuda">
         <Pila>
           <Input label="Correo del candidato" placeholder="nombre@empresa.com" type="email" />
-          <Input label="Nombre del test" defaultValue="Liderazgo Situacional 360" autoFocus />
+          <Input ref={conFoco} label="Nombre del test" defaultValue="Liderazgo Situacional 360" />
           <Input label="Correo de RR. HH." hint="recibirá una copia del reporte" defaultValue="seleccion@acmetalento.com" />
         </Pila>
       </Muestra>

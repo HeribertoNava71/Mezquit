@@ -36,6 +36,16 @@ describe('StatCard', () => {
     expect(screen.getByText('LID-360')).toHaveClass('st-stat__value', 'st-stat__value--mono')
   })
 
+  it('por defecto la cifra va en General Sans (sin modificador); heading la pasa a Satoshi', () => {
+    const { rerender } = render(<StatCard label="Saldo" value={12} />)
+    expect(screen.getByText('12')).toHaveClass('st-stat__value')
+    expect(screen.getByText('12')).not.toHaveClass('st-stat__value--heading', 'st-stat__value--mono')
+    rerender(<StatCard label="Saldo" value={12} valueFont="heading" />)
+    expect(screen.getByText('12')).toHaveClass('st-stat__value', 'st-stat__value--heading')
+    rerender(<StatCard layout="inline" label="Enviadas" value={4} valueFont="heading" />)
+    expect(screen.getByText('4')).toHaveClass('st-stat__badge', 'st-stat__badge--heading')
+  })
+
   it('el diseño inline pone la cifra en el cuadro numérico con su tono', () => {
     render(<StatCard layout="inline" tone="sky" label="Enviadas" value={4} help="esperando al candidato" />)
     expect(screen.getByText('4')).toHaveClass('st-stat__badge', 'st-stat__badge--sky')

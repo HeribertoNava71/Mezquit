@@ -8,10 +8,13 @@
   max-width: 100%;
 }
 
+/* Peso regular fijo: el valor no hereda el 500 de la celda de tabla
+   (el enlace de Strata.dc.html:745 va en 400; inline lo sube a 700). */
 .st-copy__value {
   min-width: 0;
   overflow: hidden;
   font-family: var(--font-mono);
+  font-weight: var(--fw-regular);
   line-height: var(--lh-title);
   text-align: start;
   text-overflow: ellipsis;
