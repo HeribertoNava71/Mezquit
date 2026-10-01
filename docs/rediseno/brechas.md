@@ -1,0 +1,201 @@
+# Brechas entre el repo y el prototipo
+
+Qué tiene el repo que el prototipo no diseña, qué muestra el prototipo que el backend no soporta, dónde los dos modelan distinto el dominio y qué simplificó el prototipo que el backend no permite.
+
+**Fuentes y citas.** Las mismas de [mapa.md](mapa.md): el brief (`PROMPT_CLAUDE_CODE.md`), el prototipo (`Strata.dc.html`), los planes de `docs/superpowers/plans`, las specs de `docs/superpowers/specs` y `docs/design-tokens.md`. Formato archivo:línea; «:NNN» repite el último archivo citado antes en la misma fila de tabla o en el mismo párrafo. El frontend es un estado reconstruido desde los planes: `frontend/` y `backend/` son gitlinks vacíos y todo hay que validarlo contra el código real ([PB-01](pendientes-backend.md#pb-01)).
+
+**Identificadores.** R-xx: en el repo sin diseño. P-xx: en el prototipo sin backend. C-xx: conflictos de modelo. S-xx: simplificaciones del prototipo que el backend no permite. PB-xx: [pendientes-backend.md](pendientes-backend.md). D-xx: [decisiones.md](decisiones.md).
+
+## 1. En el repo sin diseño
+
+Todo se conserva (regla 5, PROMPT_CLAUDE_CODE.md:41) y se diseña con el sistema del prototipo.
+
+| # | Qué (función, pantalla, campo, estado o regla) | Evidencia | Cómo se diseñará | Fase |
+|---|---|---|---|---|
+| R-01 | Inicio de sesión: correo, contraseña, carga, error y redirección según organización | 2026-09-12-registro-login-crud-usuarios.md:1277-1336 | Tarjeta centrada con el marco del acceso del candidato; Input y Button con carga; error inline con ícono | 7 |
+| R-02 | Registro: nombre, apellido, correo, contraseña con confirmación y fuerza, fecha de nacimiento, teléfono, empresa, puesto y aviso de privacidad; errores 422 por campo | 2026-09-12-registro-login-crud-usuarios.md:1146-1275, :250-263, :1209-1213; 2026-09-12-registro-login-crud-usuarios-design.md:93, :155 | Tarjeta en dos columnas; Input con estado de error (no existe en el prototipo); PasswordStrength con tokens nuevos; Checkbox sin marcar.<br>Validación inmediata de «Confirmar contraseña» con los estados válido y error del Input, además del 422: la pide la spec y hoy el formulario usa noValidate y solo valida el servidor. El mismo patrón en los cambios de contraseña de /perfil y /admin/perfil.<br>Logo que lleva a `/`: la spec lo pide y hoy no enlaza | 7 |
+| R-03 | Campos que el backend acepta o devuelve y la UI no muestra: sector y company_size del registro (se envían vacíos); teléfono del candidato; birth_date en /perfil (se reenvía sin campo visible); correo, organización, fecha de nacimiento y fecha de registro en /admin/usuarios/:id; columna Puesto en /admin/usuarios, que la spec pedía | 2026-09-12-registro-login-crud-usuarios.md:257-258, :1161-1165, :515-521, :1722, :1758-1763, :649-670, :1837, :1914-1928; 2026-09-11-fase1-nucleo.md:1403; 2026-09-12-registro-login-crud-usuarios-design.md:123, :133, :140 | Registro: dos Select opcionales bajo «Empresa».<br>Asistente: Input de teléfono opcional por candidato (D-10).<br>/perfil: Input de fecha opcional, anterior a hoy.<br>Detalle de usuario: correo, organización, fecha de nacimiento y fecha de registro en solo lectura, porque AdminUpdateUserRequest no los acepta (2026-09-12-registro-login-crud-usuarios.md:582-588).<br>Lista de usuarios: columna Puesto, además de Rol | 7 y 4 |
+| R-04 | Perfil: datos personales, cambio de contraseña y aviso de cuenta sin empresa | 2026-09-12-registro-login-crud-usuarios.md:1701-1780 | PageHeader y dos tarjetas; errores por campo en ambos formularios (hoy guardar el perfil no maneja errores, :1719-1724, y de la contraseña solo se pinta el error de la actual, :1770-1772); aviso corregido (PB-22) | 7 |
+| R-05 | Header público: «Entrar» y «Crear cuenta» sin sesión; con sesión, menú de usuario con Mi perfil, Panel de RH (solo con organización), Operación (solo super admin) y Salir | 2026-09-12-registro-login-crud-usuarios.md:1532-1543, :1435-1481 | «Entrar» y «Crear cuenta» en la barra pública. La pastilla del prototipo pasa a ser un botón de menú accesible (aria-haspopup, Escape, flechas) en las tres barras; hoy el menú se abre y se cierra solo con clic y no responde a Escape ni a las flechas (:1441-1447, :1462) | 2 |
+| R-06 | Menú móvil del header | 2026-09-12-registro-login-crud-usuarios.md:1545-1570, :1596; 2026-09-11-fase3-sitio-ventas-design.md:76 | Botón y panel por debajo de 768 px, con foco atrapado y Escape. Contenido: los enlaces de la nav del rol y «Tengo un código» (/evaluar); sin sesión, Entrar y Crear cuenta; con sesión, Mi perfil, Panel de RR. HH. (si tiene organización), Operación (si tiene is_platform_admin) y Salir.<br>Hoy el panel no tiene Salir ni Operación, y el menú de usuario se oculta por debajo de 768 px, así que en móvil no se puede cerrar sesión ni llegar a /admin desde el sitio público (2026-09-12-registro-login-crud-usuarios.md:1552-1570, :1596). El prototipo solo hace wrap | 2 |
+| R-07 | Salir desde el panel y desde operación | 2026-09-12-fase2-panel-rh.md:1289-1290, :1934 | Opción «Salir» en el menú de la pastilla | 2 |
+| R-08 | Búsqueda de pruebas por texto y estado «sin resultados» | 2026-09-11-fase3-sitio-ventas.md:516-523, :540 | Input de búsqueda en la barra de filtros del catálogo; EstadoVacío | 4 |
+| R-09 | Conteos del catálogo desde la API; categorías en orden fijo y sin vacías | 2026-09-11-fase3-sitio-ventas.md:231-266; 2026-09-11-fase3-sitio-ventas-design.md:96 | Filtros generados desde la respuesta, cada uno con su conteo | 4 |
+| R-10 | item_count es un dato declarado: solo la Prueba de demostración tiene reactivos | 2026-09-11-fase3-sitio-ventas-design.md:45, :47 | Las tarjetas del catálogo no ofrecen «responder» ni «asignar» mientras no exista PB-04 | 4 y 6 |
+| R-11 | Detalle de prueba con reporte de ejemplo | 2026-09-11-fase3-sitio-ventas.md:574-651 | Ver mapa.md, sección 2 | 7 |
+| R-12 | Cómo funciona, Precios, Demo, Ayuda, legales y 404 | 2026-09-11-fase3-sitio-ventas.md:679-917; 2026-09-10-multipage-site.md:1331-1343 | Ver mapa.md, sección 2 | 7 |
+| R-13 | Formulario de leads: 6 campos obligatorios con etiquetas de opción propias, éxito y 422 por campo | 2026-09-10-sales-site.md:600-610, :2208-2308 | Input y Select con estado de error; Callout de éxito con ícono; los errores que no son 422 (red, 419, 500) se muestran (hoy son silenciosos, :2169-2193) | 7 |
+| R-14 | Reporte de ejemplo con badge «Ejemplo», con el mismo componente que el real | 2026-09-11-fase1-nucleo-design.md:117; 2026-09-11-fase3-sitio-ventas-design.md:95 | El Report rediseñado acepta `sample`; su ubicación se decide en D-24 | 4 |
+| R-15 | Resumen del panel: saldo y evaluaciones activas | 2026-09-12-fase2-panel-rh.md:1343-1379 | Página «Resultados» en /app con StatCards (D-06) | 4 |
+| R-16 | Lista de evaluaciones con avance | 2026-09-12-fase2-panel-rh.md:1396-1438 | DataTable del prototipo (RH-6 en mapa.md) | 4 |
+| R-17 | Nombre de la evaluación, puesto y fecha límite | 2026-09-11-fase1-nucleo.md:1393-1405 | Campos del asistente (RH-9) | 4 |
+| R-18 | Varios candidatos por evaluación; pegar «nombre, correo» por línea | 2026-09-11-fase1-nucleo.md:2573-2577, :2647-2648 | Filas de candidato con «Agregar otro» y opción de pegar una lista | 4 |
+| R-19 | Enlaces copiables al terminar el asistente, con la indicación de compartirlos «por correo o WhatsApp» | 2026-09-11-fase1-nucleo.md:2598-2612 | CodeDisplay y CopyField del modal de invitación (RH-8); Toast «Enlace copiado»; tiles Correo (mailto) y WhatsApp (wa.me) con el enlace real si se aprueban en D-10 (ver P-09) | 4 |
+| R-20 | Error de créditos insuficientes con enlace a créditos | 2026-09-12-fase2-panel-rh.md:421; 2026-09-12-fase2-panel-rh-design.md:93; 2026-09-11-fase1-nucleo.md:2591-2593 | Callout de error en el último paso con el `message` del backend y enlace a /app/creditos (hoy el asistente muestra un mensaje genérico, :2591-2593) | 4 |
+| R-21 | Detalle de evaluación: copiar enlace, reenviar (deshabilitado si está completada; 409), ver reporte y «Comparar candidatos» | 2026-09-12-fase2-panel-rh.md:1495-1564, :1533 | Tabla de candidatos del prototipo; Toast al copiar y al reenviar; error 409 inline; botón secundario «Comparar candidatos» en el encabezado, que es el único acceso a /app/evaluaciones/:id/comparar y al CSV (la pantalla Candidatos del prototipo no tiene esa acción) | 4 |
+| R-22 | Estado «expirada» (× Expirada) | 2026-09-12-fase2-panel-rh.md:1503-1505; 2026-09-11-fase1-nucleo.md:1677-1679 | Badge de cuatro estados con punto y texto | 1 y 4 |
+| R-23 | Comparativa ordenable con CSV | 2026-09-12-fase2-panel-rh.md:1585-1680 | Ver mapa.md, sección 2 | 7 |
+| R-24 | Créditos: saldo, historial por tipo con referencia y solicitud | 2026-09-12-fase2-panel-rh.md:1740-1809, :453, :1092; 2026-09-12-registro-login-crud-usuarios.md:299 | Inventario y drawer adaptados (RH-4, RH-5). Referencias legibles en lugar del texto crudo: assessment:N enlaza a la evaluación, request:N se muestra como «Solicitud aprobada» y registro como «Cortesía de registro» | 4 |
+| R-25 | Reporte: integridad por prueba (blur_count), preguntas para entrevista, pie legal e impresión | 2026-09-11-fase1-nucleo.md:3047-3078; 2026-09-12-fase2-panel-rh.md:1846-1854 | Una sección por prueba con su integridad, más preguntas y pie legal al final (C-07); @media print con las clases nuevas | 4 |
+| R-26 | Errores 403, 409 y 404 del reporte | 2026-09-11-fase1-nucleo.md:1931-1932 | EstadoError con mensajes distintos: otra organización, aún sin completar, no existe (hoy un solo mensaje, 2026-09-12-fase2-panel-rh.md:1827) | 4 |
+| R-27 | Aislamiento por organización (403 en detalle, comparar, reenviar y reporte) | 2026-09-11-fase1-nucleo.md:1472, :1931; 2026-09-12-fase2-panel-rh.md:633, :753 | EstadoError «No tienes acceso a esta evaluación» en lugar de «Cargando…» sin fin | 4 y 7 |
+| R-28 | Portal del candidato: bienvenida con número de pruebas y duración, instrucciones, carga, bloqueo (completada, expirada, 404), reanudación en el primer reactivo sin respuesta, blur y botones de 44 px | 2026-09-11-fase1-nucleo.md:2852-2917; 2026-09-11-fase1-nucleo-design.md:86-95 | Dentro del marco de acceso: EstadoCarga; Callout de bloqueo con contacto; «¿Problemas con la prueba?» → /ayuda (hoy no lleva a ningún lado, 2026-09-11-fase1-nucleo.md:2869).<br>Errores por llamada, que hoy no se capturan o se ignoran (:2826-2850): un 409 de consent, answers o complete lleva al bloqueo; un error de red muestra «Reintentar» sin perder las respuestas guardadas; si falla la carga de reactivos, EstadoError con «Reintentar».<br>Prueba sin reactivos (items vacío; hoy pantalla en blanco, :2893, :2926): EstadoVacío con contacto a la empresa (PB-04) | 3 |
+| R-29 | Consentimiento persistido (privacy_version v1) con casilla sin marcar | 2026-09-11-fase1-nucleo.md:2735-2737, :2877-2881 | Checkbox real; botón deshabilitado hasta marcar; enlace al aviso (hoy sin enlace, :2876). Si `consented` ya es verdadero, se salta el paso: el dato llega en GET /api/evaluar/{token} (:1694) y hoy se ignora (:2799-2805) | 3 |
+| R-30 | Super admin: solicitudes de créditos | 2026-09-12-fase2-panel-rh.md:1962-2016 | Ver mapa.md, sección 2 | 7 |
+| R-31 | Super admin: usuarios (búsqueda, paginación, rol, borrado con confirmación, 409 al borrarse a sí mismo) | 2026-09-12-registro-login-crud-usuarios.md:1801-1945, :680 | Ver mapa.md, sección 2 | 7 |
+| R-32 | Super admin: perfil del operador | 2026-09-12-registro-login-crud-usuarios.md:1958-2000 | Ver mapa.md, sección 2 | 7 |
+| R-33 | `role` (admin, recruiter, viewer) no autoriza nada | 2026-09-12-registro-login-crud-usuarios.md:308, :587 | No se ocultan ni muestran funciones por rol; el rol solo se edita en /admin/usuarios/:id | 7 |
+| R-34 | Estados de carga, vacío y error en toda pantalla con API. Hoy faltan o se confunden: «Cargando…» sin fin en detalle, comparar, perfil y detalle de usuario; errores mostrados como lista vacía en /app/evaluaciones y /admin/creditos; «—» y 0 en /app cuando falla la carga; /admin/usuarios sin ningún estado; catálogo sin «Reintentar»; cualquier error de /pruebas/:slug mostrado como «Prueba no encontrada» | 2026-09-12-fase2-panel-rh.md:1524, :1635, :1407, :1972, :1355-1356; 2026-09-12-registro-login-crud-usuarios.md:1743, :1907, :1818; 2026-09-11-fase3-sitio-ventas.md:502, :609-618; 2026-09-11-fase3-sitio-ventas-design.md:87 | EstadoCarga, EstadoVacío y EstadoError del sistema; el error siempre distinto del vacío y con «Reintentar» donde aplique (la spec del catálogo lo pide) | 1 y todas |
+| R-35 | Textos [PENDIENTE] visibles (precios, agenda, correo, razón social, legales) | 2026-09-11-fase3-sitio-ventas-design.md:105-113 | Estilo «pendiente» del sistema (Tag) | 6 y 7 |
+| R-36 | Reglas de accesibilidad del repo que el rediseño debe cumplir: foco visible, prefers-reduced-motion, ícono y texto en éxito y error, y controles de 44 px en el candidato. La de ícono y texto hoy casi no se cumple | 2026-09-10-sales-site.md:373-380, :403-407; docs/design-tokens.md:34; 2026-09-12-fase2-panel-rh-design.md:19; 2026-09-11-fase1-nucleo-design.md:86 | Token de foco, regla global de reduced-motion y Callout con ícono en todo aviso de éxito o error.<br>Hoy solo llevan ícono los errores por campo de ContactSection (⚠, 2026-09-10-sales-site.md:2232) y los estados de invitación (2026-09-12-fase2-panel-rh.md:1503-1505). El resto son solo texto con color, por ejemplo el error de FloatingInput (2026-09-12-registro-login-crud-usuarios.md:887), el éxito de leads (2026-09-10-sales-site.md:2203-2206), la confirmación de créditos (2026-09-12-fase2-panel-rh.md:1786), el error de /evaluar (2026-09-11-fase3-sitio-ventas.md:981) y el error del asistente (2026-09-11-fase1-nucleo.md:2663) | 1 |
+| R-37 | Créditos de cortesía al registrar una empresa | 2026-09-12-registro-login-crud-usuarios.md:299; 2026-09-12-fase2-panel-rh.md:131 | Movimiento «Cortesía» en Créditos; sin cifra escrita a mano | 4 |
+| R-38 | CTA «Agenda una demo» y agenda externa (calendarUrl) | 2026-09-11-fase3-sitio-ventas.md:760-767; 2026-09-10-sales-site.md:2325-2333 | Se conservan en /precios y /demo | 7 |
+| R-39 | Al cambiar de ruta, el scroll vuelve al inicio o salta al #hash (ScrollToTop). Hoy solo existe en RootLayout | 2026-09-10-multipage-site.md:184-209, :1365-1376; 2026-09-12-fase2-panel-rh.md:1293-1311, :1936-1944 | Se conserva en PageLayout y se aplica también a /app y /admin; con reduced-motion el salto es instantáneo (hoy `html` usa scroll suave salvo con reduced-motion, 2026-09-10-sales-site.md:369, :374) | 2 |
+| R-40 | Pie con cinco enlaces: Aviso de privacidad, Términos y condiciones, Ayuda, «¿Te invitaron a una evaluación?» y Contacto (mailto), más «[PENDIENTE: razón social del titular]». /terminos solo se enlaza desde aquí | 2026-09-11-fase3-sitio-ventas.md:1116-1122; 2026-09-11-fase3-sitio-ventas-design.md:77 | Layout del pie del prototipo, que solo tiene Aviso de privacidad y Soporte (Strata.dc.html:319-320, :1238-1239), con los cinco enlaces reales: Soporte apunta a /ayuda | 2 |
+
+## 2. En el prototipo sin backend
+
+Ninguno se simula (PROMPT_CLAUDE_CODE.md:33). Las líneas son de Strata.dc.html salvo que se indique otro archivo.
+
+| # | Flujo o elemento del prototipo | Qué haría falta | Qué muestra la UI mientras tanto (sin simular) |
+|---|---|---|---|
+| P-01 | Compra: carrito, checkout, métodos de pago, fila «Impuestos (16 %)» y «Pagar y generar códigos» (:612-617, :1247-1321, :1305, :1823-1828, :2082, :2086-2097). La etiqueta es «Impuestos (16 %)» con tasa fija; leerla como IVA es una interpretación | [PB-09](pendientes-backend.md#pb-09) | Se adapta a un flujo real: el drawer sirve para «Solicitar créditos» (POST /api/credit-requests); sin precios, impuestos ni métodos de pago |
+| P-02 | Precio por prueba, descuento por volumen y moneda (:660-663, :1442-1447, :1560-1562) | [PB-10](pendientes-backend.md#pb-10) | Se oculta: tarjetas sin precio; /precios mantiene «[PENDIENTE: precio]» |
+| P-03 | B2C: «Comprar Test Individual — $15 USD», «Comprar en 1 clic» y «Comprar un test» (:123, :145, :256, :2037, :2063) | [PB-21](pendientes-backend.md#pb-21), [PB-09](pendientes-backend.md#pb-09) | Se adapta (D-13): «Tengo un código» (/evaluar) o «Crear cuenta» (/registro); «Comprar en 1 clic» se oculta |
+| P-04 | «Previsualizar test» con 3 reactivos de muestra (:255, :2062) | No se propone: las pruebas del catálogo no tienen reactivos (2026-09-11-fase3-sitio-ventas-design.md:45) | Se adapta: enlace a /pruebas/:slug con el reporte de ejemplo |
+| P-05 | Inventario de licencias por prueba con códigos y estados (:681-770, :1831-1858) | [PB-11](pendientes-backend.md#pb-11), solo si se elige D-08 B | Se adapta: saldo y movimientos de créditos |
+| P-06 | Generar enlace o código sin candidato y «Registrar en candidatos» (:690, :783, :1323-1374, :2123-2136) | [PB-12](pendientes-backend.md#pb-12) | Se adapta: enlaces por candidato al crear la evaluación |
+| P-07 | Código corto «XXXX-XXXX» y su validación (:1107-1120, :1553-1558, :2173-2178) | [PB-11](pendientes-backend.md#pb-11) | Se adapta: /evaluar acepta enlace o token; error inline |
+| P-08 | Modo «Link de licencia» sin correo (:1985, :2119). En el prototipo su aviso «copiado al portapapeles» no copia nada (:2119), a diferencia de `copiar()` (:1549-1552) | [PB-12](pendientes-backend.md#pb-12) | Se oculta; la UI explica que el correo se envía siempre y que los enlaces se pueden copiar |
+| P-09 | Tiles «Enviar por» del modal de invitación: Correo, WhatsApp y Copiar link (:1355-1365, :1989-1993). En el prototipo, Correo y WhatsApp solo muestran un toast («Borrador de correo abierto con el enlace», «Mensaje de WhatsApp preparado») | Nada de backend. Correo = enlace mailto con el link real en el cuerpo; WhatsApp = https://wa.me/?text= con el link real; el link de cada candidato lo devuelve POST /api/assessments (2026-09-11-fase1-nucleo.md:1460). No es el correo automático del backend (2026-09-11-fase1-nucleo.md:1459), que equivale al modo «Invitación por email» del modal de asignación (Strata.dc.html:1984) | Los tres tiles se pueden portar sin simular, sobre el enlace real de cada candidato; el asistente actual ya sugiere compartirlo «por correo o WhatsApp» (2026-09-11-fase1-nucleo.md:2602). Si se ofrecen o no se decide en D-10 |
+| P-10 | Recordatorio a los 3 días y «Vence en 14 días» (:1368, :1412, :1984) | [PB-28](pendientes-backend.md#pb-28) | Sin promesa de recordatorio; el pie muestra la fecha límite real o «Sin fecha límite» |
+| P-11 | Lista plana de candidatos con prueba, fecha y código (:772-870) | [PB-05](pendientes-backend.md#pb-05), [PB-06](pendientes-backend.md#pb-06) | Se adapta: candidatos por evaluación en /app/evaluaciones/:id, sin columnas de prueba ni fecha |
+| P-12 | Saldo por prueba «X de Y libres · N aplicadas este mes» (:790-807, :1861-1865) | No existe saldo por prueba (D-08); [PB-10](pendientes-backend.md#pb-10) si se cambia el modelo | Se adapta: un saldo de créditos y conteos por estado sumados de GET /api/assessments |
+| P-13 | «Ver avance» y «Ver respuestas» (:986, :1886, :2068) | [PB-16](pendientes-backend.md#pb-16), [PB-30](pendientes-backend.md#pb-30) | Se ocultan; el estado de la invitación se muestra en texto |
+| P-14 | «Estado en tiempo real» y «actualizado hace 2 min» (:779, :812) | No se propone tiempo real | Se omite; botón «Actualizar» que vuelve a pedir los datos |
+| P-15 | Paginación del panel (:861-866) | No hace falta: los endpoints devuelven listas completas | Paginación en el cliente solo si la lista lo pide |
+| P-16 | Índice global, radar con rango esperado del puesto y «Percentiles vs. norma LATAM» (:891, :894-918, :929) | [PB-18](pendientes-backend.md#pb-18) | Se adapta (D-14): escalas reales con categoría y normalized; radar sin rango esperado; «pc N» sin ningún texto que sugiera comparación con una población, porque hoy el percentil es el normalized redondeado (2026-09-11-fase1-nucleo.md:980) y el baremo demo solo tiene umbrales (:792-801) |
+| P-17 | Envío automático del PDF a candidato y RR. HH. (:956-979, :1966-1978, :2225-2226) | [PB-19](pendientes-backend.md#pb-19) | Se oculta |
+| P-18 | Descarga directa de «Diagnostico_….pdf» (:982-985, :2227) | No hace falta: window.print() (2026-09-12-fase2-panel-rh.md:1836) | Se adapta: «Descargar PDF» abre la impresión con el pie legal |
+| P-19 | Formulario de nombre y correo del candidato con validación en vivo (:1036-1066, :2002-2004) | [PB-14](pendientes-backend.md#pb-14) | Se oculta (D-11) |
+| P-20 | Copia del reporte al candidato (:131, :159, :205-206, :1055, :1206, :1575) | [PB-19](pendientes-backend.md#pb-19) y cambio de regla (C-09) | Se adapta: ningún texto la promete |
+| P-21 | Cuenta regresiva del examen (:1148-1153, :1515, :1526-1540) | [PB-15](pendientes-backend.md#pb-15) | Se oculta (D-12) |
+| P-22 | «Sección: {sección}» en cada pregunta. Es un dato de cada reactivo en los datos semilla, no un texto fijo (:1168, :1451-1456, :2204) | [PB-29](pendientes-backend.md#pb-29) | Se omite |
+| P-23 | Test Builder completo (:330-601, :2138-2168) | [PB-20](pendientes-backend.md#pb-20) | Se oculta: sin pantalla ni enlace (D-15) |
+| P-24 | «14 tests publicados» (:81) | No hace falta PB: se podría sumar `count` de GET /api/catalog | Se adapta: el contador del super admin muestra «N solicitudes pendientes» |
+| P-25 | Pastillas de usuario y nav pública sin destino (:68, :82, :116-119) | No hace falta PB | Se adapta: menú y rutas reales (mapa.md, sección 3) |
+| P-26 | «Para empresas» (:117) | No hace falta PB | Se adapta: → /demo |
+| P-27 | «Soporte: ayuda@strata.app» y dominio strata.app/test (:1131, :1844, :1988) | No hace falta PB | Se adapta: SITE.email ([PENDIENTE]) y el enlace real {FRONTEND_URL}/evaluar/{token} (2026-09-11-fase1-nucleo.md:1458) |
+| P-28 | Afirmaciones sin respaldo: «AES-256», «factura fiscal automática», «Datos cifrados», «Tus datos viajan cifrados», «validada para Latinoamérica», «Percentiles vs. norma LATAM» (:163, :317, :610, :766, :891, :1102, :1236, :1316) | Respaldo documental, no backend | Según D-18: «[PENDIENTE: afirmación verificable]» u omitir |
+| P-29 | Generación de códigos en el cliente (:1553-1558) | [PB-11](pendientes-backend.md#pb-11) | Nunca se generan códigos en el cliente |
+
+## 3. Conflictos de modelo
+
+<a id="c-01"></a>
+### C-01 · Licencias por código frente a créditos e invitaciones por token
+
+- **Prototipo.** Cada prueba tiene su propio saldo de licencias (`tests[].stock`, Strata.dc.html:1442-1447) y el saldo de la barra es la suma (:1781). Comprar genera códigos «Disponible» (:2093) y el modal genera otro al abrirse (:2123). Estados: Disponible, Enviada, En uso y Consumida (:1831-1836). «Un código habilita una sola aplicación y se invalida al enviarse el reporte» (:688). Se descuenta una licencia al registrar la invitación (:1330, :2132).
+- **Repo.** Un solo saldo por organización, igual a la suma del ledger (2026-09-12-fase2-panel-rh.md:243-246; 2026-09-12-fase2-panel-rh-design.md:37). 1 crédito = 1 candidato invitado (2026-09-12-fase2-panel-rh-design.md:12), sin importar cuántas pruebas tenga la evaluación; se consume al crearla, en una transacción (2026-09-12-fase2-panel-rh.md:412-459; prueba manual en :2070-2071). Cada candidato recibe una invitación con un token de 40 caracteres (2026-09-11-fase1-nucleo.md:1453) y pasa por pendiente → iniciada → completada; expirada se calcula al abrir un enlace vencido (:311, :1677-1679, :1713-1715, :1784). No hay invitaciones sin candidato.
+- **Equivalencias posibles.** Disponible ≈ saldo sin usar (no es un objeto). Enviada ≈ pendiente. En uso ≈ iniciada. Consumida ≈ completada. Expirada no existe en el prototipo.
+- **Opciones.** A) Usar en la UI el modelo del repo: «Créditos», movimientos del ledger y estados de invitación. B) Pedir licencias por prueba con códigos (PB-10, PB-11, PB-12) y rehacer el consumo. C) Mostrar cada invitación como un «código» en un inventario (mezcla vocabularios).
+- **Recomendación.** A. B cambia un modelo de negocio ya aprobado (2026-09-12-fase2-panel-rh-design.md:8-14) y C confunde.
+- **Decisión:** [D-08](decisiones.md#d-08).
+
+<a id="c-02"></a>
+### C-02 · Carrito y checkout con pago frente a solicitud de créditos con aprobación manual
+
+- **Prototipo.** Carrito por prueba con cantidad (Strata.dc.html:1804-1810), tres métodos de pago (:1823-1828), una fila «Impuestos (16 %)» con tasa fija (:1305, :2082) y «Pagar y generar códigos», que acredita al instante y lleva al inventario (:2086-2097). Precio y descuento por prueba (:660-663), conversión de moneda (:1560-1562) y un pie que promete «Pago cifrado · factura fiscal automática» (:1316).
+- **Repo.** Sin pasarela de pago (2026-09-12-fase2-panel-rh-design.md:110; 2026-09-11-fase3-sitio-ventas-design.md:103). Los créditos llegan por cortesía al registrar una empresa (2026-09-12-registro-login-crud-usuarios.md:299) o por una solicitud (cantidad entera de 1 o más y nota) que nace pendiente y aprueba un super admin, que registra una «compra» (2026-09-12-fase2-panel-rh.md:906-921, :1089-1096). No hay tabla de planes; los precios están en data/plans.ts con «[PENDIENTE: precio]» (2026-09-12-fase2-panel-rh-design.md:14; 2026-09-11-fase3-sitio-ventas.md:381-409).
+- **Opciones.** A) Drawer «Solicitar créditos» con el diseño del checkout, sin precios ni pago. B) Pasarela (PB-09) y precios (PB-10). C) Sin flujo de adquisición en el panel; todo por /demo.
+- **Recomendación.** A.
+- **Decisión:** [D-09](decisiones.md#d-09).
+
+<a id="c-03"></a>
+### C-03 · Asignar un test a un candidato frente a evaluaciones con varias pruebas y varios candidatos
+
+- **Prototipo.** «Asignar test por email» asigna una prueba a un correo (Strata.dc.html:1376-1418, :2108-2120); «Generar enlace / código» crea un código para una prueba (:1323-1374). La tabla de candidatos muestra un «Examen asignado» por fila (:826).
+- **Repo.** Una evaluación tiene nombre, puesto, fecha límite, 1..n pruebas (assessment_test) y 1..n candidatos, cada uno con su invitación (2026-09-11-fase1-nucleo.md:1393-1458; 2026-09-11-fase1-nucleo-design.md:53-58). El portal recibe todas las pruebas (2026-09-11-fase1-nucleo.md:1687-1693), aunque la UI actual solo responde la primera (:2816) y el asistente fija la demo (:2561).
+- **Opciones.** A) Asistente de evaluación en /app/evaluaciones/nueva con el lenguaje visual del modal. B) Modal de «asignación rápida» que crea una evaluación de un solo candidato con nombre generado, usando el mismo POST. C) Pedir asignación directa sin evaluación (cambia el modelo).
+- **Recomendación.** A ahora; B como atajo posterior si el dueño lo quiere.
+- **Decisión:** [D-10](decisiones.md#d-10).
+
+<a id="c-04"></a>
+### C-04 · Formulario del candidato frente a los datos que exige el backend
+
+- **Prototipo.** Nombre completo y correo con validación en vivo (Strata.dc.html:1036-1066, :2002-2004); consentimiento premarcado (:1522); «No necesitas crear una cuenta ni contraseña» (:1032).
+- **Repo.** El nombre y el correo los captura RR. HH. al crear la evaluación: obligatorios, con teléfono opcional (2026-09-11-fase1-nucleo.md:1401-1403). El portal no recibe ni devuelve datos del candidato (:1683-1695, :1806-1816). El consentimiento va sin premarcar y guarda privacy_version, IP y user agent (:1703-1711; 2026-09-11-fase1-nucleo-design.md:89). La spec pedía «confirmar nombre» (2026-09-11-fase1-nucleo-design.md:90), pero no hay endpoint.
+- **Opciones.** A) Sin formulario. B) Formulario que no guarda (simulación; descartada). C) PB-14: mostrar y confirmar el nombre.
+- **Recomendación.** A ahora; C si se quiere la confirmación.
+- **Decisión:** [D-11](decisiones.md#d-11).
+
+<a id="c-05"></a>
+### C-05 · Temporizador del examen frente a duration_min sin límite
+
+- **Prototipo.** Cuenta regresiva desde 23:41 (seg = 1421, Strata.dc.html:1515, :1529-1540) que sigue corriendo aunque se oculte (:2200) y no hace nada al llegar a cero.
+- **Repo.** duration_min es un estimado del catálogo (2026-09-11-fase1-nucleo.md:207; 2026-09-11-fase1-nucleo-design.md:45). No hay límite ni cierre por tiempo; solo elapsed_ms por respuesta (2026-09-11-fase1-nucleo.md:341, :1748). La bienvenida suma las duraciones (:2865).
+- **Opciones.** A) Ocultar el reloj. B) Mostrar el tiempo transcurrido, solo informativo. C) Límite real (PB-15).
+- **Recomendación.** A (B si el dueño quiere un reloj visible). Una cuenta regresiva sin límite real presiona al candidato sin motivo.
+- **Decisión:** [D-12](decisiones.md#d-12).
+
+<a id="c-06"></a>
+### C-06 · B2C («Para mí») frente a cuentas sin organización
+
+- **Prototipo.** «Para mí (Sin registro)»: test vocacional o de personalidad en 15 minutos, pago único de $15 e informe directo al correo (Strata.dc.html:138, :2034-2037, :2058).
+- **Repo.** No hay compra. Un usuario sin empresa puede registrarse e iniciar sesión, pero no tiene organización, créditos ni panel (2026-09-12-registro-login-crud-usuarios.md:292-307, :1192, :1306; 2026-09-12-registro-login-crud-usuarios-design.md:8) y no puede crear su empresa después (PB-22). El candidato no ve resultados (2026-09-11-fase1-nucleo-design.md:93). «Intereses vocacionales» y «Orientación de carrera» existen solo como catálogo sin reactivos (2026-09-11-fase3-sitio-ventas.md:73-74; 2026-09-11-fase3-sitio-ventas-design.md:45).
+- **Opciones.** A) Ocultar el selector hasta que exista B2C. B) Conservar el selector: «Para mí» se dirige al candidato invitado (CTA «Tengo un código», sin compra). C) B2C real (PB-21, PB-09 y cambio de la regla de C-09).
+- **Recomendación.** B.
+- **Decisión:** [D-13](decisiones.md#d-13).
+
+<a id="c-07"></a>
+### C-07 · Reporte por dimensiones frente a reporte por escalas con secciones fijas
+
+- **Prototipo.** Una sola prueba con 6 dimensiones, puntaje 0-100 y nivel («Muy alto», «Alto», «Medio»), color por umbral 80/70 (Strata.dc.html:1462-1469, :1957-1960); radar con «rango esperado del puesto» (:894-918); «Percentiles vs. norma LATAM» (:891); índice global 76 (:929); interpretación por dimensión (:946-953); envío automático (:956-979); banner con código (:876-885).
+- **Repo.** El reporte se agrupa por prueba: cada elemento de `tests[]` trae su nombre, `integrity.blur_count` y sus escalas (2026-09-11-fase1-nucleo.md:1934-1953), y `interview_questions` va en la raíz de la respuesta (:1966-1974). Por escala: normalized 0-100, percentil, categoría bajo/medio/alto (umbrales <34, 34-66 y >66 del baremo demo, 2026-09-11-fase1-nucleo-design.md:78) e interpretación fija por categoría (2026-09-11-fase1-nucleo.md:1977-1985). Report pinta un título y un dato de integridad por prueba, las preguntas y un pie legal que es texto fijo del componente, no del endpoint (:3047-3078). El mismo componente pinta el ejemplo público (2026-09-11-fase1-nucleo-design.md:117). La spec pedía además un «Resumen» prueba × resultado global (2026-09-11-fase1-nucleo-design.md:111), que el plan no implementó (PB-18).
+- **El percentil no es normativo.** ScoringService guarda percentile como el normalized redondeado (2026-09-11-fase1-nucleo.md:980) y el baremo demo solo define umbrales (:792-801). No es un percentil contra una población. Mientras no haya baremo real (PB-18), se muestra normalized o «pc N» sin ningún texto que sugiera comparación normativa, justo lo que D-18 rechaza en «Percentiles vs. norma LATAM».
+- **Opciones.** A) Diseño del prototipo con datos reales: una sección por cada prueba de tests[] (título = nombre de la prueba) con sus escalas seleccionables, su radar si tiene 3 o más escalas y su integridad («N vez(ces) que la pantalla perdió el foco»); color por categoría; sin índice global ni rango esperado; preguntas de entrevista y pie legal una sola vez, al final. B) Solo barras, sin radar. C) Esperar PB-18.
+- **Recomendación.** A.
+- **Decisión:** [D-14](decisiones.md#d-14).
+
+<a id="c-08"></a>
+### C-08 · Test Builder frente a pruebas sembradas por seeder
+
+- **Prototipo.** El super admin crea pruebas: datos, dimensiones, reactivos con tipo y peso, rangos con texto, simulador, borrador «v0.4» y publicación (Strata.dc.html:330-601).
+- **Repo.** Pruebas, escalas, reactivos, opciones, reglas y baremos se cargan con seeders (2026-09-11-fase1-nucleo.md:713-803; 2026-09-11-fase3-sitio-ventas.md:48-95); no hay API de edición. El modelo no tiene precio, tipo de reactivo ni peso; sí tiene reverse_scored, allows_back, requires_license, active y versiones de regla y baremo (2026-09-11-fase1-nucleo.md:201-266), y cada score guarda las versiones usadas (2026-09-11-fase1-nucleo-design.md:82). El super admin del repo aprueba créditos y administra usuarios (2026-09-12-fase2-panel-rh.md:1112-1116; 2026-09-12-registro-login-crud-usuarios.md:717-721).
+- **Opciones.** A) Posponer la Fase 5 hasta tener PB-20. B) UI sin persistencia (simulación; descartada). C) Diseñar el contrato con el compañero y el psicólogo en paralelo.
+- **Recomendación.** A, con C en paralelo.
+- **Decisión:** [D-15](decisiones.md#d-15).
+
+<a id="c-09"></a>
+### C-09 · Resultados para el candidato
+
+- **Prototipo.** El candidato recibe una copia del reporte por correo (Strata.dc.html:131, :159, :205-206, :1055, :1206, :1575, :1966-1969).
+- **Repo.** «Sin resultados al candidato» (2026-09-11-fase1-nucleo-design.md:93). Al terminar: «La empresa se pondrá en contacto contigo» (2026-09-11-fase1-nucleo.md:2922). Ningún plan envía reportes por correo; HowItWorks ya promete el reporte «en tu correo» sin respaldo (2026-09-10-sales-site.md:1861).
+- **Opciones.** A) Mantener la regla y ajustar todos los textos. B) Cambiar la regla (PB-19) con el psicólogo y el aviso de privacidad.
+- **Recomendación.** A.
+- **Decisión:** [D-16](decisiones.md#d-16).
+
+## 4. Simplificaciones del prototipo que el backend no permite
+
+Regla 5: se conserva lo que exige el backend y se avisa al dueño (PROMPT_CLAUDE_CODE.md:41).
+
+| # | Simplificación del prototipo | Evidencia | Lo que exige el repo | Cómo se resuelve |
+|---|---|---|---|---|
+| S-01 | El acceso pide solo nombre y correo, y no los envía | Strata.dc.html:1036-1066 | Los datos los captura RR. HH.: nombre y correo obligatorios, teléfono opcional (2026-09-11-fase1-nucleo.md:1401-1403) | El asistente de RR. HH. conserva esos campos; el acceso no pide datos (D-11) |
+| S-02 | Consentimiento premarcado y validado solo en el cliente | Strata.dc.html:1522, :2193-2196 | Casilla sin marcar y POST consent con privacy_version antes del primer reactivo (2026-09-11-fase1-nucleo-design.md:89; 2026-09-11-fase1-nucleo.md:2826-2831) | Casilla sin marcar; «Iniciar» deshabilitado hasta marcar; se llama a POST consent |
+| S-03 | «Siguiente» siempre habilitado; la falta de respuesta se avisa con toast | Strata.dc.html:2207 | No se avanza sin responder (2026-09-11-fase1-nucleo.md:2912) | Botón deshabilitado con texto de ayuda |
+| S-04 | «Anterior» siempre visible | Strata.dc.html:1186, :2211 | Solo si la prueba tiene allows_back (2026-09-11-fase1-nucleo-design.md:92; 2026-09-11-fase1-nucleo.md:1692) | «Anterior» según allows_back |
+| S-05 | «Finalizar examen» no llama al servidor | Strata.dc.html:2208 | POST complete califica y cierra; responde 409 si ya no admite respuestas (2026-09-11-fase1-nucleo.md:1774-1800) | El botón final llama a complete y maneja el 409 |
+| S-06 | Asignar por correo: solo correo, nombre derivado, sin validación, sin nombre de evaluación ni fecha | Strata.dc.html:1386-1389, :2108-2120 | Nombre de evaluación obligatorio; candidato con nombre y correo; al menos una prueba; fecha opcional; saldo suficiente (2026-09-11-fase1-nucleo.md:1393-1405; 2026-09-12-fase2-panel-rh.md:417-422) | Asistente con todos los campos y errores 422 por campo |
+| S-07 | Código de invitación sin candidato | Strata.dc.html:2123-2136 | Cada invitación pertenece a un candidato (2026-09-11-fase1-nucleo.md:1448-1458) | No se ofrece (PB-12) |
+| S-08 | El código se valida en el cliente con 6 o más caracteres | Strata.dc.html:2175 | El token se valida en el servidor: 404 si no existe; bloqueo si está completada o expirada (2026-09-11-fase1-nucleo.md:1668-1679, :2799-2805) | /evaluar valida el formato; el portal muestra los estados de bloqueo |
+| S-09 | «Reenviar código» solo copia el enlace | Strata.dc.html:1887 | POST resend reenvía el correo, actualiza sent_at y responde 409 si está completada (2026-09-12-fase2-panel-rh.md:630-641) | «Reenviar» real y «Copiar enlace» por separado |
+| S-10 | La compra acredita al instante | Strata.dc.html:2086-2097 | La solicitud nace pendiente y no cambia el saldo hasta que la aprueba un super admin (2026-09-12-fase2-panel-rh.md:906-921, :1089-1096) | Confirmación «Solicitud registrada. Un asesor la revisará.»; saldo sin cambios |
+| S-11 | El saldo baja al registrar una invitación suelta | Strata.dc.html:2116, :2132 | Se consume un crédito por candidato al crear la evaluación, en una transacción (2026-09-12-fase2-panel-rh.md:412-459) | El asistente muestra el costo antes de crear y vuelve a pedir el saldo después |
+| S-12 | Errores y confirmaciones solo por toast | Strata.dc.html:1544-1548 | Errores 422 por campo (2026-09-12-registro-login-crud-usuarios.md:1193-1201; 2026-09-10-sales-site.md:2169-2193) e ícono más texto (docs/design-tokens.md:34) | Errores inline; toast solo para confirmaciones (D-22) |
+| S-13 | No hay registro, login ni cierre de sesión; la empresa es una prop | Strata.dc.html:1439, :1779 | Registro con seis campos obligatorios, login con sesión Sanctum y logout (2026-09-12-registro-login-crud-usuarios.md:250-263; 2026-09-11-fase1-nucleo.md:2066-2080) | Se conservan /registro, /login y Salir |
+| S-14 | La pastilla de usuario no abre nada | Strata.dc.html:68, :82 | Mi perfil, Panel de RH, Operación y Salir (2026-09-12-registro-login-crud-usuarios.md:1467-1477) | Menú real en la pastilla |
+| S-15 | Sin confirmación antes de acciones que no se deshacen | Strata.dc.html:2127-2136 | Eliminar usuario pide confirmación (2026-09-12-registro-login-crud-usuarios.md:1849-1856, :1932-1940); aprobar o rechazar una solicitud no se puede deshacer (2026-09-12-fase2-panel-rh.md:1089-1104) | Modal de confirmación para eliminar usuario (hoy confirmación en línea) y para aprobar o rechazar solicitudes (hoy sin confirmación) |
+| S-16 | Categorías del catálogo fijas | Strata.dc.html:1797 | Categorías desde la API, en orden fijo y sin vacías (2026-09-11-fase3-sitio-ventas.md:231-266) | Filtros generados desde la respuesta |
+| S-17 | Tres estados de candidato | Strata.dc.html:1866-1871 | Cuatro estados, con expirada (2026-09-11-fase1-nucleo.md:311) | Badge y filtro de cuatro estados |
+| S-18 | Builder: precio, duración como texto libre y peso del reactivo | Strata.dc.html:383-395, :499-504 | La prueba no tiene precio; duration_min es entero; los reactivos no tienen peso (2026-09-11-fase1-nucleo.md:201-245) | Queda en PB-20 |
+| S-19 | El examen es de una sola prueba: título fijo, una lista de preguntas y «Test aplicado» en el fin | Strata.dc.html:1145, :1450-1457, :2215 | Una invitación puede incluir varias pruebas, cada una con su attempt y sus reactivos (2026-09-11-fase1-nucleo.md:1687-1693, :1720-1738, :1789-1795); hoy la UI solo responde la primera (2026-09-11-fase1-nucleo.md:2815-2818) | El examen recorre todas las pruebas de tests[], con el nombre de cada una en la barra y su propio avance; el fin resume todas (CA-4 en mapa.md) |
