@@ -1,0 +1,104 @@
+/* Badge de estado (Strata.dc.html:751-753, 847-849; tonos :1831-1836 y :1866-1870).
+   Siempre lleva punto y texto: el tono nunca es lo único que distingue el estado.
+   Contraste del texto sobre su fondo en cada tono. */
+.st-badge {
+  --st-badge-bg: var(--color-surface-muted);
+  --st-badge-fg: var(--color-text-tertiary);
+  --st-badge-dot: var(--color-dot-neutral);
+
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-6);
+  padding: var(--space-5) var(--space-10);
+  border-radius: var(--radius-pill);
+  background-color: var(--st-badge-bg);
+  color: var(--st-badge-fg);
+  font-family: var(--font-text);
+  font-size: var(--fs-label);
+  font-weight: var(--fw-bold);
+  line-height: var(--lh-title);
+  letter-spacing: normal;
+  text-transform: none;
+  white-space: nowrap;
+  vertical-align: middle;
+}
+
+.st-badge__dot {
+  flex: none;
+  width: var(--space-6);
+  height: var(--space-6);
+  border-radius: var(--radius-round);
+  background-color: var(--st-badge-dot);
+}
+
+/* Compacto: pastilla del encabezado del builder (Strata.dc.html:337) */
+.st-badge--sm {
+  padding: var(--space-3) var(--space-9);
+  font-size: var(--fs-micro);
+}
+
+.st-badge--sm .st-badge__dot {
+  width: var(--space-5);
+  height: var(--space-5);
+}
+
+/* Disponible / Completado · 8.77:1 */
+.st-badge--navy {
+  --st-badge-bg: var(--color-navy-tint);
+  --st-badge-fg: var(--color-navy);
+  --st-badge-dot: var(--color-navy);
+}
+
+/* Enviada / En proceso · 6.83:1 */
+.st-badge--sky {
+  --st-badge-bg: var(--color-sky-tint-strong);
+  --st-badge-fg: var(--color-sky-deep);
+  --st-badge-dot: var(--color-sky-strong);
+}
+
+/* Tinte coral de la insignia (Strata.dc.html:266-268) · 5.14:1 */
+.st-badge--coral {
+  --st-badge-bg: var(--color-coral-tint);
+  --st-badge-fg: var(--color-coral-text);
+  --st-badge-dot: var(--color-coral);
+}
+
+/* Consumida / Código enviado · 4.95:1 */
+.st-badge--neutral {
+  --st-badge-bg: var(--color-surface-muted);
+  --st-badge-fg: var(--color-text-tertiary);
+  --st-badge-dot: var(--color-dot-neutral);
+}
+
+/* · 5.04:1 */
+.st-badge--success {
+  --st-badge-bg: var(--color-success-bg);
+  --st-badge-fg: var(--color-success-text);
+  --st-badge-dot: var(--color-success-icon);
+}
+
+/* · 5.91:1 */
+.st-badge--error {
+  --st-badge-bg: var(--color-error-bg);
+  --st-badge-fg: var(--color-error-text);
+  --st-badge-dot: var(--color-error-text);
+}
+
+/* · 5.21:1 */
+.st-badge--warning {
+  --st-badge-bg: var(--color-warning-bg);
+  --st-badge-fg: var(--color-warning-text);
+  --st-badge-dot: var(--color-warning-text);
+}
+
+/* Alto contraste de Windows: el fondo desaparece; el borde y el punto siguen el color del texto. */
+@media (forced-colors: active) {
+  .st-badge {
+    border: var(--border-width) solid;
+  }
+
+  .st-badge__dot {
+    forced-color-adjust: none;
+    background-color: currentColor;
+  }
+}

@@ -22,7 +22,7 @@ Las citas siguen el formato archivo:línea, como en [auditoria.md](auditoria.md)
 
 - **Carpeta:** `frontend-strata/`, en la raíz del repo, al lado de `frontend/`.
 - **Por qué no en `frontend/`:** es un gitlink (modo 160000). Para versionar archivos ahí primero hay que sacarlo del índice con `git rm --cached frontend`, y eso cambia cómo el repo trata el frontend: es la decisión de [D-01](decisiones.md#d-01) (monorepo o submódulos) y el primer paso de PB-01, que ejecuta el compañero. Mientras esa aprobación no llegue, la reconstrucción va en una carpeta nueva y `frontend/` queda intacto. `backend/` tampoco se tocó (regla 1).
-- **Diferencia con D-26:** el texto de D-26 dice «`frontend/` se reconstruye…», pero la reconstrucción está en `frontend-strata/`. Cuando se apruebe quitar el gitlink, la carpeta se mueve a `frontend/` en un commit aparte (paso 7 de «Cómo comparar con el código real»).
+- **Relación con D-26:** D-26 ya indica `frontend-strata/` (texto corregido en el commit base). Cuando se apruebe quitar el gitlink, la carpeta se mueve a `frontend/` en un commit aparte (paso 7 de «Cómo comparar con el código real»).
 
 ## Método
 

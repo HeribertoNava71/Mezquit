@@ -1,0 +1,94 @@
+/* Base de EstadoVacio y EstadoError: caja blanca centrada con ícono, título,
+   texto y acciones. sm reproduce el carrito vacío (Strata.dc.html:1263-1268):
+   radio 14, padding 26 18, título 13 px/600 en texto secundario y texto de
+   11.5 px en terciario. md es la misma receta, más amplia, para una sección o
+   una página. El borde lo pone cada componente: punteado en EstadoVacio.css y
+   sólido en EstadoError.css. */
+.st-estado {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: var(--space-36) var(--space-24);
+  background: var(--color-surface-white);
+  border-radius: var(--radius-card);
+  text-align: center;
+}
+
+.st-estado--sm {
+  padding: var(--space-26) var(--space-18);
+  border-radius: var(--radius-control);
+}
+
+/* Caja de ícono (receta de los canales del modal, Strata.dc.html:1360:
+   tinte celeste y trazo #0369A1) */
+.st-estado__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--space-40);
+  height: var(--space-40);
+  margin-bottom: var(--space-12);
+  border-radius: var(--radius-control);
+  background: var(--color-sky-tint-strong);
+  color: var(--color-sky-text);
+}
+
+.st-estado__icon svg {
+  width: var(--space-18);
+  height: var(--space-18);
+}
+
+.st-estado--sm .st-estado__icon {
+  width: var(--space-32);
+  height: var(--space-32);
+  margin-bottom: var(--space-10);
+  border-radius: var(--radius-chip);
+}
+
+.st-estado--sm .st-estado__icon svg {
+  width: var(--space-16);
+  height: var(--space-16);
+}
+
+/* El título puede ser p o un encabezado (titleAs): se ve igual en los dos casos,
+   en General Sans como el carrito vacío, sin el tracking de los h1–h6. */
+.st-estado__title {
+  font-family: var(--font-text);
+  font-size: var(--fs-ui-lg);
+  font-weight: var(--fw-semibold);
+  line-height: var(--lh-title);
+  letter-spacing: normal;
+  color: var(--color-text-secondary);
+  text-wrap: balance;
+}
+
+.st-estado--sm .st-estado__title {
+  font-size: var(--fs-ui-sm);
+}
+
+.st-estado__description {
+  max-width: var(--width-end-text);
+  margin-top: var(--space-6);
+  font-size: var(--fs-meta);
+  line-height: var(--lh-normal);
+  color: var(--color-text-tertiary);
+  text-wrap: pretty;
+}
+
+.st-estado--sm .st-estado__description {
+  margin-top: var(--space-4);
+  font-size: var(--fs-label);
+}
+
+.st-estado__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-10);
+  margin-top: var(--space-18);
+}
+
+.st-estado--sm .st-estado__actions {
+  margin-top: var(--space-12);
+}

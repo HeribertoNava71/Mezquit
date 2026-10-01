@@ -1,0 +1,108 @@
+/* Stepper (Strata.dc.html:500-504 y 665-669): caja de radio 10 con fondo #FAF8F5,
+   − y + en navy con hover celeste y el valor en JetBrains Mono 700.
+   El borde usa --color-border-control (3.47:1 #FAF8F5) porque contiene un input;
+   el #E7E2D8 del prototipo da 1.29:1. Sin overflow:hidden para no recortar el foco. */
+.st-stepper {
+  display: inline-flex;
+  align-self: flex-start;
+  align-items: stretch;
+  border: var(--border-width) solid var(--color-border-control);
+  border-radius: var(--radius-chip);
+  background-color: var(--color-bg);
+  transition: var(--transition-state);
+}
+
+.st-stepper:focus-within {
+  border-color: var(--color-focus);
+}
+
+.st-stepper__button {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: var(--space-32);
+  height: var(--space-38);
+  padding: 0;
+  border: 0;
+  background-color: transparent;
+  color: var(--color-navy);
+  cursor: pointer;
+  user-select: none;
+}
+
+.st-stepper__button--decrement {
+  border-radius: calc(var(--radius-chip) - var(--border-width)) 0 0 calc(var(--radius-chip) - var(--border-width));
+}
+
+.st-stepper__button--increment {
+  border-radius: 0 calc(var(--radius-chip) - var(--border-width)) calc(var(--radius-chip) - var(--border-width)) 0;
+}
+
+.st-stepper__button:where(:not([aria-disabled='true'])):hover {
+  background-color: var(--color-sky-tint);
+}
+
+.st-stepper__button[aria-disabled='true'] {
+  color: var(--color-dot-neutral);
+  cursor: not-allowed;
+}
+
+.st-stepper__input {
+  width: var(--space-48);
+  min-width: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--color-text);
+  font-family: var(--font-mono);
+  font-size: var(--fs-ui);
+  font-weight: var(--fw-bold);
+  font-variant-numeric: tabular-nums;
+  text-align: center;
+  appearance: textfield;
+}
+
+.st-stepper__input::-webkit-outer-spin-button,
+.st-stepper__input::-webkit-inner-spin-button {
+  margin: 0;
+  appearance: none;
+}
+
+/* Foco por dentro de cada parte: la caja no recorta el anillo ni tapa a sus vecinos */
+.st-stepper__button:focus-visible,
+.st-stepper__input:focus-visible {
+  outline: var(--focus-outline-width) solid var(--color-focus);
+  outline-offset: calc(-1 * var(--focus-outline-width));
+}
+
+/* Cantidad del catálogo */
+.st-stepper--sm .st-stepper__button {
+  width: var(--space-30);
+  height: var(--space-34);
+}
+
+.st-stepper--sm .st-stepper__input {
+  width: var(--space-34);
+}
+
+/* ── Estados ───────────────────────────────────────────────────────────── */
+
+.st-stepper--invalid {
+  border-color: var(--color-error-text);
+  background-color: var(--color-error-bg);
+}
+
+.st-stepper--invalid:focus-within {
+  border-color: var(--color-error-text);
+}
+
+.st-stepper--disabled {
+  border-color: var(--color-border-neutral);
+  background-color: var(--color-bg-alt);
+}
+
+.st-stepper--disabled .st-stepper__input {
+  color: var(--color-text-tertiary);
+  cursor: not-allowed;
+}

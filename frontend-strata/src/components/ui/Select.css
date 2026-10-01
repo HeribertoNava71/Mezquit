@@ -1,0 +1,97 @@
+/* Select STRATA: select nativo con las medidas de Input y flecha propia.
+   El prototipo no tiene select: se diseña con el sistema de los campos
+   (borde funcional --color-border-control, foco celeste y error de D-22). */
+.st-select {
+  position: relative;
+  display: flex;
+  min-width: 0;
+}
+
+.st-select__field {
+  width: 100%;
+  min-width: 0;
+  padding: var(--space-12) var(--space-40) var(--space-12) var(--space-14);
+  border: var(--border-width) solid var(--color-border-control);
+  border-radius: var(--radius-control);
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-text);
+  font-size: var(--fs-ui);
+  line-height: var(--lh-title);
+  text-overflow: ellipsis;
+  cursor: pointer;
+  appearance: none;
+  transition: var(--transition-state);
+}
+
+/* Mientras la opción vacía (placeholder) está elegida, el texto va en gris (4.83:1 #FAF8F5) */
+.st-select__field:has(> option[value='']:checked) {
+  color: var(--color-text-placeholder);
+}
+
+.st-select__field option {
+  color: var(--color-text);
+}
+
+/* Flecha: #8B8574 (3.47:1 #FAF8F5), no recibe clics */
+.st-select__chevron {
+  position: absolute;
+  top: 50%;
+  right: var(--space-14);
+  color: var(--color-icon-muted);
+  pointer-events: none;
+  transform: translateY(-50%);
+}
+
+/* ── Tamaños ───────────────────────────────────────────────────────────── */
+
+.st-select--sm .st-select__field {
+  padding: var(--space-11) var(--space-36) var(--space-11) var(--space-13);
+  border-radius: var(--radius-chip);
+}
+
+.st-select--sm .st-select__chevron {
+  right: var(--space-12);
+}
+
+.st-select--lg .st-select__field {
+  padding: var(--space-14) var(--space-42) var(--space-14) var(--space-16);
+  border-width: var(--border-width-control);
+  border-radius: var(--radius-control-candidate);
+  background-color: var(--color-surface-soft);
+  font-size: var(--fs-ui-lg);
+}
+
+.st-select--lg .st-select__chevron {
+  right: var(--space-16);
+}
+
+/* ── Estados ───────────────────────────────────────────────────────────── */
+
+.st-select--invalid .st-select__field {
+  border-color: var(--color-error-text);
+  background-color: var(--color-error-bg);
+}
+
+.st-select__field:focus {
+  outline: var(--focus-outline-width) solid transparent;
+  border-color: var(--color-focus);
+  background-color: var(--color-surface-white);
+  box-shadow: var(--focus-ring);
+}
+
+.st-select--invalid .st-select__field:focus {
+  border-color: var(--color-error-text);
+  box-shadow: var(--focus-ring-error);
+}
+
+.st-select__field:disabled {
+  border-color: var(--color-border-neutral);
+  background-color: var(--color-bg-alt);
+  color: var(--color-text-tertiary);
+  cursor: not-allowed;
+}
+
+.st-select__field:disabled + .st-select__chevron {
+  color: var(--color-dot-neutral);
+}

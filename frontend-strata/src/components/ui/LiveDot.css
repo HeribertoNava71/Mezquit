@@ -1,0 +1,46 @@
+/* Punto de estado (Strata.dc.html:67, 130, 173, 212, 976, 1155 y 1422). Decorativo. */
+.st-live-dot {
+  --st-live-dot-color: var(--color-sky);
+  --st-live-dot-size: var(--space-7);
+
+  display: inline-block;
+  flex: none;
+  width: var(--st-live-dot-size);
+  height: var(--st-live-dot-size);
+  border-radius: var(--radius-round);
+  background-color: var(--st-live-dot-color);
+  vertical-align: middle;
+}
+
+.st-live-dot--size-5 { --st-live-dot-size: var(--space-5); }
+.st-live-dot--size-6 { --st-live-dot-size: var(--space-6); }
+.st-live-dot--size-7 { --st-live-dot-size: var(--space-7); }
+
+.st-live-dot--sky        { --st-live-dot-color: var(--color-sky); }
+.st-live-dot--sky-strong { --st-live-dot-color: var(--color-sky-strong); }
+.st-live-dot--navy       { --st-live-dot-color: var(--color-navy); }
+.st-live-dot--success    { --st-live-dot-color: var(--color-success-bright); }
+.st-live-dot--neutral    { --st-live-dot-color: var(--color-dot-neutral); }
+.st-live-dot--coral      { --st-live-dot-color: var(--color-coral); }
+
+/* livePulse: opacidad .4 y escala .82 a la mitad (eyebrow del hero, «Perfil en vivo») */
+.st-live-dot--live {
+  animation: var(--anim-live-pulse);
+}
+
+/* pulseDot: solo opacidad («Guardado automático» del examen) */
+.st-live-dot--blink {
+  animation: var(--anim-pulse-dot);
+}
+
+/* Ritmo: van después del atajo para reemplazar solo la duración */
+.st-live-dot--tempo-fast   { animation-duration: var(--dur-pulse); }
+.st-live-dot--tempo-normal { animation-duration: var(--dur-live); }
+.st-live-dot--tempo-slow   { animation-duration: var(--dur-live-alt); }
+
+@media (prefers-reduced-motion: reduce) {
+  .st-live-dot--live,
+  .st-live-dot--blink {
+    animation: none;
+  }
+}

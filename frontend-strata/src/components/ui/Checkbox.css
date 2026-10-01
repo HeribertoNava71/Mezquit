@@ -1,0 +1,153 @@
+/* Checkbox STRATA: casilla de 19 px, radio 6 y borde de 1.5 px (Strata.dc.html:1069).
+   - Sin marcar: borde funcional --color-border-control (el #C9C2B4 del prototipo da 1.77:1).
+   - Marcada: --color-control-checked con palomita blanca (4.10:1); el #0EA5E9 del
+     prototipo da 2.77:1 sobre blanco y no llega al 3:1 de un indicador de estado.
+   El input nativo cubre la casilla con opacidad 0: recibe clics, foco y teclado. */
+.st-checkbox-field {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.st-checkbox {
+  position: relative;
+  display: inline-flex;
+  align-self: flex-start;
+  align-items: flex-start;
+  gap: var(--space-10);
+  color: var(--color-text-data);
+  font-size: var(--fs-ui-sm);
+  line-height: var(--lh-normal);
+  cursor: pointer;
+}
+
+.st-checkbox__control {
+  position: relative;
+  display: inline-flex;
+  flex: none;
+  margin-top: var(--space-1);
+}
+
+.st-checkbox__input {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  opacity: 0;
+  cursor: inherit;
+}
+
+.st-checkbox__box {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--space-19);
+  height: var(--space-19);
+  border: var(--border-width-control) solid var(--color-border-control);
+  border-radius: var(--radius-tag);
+  background-color: var(--color-surface-white);
+  color: transparent;
+  transition:
+    background-color var(--dur-state) var(--ease-base),
+    border-color var(--dur-state) var(--ease-base),
+    color var(--dur-state) var(--ease-base);
+}
+
+.st-checkbox:hover .st-checkbox__input:not(:checked, :disabled) + .st-checkbox__box {
+  border-color: var(--color-text-tertiary);
+}
+
+.st-checkbox__input:checked + .st-checkbox__box {
+  border-color: var(--color-control-checked);
+  background-color: var(--color-control-checked);
+  color: var(--color-on-primary);
+}
+
+.st-checkbox__input:focus-visible + .st-checkbox__box {
+  outline: var(--focus-outline-width) solid var(--color-focus);
+  outline-offset: var(--focus-outline-offset);
+}
+
+.st-checkbox__text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.st-checkbox__label a {
+  color: var(--color-link);
+  text-decoration: underline;
+  text-underline-offset: var(--space-2);
+}
+
+.st-checkbox__label a:hover {
+  color: var(--color-link-hover);
+}
+
+.st-checkbox__description {
+  margin-top: var(--space-2);
+  font-size: var(--fs-small);
+  color: var(--color-text-tertiary);
+}
+
+/* ── Consentimiento (Strata.dc.html:1068-1073, 2188-2192) ──────────────── */
+.st-checkbox--consent {
+  display: flex;
+  align-self: stretch;
+  gap: var(--space-11);
+  padding: var(--space-13) var(--space-15);
+  border: var(--border-width) solid var(--color-border-divider);
+  border-radius: var(--radius-control-candidate);
+  background-color: var(--color-bg);
+  color: var(--color-text-secondary);
+  font-size: var(--fs-small);
+  transition:
+    background-color var(--dur-state) var(--ease-base),
+    border-color var(--dur-state) var(--ease-base);
+}
+
+/* Marcado: tinte celeste suave (texto 7.02:1) */
+.st-checkbox--consent:has(.st-checkbox__input:checked) {
+  border-color: var(--color-sky-border);
+  background-color: var(--color-sky-tint-soft);
+}
+
+.st-checkbox--consent:has(.st-checkbox__input:focus-visible) {
+  border-color: var(--color-focus);
+}
+
+/* ── Estados ───────────────────────────────────────────────────────────── */
+
+.st-checkbox--invalid .st-checkbox__box {
+  border-color: var(--color-error-text);
+}
+
+.st-checkbox--consent.st-checkbox--invalid {
+  border-color: var(--color-error-text);
+  background-color: var(--color-error-bg);
+}
+
+.st-checkbox--disabled {
+  color: var(--color-text-tertiary);
+  cursor: not-allowed;
+}
+
+.st-checkbox__input:disabled + .st-checkbox__box {
+  border-color: var(--color-border-neutral);
+  background-color: var(--color-bg-alt);
+}
+
+.st-checkbox__input:disabled:checked + .st-checkbox__box {
+  border-color: var(--color-dot-neutral);
+  background-color: var(--color-dot-neutral);
+}
+
+@media (forced-colors: active) {
+  .st-checkbox__input:checked + .st-checkbox__box {
+    forced-color-adjust: none;
+    border-color: Highlight;
+    background-color: Highlight;
+    color: HighlightText;
+  }
+}

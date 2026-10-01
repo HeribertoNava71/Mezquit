@@ -1,15 +1,16 @@
-/* Cormorant Garamond — pesos usados: 400, 600, 700 */
+/* Fuentes (D-04, opción B)
+   - Satoshi y General Sans: CDN de Fontshare, enlazadas en index.html.
+   - JetBrains Mono: autohospedada con @fontsource (licencia OFL), pesos 400, 500 y 700.
+   Las familias se definen en tokens.css (--font-heading, --font-text y --font-mono). */
+@import '@fontsource/jetbrains-mono/400.css';
+@import '@fontsource/jetbrains-mono/500.css';
+@import '@fontsource/jetbrains-mono/700.css';
+
+/* Fuentes del sistema anterior: ya no las usa ningún token (--font-display y
+   --font-body apuntan a Satoshi y General Sans). Se retiran en la Fase 8 (D-20). */
 @import '@fontsource/cormorant-garamond/400.css';
 @import '@fontsource/cormorant-garamond/600.css';
 @import '@fontsource/cormorant-garamond/700.css';
 @import '@fontsource/cormorant-garamond/400-italic.css';
 @import '@fontsource/cormorant-garamond/600-italic.css';
-
-/* DM Sans — variable font (incluye todos los pesos) */
 @import '@fontsource-variable/dm-sans';
-
-/* Variables de fuente */
-:root {
-  --font-display: 'Cormorant Garamond', Georgia, serif;
-  --font-body:    'DM Sans Variable', 'DM Sans', system-ui, sans-serif;
-}

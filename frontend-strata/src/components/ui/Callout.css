@@ -1,0 +1,204 @@
+/* Callout: aviso en línea con ícono, título, texto y acciones.
+   Base: el aviso celeste de Strata.dc.html:1217-1220 (radio 14, padding 15 17,
+   gap 11, texto de 12.5 px). Los tonos de estado siguen la misma receta (D-22). */
+.st-callout {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: var(--space-11);
+  padding: var(--space-15) var(--space-17);
+  border: var(--border-width) solid transparent;
+  border-radius: var(--radius-control);
+  font-size: var(--fs-meta);
+  line-height: var(--lh-normal);
+  text-align: left;
+}
+
+/* Ícono de 17 px alineado con la primera línea */
+.st-callout__icon {
+  flex: none;
+  display: inline-flex;
+  margin-top: var(--space-1);
+}
+
+.st-callout__icon svg {
+  width: var(--space-17);
+  height: var(--space-17);
+}
+
+.st-callout__content {
+  flex: 1 1 200px;
+  min-width: 0;
+}
+
+.st-callout__title {
+  font-size: var(--fs-ui-sm);
+  font-weight: var(--fw-bold);
+  line-height: var(--lh-title);
+}
+
+.st-callout__title + .st-callout__text {
+  margin-top: var(--space-2);
+}
+
+.st-callout__text > * + * {
+  margin-top: var(--space-6);
+}
+
+/* Enlaces dentro del texto: subrayados (no se distinguen solo por color) */
+.st-callout__text a {
+  font-weight: var(--fw-semibold);
+  text-decoration: underline;
+  text-underline-offset: var(--space-2);
+}
+
+.st-callout__actions {
+  flex: none;
+  align-self: center;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-10);
+  margin-left: auto;
+}
+
+.st-callout__actions a {
+  font-weight: var(--fw-semibold);
+}
+
+.st-callout__actions a:hover {
+  text-decoration: underline;
+  text-underline-offset: var(--space-2);
+}
+
+/* ── Tonos de estado ─────────────────────────────────────────────────────── */
+.st-callout--info {
+  background: var(--color-info-bg);
+  border-color: var(--color-info-border);
+  color: var(--color-info-text);
+}
+
+.st-callout--info .st-callout__icon {
+  color: var(--color-info-icon);
+}
+
+.st-callout--success {
+  background: var(--color-success-bg);
+  border-color: var(--color-success-border);
+  color: var(--color-success-text);
+}
+
+.st-callout--success .st-callout__icon {
+  color: var(--color-success-icon);
+}
+
+.st-callout--error {
+  background: var(--color-error-bg);
+  border-color: var(--color-error-border);
+  color: var(--color-error-text);
+}
+
+.st-callout--warning {
+  background: var(--color-warning-bg);
+  border-color: var(--color-warning-border);
+  color: var(--color-warning-text);
+}
+
+/* ── Neutro: caja de interpretación (Strata.dc.html:946-953) ─────────────── */
+.st-callout--neutral {
+  padding: var(--space-16);
+  background: var(--color-bg);
+  border-color: var(--color-border-divider);
+  color: var(--color-text-secondary);
+}
+
+.st-callout--neutral .st-callout__icon {
+  color: var(--color-icon-muted);
+}
+
+.st-callout--neutral .st-callout__title {
+  font-size: var(--fs-meta);
+  color: var(--color-text);
+}
+
+.st-callout--neutral .st-callout__title + .st-callout__text {
+  margin-top: var(--space-8);
+}
+
+.st-callout--neutral .st-callout__text {
+  line-height: var(--lh-relaxed);
+}
+
+/* ── Banner tinta (Strata.dc.html:876-885) ───────────────────────────────── */
+/* Padding 17 20 del prototipo menos el borde transparente, que se conserva
+   para que el banner tenga contorno en modo de alto contraste. */
+.st-callout--dark {
+  align-items: center;
+  gap: var(--space-16);
+  padding: var(--space-16) var(--space-19);
+  border-radius: var(--radius-feature);
+  background: var(--color-surface-dark);
+  color: var(--color-on-dark-muted);
+}
+
+.st-callout--dark .st-callout__icon {
+  align-items: center;
+  justify-content: center;
+  width: var(--space-36);
+  height: var(--space-36);
+  margin-top: 0;
+  border-radius: var(--radius-round);
+  background: var(--color-on-dark-icon-bg);
+  color: var(--color-sky);
+}
+
+.st-callout--dark .st-callout__icon svg {
+  width: var(--space-19);
+  height: var(--space-19);
+}
+
+.st-callout--dark .st-callout__title {
+  font-size: var(--fs-h5);
+  color: var(--color-on-dark);
+}
+
+.st-callout--dark .st-callout__text {
+  font-size: var(--fs-small);
+}
+
+.st-callout--dark a {
+  color: var(--color-on-dark-link);
+}
+
+.st-callout--dark .st-callout__actions {
+  font-size: var(--fs-meta);
+  font-weight: var(--fw-semibold);
+}
+
+.st-callout--dark .st-callout__actions a:hover {
+  color: var(--color-on-dark);
+  text-decoration: none;
+}
+
+/* ── Compacto: pista del builder (Strata.dc.html:572-575) ────────────────── */
+/* Gap 8, padding 11 13, radio 10 y texto de 11 px, como el prototipo. */
+.st-callout--sm {
+  align-items: center;
+  gap: var(--space-8);
+  padding: var(--space-11) var(--space-13);
+  border-radius: var(--radius-chip);
+  font-size: var(--fs-eyebrow);
+}
+
+.st-callout--sm .st-callout__icon {
+  margin-top: 0;
+}
+
+.st-callout--sm .st-callout__icon svg {
+  width: var(--space-14);
+  height: var(--space-14);
+}
+
+.st-callout--sm .st-callout__title {
+  font-size: var(--fs-eyebrow);
+}

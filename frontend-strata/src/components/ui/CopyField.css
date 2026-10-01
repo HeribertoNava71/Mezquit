@@ -1,0 +1,232 @@
+/* Campo copiable (Strata.dc.html:1336-1339 fila sobre tinta; :737-738 código en
+   tabla; :742-745 enlace en tabla).
+   Contraste: enlace #38BDF8 sobre la fila oscura 6.95:1 · «Copiar» blanco 14.89:1 ·
+   valor #0369A1 sobre #FAF8F5 5.60:1 · ícono #6B6558 sobre blanco 5.79:1 ·
+   «Copiar» navy sobre vidrio 10.19:1 y su hover #0369A1 5.84:1 (5.79:1 en fila con hover). */
+.st-copy {
+  min-width: 0;
+  max-width: 100%;
+}
+
+.st-copy__value {
+  min-width: 0;
+  overflow: hidden;
+  font-family: var(--font-mono);
+  line-height: var(--lh-title);
+  text-align: start;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.st-copy__button {
+  flex: none;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font-family: var(--font-text);
+  line-height: var(--lh-title);
+  cursor: pointer;
+}
+
+/* ── field: fila con el valor y el botón de texto ──────────────────────── */
+.st-copy--field {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--space-10);
+  padding: var(--space-11) var(--space-14);
+  border: var(--border-width) solid var(--color-on-dark-border);
+  border-radius: var(--radius-control);
+  background-color: var(--color-on-dark-surface);
+  cursor: pointer;
+  transition: border-color var(--dur-state) var(--ease-base);
+}
+
+.st-copy--field .st-copy__value {
+  flex: 1;
+  font-size: var(--fs-small);
+  color: var(--color-on-dark-link);
+}
+
+.st-copy--field .st-copy__button {
+  margin: calc(var(--space-6) * -1) calc(var(--space-8) * -1) calc(var(--space-6) * -1) 0;
+  padding: var(--space-6) var(--space-8);
+  border-radius: var(--radius-chip-sm);
+  color: var(--color-on-dark);
+  font-size: var(--fs-label);
+  font-weight: var(--fw-bold);
+}
+
+/* Toda la fila copia, como en el prototipo; el foco sigue en el botón. */
+.st-copy--field .st-copy__button::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+}
+
+.st-copy--field:hover {
+  border-color: var(--color-sky);
+}
+
+.st-copy--field.st-copy--copied .st-copy__button {
+  color: var(--color-success-on-dark);
+}
+
+.st-copy--field.st-copy--error .st-copy__button {
+  color: var(--color-error-on-dark);
+}
+
+/* field claro */
+.st-copy--field.st-copy--light {
+  border-color: var(--color-border-neutral);
+  background-color: var(--color-bg);
+}
+
+.st-copy--field.st-copy--light .st-copy__value {
+  color: var(--color-sky-text);
+}
+
+.st-copy--field.st-copy--light .st-copy__button {
+  color: var(--color-link);
+}
+
+.st-copy--field.st-copy--light:hover {
+  border-color: var(--color-sky-strong);
+}
+
+.st-copy--field.st-copy--light:hover .st-copy__button {
+  color: var(--color-link-hover);
+}
+
+.st-copy--field.st-copy--light.st-copy--copied .st-copy__button {
+  color: var(--color-success-text);
+}
+
+.st-copy--field.st-copy--light.st-copy--error .st-copy__button {
+  color: var(--color-error-text);
+}
+
+/* ── inline: código y botón de ícono ───────────────────────────────────── */
+.st-copy--inline {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-9);
+  vertical-align: middle;
+}
+
+.st-copy--inline .st-copy__value {
+  font-size: var(--fs-ui-sm);
+  font-weight: var(--fw-bold);
+  letter-spacing: var(--tracking-code);
+  color: var(--color-text);
+}
+
+.st-copy--inline .st-copy__button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--space-24);
+  height: var(--space-24);
+  border: var(--border-width) solid var(--color-border-neutral);
+  border-radius: var(--radius-icon-btn);
+  background-color: transparent;
+  color: var(--color-text-tertiary);
+}
+
+.st-copy--inline .st-copy__button:hover {
+  border-color: var(--color-sky-strong);
+  background-color: var(--color-sky-tint);
+}
+
+.st-copy--inline.st-copy--copied .st-copy__button {
+  border-color: var(--color-success-icon);
+  color: var(--color-success-icon);
+}
+
+.st-copy--inline.st-copy--error .st-copy__button {
+  border-color: var(--color-error-text);
+  color: var(--color-error-text);
+}
+
+/* inline sobre oscuro */
+.st-copy--inline.st-copy--dark .st-copy__value {
+  color: var(--color-on-dark);
+}
+
+.st-copy--inline.st-copy--dark .st-copy__button {
+  border-color: var(--color-on-dark-border);
+  color: var(--color-on-dark-secondary);
+}
+
+.st-copy--inline.st-copy--dark .st-copy__button:hover {
+  border-color: var(--color-sky);
+  background-color: var(--color-on-dark-control);
+}
+
+.st-copy--inline.st-copy--dark.st-copy--copied .st-copy__button {
+  border-color: var(--color-success-bright);
+  color: var(--color-success-bright);
+}
+
+.st-copy--inline.st-copy--dark.st-copy--error .st-copy__button {
+  border-color: var(--color-error-on-dark);
+  color: var(--color-error-on-dark);
+}
+
+/* ── link: enlace en mono y «Copiar» de texto (Strata.dc.html:742-745) ── */
+.st-copy--link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-8);
+  vertical-align: middle;
+}
+
+.st-copy--link .st-copy__value {
+  font-size: var(--fs-label);
+  color: var(--color-sky-text);
+}
+
+/* El área del botón llega a 24 px de alto (WCAG 2.5.8) sin mover el texto. */
+.st-copy--link .st-copy__button {
+  margin: calc(var(--space-5) * -1) calc(var(--space-6) * -1);
+  padding: var(--space-5) var(--space-6);
+  border-radius: var(--radius-tag);
+  color: var(--color-link);
+  font-size: var(--fs-eyebrow);
+  font-weight: var(--fw-bold);
+}
+
+.st-copy--link .st-copy__button:hover {
+  color: var(--color-link-hover);
+}
+
+.st-copy--link.st-copy--copied .st-copy__button {
+  color: var(--color-success-text);
+}
+
+.st-copy--link.st-copy--error .st-copy__button {
+  color: var(--color-error-text);
+}
+
+/* link sobre oscuro */
+.st-copy--link.st-copy--dark .st-copy__value {
+  color: var(--color-on-dark-link);
+}
+
+.st-copy--link.st-copy--dark .st-copy__button {
+  color: var(--color-on-dark);
+}
+
+.st-copy--link.st-copy--dark .st-copy__button:hover {
+  color: var(--color-on-dark-link);
+}
+
+.st-copy--link.st-copy--dark.st-copy--copied .st-copy__button {
+  color: var(--color-success-on-dark);
+}
+
+.st-copy--link.st-copy--dark.st-copy--error .st-copy__button {
+  color: var(--color-error-on-dark);
+}

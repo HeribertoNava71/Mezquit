@@ -6,7 +6,8 @@ import tseslint from 'typescript-eslint'
 import { defineConfig, globalIgnores } from 'eslint/config'
 
 export default defineConfig([
-  globalIgnores(['dist']),
+  // .capturas: capturas y bancos de prueba temporales (scripts/captura.mjs), fuera de git.
+  globalIgnores(['dist', '.capturas']),
   {
     files: ['**/*.{ts,tsx}'],
     extends: [

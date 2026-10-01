@@ -1,0 +1,65 @@
+/* Campo: rótulo, ayuda, control y error.
+   Rótulo de 11.5 px (Strata.dc.html:368, :1039) y error inline con ícono (D-22). */
+.st-field {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.st-field__header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  column-gap: var(--space-8);
+  row-gap: var(--space-2);
+  margin-bottom: var(--space-7);
+}
+
+/* Builder y modales: 700, secundario (7.42:1 blanco, 7.00:1 #FAF8F5) */
+.st-field__label {
+  font-size: var(--fs-label);
+  font-weight: var(--fw-bold);
+  line-height: var(--lh-title);
+  color: var(--color-text-secondary);
+}
+
+/* Candidato: 600, #3D3A33 (11.34:1 blanco) y tracking .01em */
+.st-field--lg .st-field__label {
+  font-weight: var(--fw-semibold);
+  letter-spacing: var(--tracking-label);
+  color: var(--color-text-data);
+}
+
+.st-field__required {
+  margin-left: var(--space-2);
+  color: var(--color-error-text);
+}
+
+/* Ayuda junto al rótulo (Strata.dc.html:1055): 11 px, terciario (5.79:1 blanco) */
+.st-field__hint {
+  font-size: var(--fs-eyebrow);
+  line-height: var(--lh-normal);
+  color: var(--color-text-tertiary);
+}
+
+/* Error: #B3261E (6.54:1 blanco, 6.17:1 #FAF8F5) con ícono */
+.st-field__error {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-6);
+  margin-top: var(--space-7);
+  font-size: var(--fs-small);
+  font-weight: var(--fw-medium);
+  line-height: var(--lh-normal);
+  color: var(--color-error-text);
+}
+
+.st-field__error-icon {
+  flex: none;
+  margin-top: var(--space-2);
+}
+
+/* Palomita blanca del ícono de válido (IconoValido, en Iconos.tsx) */
+.st-icono-valido__palomita {
+  stroke: var(--color-surface-white);
+}

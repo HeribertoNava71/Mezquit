@@ -1,0 +1,185 @@
+/* ==========================================================================
+   Input STRATA
+   - md: builder y modales (Strata.dc.html:369, :1388): radio 14, fondo #FAF8F5, 13.5 px.
+   - sm: rangos del builder (Strata.dc.html:559): radio 10.
+   - lg: candidato (Strata.dc.html:1044, :1059): radio 12, borde 1.5 px, fondo
+     #FCFBF9, 14.5 px, ícono a la izquierda y check de válido.
+   - code: código de licencia (Strata.dc.html:1111): 20 px mono, centrado.
+   El borde usa --color-border-control (3.68:1 blanco, 3.47:1 #FAF8F5): los
+   #E7E2D8 y #E5E0D8 del prototipo dan 1.29 y 1.31:1. En el builder el prototipo
+   quitaba el foco (outline:none); aquí todos los tamaños llevan el anillo.
+   El contenedor dibuja borde, fondo y foco; el <input> va transparente dentro.
+   ========================================================================== */
+
+.st-input {
+  position: relative;
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  overflow: hidden;
+  border: var(--border-width) solid var(--color-border-control);
+  border-radius: var(--radius-control);
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-text);
+  font-size: var(--fs-ui);
+  line-height: var(--lh-title);
+  cursor: text;
+  transition: var(--transition-state);
+}
+
+.st-input__field {
+  flex: 1 1 auto;
+  width: 100%;
+  min-width: 0;
+  padding: var(--space-12) var(--space-14);
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  letter-spacing: inherit;
+  text-align: inherit;
+  text-transform: inherit;
+}
+
+/* El contenedor dibuja el foco (:focus-within); el input no repite el outline global. */
+.st-input__field:focus,
+.st-input__field:focus-visible {
+  outline: none;
+}
+
+/* Autocompletado de Chrome y Safari: sin el fondo amarillo o azul del navegador */
+.st-input__field:-webkit-autofill {
+  -webkit-text-fill-color: var(--color-text);
+  box-shadow: inset 0 0 0 100vmax var(--color-surface-white);
+}
+
+/* Ícono a la izquierda: 16 px, #8B8574 (3.47:1 #FAF8F5) (Strata.dc.html:1043) */
+.st-input__icon {
+  display: inline-flex;
+  flex: none;
+  margin-left: var(--space-14);
+  color: var(--color-icon-muted);
+  pointer-events: none;
+}
+
+/* Prefijo y sufijo de texto (Strata.dc.html:385) */
+.st-input__affix {
+  flex: none;
+  padding-inline: var(--space-11);
+  font-size: var(--fs-ui-sm);
+  font-weight: var(--fw-bold);
+  color: var(--color-text-tertiary);
+  white-space: nowrap;
+  user-select: none;
+}
+
+/* Check de válido con popIn (Strata.dc.html:1045-1049) */
+.st-input__check {
+  display: inline-flex;
+  flex: none;
+  margin-right: var(--space-14);
+  color: var(--color-success-icon);
+  animation: var(--anim-pop-in);
+}
+
+/* ── Tamaños ───────────────────────────────────────────────────────────── */
+
+.st-input--sm {
+  border-radius: var(--radius-chip);
+}
+
+.st-input--sm .st-input__field {
+  padding: var(--space-11) var(--space-13);
+}
+
+.st-input--lg {
+  border-width: var(--border-width-control);
+  border-radius: var(--radius-control-candidate);
+  background-color: var(--color-surface-soft);
+  font-size: var(--fs-ui-lg);
+}
+
+.st-input--lg .st-input__field {
+  padding: var(--space-14) var(--space-16);
+}
+
+/* ── Variantes ─────────────────────────────────────────────────────────── */
+
+.st-input--mono {
+  font-family: var(--font-mono);
+  font-weight: var(--fw-bold);
+}
+
+.st-input--code {
+  border-width: var(--border-width-control);
+  border-radius: var(--radius-control-candidate);
+  background-color: var(--color-surface-soft);
+  font-family: var(--font-mono);
+  font-size: var(--fs-code-lg);
+  font-weight: var(--fw-bold);
+  letter-spacing: var(--tracking-code-lg);
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.st-input.st-input--code .st-input__field {
+  padding: var(--space-16) var(--space-18);
+}
+
+/* Huecos junto al ícono, los afijos y el check (valen en todos los tamaños) */
+.st-input.st-input--has-icon .st-input__field {
+  padding-left: var(--space-10);
+}
+
+.st-input.st-input--has-prefix .st-input__field {
+  padding-left: 0;
+}
+
+.st-input.st-input--has-suffix .st-input__field {
+  padding-right: 0;
+}
+
+.st-input.st-input--valid .st-input__field {
+  padding-right: var(--space-12);
+}
+
+/* ── Estados (el orden importa: el foco gana a válido, y el error se queda) ── */
+
+/* Válido: borde #16A34A (3.22:1 sobre su fondo) y fondo #FAFDFB */
+.st-input--valid {
+  border-color: var(--color-success-icon);
+  background-color: var(--color-success-bg-subtle);
+}
+
+/* Error (D-22): borde #B3261E y fondo #FCF1F0; el texto va debajo con ícono */
+.st-input--invalid {
+  border-color: var(--color-error-text);
+  background-color: var(--color-error-bg);
+}
+
+/* Foco: borde y anillo celeste del prototipo (Strata.dc.html:1044) con --color-focus.
+   outline transparente para que se vea en modo de alto contraste. */
+.st-input:focus-within {
+  outline: var(--focus-outline-width) solid transparent;
+  border-color: var(--color-focus);
+  background-color: var(--color-surface-white);
+  box-shadow: var(--focus-ring);
+}
+
+.st-input--invalid:focus-within {
+  border-color: var(--color-error-text);
+  box-shadow: var(--focus-ring-error);
+}
+
+.st-input--disabled {
+  border-color: var(--color-border-neutral);
+  background-color: var(--color-bg-alt);
+  color: var(--color-text-tertiary);
+  cursor: not-allowed;
+}
+
+.st-input--disabled .st-input__field {
+  cursor: not-allowed;
+}

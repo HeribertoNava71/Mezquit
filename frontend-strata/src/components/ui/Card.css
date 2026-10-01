@@ -1,0 +1,113 @@
+/* Tarjeta (superficies de tokens.css; Strata.dc.html:169, 239, 273, 419, 509,
+   511, 630, 698, 708, 888, 1011, 1170, 1210, 1264, 1270, 1333). */
+.st-card {
+  --st-card-lift: calc(var(--space-4) * -1);
+  --st-card-shadow-hover: var(--shadow-step-hover);
+
+  position: relative;
+  min-width: 0;
+  color: var(--color-text);
+}
+
+/* ── Superficies ───────────────────────────────────────────────────────── */
+.st-card--glass {
+  --st-card-lift: calc(var(--space-5) * -1);
+  --st-card-shadow-hover: var(--shadow-glass-hover);
+
+  background: var(--surface-glass-bg);
+  border: var(--surface-glass-border);
+  border-radius: var(--surface-glass-radius);
+  box-shadow: var(--shadow-glass);
+  -webkit-backdrop-filter: blur(var(--blur-glass));
+  backdrop-filter: blur(var(--blur-glass));
+}
+
+.st-card--secondary {
+  background: var(--surface-secondary-bg);
+  border: var(--surface-secondary-border);
+  border-radius: var(--surface-secondary-radius);
+}
+
+.st-card--white {
+  --st-card-shadow-hover: var(--shadow-glass-hover);
+
+  background: var(--surface-white-bg);
+  border: var(--surface-white-border);
+  border-radius: var(--surface-white-radius);
+}
+
+/* Borde cálido: tarjeta del acceso del candidato (Strata.dc.html:1011) */
+.st-card--white.st-card--border-warm {
+  border: var(--surface-white-border-warm);
+}
+
+.st-card--dark {
+  background: var(--surface-dark-bg);
+  border-radius: var(--surface-dark-radius);
+  color: var(--color-on-dark);
+}
+
+.st-card--dashed {
+  background: var(--surface-dashed-bg);
+  border: var(--surface-dashed-border);
+  border-radius: var(--surface-dashed-radius);
+}
+
+.st-card--step {
+  background: var(--surface-step-bg);
+  border: var(--surface-step-border);
+  border-radius: var(--surface-step-radius);
+}
+
+/* ── Padding ───────────────────────────────────────────────────────────── */
+.st-card--pad-none { padding: 0; overflow: hidden; }
+.st-card--pad-sm   { padding: var(--space-16); }
+.st-card--pad-md   { padding: var(--space-24); }
+.st-card--pad-lg   { padding: var(--space-34); }
+
+@media (max-width: 640px) {
+  .st-card--pad-md { padding: var(--space-20); }
+  .st-card--pad-lg { padding: var(--space-24); }
+}
+
+/* ── Hover (solo con puntero que permite hover) ────────────────────────── */
+.st-card--hover-lift {
+  transition:
+    transform var(--dur-lift) var(--ease-base),
+    box-shadow var(--dur-lift) var(--ease-base);
+}
+
+.st-card--hover-outline {
+  transition:
+    transform var(--dur-state) var(--ease-base),
+    border-color var(--dur-state) var(--ease-base);
+}
+
+@media (hover: hover) {
+  .st-card--hover-lift:hover {
+    transform: translateY(var(--st-card-lift));
+    box-shadow: var(--st-card-shadow-hover);
+  }
+
+  .st-card--hover-outline:hover {
+    border-color: var(--color-border-cool-hover);
+    transform: translateY(calc(var(--space-2) * -1));
+  }
+}
+
+/* ── Entrada escalonada (riseIn, 55 ms entre tarjetas) ─────────────────── */
+.st-card--enter {
+  animation: var(--anim-rise-in);
+  animation-delay: calc(var(--i, 0) * var(--stagger-card));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .st-card--enter {
+    animation: none;
+  }
+
+  .st-card--hover-lift:hover,
+  .st-card--hover-outline:hover {
+    transform: none;
+  }
+}

@@ -1,0 +1,91 @@
+/* Textarea STRATA (Strata.dc.html:400, :477, :571): radio 14, fondo #FAF8F5,
+   13 px con interlineado 1.5 y redimensionable en vertical. Borde funcional
+   --color-border-control y foco visible (el prototipo usaba outline:none). */
+.st-textarea {
+  position: relative;
+  display: flex;
+  min-width: 0;
+}
+
+.st-textarea__field {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  padding: var(--space-12) var(--space-14);
+  border: var(--border-width) solid var(--color-border-control);
+  border-radius: var(--radius-control);
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-text);
+  font-size: var(--fs-ui-sm);
+  line-height: var(--lh-normal);
+  resize: vertical;
+  transition: var(--transition-state);
+}
+
+/* ── Tamaños y variante ────────────────────────────────────────────────── */
+
+.st-textarea--sm .st-textarea__field {
+  padding: var(--space-11) var(--space-13);
+  border-radius: var(--radius-chip);
+}
+
+.st-textarea--lg .st-textarea__field {
+  padding: var(--space-14) var(--space-16);
+  border-width: var(--border-width-control);
+  border-radius: var(--radius-control-candidate);
+  background-color: var(--color-surface-soft);
+  font-size: var(--fs-ui-lg);
+}
+
+.st-textarea--mono .st-textarea__field {
+  font-family: var(--font-mono);
+}
+
+/* Check de válido arriba a la derecha */
+.st-textarea__check {
+  position: absolute;
+  top: var(--space-13);
+  right: var(--space-14);
+  display: inline-flex;
+  color: var(--color-success-icon);
+  pointer-events: none;
+  animation: var(--anim-pop-in);
+}
+
+.st-textarea--lg .st-textarea__check {
+  top: var(--space-16);
+}
+
+/* ── Estados (el foco gana a válido; el error conserva su borde) ────────── */
+
+.st-textarea--valid .st-textarea__field {
+  padding-right: var(--space-42);
+  border-color: var(--color-success-icon);
+  background-color: var(--color-success-bg-subtle);
+}
+
+.st-textarea--invalid .st-textarea__field {
+  border-color: var(--color-error-text);
+  background-color: var(--color-error-bg);
+}
+
+.st-textarea__field:focus {
+  outline: var(--focus-outline-width) solid transparent;
+  border-color: var(--color-focus);
+  background-color: var(--color-surface-white);
+  box-shadow: var(--focus-ring);
+}
+
+.st-textarea--invalid .st-textarea__field:focus {
+  border-color: var(--color-error-text);
+  box-shadow: var(--focus-ring-error);
+}
+
+.st-textarea__field:disabled {
+  border-color: var(--color-border-neutral);
+  background-color: var(--color-bg-alt);
+  color: var(--color-text-tertiary);
+  cursor: not-allowed;
+  resize: none;
+}

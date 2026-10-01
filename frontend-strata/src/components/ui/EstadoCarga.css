@@ -1,0 +1,94 @@
+/* EstadoCarga: el prototipo no diseña la carga; se arma con sus tokens.
+   Inline: Spinner sm (14 px) en celeste y «Cargando…» en texto terciario.
+   Bloque: esqueleto de líneas o de tarjetas secundarias con pulso suave.
+   Con movimiento reducido, la regla global de global.css los deja quietos. */
+
+/* ── Inline ──────────────────────────────────────────────────────────────── */
+.st-carga--inline {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-8);
+  font-size: var(--fs-ui-sm);
+  font-weight: var(--fw-medium);
+  line-height: var(--lh-normal);
+  color: var(--color-text-tertiary);
+}
+
+/* El Spinner toma currentColor: anillo celeste con pista tenue. Es decorativo
+   (aria-hidden); el texto visible explica el estado. */
+.st-carga__spinner {
+  color: var(--color-sky-strong);
+}
+
+/* ── Bloque ──────────────────────────────────────────────────────────────── */
+.st-carga--bloque {
+  display: block;
+}
+
+.st-carga__lineas {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-12);
+}
+
+.st-carga__linea {
+  display: block;
+  height: var(--space-12);
+  border-radius: var(--radius-pill);
+  background: var(--color-border-subtle);
+  animation: st-skeleton-pulse var(--dur-pulse) var(--ease-loop) infinite;
+}
+
+/* Anchos variados para que parezca texto; la última línea, más corta */
+.st-carga__lineas .st-carga__linea:nth-child(3n + 2) {
+  width: 92%;
+}
+
+.st-carga__lineas .st-carga__linea:nth-child(3n) {
+  width: 84%;
+}
+
+.st-carga__lineas .st-carga__linea:last-child:not(:first-child) {
+  width: 60%;
+}
+
+/* Tarjetas: receta de la tarjeta secundaria, en rejilla de 18 px */
+.st-carga__tarjetas {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 260px), 1fr));
+  gap: var(--space-18);
+}
+
+.st-carga__tarjeta {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-12);
+  padding: var(--space-22);
+  background: var(--surface-secondary-bg);
+  border: var(--surface-secondary-border);
+  border-radius: var(--surface-secondary-radius);
+}
+
+.st-carga__tarjeta .st-carga__linea {
+  background: var(--color-surface-muted);
+}
+
+.st-carga__linea--titulo {
+  width: 64%;
+  height: var(--space-16);
+}
+
+.st-carga__linea--corta {
+  width: 78%;
+}
+
+.st-carga__linea--pastilla {
+  width: 32%;
+  height: var(--space-22);
+  margin-top: var(--space-6);
+}
+
+@keyframes st-skeleton-pulse {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0.5; }
+}

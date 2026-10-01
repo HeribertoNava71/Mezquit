@@ -1,0 +1,100 @@
+/* Pastillas de pasos (Strata.dc.html:351-358; estados :1896-1904).
+   Contraste: número activo blanco sobre navy 10.36:1 · número pendiente 5.75:1 ·
+   etiqueta pendiente 5.46:1. El borde celeste del activo es un refuerzo
+   decorativo: el estado también lo dicen el número navy, el fondo, el peso y aria-current. */
+.st-steps {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-8);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.st-steps__item {
+  display: flex;
+  min-width: 0;
+}
+
+.st-steps__pill {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-9);
+  min-width: 0;
+  padding: var(--space-11) var(--space-16);
+  border: var(--border-width) solid var(--color-border-neutral);
+  border-radius: var(--radius-control-candidate);
+  background-color: transparent;
+  color: var(--color-text-tertiary);
+  font: inherit;
+  font-size: var(--fs-ui-sm);
+  font-weight: var(--fw-semibold);
+  line-height: var(--lh-title);
+  text-align: start;
+}
+
+.st-steps__pill--button {
+  cursor: pointer;
+}
+
+.st-steps__number {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: var(--space-20);
+  height: var(--space-20);
+  border-radius: var(--radius-round);
+  background-color: var(--color-border-neutral);
+  color: var(--color-text-secondary);
+  font-size: var(--fs-eyebrow);
+  font-weight: var(--fw-bold);
+  line-height: var(--lh-none);
+  font-variant-numeric: tabular-nums;
+}
+
+.st-steps__label {
+  min-width: 0;
+}
+
+/* Activo */
+.st-steps__item--active .st-steps__pill {
+  border-color: var(--color-sky-strong);
+  background-color: var(--color-surface-white);
+  color: var(--color-text);
+}
+
+.st-steps__item--active .st-steps__number {
+  background-color: var(--color-navy);
+  color: var(--color-on-navy);
+}
+
+/* Hecho: check navy sobre tinte navy (8.77:1) */
+.st-steps__item--done .st-steps__pill {
+  color: var(--color-text-secondary);
+}
+
+.st-steps__item--done .st-steps__number {
+  background-color: var(--color-navy-tint);
+  color: var(--color-navy);
+}
+
+/* Hover de los pasos seleccionables que no son el actual */
+@media (hover: hover) {
+  .st-steps__item:not(.st-steps__item--active) .st-steps__pill--button:hover {
+    border-color: var(--color-border-strong);
+    background-color: var(--color-surface-white);
+    color: var(--color-text);
+  }
+}
+
+@media (forced-colors: active) {
+  .st-steps__item--active .st-steps__pill {
+    border-width: var(--border-width-thick);
+    border-color: Highlight;
+  }
+
+  .st-steps__number {
+    border: var(--border-width) solid;
+  }
+}

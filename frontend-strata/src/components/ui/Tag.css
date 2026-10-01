@@ -1,0 +1,181 @@
+/* Tag o pastilla (Strata.dc.html:129-132, 240-243, 266-269, 460-462, 474, 638-641, 795, 1015-1019).
+   Contraste del texto sobre su fondo en cada tono. La pastilla «Borrador · v0.4»
+   (:337) es un estado: va con <Badge size="sm">. */
+.st-tag {
+  --st-tag-bg: var(--color-sky-tint-strong);
+  --st-tag-fg: var(--color-sky-deep);
+  --st-tag-dot: var(--color-sky-strong);
+  --st-tag-border: transparent;
+  --st-tag-icon: currentColor;
+  --st-tag-dot-size: var(--space-5);
+
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-7);
+  max-width: 100%;
+  padding: var(--space-5) var(--space-11);
+  border: var(--border-width) solid var(--st-tag-border);
+  border-radius: var(--radius-pill);
+  background-color: var(--st-tag-bg);
+  color: var(--st-tag-fg);
+  font-family: var(--font-text);
+  font-size: var(--fs-eyebrow);
+  font-weight: var(--fw-semibold);
+  line-height: var(--lh-title);
+  white-space: nowrap;
+  vertical-align: middle;
+}
+
+/* Tamaños */
+.st-tag--xs {
+  gap: var(--space-4);
+  padding: var(--space-2) var(--space-7);
+  font-size: var(--fs-micro-sm);
+}
+
+.st-tag--sm {
+  gap: var(--space-5);
+  padding: var(--space-3) var(--space-9);
+  font-size: var(--fs-micro);
+}
+
+.st-tag--lg {
+  --st-tag-dot-size: var(--space-7);
+
+  gap: var(--space-8);
+  padding: var(--space-6) var(--space-13);
+  font-size: var(--fs-label);
+}
+
+/* Insignia (Strata.dc.html:266-269): el ícono no recorta el padding */
+.st-tag--xl {
+  --st-tag-dot-size: var(--space-7);
+
+  gap: var(--space-8);
+  padding: var(--space-7) var(--space-14);
+  font-size: var(--fs-small);
+}
+
+/* Con punto o ícono, el lado del punto se recorta (Strata.dc.html:129, 1015) */
+.st-tag--lg.st-tag--lead {
+  padding-inline-start: var(--space-9);
+}
+
+/* Forma cuadrada: etiquetas y chips de código */
+.st-tag--square {
+  border-radius: var(--radius-tag);
+}
+
+.st-tag--square.st-tag--sm {
+  padding: var(--space-3) var(--space-7);
+}
+
+/* Chip de código del saldo (Strata.dc.html:795): radio de 5 px */
+.st-tag--square.st-tag--xs {
+  padding: var(--space-2) var(--space-5);
+  border-radius: var(--radius-code);
+}
+
+/* Mono: códigos (ITEM-1, LID-360, ×1.2) */
+.st-tag--mono {
+  font-family: var(--font-mono);
+  font-weight: var(--fw-regular);
+  letter-spacing: normal;
+}
+
+/* Punto: hereda el color del tono */
+.st-tag .st-tag__dot {
+  --st-live-dot-color: var(--st-tag-dot);
+  --st-live-dot-size: var(--st-tag-dot-size);
+}
+
+.st-tag__icon {
+  display: inline-flex;
+  flex: none;
+  color: var(--st-tag-icon);
+}
+
+/* ── Tonos ─────────────────────────────────────────────────────────────── */
+
+/* Celeste · 6.83:1 (mono: #0369A1, 5.36:1) */
+.st-tag--sky {
+  --st-tag-bg: var(--color-sky-tint-strong);
+  --st-tag-fg: var(--color-sky-deep);
+  --st-tag-dot: var(--color-sky-strong);
+}
+
+.st-tag--sky.st-tag--mono {
+  --st-tag-fg: var(--color-sky-text);
+}
+
+.st-tag--sky.st-tag--bordered {
+  --st-tag-border: var(--color-sky-border);
+}
+
+/* Coral · 5.14:1 */
+.st-tag--coral {
+  --st-tag-bg: var(--color-coral-tint);
+  --st-tag-fg: var(--color-coral-text);
+  --st-tag-dot: var(--color-coral);
+  --st-tag-icon: var(--color-coral-strong);
+}
+
+.st-tag--coral.st-tag--bordered {
+  --st-tag-border: var(--color-coral-border);
+}
+
+/* Navy · 8.77:1 */
+.st-tag--navy {
+  --st-tag-bg: var(--color-navy-tint);
+  --st-tag-fg: var(--color-navy);
+  --st-tag-dot: var(--color-navy);
+}
+
+/* Neutro · 6.34:1 */
+.st-tag--neutral {
+  --st-tag-bg: var(--color-surface-muted);
+  --st-tag-fg: var(--color-text-secondary);
+  --st-tag-dot: var(--color-dot-neutral);
+}
+
+.st-tag--neutral.st-tag--bordered {
+  --st-tag-border: var(--color-border-subtle);
+}
+
+/* Pastilla blanca del hero · 7.35:1 */
+.st-tag--surface {
+  --st-tag-bg: var(--surface-pill-bg);
+  --st-tag-fg: var(--color-text-secondary);
+  --st-tag-dot: var(--color-sky);
+  --st-tag-border: var(--color-border-subtle);
+
+  box-shadow: var(--shadow-pill);
+}
+
+/* Contorno («{n} en saldo») · 7.46:1 sobre vidrio */
+.st-tag--outline {
+  --st-tag-bg: transparent;
+  --st-tag-fg: var(--color-text-slate);
+  --st-tag-dot: var(--color-sky-strong);
+  --st-tag-border: var(--color-border-cool);
+}
+
+/* Insignia verificada sobre tinta · 11.62:1 */
+.st-tag--success-on-dark {
+  --st-tag-bg: var(--color-success-on-dark-bg);
+  --st-tag-fg: var(--color-success-on-dark);
+  --st-tag-dot: var(--color-success-bright);
+  --st-tag-border: var(--color-success-on-dark-border);
+  --st-tag-icon: var(--color-success-bright);
+}
+
+@media (forced-colors: active) {
+  .st-tag {
+    border-color: currentColor;
+  }
+
+  .st-tag .st-tag__dot {
+    forced-color-adjust: none;
+    background-color: currentColor;
+  }
+}

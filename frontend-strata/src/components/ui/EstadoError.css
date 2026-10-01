@@ -1,0 +1,18 @@
+/* EstadoError: el prototipo no diseña errores. Se arma con la receta de
+   EstadoBase (el carrito vacío, Strata.dc.html:1263-1268) y se distingue del
+   vacío por el borde sólido de tarjeta, el ícono en el tinte de error del repo
+   (#B3261E sobre #FCF1F0, 5.91:1) y el título en tinta. El botón «Reintentar»
+   es el Button secundario del sistema (Strata.dc.html:1224). */
+.st-estado-error {
+  border: var(--border-width) solid var(--color-border-card);
+}
+
+.st-estado-error .st-estado__icon {
+  background: var(--color-error-bg);
+  color: var(--color-error-text);
+}
+
+.st-estado-error .st-estado__title {
+  font-weight: var(--fw-bold);
+  color: var(--color-text);
+}

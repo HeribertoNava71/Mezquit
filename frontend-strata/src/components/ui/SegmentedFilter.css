@@ -1,0 +1,90 @@
+/* SegmentedFilter (Strata.dc.html:621-624, 713-716, 814-817; chip() en :1757-1761).
+   Pista #F1EDE4 con borde #E5E0D8, radio 14 y 3 px de relleno. Inactivo #6B6558
+   en 500 (4.95:1 sobre la pista); activo en blanco, tinta, 600 y sombra. */
+.st-segmented {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+  max-width: 100%;
+  padding: var(--space-3);
+  border: var(--border-width) solid var(--color-border-warm);
+  border-radius: var(--radius-control);
+  background-color: var(--color-surface-track);
+}
+
+.st-segmented__option {
+  display: inline-flex;
+  align-items: baseline;
+  gap: var(--space-6);
+  padding: var(--space-7) var(--space-14);
+  border-radius: var(--radius-tab);
+  background-color: transparent;
+  color: var(--color-text-tertiary);
+  font-size: var(--fs-meta);
+  font-weight: var(--fw-medium);
+  line-height: var(--lh-snug); /* 31 y 28 px de alto, como el interlineado normal del prototipo */
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.st-segmented__option:where(:not(:disabled, [aria-pressed='true'])):hover {
+  color: var(--color-text);
+}
+
+.st-segmented__option[aria-pressed='true'] {
+  background-color: var(--color-surface-white);
+  color: var(--color-text);
+  font-weight: var(--fw-semibold);
+  box-shadow: var(--shadow-chip);
+}
+
+/* Foco pegado al chip para no tapar a los vecinos (3.51:1 sobre la pista) */
+.st-segmented__option:focus-visible {
+  outline-offset: 0;
+}
+
+.st-segmented__option:disabled {
+  color: var(--color-dot-neutral);
+  cursor: not-allowed;
+}
+
+/* Reserva el ancho del texto en 600 para que el chip no salte al activarse */
+.st-segmented__label {
+  display: inline-grid;
+}
+
+.st-segmented__label::after {
+  content: attr(data-label);
+  content: attr(data-label) / '';
+  height: 0;
+  overflow: hidden;
+  font-weight: var(--fw-semibold);
+  visibility: hidden;
+  user-select: none;
+  pointer-events: none;
+}
+
+.st-segmented__count {
+  font-variant-numeric: tabular-nums;
+  font-weight: var(--fw-semibold);
+  color: var(--color-text-tertiary);
+}
+
+.st-segmented__option[aria-pressed='true'] .st-segmented__count {
+  color: var(--color-text-secondary);
+}
+
+/* Filtros de tabla */
+.st-segmented--sm .st-segmented__option {
+  padding: var(--space-6) var(--space-12);
+  font-size: var(--fs-label);
+}
+
+/* Alto contraste: sin fondos ni sombras, el activo se marca con un contorno */
+@media (forced-colors: active) {
+  .st-segmented__option[aria-pressed='true']:not(:focus-visible) {
+    outline: var(--border-width) solid CanvasText;
+    outline-offset: calc(-1 * var(--border-width));
+  }
+}

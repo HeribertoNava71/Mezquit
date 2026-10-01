@@ -1,0 +1,54 @@
+/* Tarjeta oscura del código (Strata.dc.html:1333-1340).
+   Rótulo #7DA2D9 sobre tinta 6.84:1 · código blanco 17.85:1. */
+.st-code-display {
+  min-width: 0;
+  padding: var(--space-22);
+  border-radius: var(--radius-feature);
+  background: var(--surface-dark-bg);
+  color: var(--color-on-dark);
+  text-align: center;
+}
+
+.st-code-display--start {
+  text-align: start;
+}
+
+.st-code-display__label {
+  margin: 0;
+  font-size: var(--fs-micro);
+  font-weight: var(--fw-bold);
+  line-height: var(--lh-title);
+  letter-spacing: var(--tracking-eyebrow);
+  text-transform: uppercase;
+  color: var(--color-on-dark-eyebrow);
+}
+
+.st-code-display__code {
+  margin: var(--space-12) 0 0;
+  font-family: var(--font-mono);
+  font-size: var(--fs-code-xl);
+  font-weight: var(--fw-bold);
+  line-height: var(--lh-heading);
+  letter-spacing: var(--tracking-code-xl);
+  color: var(--color-on-dark);
+  overflow-wrap: anywhere;
+}
+
+/* Sin rótulo, el código abre la tarjeta sin margen */
+.st-code-display__code:first-child {
+  margin-top: 0;
+}
+
+.st-code-display__label:first-child + .st-code-display__body {
+  margin-top: var(--space-14);
+}
+
+.st-code-display__code + .st-code-display__body {
+  margin-top: var(--space-14);
+}
+
+@media (max-width: 640px) {
+  .st-code-display {
+    padding: var(--space-18);
+  }
+}

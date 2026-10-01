@@ -1,0 +1,5 @@
+/* EstadoVacio: el carrito vacío (Strata.dc.html:1263-1268). Caja blanca con
+   borde punteado #D6CFC2; el layout está en EstadoBase.css. */
+.st-estado-vacio {
+  border: var(--surface-dashed-border);
+}

@@ -1,0 +1,31 @@
+/* Grupo de RadioCard. Separación del prototipo: 8 px en fila de chips (Strata.dc.html:480),
+   7 px en listas de modal (:1344), 9 px en el examen (:1173) y 10 px en fila de tarjetas (:1402). */
+.st-radio-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-7);
+  min-width: 0;
+}
+
+.st-radio-group--sm {
+  gap: var(--space-8);
+}
+
+.st-radio-group--lg {
+  gap: var(--space-9);
+}
+
+.st-radio-group--horizontal {
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: stretch;
+}
+
+.st-radio-group--horizontal.st-radio-group--md {
+  gap: var(--space-10);
+}
+
+/* Tarjetas sin aro en fila: se reparten el ancho, mínimo 180 px (Strata.dc.html:1404) */
+.st-radio-group--horizontal > .st-radio-card--plain {
+  flex: 1 1 180px;
+}

@@ -1,0 +1,22 @@
+// Barril de retroalimentación (Fase 1): toast, modal, drawer, avisos y estados.
+// D-22: el toast solo confirma acciones; los errores van inline (Callout,
+// EstadoError o el error del campo), con ícono y texto.
+export { Callout } from './Callout'
+export type { CalloutLive, CalloutProps, CalloutSize, CalloutTone } from './Callout'
+export { Drawer } from './Drawer'
+export type { DrawerProps } from './Drawer'
+export { EstadoCarga } from './EstadoCarga'
+export type { EstadoCargaProps, EstadoCargaSkeleton, EstadoCargaVariant } from './EstadoCarga'
+export { EstadoError } from './EstadoError'
+export type { EstadoErrorProps } from './EstadoError'
+export { EstadoVacio } from './EstadoVacio'
+export type { EstadoVacioProps } from './EstadoVacio'
+export type { EstadoSize, EstadoTitleAs } from './EstadoBase'
+export { estadoErrorTextos, getErrorKind, getErrorKindFromStatus } from './errorKind'
+export type { EstadoErrorKind, EstadoErrorTexto } from './errorKind'
+export { Modal } from './Modal'
+export type { ModalProps, ModalRole, ModalSize } from './Modal'
+export { ToastProvider } from './Toast'
+export type { ToastProviderProps } from './Toast'
+export { TOAST_DURATION, TOAST_MAX, useToast } from './useToast'
+export type { ToastApi, ToastOptions, ToastTone } from './useToast'

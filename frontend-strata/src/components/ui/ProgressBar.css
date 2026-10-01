@@ -1,0 +1,67 @@
+/* Barra de progreso (Strata.dc.html:177-179, 801-803, 940-942 y 1159-1161).
+   El relleno no llega a 3:1 contra la pista en todos los tonos: el valor siempre
+   va también en texto (regla 12 de design-tokens.md). */
+.st-progress {
+  --st-progress-height: var(--space-6);
+  --st-progress-fill: var(--color-sky);
+  --st-progress-track: var(--color-data-track);
+
+  position: relative;
+  width: 100%;
+  height: var(--st-progress-height);
+  overflow: hidden;
+  border-radius: var(--radius-pill);
+  background-color: var(--st-progress-track);
+}
+
+/* El relleno mide el 100 % y se desplaza con transform (el valor llega en línea
+   como translateX(valor − 100 %)): la pista recorta el sobrante y el extremo
+   derecho conserva el redondeo, igual que el ancho del prototipo, sin reflow. */
+.st-progress__fill {
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+  background-color: var(--st-progress-fill);
+  transition: transform var(--dur-progress) var(--ease-standard);
+}
+
+/* Alto */
+.st-progress--size-4 { --st-progress-height: var(--space-4); }
+.st-progress--size-5 { --st-progress-height: var(--space-5); }
+.st-progress--size-6 { --st-progress-height: var(--space-6); }
+.st-progress--size-7 { --st-progress-height: var(--space-7); }
+.st-progress--size-8 { --st-progress-height: var(--space-8); }
+
+/* Relleno */
+.st-progress--sky        { --st-progress-fill: var(--color-sky); }
+.st-progress--sky-strong { --st-progress-fill: var(--color-sky-strong); }
+.st-progress--navy       { --st-progress-fill: var(--color-navy); }
+.st-progress--neutral    { --st-progress-fill: var(--color-data-neutral); }
+
+/* Pista */
+.st-progress--track-muted   { --st-progress-track: var(--color-data-track); }
+.st-progress--track-divider { --st-progress-track: var(--color-border-divider); }
+.st-progress--track-on-dark { --st-progress-track: var(--color-on-dark-track); }
+
+/* Pegada al borde (barra del examen) */
+.st-progress--flush {
+  border-radius: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .st-progress__fill {
+    transition: none;
+  }
+}
+
+/* Alto contraste de Windows: la pista lleva borde y el relleno usa el color de selección. */
+@media (forced-colors: active) {
+  .st-progress {
+    border: var(--border-width) solid CanvasText;
+  }
+
+  .st-progress__fill {
+    forced-color-adjust: none;
+    background-color: Highlight;
+  }
+}

@@ -1,0 +1,95 @@
+/* Drawer (Strata.dc.html:1247-1321)
+   Panel derecho de 408 px (a pantalla completa por debajo de ese ancho),
+   fondo beige y sombra hacia la izquierda. Entra con slideIn .26s. */
+.st-drawer {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: var(--width-drawer);
+  max-width: 100%;
+  height: 100%;
+  background: var(--color-bg);
+  box-shadow: var(--shadow-drawer);
+  animation: var(--anim-slide-in);
+}
+
+/* Cabecera blanca: 20 22, divisor neutro */
+.st-drawer__header {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: var(--space-12);
+  padding: var(--space-20) var(--space-22);
+  background: var(--color-surface-white);
+  border-bottom: var(--border-width) solid var(--color-border-neutral);
+}
+
+.st-drawer__heading {
+  flex: 1;
+  min-width: 0;
+}
+
+/* Título: 16 px, 700, en General Sans como en el prototipo */
+.st-drawer__title {
+  font-family: var(--font-text);
+  font-size: var(--fs-body);
+  font-weight: var(--fw-bold);
+  line-height: var(--lh-title);
+  letter-spacing: 0;
+  color: var(--color-text);
+}
+
+.st-drawer__description {
+  margin-top: var(--space-2);
+  font-size: var(--fs-label);
+  line-height: var(--lh-normal);
+  color: var(--color-text-tertiary);
+}
+
+/* Cuerpo: 20 22, columna con 20 px entre bloques, scroll propio */
+.st-drawer__body {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-20);
+  padding: var(--space-20) var(--space-22);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+/* Cuerpo largo sin controles: es enfocable (useScrollableFocus). El anillo va
+   hacia dentro para que no quede bajo la cabecera ni el pie. */
+.st-drawer__body:focus-visible {
+  outline-offset: calc(-2 * var(--focus-outline-offset));
+}
+
+/* Pie blanco: 18 22, divisor neutro */
+.st-drawer__footer {
+  flex: none;
+  padding: var(--space-18) var(--space-22);
+  background: var(--color-surface-white);
+  border-top: var(--border-width) solid var(--color-border-neutral);
+}
+
+/* Nota centrada bajo la acción (Strata.dc.html:1314-1317) */
+.st-drawer__note {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-7);
+  margin-top: var(--space-11);
+  font-size: var(--fs-eyebrow);
+  line-height: var(--lh-normal);
+  color: var(--color-text-tertiary);
+  text-align: center;
+}
+
+.st-drawer__note:first-child {
+  margin-top: 0;
+}
+
+.st-drawer__note svg {
+  flex: none;
+  color: var(--color-icon-muted);
+}

@@ -1,0 +1,45 @@
+/* Base de Modal y Drawer (Strata.dc.html:1249-1250, 1325-1326, 1378-1379).
+   Capa fija sobre todo el contenido, con el fondo tinta al 42 %. El fondo
+   no se anima, igual que en el prototipo. */
+.st-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-overlay);
+  display: flex;
+}
+
+/* Modal: centrado, con 24 px de aire alrededor */
+.st-overlay--center {
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-24);
+}
+
+/* Drawer: panel pegado a la derecha */
+.st-overlay--end {
+  justify-content: flex-end;
+}
+
+.st-overlay__scrim {
+  position: absolute;
+  inset: 0;
+  background: var(--color-scrim);
+}
+
+/* El panel solo recibe el foco como respaldo (tabindex -1, cuando no hay
+   controles): no es un control, así que no dibuja el anillo de foco. */
+.st-overlay__panel:focus {
+  outline: none;
+}
+
+/* Botón «X» de cabecera: el IconButton md (32 px, radio 9, borde neutro y
+   hover beige, en IconButton.css). Aquí solo se alinea a la derecha. */
+.st-overlay__close {
+  margin-left: auto;
+}
+
+@media (max-width: 640px) {
+  .st-overlay--center {
+    padding: var(--space-16);
+  }
+}

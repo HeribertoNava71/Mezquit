@@ -1,0 +1,209 @@
+/* ==========================================================================
+   RadioCard STRATA
+   Prototipo: Strata.dc.html:482-485 (chip del builder), 1175-1181 (examen),
+   1289-1298 (lista con detalle), 1346-1350 y 1394-1398 (modales), 1404-1407
+   (sin aro) y los estilos de radio() en :1765-1769.
+   - Sin elegir: borde decorativo #E7E2D8 y fondo blanco; el aro usa el borde
+     funcional --color-border-control (3.68:1; el #D6CFC2 del prototipo da 1.55:1).
+   - Elegida: borde, aro y punto --color-control-checked (3.83:1 sobre #EFF9FE;
+     el #0EA5E9 del prototipo da 2.59:1) y fondo #EFF9FE.
+   - El radio nativo cubre la tarjeta con opacidad 0: recibe clics, foco y flechas.
+   ========================================================================== */
+
+.st-radio-card {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--space-11);
+  min-width: 0;
+  padding: var(--space-11) var(--space-14);
+  border: var(--border-width-control) solid var(--color-border-neutral);
+  border-radius: var(--radius-control);
+  background-color: var(--color-surface-white);
+  color: var(--color-text);
+  cursor: pointer;
+  transition: var(--transition-state);
+}
+
+.st-radio-card__input {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  opacity: 0;
+  cursor: inherit;
+}
+
+/* Aro y punto */
+.st-radio-card__radio {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: var(--space-17);
+  height: var(--space-17);
+  border: var(--border-width-thick) solid var(--color-border-control);
+  border-radius: var(--radius-round);
+  transition: border-color var(--dur-state) var(--ease-base);
+}
+
+.st-radio-card__radio::after {
+  content: '';
+  width: var(--space-7);
+  height: var(--space-7);
+  border-radius: var(--radius-round);
+  background-color: var(--color-control-checked);
+  transform: scale(0);
+  transition: transform var(--dur-state) var(--ease-base);
+}
+
+.st-radio-card__input:checked + .st-radio-card__radio {
+  border-color: var(--color-control-checked);
+}
+
+.st-radio-card__input:checked + .st-radio-card__radio::after {
+  transform: scale(1);
+}
+
+/* Texto */
+.st-radio-card__body {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.st-radio-card__label {
+  font-size: var(--fs-ui-sm);
+  font-weight: var(--fw-semibold);
+  line-height: var(--lh-title);
+}
+
+/* Detalle y dato lateral: 11 px terciario (5.79:1 blanco, 5.42:1 #EFF9FE) */
+.st-radio-card__description {
+  margin-top: var(--space-1);
+  font-size: var(--fs-eyebrow);
+  line-height: var(--lh-snug);
+  color: var(--color-text-tertiary);
+}
+
+.st-radio-card__aside {
+  flex: none;
+  font-size: var(--fs-eyebrow);
+  color: var(--color-text-tertiary);
+}
+
+/* ── Estados ───────────────────────────────────────────────────────────── */
+
+/* Hover celeste (Strata.dc.html:1175) */
+.st-radio-card:where(:not(.st-radio-card--disabled)):hover {
+  border-color: var(--color-sky);
+}
+
+.st-radio-card:has(.st-radio-card__input:checked) {
+  border-color: var(--color-control-checked);
+  background-color: var(--color-sky-tint);
+}
+
+.st-radio-card:has(.st-radio-card__input:focus-visible) {
+  outline: var(--focus-outline-width) solid var(--color-focus);
+  outline-offset: var(--focus-outline-offset);
+}
+
+/* Error del grupo: aro en rojo mientras no haya respuesta */
+.st-radio-card--invalid .st-radio-card__input:not(:checked) + .st-radio-card__radio {
+  border-color: var(--color-error-text);
+}
+
+.st-radio-card.st-radio-card--disabled {
+  background-color: var(--color-bg-alt);
+  color: var(--color-text-tertiary);
+  cursor: not-allowed;
+}
+
+.st-radio-card--disabled .st-radio-card__radio {
+  border-color: var(--color-border-neutral);
+}
+
+/* ── Tamaños ───────────────────────────────────────────────────────────── */
+
+/* Chip del builder: 10 × 13 px, aro de 15 y 12.5 px (Strata.dc.html:482-484) */
+.st-radio-card--sm {
+  gap: var(--space-9);
+  padding: var(--space-10) var(--space-13);
+}
+
+.st-radio-card--sm .st-radio-card__radio {
+  width: var(--space-15);
+  height: var(--space-15);
+}
+
+.st-radio-card--sm .st-radio-card__radio::after {
+  width: var(--space-6);
+  height: var(--space-6);
+}
+
+.st-radio-card--sm .st-radio-card__label {
+  font-size: var(--fs-meta);
+}
+
+/* Opción del examen: 15 × 18 px, radio 13, aro de 20 y 14.5 px (Strata.dc.html:1175-1181) */
+.st-radio-card--lg {
+  gap: var(--space-14);
+  padding: var(--space-15) var(--space-18);
+  border-radius: var(--radius-option);
+}
+
+.st-radio-card--lg .st-radio-card__radio {
+  width: var(--space-20);
+  height: var(--space-20);
+}
+
+.st-radio-card--lg .st-radio-card__radio::after {
+  width: var(--space-9);
+  height: var(--space-9);
+}
+
+.st-radio-card--lg .st-radio-card__label {
+  font-size: var(--fs-ui-lg);
+  font-weight: var(--fw-medium);
+}
+
+.st-radio-card--lg:has(.st-radio-card__input:checked) .st-radio-card__label {
+  font-weight: var(--fw-semibold);
+}
+
+.st-radio-card--lg .st-radio-card__aside {
+  font-family: var(--font-mono);
+}
+
+/* Sin aro: modos de envío (Strata.dc.html:1404-1407) */
+.st-radio-card--plain {
+  align-items: flex-start;
+  padding: var(--space-13) var(--space-15);
+  border-radius: var(--radius-control-candidate);
+  background-color: var(--color-bg);
+}
+
+.st-radio-card--plain .st-radio-card__label {
+  font-size: var(--fs-meta);
+  font-weight: var(--fw-bold);
+}
+
+.st-radio-card--plain .st-radio-card__description {
+  margin-top: var(--space-3);
+}
+
+/* Alto contraste: la selección usa los colores del sistema */
+@media (forced-colors: active) {
+  .st-radio-card:has(.st-radio-card__input:checked) {
+    border-color: Highlight;
+  }
+
+  .st-radio-card__radio::after {
+    forced-color-adjust: none;
+    background-color: Highlight;
+  }
+}

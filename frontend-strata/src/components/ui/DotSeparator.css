@@ -1,0 +1,21 @@
+/* Separador de metadatos (Strata.dc.html:247, 635, 1023, 1025 y 1127). Decorativo. */
+.st-dot-sep {
+  display: inline-block;
+  flex: none;
+  width: var(--space-3);
+  height: var(--space-3);
+  border-radius: var(--radius-round);
+  background-color: var(--color-dot);
+  vertical-align: middle;
+}
+
+.st-dot-sep--soft    { background-color: var(--color-dot-soft); }
+.st-dot-sep--on-dark { background-color: var(--color-dot-on-dark); }
+
+/* Alto contraste de Windows: el fondo se perdería; el punto toma el color del texto. */
+@media (forced-colors: active) {
+  .st-dot-sep {
+    forced-color-adjust: none;
+    background-color: CanvasText;
+  }
+}

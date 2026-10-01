@@ -1,65 +1,625 @@
+/* ==========================================================================
+   Tokens STRATA (Fase 1)
+   Fuente: brief (PROMPT_CLAUDE_CODE.md, «Sistema de diseño») y prototipo
+   (Strata.dc.html), resumidos en docs/rediseno/auditoria.md §3.
+   Guía de uso, contrastes y equivalencias hex → token: docs/design-tokens.md.
+
+   Reglas rápidas:
+   - En código nuevo usa solo estos nombres. Los del bloque «Alias temporales»
+     son del sistema anterior y se retiran en la Fase 8.
+   - Los contrastes (WCAG 2.x) se indican como «x:1 sobre fondo».
+   - Las custom properties compuestas (que usan var()) se resuelven en :root.
+     Si un contenedor cambia un color base, redefine también la compuesta.
+   ========================================================================== */
+
 :root {
-  /* Marca */
-  --color-sage:             #A3B18A;
-  --color-timberwolf:       #DAD7CD;
-  --color-fern:             #567F55;
-  --color-hunter:           #3A5A40;
-  --color-brunswick:        #344E41;
-  --color-surface:          #FFFFFF;
-  --color-surface-secondary:#F7F6F4;
-  --color-ink:              #1E2B24;
-  --color-border:           #7E8C74;
-  --color-accent:           #E0A526;
+  color-scheme: light;
 
-  /* Semánticos */
-  --color-success: #2E6B3F;
-  --color-error:   #B3261E;
-  --color-warning: #B45309;
-  --color-info:    #2B5F8A;
+  /* ------------------------------------------------------------------------
+     Color · fondos y superficies
+     ------------------------------------------------------------------------ */
+  --color-bg:              #FAF8F5;  /* fondo de página; inputs del builder y modales; pies de modal */
+  --color-bg-alt:          #F7F5F0;  /* beige secundario: hover de «cerrar», base del thead */
+  --color-bg-thead:        rgba(247, 245, 240, 0.6); /* cabecera de tabla (beige al 60 %) */
+  --color-surface-white:   #FFFFFF;  /* tarjetas blancas, inputs con foco, botones secundarios */
+  --color-surface-soft:    #FCFBF9;  /* input neutro del candidato, opción apagada */
+  --color-surface-hover:   #FDFCFA;  /* hover de fila y pie de tabla */
+  --color-surface-track:   #F1EDE4;  /* pista de los controles segmentados */
+  --color-surface-muted:   #F0EDE5;  /* badges neutros (Consumida), pistas de barras, divisores de fila */
+  --color-surface-dark:    #0F172A;  /* superficie oscura: vista previa, banner, toast, burbuja */
+  --color-surface-pill:    rgba(255, 255, 255, 0.8);  /* pastilla de usuario y eyebrow del hero */
+  --color-surface-ghost:   rgba(255, 255, 255, 0.9);  /* botón secundario sobre vidrio («Previsualizar») */
+  --color-scrim:           rgba(15, 23, 42, 0.42);    /* fondo detrás de modales y drawer */
+  --color-topbar-bg:       rgba(250, 248, 245, 0.78); /* barra superior translúcida */
+  --color-exam-bar-bg:     rgba(250, 248, 245, 0.8);  /* barra del examen */
 
-  /* DISC */
+  /* ------------------------------------------------------------------------
+     Color · texto
+     ------------------------------------------------------------------------ */
+  --color-text:             #0F172A; /* tinta: títulos y texto base · 17.85:1 blanco, 16.84:1 #FAF8F5 */
+  --color-text-data:        #3D3A33; /* celdas, labels del candidato, valores de totales · 11.34:1 blanco */
+  --color-text-secondary:   #5B5545; /* entradillas, labels, apoyo · 7.42:1 blanco, 7.00:1 #FAF8F5 */
+  --color-text-tertiary:    #6B6558; /* ayudas, th, notas, nav inactiva · 5.46:1 #FAF8F5, 4.95:1 #F0EDE5 */
+  --color-text-placeholder: #756D5C; /* ::placeholder · 4.83:1 #FAF8F5, 4.95:1 #FCFBF9 */
+  --color-text-slate:       #475569; /* texto de la pastilla de saldo · 7.58:1 blanco */
+  --color-icon-muted:       #8B8574; /* trazo de íconos de input y reloj (gráfico, ≥3:1) · 3.47:1 #FAF8F5 */
+  --color-eyebrow:          var(--color-sky-text);       /* eyebrow de 11 px */
+  --color-lead:             var(--color-text-secondary); /* entradilla de 17 px */
+  --color-link:             var(--color-navy);
+  --color-link-hover:       var(--color-sky-text);       /* el #0EA5E9 del prototipo no cumple como texto */
+  --color-selection:        #BAE6FD; /* ::selection, con tinta encima · 13.45:1 */
+
+  /* ------------------------------------------------------------------------
+     Color · marca y acentos
+     ------------------------------------------------------------------------ */
+  --color-navy:          #1E3A8A; /* marca, primario, enlaces, precios · 10.36:1 con blanco */
+  --color-navy-hover:    #172554; /* hover y presionado del primario · 14.69:1 con blanco */
+  --color-navy-tint:     #E8ECF7; /* fondo de Disponible/Completado, chip de peso, tag navy */
+  --color-on-navy:       #FFFFFF;
+  --color-on-navy-muted: #DBEAFE; /* iniciales del avatar navy · 8.49:1 */
+  --color-primary:       var(--color-navy);       /* botón primario (D-19) */
+  --color-primary-hover: var(--color-navy-hover);
+  --color-on-primary:    var(--color-on-navy);
+
+  --color-sky:           #38BDF8; /* celeste: puntos, progreso, check, acento sobre oscuro. Nunca texto sobre claro (2.14:1) */
+  --color-sky-text:      #0369A1; /* celeste para texto: eyebrows, mono, íconos · 5.93:1 blanco, 5.60:1 #FAF8F5 */
+  --color-sky-strong:    #0EA5E9; /* selección, radios y chips activos, bordes de hover, radar. Nunca texto (2.77:1) */
+  --color-sky-ui:        #0284C7; /* celeste de interfaz (≥3:1 en claros): foco y control marcado. No es texto normal · 4.10:1 blanco, 3.86:1 #FAF8F5, 3.83:1 #EFF9FE, 3.51:1 #F1EDE4, 3.47:1 #E8ECF7, 4.36:1 tinta */
+  --color-sky-deep:      #075985; /* texto sobre tintes celeste · 7.08:1 #EFF9FE */
+  --color-sky-deeper:    #0C4A6E; /* texto del nivel bajo del reporte · 9.46:1 blanco */
+  --color-sky-tint:        #EFF9FE; /* selección, En uso, hover de stepper, callout informativo */
+  --color-sky-tint-strong: #E6F6FE; /* Enviada/En proceso, chips de código, caja de ícono */
+  --color-sky-tint-soft:   #F2FAFE; /* consentimiento activo, opción activa de la demo */
+  --color-sky-tint-subtle: #F5FCFF; /* fila o elemento seleccionado */
+  --color-sky-border:      #BAE6FD; /* bordes informativos y de selección suave */
+
+  --color-coral:           #FF6B6B; /* solo acentos y subrayado activo (D-19). Nunca fondo de texto (2.78:1) */
+  --color-coral-strong:    #F4574F; /* hover de acentos coral */
+  --color-coral-tint:      #FFF1F1; /* insignia y tag coral */
+  --color-coral-border:    #FFD9D9; /* borde de la insignia coral */
+  --color-coral-text:      #B93A34; /* texto sobre tinte coral · 5.14:1 #FFF1F1 */
+  --color-indicator-active: var(--color-coral); /* subrayado de 2 px del enlace activo */
+
+  /* ------------------------------------------------------------------------
+     Color · bordes
+     ------------------------------------------------------------------------ */
+  --color-border-control:    #8B8574; /* borde funcional (≥3:1): input, select, textarea, casilla y radio · 3.68:1 blanco, 3.47:1 #FAF8F5 */
+  --color-border-neutral:    #E7E2D8; /* bordes neutros: chips, filas de opción, divisores de drawer, retícula */
+  --color-border-subtle:     #EBE5DA; /* pastillas y separadores de sección */
+  --color-border-card:       #EFE9DF; /* tarjeta secundaria, demo y badges flotantes */
+  --color-border-warm:       #E5E0D8; /* tarjeta del acceso, segmentados, caja de ícono */
+  --color-border-divider:    #EDE9E0; /* divisores de cabecera y pie de tarjetas y modales; pista de progreso */
+  --color-border-strong:     #D6CFC2; /* botones secundarios y bordes punteados */
+  --color-border-ghost:      #E0D9CB; /* botón secundario sobre vidrio («Previsualizar») */
+  --color-border-cool:       #E2E8F0; /* tarjetas blancas del reporte y de la pregunta */
+  --color-border-cool-hover: #CBD5E1; /* hover de la tarjeta del catálogo */
+  --color-border-glass:      rgba(255, 255, 255, 0.92); /* borde del vidrio */
+  --color-border-step:       rgba(255, 255, 255, 0.9);  /* borde del paso translúcido */
+  --color-connector:         #DCD5C8; /* conector punteado entre pasos */
+
+  /* Puntos decorativos (siempre acompañan texto) */
+  --color-dot:         #C9C2B4; /* separador entre metadatos */
+  --color-dot-soft:    #D2CBBD; /* separador del acceso */
+  --color-dot-neutral: #A8A296; /* punto de badge neutro y rango bajo (2.54:1: nunca solo) */
+  --color-dot-on-dark: #475569; /* separador sobre oscuro */
+
+  /* Control marcado (Fase 1 · controles). El #0EA5E9 del prototipo da 2.59:1 sobre
+     #EFF9FE y no llega al 3:1 que pide un indicador de estado (WCAG 1.4.11). */
+  --color-control-checked: var(--color-sky-ui); /* #0284C7 · casilla y radio marcados, borde de opción seleccionada · 4.10:1 blanco, 3.83:1 #EFF9FE, 3.88:1 #F2FAFE, 3.86:1 #FAF8F5; blanco encima 4.10:1 */
+
+  /* ------------------------------------------------------------------------
+     Color · sobre oscuro (#0F172A)
+     ------------------------------------------------------------------------ */
+  --color-on-dark:           #FFFFFF; /* títulos y texto principal · 17.85:1 */
+  --color-on-dark-secondary: #CBD5E1; /* metadatos · 12.02:1 */
+  --color-on-dark-tertiary:  #B6C4DC; /* rótulos · 10.13:1 */
+  --color-on-dark-muted:     #8FA3C4; /* metadatos secundarios · 6.97:1 */
+  --color-on-dark-eyebrow:   #7DA2D9; /* eyebrow sobre oscuro · 6.84:1 */
+  --color-on-dark-link:      #38BDF8; /* enlaces y acentos sobre oscuro · 8.33:1 */
+  --color-on-dark-surface:   rgba(255, 255, 255, 0.07); /* fila interactiva dentro de superficie oscura */
+  --color-on-dark-control:   rgba(255, 255, 255, 0.09); /* botones ± del simulador */
+  --color-on-dark-border:    rgba(255, 255, 255, 0.12); /* borde dentro de superficie oscura */
+  --color-on-dark-track:     rgba(255, 255, 255, 0.14); /* pista de barra sobre oscuro */
+  --color-on-dark-icon-bg:   rgba(56, 189, 248, 0.16);  /* círculo del ícono del banner oscuro (Callout dark; compone #16324B) · #38BDF8 encima 6.16:1 */
+
+  /* ------------------------------------------------------------------------
+     Color · estados (siempre con ícono y texto, nunca solo color)
+     ------------------------------------------------------------------------ */
+  --color-error-text:   #B3261E; /* texto, ícono y borde de control con error · 6.54:1 blanco, 6.17:1 #FAF8F5 */
+  --color-error-hover:  #8E1F18; /* hover del botón de peligro · 8.90:1 con blanco */
+  --color-error-bg:     #FCF1F0; /* fondo de Callout e input con error · texto 5.91:1 */
+  --color-error-border: #F0C6C2; /* borde de Callout de error (decorativo) */
+
+  --color-success-text:      #157A3A; /* texto de éxito · 5.42:1 blanco, 5.11:1 #FAF8F5, 5.04:1 #F0F9F3 */
+  --color-success-icon:      #16A34A; /* ícono, check y borde de control válido (≥3:1) · 3.30:1 blanco. Nunca texto */
+  --color-success-bright:    #22C55E; /* punto en vivo y check sobre oscuro (7.83:1 sobre #0F172A) */
+  --color-success-bg:        #F0F9F3; /* fondo de Callout de éxito */
+  --color-success-bg-subtle: #FAFDFB; /* fondo de input válido */
+  --color-success-border:    #A7D8B8; /* borde de Callout de éxito (decorativo) */
+  --color-success-on-dark:        #BBF7D0; /* texto de éxito sobre oscuro · 11.62:1 sobre su fondo */
+  --color-success-on-dark-bg:     rgba(22, 163, 74, 0.18); /* sobre tinta compone #103030 */
+  --color-success-on-dark-border: rgba(134, 239, 172, 0.34);
+
+  --color-warning-text:   #A84E07; /* texto e ícono de advertencia · 5.59:1 blanco, 5.27:1 #FAF8F5, 5.21:1 #FEF6E9 */
+  --color-warning-bg:     #FEF6E9;
+  --color-warning-border: #EFCF9F; /* decorativo */
+
+  --color-info-text:   var(--color-sky-deep);   /* #075985 · 7.08:1 sobre #EFF9FE */
+  --color-info-icon:   var(--color-sky-text);   /* #0369A1 · 5.55:1 sobre #EFF9FE */
+  --color-info-bg:     var(--color-sky-tint);   /* #EFF9FE */
+  --color-info-border: var(--color-sky-border); /* #BAE6FD, decorativo */
+
+  --color-error-on-dark: #F87171; /* ícono de error sobre oscuro (toast) · 6.45:1 sobre #0F172A */
+
+  /* ------------------------------------------------------------------------
+     Foco (WCAG 2.4.7 y 1.4.11: el indicador necesita 3:1 contra lo adyacente)
+     El #0EA5E9 del prototipo da 2.77:1 sobre blanco; #0284C7 conserva el tono
+     celeste y da 4.10:1 blanco, 3.86:1 #FAF8F5, 3.51:1 #F1EDE4, 3.47:1 #E8ECF7
+     y 4.36:1 #0F172A. Sobre navy usa --color-focus-on-dark (#38BDF8, 4.84:1).
+     ------------------------------------------------------------------------ */
+  --color-focus:          var(--color-sky-ui); /* #0284C7 */
+  --color-focus-on-dark:  #38BDF8;
+  --color-focus-halo:     rgba(56, 189, 248, 0.16); /* halo suave del prototipo (decorativo, no cuenta para contraste) */
+  --color-focus-halo-on-dark: rgba(56, 189, 248, 0.28);
+  --focus-outline-width:  2px;
+  --focus-outline-offset: 2px;
+  /* Anillo para controles con borde (input, select): úsalo con border-color: var(--color-focus)
+     y outline: 2px solid transparent (así se ve en modo de alto contraste). */
+  --focus-ring:         0 0 0 1px var(--color-focus), 0 0 0 4px var(--color-focus-halo);
+  --focus-ring-on-dark: 0 0 0 1px var(--color-focus-on-dark), 0 0 0 4px var(--color-focus-halo-on-dark);
+  /* Campo con error y foco (Fase 1 · controles): conserva el borde de error y suma
+     1 px del mismo color (6.17:1 #FAF8F5) más un halo decorativo. */
+  --color-error-halo:   rgba(179, 38, 30, 0.14); /* decorativo */
+  --focus-ring-error:   0 0 0 1px var(--color-error-text), 0 0 0 4px var(--color-error-halo);
+
+  /* ------------------------------------------------------------------------
+     Color · datos (reporte y gráficas; las barras siempre llevan su valor en texto)
+     ------------------------------------------------------------------------ */
+  --color-data-high:         var(--color-navy);       /* ≥ 80 */
+  --color-data-mid:          var(--color-sky-strong); /* ≥ 70 */
+  --color-data-low:          var(--color-sky);        /* < 70 */
+  --color-data-neutral:      var(--color-dot-neutral);
+  --color-data-high-text:    var(--color-navy);       /* 10.36:1 blanco */
+  --color-data-mid-text:     var(--color-sky-deep);   /* 7.56:1 blanco */
+  --color-data-low-text:     var(--color-sky-deeper); /* 9.46:1 blanco */
+  --color-data-neutral-text: var(--color-text-secondary);
+  --color-data-track:        var(--color-surface-muted);
+  --color-radar-stroke:      var(--color-sky-strong);
+  --color-radar-fill:        rgba(14, 165, 233, 0.2);
+  --color-radar-fill-home:   rgba(56, 189, 248, 0.22);
+  --color-radar-vertex:      var(--color-navy);
+  --color-radar-grid:        var(--color-border-neutral);
+  --color-radar-range-fill:  #F7FBFE; /* hexágono del rango */
+  --color-radar-range-stroke: #DCE6EF;
+
+  /* Halos de fondo (radial-gradient(circle, halo, transparent 70%)) */
+  --halo-coral:      rgba(255, 107, 107, 0.2);
+  --halo-sky:        rgba(56, 189, 248, 0.2);
+  --halo-navy:       rgba(30, 58, 138, 0.1);
+  --halo-coral-home: rgba(255, 107, 107, 0.26);
+  --halo-sky-home:   rgba(56, 189, 248, 0.24);
+  --halo-navy-home:  rgba(30, 58, 138, 0.12);
+
+  /* ------------------------------------------------------------------------
+     Tipografía · familias
+     Satoshi y General Sans: CDN de Fontshare (index.html). JetBrains Mono: @fontsource.
+     ------------------------------------------------------------------------ */
+  --font-heading: 'Satoshi', 'General Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-text:    'General Sans', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-mono:    'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+
+  /* Tipografía · títulos (los cuatro mayores son fluidos: valor exacto desde ~1100 px) */
+  --fs-display:  clamp(2.125rem, 1.578rem + 2.432vw, 3.25rem);  /* 52 px (mín. 34): hero */
+  --fs-h1:       clamp(2rem, 1.574rem + 1.892vw, 2.875rem);     /* 46 px (mín. 32): H1 de página */
+  --fs-h2:       clamp(1.625rem, 1.382rem + 1.081vw, 2.125rem); /* 34 px (mín. 26): H2 de sección */
+  --fs-h2-sm:    clamp(1.5rem, 1.318rem + 0.811vw, 1.875rem);   /* 30 px (mín. 24): H2 secundario */
+  --fs-title-xl: 2rem;       /* 32 px: H1 del fin */
+  --fs-title-lg: 1.5625rem;  /* 25 px: H1 del acceso (24–25) */
+  --fs-title:    1.4375rem;  /* 23 px: pregunta del examen */
+  --fs-h3:       1.25rem;    /* 20 px: H3 destacado, total */
+  --fs-h3-sm:    1.1875rem;  /* 19 px: título de tarjeta destacada */
+  --fs-title-sm: 1.125rem;   /* 18 px: título de modal y drawer */
+  --fs-h4:       1.03125rem; /* 16.5 px: título de tarjeta y de paso */
+  --fs-h5:       0.96875rem; /* 15.5 px: título compacto (builder, reporte) */
+
+  /* Tipografía · cifras (Satoshi 700–800, números tabulares) */
+  --fs-figure-xl: 1.8125rem; /* 29 px: precio de la home, índice */
+  --fs-figure-lg: 1.6875rem; /* 27 px: saldo */
+  --fs-figure:    1.4375rem; /* 23 px: precio del catálogo */
+  --fs-figure-sm: 1.3125rem; /* 21 px: vista previa */
+
+  /* Tipografía · texto */
+  --fs-lead:     1.0625rem;  /* 17 px: entradilla */
+  --fs-body:     1rem;       /* 16 px: cuerpo base del documento */
+  --fs-body-sm:  0.9375rem;  /* 15 px: cuerpo compacto, CTA grande */
+  --fs-ui-lg:    0.90625rem; /* 14.5 px: CTA y controles del candidato */
+  --fs-ui-md:    0.875rem;   /* 14 px: nav, texto de interfaz */
+  --fs-ui:       0.84375rem; /* 13.5 px: inputs y botones */
+  --fs-ui-sm:    0.8125rem;  /* 13 px: botones secundarios, párrafos de tarjeta, toast */
+  --fs-meta:     0.78125rem; /* 12.5 px: metadatos, celdas, callouts */
+  --fs-small:    0.75rem;    /* 12 px: ayudas y notas */
+  --fs-label:    0.71875rem; /* 11.5 px: labels y notas al pie */
+  --fs-eyebrow:  0.6875rem;  /* 11 px: eyebrow */
+  --fs-micro:    0.65625rem; /* 10.5 px: micro-rótulos y badges */
+  --fs-micro-sm: 0.625rem;   /* 10 px: th, chips de código */
+  --fs-nano:     0.59375rem; /* 9.5 px: categorías en mayúsculas */
+  --fs-code-xl:  1.875rem;   /* 30 px: código grande (mono) */
+  --fs-code-lg:  1.25rem;    /* 20 px: input de código (mono) */
+
+  /* Tipografía · pesos (General Sans carga hasta 700; 800 solo en Satoshi) */
+  --fw-regular:   400;
+  --fw-medium:    500;
+  --fw-semibold:  600;
+  --fw-bold:      700;
+  --fw-extrabold: 800;
+
+  /* Tipografía · interlineado */
+  --lh-none:       1;    /* cifras */
+  --lh-display:    1.06; /* display y H1 */
+  --lh-heading:    1.15; /* H2 y títulos por defecto */
+  --lh-heading-sm: 1.2;  /* H2 secundario, H1 del fin */
+  --lh-title:      1.3;  /* títulos de tarjeta (1.28–1.35) */
+  --lh-snug:       1.4;  /* pregunta del examen */
+  --lh-normal:     1.5;  /* texto de interfaz */
+  --lh-paragraph:  1.55; /* párrafos de tarjeta */
+  --lh-relaxed:    1.6;  /* entradilla y cuerpo */
+
+  /* Tipografía · tracking */
+  --tracking-display:  -0.03em;  /* display y H1 */
+  --tracking-h2:       -0.025em; /* H2 */
+  --tracking-heading:  -0.02em;  /* h1–h4 por defecto, marca, cifras */
+  --tracking-snug:     -0.015em; /* pregunta del examen */
+  --tracking-title:    -0.01em;  /* título de modal */
+  --tracking-label:    0.01em;   /* labels del candidato */
+  --tracking-code-sm:  0.02em;   /* código chico */
+  --tracking-code:     0.04em;   /* código en tabla */
+  --tracking-caps-sm:  0.06em;   /* mayúsculas pequeñas, marca «STRATA» */
+  --tracking-caps:     0.1em;    /* th y contadores en mayúsculas */
+  --tracking-caps-lg:  0.12em;   /* eyebrow sobre oscuro, categorías */
+  --tracking-eyebrow:  0.13em;   /* eyebrow */
+  --tracking-code-lg:  0.14em;   /* input de código */
+  --tracking-code-xl:  0.16em;   /* código grande */
+
+  /* ------------------------------------------------------------------------
+     Espaciado: --space-N vale N px (pasos del prototipo)
+     ------------------------------------------------------------------------ */
+  --space-0: 0;
+  --space-1: 1px;
+  --space-2: 2px;
+  --space-3: 3px;
+  --space-4: 4px;
+  --space-5: 5px;
+  --space-6: 6px;
+  --space-7: 7px;
+  --space-8: 8px;
+  --space-9: 9px;
+  --space-10: 10px;
+  --space-11: 11px;
+  --space-12: 12px;
+  --space-13: 13px;
+  --space-14: 14px;
+  --space-15: 15px;
+  --space-16: 16px;
+  --space-17: 17px;
+  --space-18: 18px;
+  --space-19: 19px;
+  --space-20: 20px;
+  --space-22: 22px;
+  --space-24: 24px;
+  --space-26: 26px;
+  --space-28: 28px;
+  --space-30: 30px;
+  --space-32: 32px;
+  --space-34: 34px;
+  --space-36: 36px;
+  --space-38: 38px; /* alto de los botones del stepper del builder (Strata.dc.html:501) */
+  --space-40: 40px;
+  --space-42: 42px;
+  --space-44: 44px;
+  --space-48: 48px;
+  --space-52: 52px;
+  --space-56: 56px;
+  --space-64: 64px;
+  --space-72: 72px;
+  --space-88: 88px;
+
+  /* Bordes y tamaños mínimos */
+  --border-width:         1px;
+  --border-width-control: 1.5px; /* inputs del candidato y opciones del examen */
+  --border-width-thick:   2px;   /* aro de radio, subrayado activo */
+  --size-target:          44px;  /* objetivo táctil mínimo en el flujo del candidato */
+  --size-avatar:          30px;  /* avatar de iniciales de la barra y marca de la empresa (Strata.dc.html:69, 1001) */
+  --size-avatar-lg:       33px;  /* avatar cuadrado de la tabla de candidatos (Strata.dc.html:838) */
+  --size-stat-badge:      38px;  /* cuadro numérico de la tarjeta de resumen (Strata.dc.html:699) */
+
+  /* ------------------------------------------------------------------------
+     Radios
+     ------------------------------------------------------------------------ */
+  --radius-hero:              26px;  /* tarjeta demo, ícono del fin */
+  --radius-glass:             24px;  /* tarjeta de vidrio */
+  --radius-step:              22px;  /* paso translúcido */
+  --radius-modal:             20px;  /* modal, badge flotante */
+  --radius-card:              18px;  /* tarjetas blanca, secundaria, oscura y punteada */
+  --radius-feature:           16px;  /* CTA del hero, burbuja, banner */
+  --radius-control:           14px;  /* controles: input, select, botón, segmentado */
+  --radius-option:            13px;  /* opciones del examen, toast */
+  --radius-control-candidate: 12px;  /* inputs y CTA del candidato */
+  --radius-chip:              10px;  /* stepper, chips de dimensión, callout chico */
+  --radius-chip-sm:           9px;   /* acción de tabla, chips de categoría, cerrar */
+  --radius-tab:               8px;   /* opción del segmentado, paginación */
+  --radius-icon-btn:          7px;   /* botón de ícono (copiar) */
+  --radius-tag:               6px;   /* etiquetas, casilla */
+  --radius-code:              5px;   /* chip de código */
+  --radius-pill:              999px; /* pastillas, badges, barras */
+  --radius-round:             50%;   /* puntos, avatares, radios */
+
+  /* ------------------------------------------------------------------------
+     Superficies (receta: fondo + borde + radio + sombra)
+     ------------------------------------------------------------------------ */
+  --surface-glass-bg:         rgba(255, 255, 255, 0.72); /* + blur var(--blur-glass) y sombra var(--shadow-glass) */
+  --surface-glass-border:     1px solid var(--color-border-glass);
+  --surface-glass-radius:     var(--radius-glass);
+  --surface-secondary-bg:     rgba(255, 255, 255, 0.85);
+  --surface-secondary-border: 1px solid var(--color-border-card);
+  --surface-secondary-radius: var(--radius-card);
+  --surface-white-bg:         var(--color-surface-white);
+  --surface-white-border:     1px solid var(--color-border-cool);  /* reporte y pregunta */
+  --surface-white-border-warm: 1px solid var(--color-border-warm); /* tarjeta del acceso */
+  --surface-white-radius:     var(--radius-card);
+  --surface-dark-bg:          var(--color-surface-dark);
+  --surface-dark-radius:      var(--radius-card);
+  --surface-dashed-bg:        var(--color-bg);
+  --surface-dashed-border:    1px dashed var(--color-border-strong);
+  --surface-dashed-radius:    var(--radius-card);
+  --surface-step-bg:          rgba(255, 255, 255, 0.66); /* sin blur */
+  --surface-step-border:      1px solid var(--color-border-step);
+  --surface-step-radius:      var(--radius-step);
+  --surface-pill-bg:          var(--color-surface-pill);
+  --surface-pill-border:      1px solid var(--color-border-subtle);
+  --surface-pill-radius:      var(--radius-pill);
+
+  /* ------------------------------------------------------------------------
+     Sombras y filtros
+     ------------------------------------------------------------------------ */
+  --shadow-glass:       0 20px 44px -28px rgba(15, 23, 42, 0.28);
+  --shadow-glass-hover: 0 32px 60px -28px rgba(15, 23, 42, 0.34);
+  --shadow-step-hover:  0 22px 44px -26px rgba(15, 23, 42, 0.28);
+  --shadow-demo:        0 40px 80px -34px rgba(15, 23, 42, 0.32), 0 10px 26px -18px rgba(15, 23, 42, 0.16);
+  --shadow-float:       0 22px 44px -22px rgba(15, 23, 42, 0.3);
+  --shadow-float-lg:    0 24px 48px -22px rgba(15, 23, 42, 0.32);
+  --shadow-modal:       0 24px 60px rgba(15, 23, 42, 0.24);
+  --shadow-drawer:      -14px 0 40px rgba(15, 23, 42, 0.18);
+  --shadow-toast:       0 12px 34px rgba(15, 23, 42, 0.3);
+  --shadow-bubble:      0 18px 38px -18px rgba(15, 23, 42, 0.5);
+  --shadow-chip:        0 1px 2px rgba(15, 23, 42, 0.07);     /* opción activa del segmentado */
+  --shadow-thumb:       0 3px 10px -3px rgba(15, 23, 42, 0.18); /* thumb del selector */
+  --shadow-pill:        0 6px 18px -12px rgba(15, 23, 42, 0.2); /* eyebrow del hero */
+  --shadow-icon-box:    0 4px 12px -6px rgba(15, 23, 42, 0.18);
+  --shadow-knob:        0 1px 3px rgba(15, 23, 42, 0.28);       /* perilla del interruptor */
+  /* Primario navy (D-19): geometría de las sombras coral del prototipo, en navy */
+  --shadow-primary:          0 6px 18px rgba(30, 58, 138, 0.22);
+  --shadow-primary-hover:    0 9px 22px rgba(30, 58, 138, 0.28);
+  --shadow-primary-sm:       0 10px 24px -14px rgba(30, 58, 138, 0.6);
+  --shadow-primary-lg:       0 12px 30px -12px rgba(30, 58, 138, 0.55);
+  --shadow-primary-lg-hover: 0 18px 40px -12px rgba(30, 58, 138, 0.6);
+  --filter-mascot:      drop-shadow(0 14px 22px rgba(15, 23, 42, 0.2));
+
+  /* Desenfoque */
+  --blur-glass:  14px;
+  --blur-topbar: 16px;
+
+  /* ------------------------------------------------------------------------
+     Capas (z-index)
+     ------------------------------------------------------------------------ */
+  --z-halos:        0;
+  --z-content:      1;  /* main */
+  --z-mascot:       1;
+  --z-home-content: 2;
+  --z-bubble:       4;  /* burbuja de la mascota */
+  --z-exam-bar:     10;
+  --z-topbar:       30;
+  --z-dropdown:     40; /* menú de la pastilla y menú móvil (no están en el prototipo) */
+  --z-overlay:      60; /* drawer, modales y su scrim */
+  --z-toast:        80;
+  --z-skip-link:    90; /* enlace para saltar al contenido */
+
+  /* ------------------------------------------------------------------------
+     Movimiento
+     ------------------------------------------------------------------------ */
+  --dur-state:    0.18s; /* hover y cambios de estado (regla global) */
+  --dur-toggle:   0.2s;  /* CTA, color de etiquetas, interruptor, entrada del toast */
+  --dur-lift:     0.22s; /* elevación de tarjetas, entrada de modales */
+  --dur-drawer:   0.26s;
+  --dur-pop:      0.3s;  /* popIn y burbuja */
+  --dur-soft:     0.34s; /* softIn */
+  --dur-progress: 0.35s;
+  --dur-thumb:    0.36s; /* thumb del selector */
+  --dur-pop-lg:   0.38s; /* ícono del fin */
+  --dur-row:      0.42s; /* rowIn */
+  --dur-screen:   0.5s;  /* screenIn y riseIn */
+  --dur-pulse:      1.8s;
+  --dur-live:       2s;
+  --dur-live-alt:   2.2s;
+  --dur-float-badge: 6.4s;
+  --dur-float-card: 7.5s;
+  --dur-float-badge-alt: 7.8s;
+  --dur-poly:       8.4s;
+  --dur-glow:       18s;
+
+  --ease-base:       ease;                           /* hover y estado */
+  --ease-out:        cubic-bezier(0.22, 0.61, 0.36, 1); /* entradas */
+  --ease-standard:   cubic-bezier(0.4, 0, 0.2, 1);   /* selector y progreso */
+  /* Resortes del prototipo aprobado (Strata.dc.html:145, :103 y :30): intencionales. */
+  --ease-spring:     cubic-bezier(0.34, 1.4, 0.64, 1);  /* CTA y burbuja */
+  --ease-spring-pop: cubic-bezier(0.34, 1.56, 0.64, 1); /* popIn */
+  --ease-drawer:     cubic-bezier(0.32, 0.72, 0, 1);
+  --ease-loop:       ease-in-out;                    /* bucles */
+
+  --stagger-card: 55ms; /* entre tarjetas */
+  --stagger-row:  28ms; /* entre filas de tabla */
+
+  --transition-state:
+    background-color var(--dur-state) var(--ease-base),
+    border-color var(--dur-state) var(--ease-base),
+    color var(--dur-state) var(--ease-base),
+    box-shadow var(--dur-state) var(--ease-base),
+    opacity var(--dur-state) var(--ease-base);
+
+  /* Animaciones listas (keyframes en animations.css). Las entradas usan fill
+     «backwards» para no fijar transform y no romper el transform del hover. */
+  --anim-screen-in:   st-screen-in var(--dur-screen) var(--ease-out) backwards;
+  --anim-rise-in:     st-rise-in var(--dur-screen) var(--ease-out) backwards;
+  --anim-soft-in:     st-soft-in var(--dur-soft) var(--ease-out) backwards;
+  --anim-row-in:      st-row-in var(--dur-row) var(--ease-out) backwards;
+  --anim-fade-up:     st-fade-up var(--dur-lift) var(--ease-base) backwards;
+  --anim-toast-in:    st-fade-up var(--dur-toggle) var(--ease-base) backwards;
+  --anim-slide-in:    st-slide-in var(--dur-drawer) var(--ease-drawer) backwards;
+  --anim-pop-in:      st-pop-in var(--dur-pop) var(--ease-spring-pop) backwards;
+  --anim-bubble-in:   st-bubble-in var(--dur-pop) var(--ease-spring) backwards;
+  --anim-live-pulse:  st-live-pulse var(--dur-live) var(--ease-loop) infinite;
+  --anim-pulse-dot:   st-pulse-dot var(--dur-pulse) var(--ease-loop) infinite;
+  --anim-glow-drift:  st-glow-drift var(--dur-glow) var(--ease-loop) infinite;
+  --anim-float-card:  st-float-card var(--dur-float-card) var(--ease-loop) infinite;
+  --anim-float-badge: st-float-badge var(--dur-float-badge) var(--ease-loop) infinite;
+  /* Spinner de carga (EstadoCarga). Con movimiento reducido queda quieto: el texto lo explica. */
+  --dur-spinner:      0.8s;
+  --anim-spin:        st-spin var(--dur-spinner) linear infinite;
+
+  /* ------------------------------------------------------------------------
+     Layout
+     ------------------------------------------------------------------------ */
+  --layout-max:             1200px;
+  --layout-page-pad-top:    48px;
+  --layout-page-pad-x:      34px;
+  --layout-page-pad-bottom: 88px;
+  --layout-page-padding:    var(--layout-page-pad-top) var(--layout-page-pad-x) var(--layout-page-pad-bottom);
+  --layout-topbar-pad-y:    20px;
+  --layout-topbar-pad-x:    34px;
+  --layout-topbar-padding:  var(--layout-topbar-pad-y) var(--layout-topbar-pad-x);
+  --layout-home-padding:    0 var(--layout-page-pad-x) 72px;
+  --layout-section-pad-y:   64px; /* separación entre secciones de la home */
+  --layout-access-padding:  48px 24px;
+  --layout-exam-padding:    44px 28px 64px;
+  --layout-exam-bar-padding: 15px 28px;
+  --layout-end-padding:     48px 28px;
+  --layout-scroll-offset:   96px; /* scroll-padding-top: el foco no queda bajo la barra fija */
+
+  /* Anchos máximos */
+  --width-report:    1080px;
+  --width-exam-bar:  900px;
+  --width-table-min: 900px; /* tabla en modo tabla; por debajo de 640 px pasa a tarjetas (D-23) */
+  --width-exam:      760px;
+  --width-access:    600px;
+  --width-end:       560px;
+  --width-modal:     540px;
+  --width-modal-sm:  520px;
+  --width-lead:      470px;
+  --width-end-text:  440px;
+  --width-demo:      430px;
+  --width-drawer:    408px;
+  --width-radar:     330px;
+  --width-bubble:    232px;
+  --width-mascot:    100px;
+  --width-page-title-min: 260px; /* columna del título del PageHeader antes de pasar las acciones abajo */
+  --width-page-lede: 600px;      /* entradilla del PageHeader (560–600 px en Strata.dc.html:610, 688) */
+  --width-toast:     560px;      /* toast: en el prototipo crece hasta la mitad de la ventana (left: 50%); aquí, como el fin */
+
+  /* Altos máximos */
+  --height-modal-max: 92dvh; /* modales (92vh en el prototipo; dvh descuenta la barra del navegador móvil) */
+}
+
+/* Adaptación a móvil (desktop-first, usable a 360 px). Los breakpoints no
+   pueden ser variables CSS: 640 px (tablas a tarjetas, D-23) y 768 px (menú móvil). */
+@media (max-width: 640px) {
+  :root {
+    --layout-page-pad-top:  32px;
+    --layout-page-pad-x:    20px;
+    --layout-page-pad-bottom: 64px;
+    --layout-topbar-pad-y:  14px;
+    --layout-topbar-pad-x:  20px;
+    --layout-section-pad-y: 48px;
+    --layout-access-padding: 32px 20px;
+    --layout-exam-padding:  32px 20px 48px;
+    --layout-exam-bar-padding: 12px 20px;
+    --layout-end-padding:   32px 20px;
+  }
+}
+
+/* ==========================================================================
+   Alias temporales (D-20)
+   Nombres del sistema anterior (Mezquit) apuntando a su equivalente STRATA
+   para que las pantallas aún no rediseñadas se vean coherentes.
+   No los uses en código nuevo. Se retiran en la Fase 8.
+   ========================================================================== */
+:root {
+  /* Color. El primario viejo (hunter) pasa a navy; brunswick (títulos, pie) e
+     ink (cuerpo) a tinta. Los niveles del reporte viejo (sage < fern < hunter)
+     quedan en una escala celeste → navy que cumple 4.5:1 como texto, y fern,
+     que también es el hover del primario viejo, da 7.56:1 con blanco. */
+  --color-hunter:            var(--color-navy);
+  --color-fern:              var(--color-sky-deep);
+  --color-sage:              var(--color-sky-text);
+  --color-brunswick:         var(--color-text);
+  --color-ink:               var(--color-text);
+  --color-timberwolf:        var(--color-border-neutral);
+  --color-surface:           var(--color-surface-white);
+  --color-surface-secondary: var(--color-bg-alt);
+  --color-border:            var(--color-border-control);
+  --color-accent:            var(--color-coral);
+  --color-success:           var(--color-success-text);
+  --color-error:             var(--color-error-text);
+  --color-warning:           var(--color-warning-text);
+  --color-info:              var(--color-info-text);
+
+  /* Fuentes. Cormorant y DM Sans siguen importadas hasta la Fase 8, sin uso. */
+  --font-display: var(--font-heading);
+  --font-body:    var(--font-text);
+
+  /* Escala de texto vieja (fluida) → escala STRATA más cercana */
+  --text-xs:   var(--fs-small);   /* 12 px */
+  --text-sm:   var(--fs-ui-md);   /* 14 px */
+  --text-base: var(--fs-body);    /* 16 px */
+  --text-lg:   var(--fs-lead);    /* 17 px */
+  --text-xl:   var(--fs-h3);      /* 20 px */
+  --text-2xl:  var(--fs-h2-sm);   /* 24–30 px */
+  --text-3xl:  var(--fs-h2);      /* 26–34 px */
+  --text-4xl:  var(--fs-h1);      /* 32–46 px */
+  --text-hero: var(--fs-display); /* 34–52 px */
+
+  /* Espaciado viejo (--sp-N = N × 4 px) → --space-* */
+  --sp-1:  var(--space-4);
+  --sp-2:  var(--space-8);
+  --sp-3:  var(--space-12);
+  --sp-4:  var(--space-16);
+  --sp-5:  var(--space-20);
+  --sp-6:  var(--space-24);
+  --sp-8:  var(--space-32);
+  --sp-10: var(--space-40);
+  --sp-12: var(--space-48);
+  --sp-16: var(--space-64);
+  --sp-20: var(--space-72);
+  --sp-24: var(--space-88);
+
+  /* Radios. sm era el de botones e inputs; md, el de tarjetas; lg, el de la tarjeta de auth. */
+  --radius-sm: var(--radius-control);
+  --radius-md: var(--radius-card);
+  --radius-lg: var(--radius-glass);
+
+  /* Transiciones */
+  --t-fast: var(--dur-state) var(--ease-base);
+  --t-base: var(--dur-lift) var(--ease-base);
+
+  /* Layout. --header-h se conserva (barra fija vieja y padding-top del body)
+     hasta que la Fase 2 los retire. */
+  --max-width:  var(--layout-max);
+  --section-px: var(--layout-page-pad-x);
+  --section-py: var(--layout-section-pad-y);
+  --header-h:   64px;
+
+  /* DISC: sin uso desde que Report reemplazó al reporte DISC; no necesitan
+     alias y se retiran en la Fase 8 (D-20). */
   --disc-d: #B84A3E;
   --disc-i: #D9A33A;
   --disc-s: #588157;
   --disc-c: #3F6E96;
-
-  /* Escala tipográfica fluida */
-  --text-xs:   clamp(0.75rem,  0.7rem  + 0.25vw, 0.875rem);
-  --text-sm:   clamp(0.875rem, 0.825rem + 0.25vw, 1rem);
-  --text-base: clamp(1rem,     0.975rem + 0.125vw, 1.0625rem);
-  --text-lg:   clamp(1.125rem, 1.05rem  + 0.375vw, 1.3125rem);
-  --text-xl:   clamp(1.25rem,  1.15rem  + 0.5vw,   1.5rem);
-  --text-2xl:  clamp(1.5rem,   1.3rem   + 1vw,     2rem);
-  --text-3xl:  clamp(1.875rem, 1.55rem  + 1.625vw, 2.625rem);
-  --text-4xl:  clamp(2.25rem,  1.75rem  + 2.5vw,   3.5rem);
-  --text-hero: clamp(2.75rem,  1.5rem   + 6.25vw,  6rem);
-
-  /* Espaciado */
-  --sp-1:  0.25rem;
-  --sp-2:  0.5rem;
-  --sp-3:  0.75rem;
-  --sp-4:  1rem;
-  --sp-5:  1.25rem;
-  --sp-6:  1.5rem;
-  --sp-8:  2rem;
-  --sp-10: 2.5rem;
-  --sp-12: 3rem;
-  --sp-16: 4rem;
-  --sp-20: 5rem;
-  --sp-24: 6rem;
-
-  /* Layout */
-  --max-width:   1200px;
-  --section-px:  clamp(1rem, 5vw, 4rem);
-  --section-py:  clamp(3rem, 8vw, 6rem);
-  --header-h:    64px;
-
-  /* Radio */
-  --radius-sm: 4px;
-  --radius-md: 8px;
-  --radius-lg: 16px;
-
-  /* Transiciones */
-  --t-fast: 150ms ease;
-  --t-base: 250ms ease;
 }

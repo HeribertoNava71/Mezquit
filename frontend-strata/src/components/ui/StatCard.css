@@ -1,0 +1,146 @@
+/* Tarjeta de estadística (Strata.dc.html:698-704 resumen y 792-805 saldo). */
+.st-stat__label,
+.st-stat__help,
+.st-stat__figure {
+  margin: 0;
+}
+
+/* ── stacked: saldo ────────────────────────────────────────────────────── */
+.st-stat__head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-8);
+}
+
+.st-stat--stacked .st-stat__label {
+  font-size: var(--fs-small);
+  font-weight: var(--fw-semibold);
+  line-height: var(--lh-title);
+  color: var(--color-text-secondary);
+}
+
+.st-stat__meta {
+  flex: none;
+}
+
+.st-stat__figure {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--space-5);
+  margin: var(--space-11) 0 var(--space-9);
+}
+
+.st-stat__value {
+  font-family: var(--font-heading);
+  font-size: var(--fs-figure-lg);
+  font-weight: var(--fw-extrabold);
+  line-height: var(--lh-none);
+  letter-spacing: var(--tracking-heading);
+  color: var(--color-text);
+  font-variant-numeric: tabular-nums;
+}
+
+.st-stat__value--mono {
+  font-family: var(--font-mono);
+  font-weight: var(--fw-bold);
+  letter-spacing: normal;
+}
+
+.st-stat__unit {
+  font-size: var(--fs-label);
+  font-weight: var(--fw-medium);
+  line-height: var(--lh-title);
+  color: var(--color-text-tertiary);
+}
+
+.st-stat--stacked .st-stat__help {
+  margin-top: var(--space-8);
+  font-size: var(--fs-micro);
+  line-height: var(--lh-title);
+  color: var(--color-text-tertiary);
+}
+
+/* ── inline: resumen con cuadro numérico ───────────────────────────────── */
+.st-stat--inline {
+  display: flex;
+  align-items: center;
+  gap: var(--space-13);
+}
+
+.st-stat__badge {
+  --st-stat-badge-bg: var(--color-navy-tint);
+  --st-stat-badge-fg: var(--color-navy);
+
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  min-width: var(--size-stat-badge);
+  height: var(--size-stat-badge);
+  padding: 0 var(--space-6);
+  border-radius: var(--radius-control-candidate);
+  background-color: var(--st-stat-badge-bg);
+  color: var(--st-stat-badge-fg);
+  font-family: var(--font-heading);
+  font-size: var(--fs-body-sm);
+  font-weight: var(--fw-extrabold);
+  line-height: var(--lh-none);
+  font-variant-numeric: tabular-nums;
+}
+
+.st-stat__badge--mono {
+  font-family: var(--font-mono);
+  font-weight: var(--fw-bold);
+}
+
+/* Tonos del cuadro · navy 8.77:1 · sky 6.83:1 · sky-soft 5.55:1 · neutral 4.95:1 */
+.st-stat__badge--navy {
+  --st-stat-badge-bg: var(--color-navy-tint);
+  --st-stat-badge-fg: var(--color-navy);
+}
+
+.st-stat__badge--sky {
+  --st-stat-badge-bg: var(--color-sky-tint-strong);
+  --st-stat-badge-fg: var(--color-sky-deep);
+}
+
+.st-stat__badge--sky-soft {
+  --st-stat-badge-bg: var(--color-sky-tint);
+  --st-stat-badge-fg: var(--color-sky-text);
+}
+
+.st-stat__badge--neutral {
+  --st-stat-badge-bg: var(--color-surface-muted);
+  --st-stat-badge-fg: var(--color-text-tertiary);
+}
+
+.st-stat__body {
+  flex: 1;
+  min-width: 0;
+}
+
+.st-stat--inline .st-stat__label {
+  font-size: var(--fs-meta);
+  font-weight: var(--fw-bold);
+  line-height: var(--lh-title);
+  color: var(--color-text);
+}
+
+.st-stat--inline .st-stat__help {
+  margin-top: var(--space-2);
+  font-size: var(--fs-eyebrow);
+  line-height: var(--lh-title);
+  color: var(--color-text-tertiary);
+}
+
+.st-stat--inline .st-stat__meta {
+  align-self: flex-start;
+}
+
+@media (forced-colors: active) {
+  .st-stat__badge {
+    border: var(--border-width) solid;
+  }
+}

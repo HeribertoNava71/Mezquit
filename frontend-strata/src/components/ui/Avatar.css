@@ -1,0 +1,61 @@
+/* Avatar de iniciales (Strata.dc.html:69, 83, 838 y 1001). */
+.st-avatar {
+  --st-avatar-size: var(--size-avatar);
+
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: var(--st-avatar-size);
+  height: var(--st-avatar-size);
+  font-family: var(--font-text);
+  font-size: var(--fs-eyebrow);
+  font-weight: var(--fw-bold);
+  line-height: var(--lh-none);
+  letter-spacing: normal;
+  text-transform: uppercase;
+  white-space: nowrap;
+  user-select: none;
+}
+
+/* Tamaños: 30 px (barra, marca) y 33 px (tabla) */
+.st-avatar--sm { --st-avatar-size: var(--size-avatar); }
+
+.st-avatar--md {
+  --st-avatar-size: var(--size-avatar-lg);
+
+  font-size: var(--fs-label);
+}
+
+/* Formas */
+.st-avatar--circle { border-radius: var(--radius-round); }
+.st-avatar--square { border-radius: var(--radius-chip-sm); }
+.st-avatar--square.st-avatar--md { border-radius: var(--radius-chip); }
+
+/* Tonos · #DBEAFE sobre navy 8.49:1 · #0369A1 sobre #EFF9FE 5.55:1 */
+.st-avatar--navy {
+  background-color: var(--color-navy);
+  color: var(--color-on-navy-muted);
+}
+
+.st-avatar--sky {
+  background-color: var(--color-sky-tint);
+  color: var(--color-sky-text);
+}
+
+/* Marca de la empresa en el acceso: una letra en Satoshi, blanca (Strata.dc.html:1001) */
+.st-avatar--single {
+  font-family: var(--font-heading);
+  font-size: var(--fs-ui-lg);
+  letter-spacing: var(--tracking-heading);
+}
+
+.st-avatar--square.st-avatar--navy.st-avatar--single {
+  color: var(--color-on-navy);
+}
+
+@media (forced-colors: active) {
+  .st-avatar {
+    border: var(--border-width) solid;
+  }
+}

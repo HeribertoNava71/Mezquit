@@ -1,0 +1,114 @@
+/* Modal (Strata.dc.html:1323-1418)
+   Panel blanco de 520 o 540 px, radio 20 y alto máximo de 92vh: cabecera y pie
+   fijos, cuerpo con scroll. Entra con fadeUp .22s (--anim-fade-up). */
+.st-modal {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: var(--width-modal-sm);
+  max-width: 100%;
+  /* 92vh del prototipo, sin pasar del área útil del overlay (que ya resta su padding) */
+  max-height: min(var(--height-modal-max), 100%);
+  overflow: hidden;
+  background: var(--color-surface-white);
+  border-radius: var(--radius-modal);
+  box-shadow: var(--shadow-modal);
+  animation: var(--anim-fade-up);
+}
+
+.st-modal--lg {
+  width: var(--width-modal);
+}
+
+/* Cabecera: 22 24 18, divisor #EDE9E0 */
+.st-modal__header {
+  flex: none;
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-12);
+  padding: var(--space-22) var(--space-24) var(--space-18);
+  border-bottom: var(--border-width) solid var(--color-border-divider);
+}
+
+.st-modal__heading {
+  flex: 1;
+  min-width: 0;
+}
+
+/* Título: 18 px, 700, -0.01em, en General Sans como en el prototipo */
+.st-modal__title {
+  font-family: var(--font-text);
+  font-size: var(--fs-title-sm);
+  font-weight: var(--fw-bold);
+  line-height: var(--lh-title);
+  letter-spacing: var(--tracking-title);
+  color: var(--color-text);
+}
+
+.st-modal__description {
+  margin-top: var(--space-3);
+  font-size: var(--fs-meta);
+  line-height: var(--lh-normal);
+  color: var(--color-text-tertiary);
+}
+
+/* Cuerpo: 22 24, columna con 18 px entre bloques, scroll propio */
+.st-modal__body {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-18);
+  padding: var(--space-22) var(--space-24);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+/* Cuerpo largo sin controles: es enfocable (useScrollableFocus). El anillo va
+   hacia dentro para que el panel, con overflow hidden, no lo recorte. */
+.st-modal__body:focus-visible {
+  outline-offset: calc(-2 * var(--focus-outline-offset));
+}
+
+/* Pie beige: nota a la izquierda y acciones a la derecha, gap 11 */
+.st-modal__footer {
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: var(--space-11);
+  padding: var(--space-18) var(--space-24);
+  background: var(--color-bg);
+  border-top: var(--border-width) solid var(--color-border-divider);
+}
+
+.st-modal__note {
+  flex: 1;
+  min-width: 120px; /* como el prototipo: debajo de eso, las acciones bajan de línea */
+  font-size: var(--fs-label);
+  line-height: var(--lh-normal);
+  color: var(--color-text-tertiary);
+}
+
+.st-modal__actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: var(--space-11);
+  margin-left: auto;
+}
+
+@media (max-width: 640px) {
+  .st-modal__header {
+    padding: var(--space-20) var(--space-20) var(--space-16);
+  }
+
+  .st-modal__body {
+    padding: var(--space-20);
+  }
+
+  .st-modal__footer {
+    padding: var(--space-16) var(--space-20);
+  }
+}

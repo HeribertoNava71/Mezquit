@@ -11,6 +11,15 @@
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 
+    <!-- Fuentes: Satoshi y General Sans desde el CDN de Fontshare (D-04, opción B).
+         Una hoja por familia, como el prototipo: con las dos en la misma URL,
+         la API solo devuelve Satoshi y General Sans no carga.
+         JetBrains Mono se autohospeda con @fontsource (src/styles/typography.css). -->
+    <link rel="preconnect" href="https://api.fontshare.com" crossorigin />
+    <link rel="preconnect" href="https://cdn.fontshare.com" crossorigin />
+    <link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,600,700,800&display=swap" />
+    <link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=general-sans@400,500,600,700&display=swap" />
+
     <!-- Open Graph -->
     <meta property="og:type" content="website" />
     <meta property="og:title" content="Mezquit — Pruebas psicométricas para empresas" />

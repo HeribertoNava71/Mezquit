@@ -1,48 +1,258 @@
-.btn {
+/* ==========================================================================
+   Button STRATA
+   Prototipo: Strata.dc.html:123 (tinta), 145 (CTA del hero), 343-344 y 613
+   (builder y catálogo), 671 (ancho completo), 690, 757 y 854 (acción de tabla),
+   982, 986, 1077 y 1113 (acceso), 1186-1188 (examen), 1223-1224 (fin),
+   1313, 1369-1370 y 1413-1414 (pies de modal).
+   - Primario navy con texto blanco y hover más oscuro (D-19): el coral del
+     prototipo da 2.78:1 con blanco.
+   - Todos llevan borde de 1 px (transparente en los rellenos): primario y
+     secundario miden lo mismo en una misma fila.
+   - Deshabilitado con aria-disabled: sigue enfocable y anuncia su estado.
+   - Los hover y el presionado se escriben con :where(...) para no subir la
+     especificidad y no aplicarse cuando el botón está deshabilitado o cargando.
+   - Los hover que mueven el botón (elevación de la tinta, resorte del CTA) solo
+     se aplican con (hover: hover), porque en pantallas táctiles el :hover se
+     queda pegado tras el toque, y con (prefers-reduced-motion: no-preference),
+     porque sin transición el escalado sería un salto brusco.
+   ========================================================================== */
+
+.st-btn {
+  position: relative;
   display: inline-flex;
   align-items: center;
-  gap: var(--sp-2);
-  padding: var(--sp-3) var(--sp-6);
-  border-radius: var(--radius-sm);
-  font-family: var(--font-body);
-  font-size: var(--text-base);
-  font-weight: 500;
-  line-height: 1;
-  white-space: nowrap;
-  cursor: pointer;
-  transition: background-color var(--t-base), color var(--t-base), opacity var(--t-base);
-  text-decoration: none;
-  border: none;
-}
-
-.btn:disabled,
-.btn--loading {
-  opacity: 0.6;
-  pointer-events: none;
-}
-
-/* Variante primaria */
-.btn--primary {
-  background-color: var(--color-hunter);
-  color: #ffffff;
-}
-.btn--primary:hover:not(:disabled) {
-  background-color: var(--color-fern);
-}
-
-/* Variante ghost (sin relleno, solo borde) */
-.btn--ghost {
+  justify-content: center;
+  gap: var(--space-8);
+  min-width: 0;
+  padding: var(--space-12) var(--space-18);
+  border: var(--border-width) solid transparent;
+  border-radius: var(--radius-control);
   background-color: transparent;
-  color: var(--color-hunter);
-  border: 1.5px solid var(--color-hunter);
-}
-.btn--ghost:hover:not(:disabled) {
-  background-color: var(--color-hunter);
-  color: #ffffff;
+  color: inherit;
+  font-family: var(--font-text);
+  font-size: var(--fs-ui);
+  font-weight: var(--fw-semibold);
+  line-height: var(--lh-heading-sm);
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  transition: var(--transition-state), transform var(--dur-state) var(--ease-base);
 }
 
-/* Tamaño large */
-.btn--lg {
-  padding: var(--sp-4) var(--sp-8);
-  font-size: var(--text-lg);
+.st-btn__icon {
+  display: inline-flex;
+  flex: none;
+}
+
+.st-btn__label {
+  min-width: 0;
+  text-wrap: balance;
+}
+
+/* ── Variantes ─────────────────────────────────────────────────────────── */
+
+/* Primario navy (D-19) */
+.st-btn--primary {
+  background-color: var(--color-primary);
+  color: var(--color-on-primary);
+}
+
+.st-btn--primary:where(:not([aria-disabled='true'])):hover {
+  background-color: var(--color-primary-hover);
+}
+
+/* Secundario (Strata.dc.html:343, :986, :1186, :1224) */
+.st-btn--secondary {
+  border-color: var(--color-border-strong);
+  background-color: var(--color-surface-white);
+  color: var(--color-navy);
+}
+
+.st-btn--secondary:where(:not([aria-disabled='true'])):hover {
+  border-color: var(--color-navy);
+}
+
+/* Neutro: «Cerrar» y «Cancelar» de los pies de modal (Strata.dc.html:1369, :1413) */
+.st-btn--neutral {
+  border-color: var(--color-border-strong);
+  background-color: var(--color-surface-white);
+  color: var(--color-text-secondary);
+}
+
+.st-btn--neutral:where(:not([aria-disabled='true'])):hover {
+  border-color: var(--color-border-control);
+  color: var(--color-text);
+}
+
+/* Destacado: acción de tabla con resultado listo (Strata.dc.html:854, :1880-1882).
+   Texto #0369A1 sobre #EFF9FE: 5.55:1. */
+.st-btn--highlight {
+  border-color: var(--color-sky-strong);
+  background-color: var(--color-sky-tint);
+  color: var(--color-sky-text);
+}
+
+.st-btn--highlight:where(:not([aria-disabled='true'])):hover {
+  background-color: var(--color-sky-tint-strong);
+}
+
+/* Ghost: enlace con forma de botón (Strata.dc.html:149, :1117). El hover
+   #0EA5E9 del prototipo no cumple como texto: se usa --color-link-hover. */
+.st-btn--ghost {
+  color: var(--color-link);
+}
+
+.st-btn--ghost:where(:not([aria-disabled='true'])):hover {
+  color: var(--color-link-hover);
+}
+
+.st-on-dark .st-btn--ghost {
+  color: var(--color-on-dark-link);
+}
+
+.st-on-dark .st-btn--ghost:where(:not([aria-disabled='true'])):hover {
+  color: var(--color-on-dark);
+}
+
+/* Tinta: pastilla del header público (Strata.dc.html:123) */
+.st-btn--ink {
+  border-radius: var(--radius-pill);
+  background-color: var(--color-surface-dark);
+  color: var(--color-on-dark);
+}
+
+.st-btn--ink:where(:not([aria-disabled='true'])):hover {
+  background-color: var(--color-navy);
+}
+
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .st-btn--ink:where(:not([aria-disabled='true'])):hover {
+    transform: translateY(-1px);
+  }
+}
+
+/* Peligro: blanco sobre #B3261E (6.54:1); hover #8E1F18 (8.90:1) */
+.st-btn--danger {
+  background-color: var(--color-error-text);
+  color: var(--color-on-primary);
+}
+
+.st-btn--danger:where(:not([aria-disabled='true'])):hover {
+  background-color: var(--color-error-hover);
+}
+
+/* Presionado (Strata.dc.html:671, :1077) */
+.st-btn:where(:not([aria-disabled='true'])):active {
+  transform: translateY(1px);
+}
+
+/* ── Tamaños ───────────────────────────────────────────────────────────── */
+
+/* Mediano: alto mínimo de 44 px, el objetivo táctil que el repo exige en el
+   flujo del candidato (R-36; criterios de la Fase 3). El prototipo mide entre
+   42 y 44 px con su interlineado normal. */
+.st-btn--md {
+  min-height: var(--size-target);
+}
+
+/* Chico: acción de tabla (Strata.dc.html:757). Interlineado 1.3 para medir
+   unos 32 px, como el prototipo con su interlineado normal. */
+.st-btn--sm {
+  gap: var(--space-6);
+  padding: var(--space-7) var(--space-13);
+  border-radius: var(--radius-chip-sm);
+  font-size: var(--fs-small);
+  line-height: var(--lh-title);
+  white-space: nowrap;
+}
+
+/* En la tabla, el hover del secundario es celeste (Strata.dc.html:757, :854) */
+.st-btn--secondary.st-btn--sm:where(:not([aria-disabled='true'])):hover {
+  border-color: var(--color-sky-strong);
+  color: var(--color-sky-text);
+}
+
+/* Tinta mediana: 10 × 18 px y 13 px, como la pastilla del prototipo (unos 38 px
+   de alto; vive en el header público, fuera del flujo del candidato). */
+.st-btn--ink.st-btn--md {
+  min-height: 0;
+  padding: var(--space-10) var(--space-18);
+  font-size: var(--fs-ui-sm);
+  white-space: nowrap;
+}
+
+/* Grande: CTA del hero con resorte (Strata.dc.html:145) */
+.st-btn--lg {
+  gap: var(--space-10);
+  padding: var(--space-16) var(--space-28);
+  border-radius: var(--radius-feature);
+  font-size: var(--fs-body-sm);
+  transition: var(--transition-state), transform var(--dur-toggle) var(--ease-spring);
+}
+
+/* Sombra navy del CTA (la coral del prototipo, en navy). No va a todo lo ancho:
+   en pies de drawer y tarjetas el prototipo no la usa (Strata.dc.html:671, :1313).
+   :where() deja la especificidad en 0,2,0 para que el deshabilitado la quite. */
+.st-btn--primary.st-btn--lg:where(:not(.st-btn--full)) {
+  box-shadow: var(--shadow-primary-lg);
+}
+
+.st-btn--primary.st-btn--lg:where(:not(.st-btn--full)):where(:not([aria-disabled='true'])):hover {
+  box-shadow: var(--shadow-primary-lg-hover);
+}
+
+/* El resorte (scale 1.05) solo en los rellenos y no a todo lo ancho */
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .st-btn--lg:not(.st-btn--full):is(.st-btn--primary, .st-btn--ink, .st-btn--danger):where(:not([aria-disabled='true'])):hover {
+    transform: scale(1.05);
+  }
+}
+
+.st-btn--lg:not(.st-btn--full):is(.st-btn--primary, .st-btn--ink, .st-btn--danger):where(:not([aria-disabled='true'])):active {
+  transform: scale(0.99);
+}
+
+/* La tinta es pastilla en todos los tamaños */
+.st-btn.st-btn--ink {
+  border-radius: var(--radius-pill);
+}
+
+/* ── Ancho completo (Strata.dc.html:671, :1313) ────────────────────────── */
+.st-btn--full {
+  display: flex;
+  width: 100%;
+}
+
+/* ── Estados ───────────────────────────────────────────────────────────── */
+
+/* Deshabilitado: tonos apagados como la paginación del prototipo (Strata.dc.html:864).
+   El texto #6B6558 sobre #F0EDE5 da 4.95:1, aunque WCAG no lo exige en controles inactivos. */
+.st-btn.st-btn--disabled {
+  border-color: transparent;
+  background-color: var(--color-surface-muted);
+  color: var(--color-text-tertiary);
+  box-shadow: none;
+  cursor: not-allowed;
+}
+
+.st-btn.st-btn--disabled:is(.st-btn--secondary, .st-btn--neutral, .st-btn--highlight) {
+  border-color: var(--color-border-neutral);
+  background-color: var(--color-surface-white);
+}
+
+.st-btn.st-btn--disabled.st-btn--ghost {
+  background-color: transparent;
+}
+
+/* Cargando: conserva su color; el spinner toma currentColor */
+.st-btn--loading {
+  cursor: progress;
+}
+
+@media (forced-colors: active) {
+  .st-btn.st-btn--disabled {
+    color: GrayText;
+  }
 }
