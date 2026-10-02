@@ -195,7 +195,7 @@ Cada respuesta trae las cabeceras `X-Strata-Mock-Escenario` y `X-Strata-Mock-Fue
 
 1. Edita o crea un `.json` en `e2e/mocks` con el [formato de los mocks](#mocks). El nombre del archivo es el del escenario: letras, números, guion y guion bajo.
 2. Revísalo con `node scripts/captura.mjs --validar`. Para saber qué entrada responde una petición: `node scripts/captura.mjs --validar e2e/mocks/rh.json --probar "GET /api/assessments/13"`.
-3. Con `npm run dev:mock` corriendo, el cambio se carga solo y la página se recarga. Si el JSON quedó con errores, la terminal lo dice y se sigue usando la versión anterior. Un escenario nuevo aparece en la pastilla, descrito con su comentario `//` hasta los dos puntos.
+3. Con `npm run dev:mock` corriendo, el cambio se carga solo y la página se recarga. Si el JSON quedó con errores, la terminal lo dice, la página no se recarga y se sigue usando la versión anterior. Un escenario nuevo aparece en la pastilla, descrito con su comentario `//` hasta los dos puntos.
 
 Las pruebas de extremo a extremo y los scripts de QA leen los mismos archivos: antes de cambiar una entrada que ya existe, busca quién la usa en `e2e/` y corre `npm run test:e2e`.
 

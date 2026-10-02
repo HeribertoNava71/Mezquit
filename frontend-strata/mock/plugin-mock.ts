@@ -24,7 +24,8 @@
 // - Cada respuesta tarda de 250 a 400 ms, para que se vean los estados de carga
 //   (STRATA_MOCK_RETARDO: «0», «300» o «250-400», en el entorno o en .env.mock.local).
 // - Al guardar un JSON de e2e/mocks, el escenario se vuelve a leer y la página se
-//   recarga. Si el archivo quedó con errores, se conserva la versión anterior.
+//   recarga. Si el archivo quedó con errores, se conserva la versión anterior y
+//   la página no se recarga.
 // El formato de los JSON está en mock/coincidencias.mjs.
 
 import { readdir } from 'node:fs/promises'
@@ -474,8 +475,11 @@ export interface ModoDemo {
   readonly escenarios: Escenarios
   /** Middleware de connect: /__mock, ?escenario= y las rutas de /api y /sanctum. */
   middleware: Connect.NextHandleFunction
-  /** Vuelve a leer la carpeta. Un archivo con errores conserva su versión anterior. */
-  recargar(): Promise<void>
+  /**
+   * Vuelve a leer la carpeta. Un archivo con errores conserva su versión anterior.
+   * Devuelve esos errores («archivo.json: motivo»), como cargarEscenarios.
+   */
+  recargar(): Promise<string[]>
 }
 
 function leerCookie(cabecera: string | undefined, nombre: string): string | undefined {
@@ -539,7 +543,7 @@ export async function crearModoDemo(opciones: OpcionesModoDemo): Promise<ModoDem
       : (opciones.retardo ?? RETARDO_POR_DEFECTO)
   let escenarios: Escenarios = new Map()
 
-  async function recargar(): Promise<void> {
+  async function recargar(): Promise<string[]> {
     const carga = await cargarEscenarios(carpeta, escenarios)
     for (const aviso of carga.avisos) registro.warn(`[mock] aviso: ${aviso}`)
     for (const error of carga.errores) registro.error(`[mock] ${error}`, { timestamp: true })
@@ -547,6 +551,7 @@ export async function crearModoDemo(opciones: OpcionesModoDemo): Promise<ModoDem
     if (!escenarios.has(ESCENARIO_INICIAL)) {
       registro.error(`[mock] Falta ${ESCENARIO_INICIAL}.json en ${carpeta}: sin cookie, todo responde por defecto.`)
     }
+    return carga.errores
   }
   await recargar()
 
@@ -696,10 +701,14 @@ export function pluginMock(opciones: OpcionesPluginMock = {}): Plugin {
       server.middlewares.use(demo.middleware)
 
       // Al guardar un JSON de la carpeta: se vuelve a leer y la página se recarga.
+      // Si quedó con errores no cambió nada: la terminal ya lo dijo y la página
+      // sigue como estaba, para corregirlo y volver a guardar.
       const alCambiar = (archivo: string) => {
         if (!mismaRuta(path.dirname(archivo), carpeta) || !archivo.toLowerCase().endsWith('.json')) return
-        void demo.recargar().then(() => {
-          server.config.logger.info(`[mock] ${path.basename(archivo)} recargado.`, { timestamp: true })
+        const nombre = path.basename(archivo)
+        void demo.recargar().then((errores) => {
+          if (errores.some((error) => error.startsWith(`${nombre}:`))) return
+          server.config.logger.info(`[mock] ${nombre} recargado.`, { timestamp: true })
           server.ws.send({ type: 'full-reload', path: '*' })
         })
       }

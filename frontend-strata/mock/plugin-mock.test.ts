@@ -450,11 +450,14 @@ describe('recarga de los JSON', () => {
     expect(catalogo().body).toEqual({ data: [] })
 
     await writeFile(archivo, JSON.stringify({ 'GET /api/catalog': { body: { data: [{ id: 'nueva' }] } } }))
-    await demo.recargar()
+    expect(await demo.recargar()).toEqual([])
     expect(catalogo().body).toEqual({ data: [{ id: 'nueva' }] })
 
+    // recargar() devuelve el error con el nombre del archivo: el plugin no recarga la página.
     await writeFile(archivo, '{ "GET /api/catalog": ')
-    await demo.recargar()
+    const suyos = await demo.recargar()
+    expect(suyos).toHaveLength(1)
+    expect(suyos[0]).toMatch(/^visitante\.json: /)
     expect(catalogo().body).toEqual({ data: [{ id: 'nueva' }] })
     expect(errores.some((error) => error.includes('visitante.json') && error.includes('Se conserva la versión anterior.'))).toBe(true)
   })

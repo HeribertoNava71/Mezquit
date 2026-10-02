@@ -4,8 +4,13 @@
    overlays y el toast (--z-demo). La pastilla es la tinta del sistema en
    tamaño chico; el panel usa las superficies del menú de la pastilla de
    usuario (UserMenu.css) y se abre hacia arriba.
+   --z-demo se define aquí y no en tokens.css: la hoja global va al build de
+   producción y esta solo existe en el modo demo.
    ========================================================================== */
 .st-modo-demo {
+  /* Sobre la mascota (--z-mascot-layer, 20) y bajo la barra con su menú móvil
+     (--z-topbar, 30), los overlays (60) y los toasts (80). */
+  --z-demo: 25;
   position: fixed;
   bottom: calc(var(--space-12) + env(safe-area-inset-bottom, 0px));
   left: calc(var(--space-12) + env(safe-area-inset-left, 0px));
