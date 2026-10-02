@@ -1,0 +1,107 @@
+/* ==========================================================================
+   Mascota de la home (Strata.dc.html:101-106; lógica :1571-1755)
+   Portal en el body con capa propia (--z-mascot-layer): por encima del
+   contenido de la home y por debajo de barras, menús, overlays y toasts.
+   La capa cubre la ventana pero no recibe clics; solo el botón de la mascota.
+   El motor (motor.ts) escribe el transform del botón y de la burbuja.
+   ========================================================================== */
+
+.st-mascota {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-mascot-layer);
+  pointer-events: none;
+}
+
+/* Botón de 100 px que se desplaza. El motor lo centra en su punto con
+   translate(-50%, -50%) y le aplica giro y escala alrededor del centro. */
+.st-mascota__boton {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: block;
+  width: var(--width-mascot);
+  padding: 0;
+  border: 0;
+  /* El anillo de foco (global.css) toma forma de cápsula alrededor de la salamandra. */
+  border-radius: var(--radius-pill);
+  background: none;
+  cursor: pointer;
+  pointer-events: auto;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  will-change: transform;
+}
+
+/* Antes de entrar en escena no se ve ni se alcanza con Tab ni con un lector de pantalla. */
+.st-mascota__boton:not([data-fase]),
+.st-mascota__boton[data-fase='espera'] {
+  visibility: hidden;
+}
+
+/* La carrera termina junto al CTA pulsado (+66 px) y ahí gira y espera 400 ms.
+   En el prototipo quedaba debajo del contenido; aquí va encima, así que
+   mientras corre deja pasar los clics al CTA y a sus vecinos. */
+.st-mascota__boton[data-fase='carrera'] {
+  pointer-events: none;
+}
+
+/* Salamandra con sombra (Strata.dc.html:101). La opacidad va en la imagen y
+   no en el botón, para que el anillo de foco no se atenúe sobre el titular.
+   Empieza transparente: la entrada la lleva a .8. */
+.st-mascota__cuerpo {
+  display: block;
+  width: 100%;
+  height: auto;
+  opacity: 0;
+  filter: var(--filter-mascot);
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+/* ── Burbuja (Strata.dc.html:103-105) ──────────────────────────────────── */
+/* El contenedor es la región aria-live y lo coloca el motor; el globo lleva
+   el aspecto y la entrada bubbleIn. */
+.st-mascota__burbuja {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: var(--width-bubble);
+  max-width: calc(100vw - var(--space-24));
+  pointer-events: none;
+}
+
+/* Blanco sobre tinta: 17.85:1. */
+.st-mascota__globo {
+  padding: var(--space-12) var(--space-14);
+  border-radius: var(--radius-feature);
+  background-color: var(--color-surface-dark);
+  box-shadow: var(--shadow-bubble);
+  color: var(--color-on-dark);
+  font-size: var(--fs-meta);
+  line-height: var(--lh-normal);
+  text-wrap: pretty;
+  animation: var(--anim-bubble-in);
+}
+
+/* ── Movimiento reducido, alto contraste e impresión ───────────────────── */
+/* Con movimiento reducido el componente no se monta; esto cubre el instante
+   entre el cambio de preferencia y el desmontaje. */
+@media (prefers-reduced-motion: reduce) {
+  .st-mascota {
+    display: none;
+  }
+}
+
+@media (forced-colors: active) {
+  .st-mascota__globo {
+    border: var(--border-width) solid CanvasText;
+  }
+}
+
+@media print {
+  .st-mascota {
+    display: none;
+  }
+}

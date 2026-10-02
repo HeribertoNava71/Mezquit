@@ -114,10 +114,14 @@
 }
 
 /* Home: el marco lleva el ancho y el padding, y contiene barra, contenido y
-   pie, como el contenedor de la home del prototipo (Strata.dc.html:108). */
+   pie, como el contenedor de la home del prototipo (Strata.dc.html:108).
+   Sin z-index propio (Fase 6): no abre un contexto de apilamiento, así el menú
+   de la pastilla y el panel del menú móvil (--z-dropdown, 40) quedan por encima
+   de la capa de la mascota (--z-mascot-layer, 20, en un portal del body). Ya
+   sobre los halos: va después de ellos y main y el pie llevan --z-content. */
 .st-page__frame {
   position: relative;
-  z-index: var(--z-home-content);
+  z-index: auto;
   display: flex;
   flex: 1 0 auto;
   flex-direction: column;

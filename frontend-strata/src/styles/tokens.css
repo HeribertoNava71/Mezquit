@@ -428,6 +428,7 @@
   --z-overlay:      60; /* drawer, modales y su scrim */
   --z-toast:        80;
   --z-skip-link:    90; /* enlace para saltar al contenido */
+  --z-mascot-layer: 20; /* Fase 6 · capa de la mascota en portal (document.body): sobre el contenido de la home (2) y bajo barra (30), menús (40), overlays (60) y toasts (80). --z-mascot y --z-bubble son los del prototipo, que la dejaban debajo del contenido */
 
   /* ------------------------------------------------------------------------
      Movimiento
@@ -531,9 +532,12 @@
   --width-page-title-min: 260px; /* columna del título del PageHeader antes de pasar las acciones abajo */
   --width-page-lede: 600px;      /* entradilla del PageHeader (560–600 px en Strata.dc.html:610, 688) */
   --width-toast:     560px;      /* toast: en el prototipo crece hasta la mitad de la ventana (left: 50%); aquí, como el fin */
+  --width-hero-copy:  600px;     /* columna de texto del hero de la home cuando va en una sola columna (Fase 6) */
+  --width-demo-stage: 540px;     /* escenario de la demo de la home: la columna del prototipo a 1200 px (Strata.dc.html:168) */
 
   /* Altos máximos */
   --height-modal-max: 92dvh; /* modales (92vh en el prototipo; dvh descuenta la barra del navegador móvil) */
+  --height-demo-stage: 430px; /* alto mínimo del escenario de la demo de la home (Strata.dc.html:168) */
 }
 
 /* Adaptación a móvil (desktop-first, usable a 360 px). Los breakpoints no

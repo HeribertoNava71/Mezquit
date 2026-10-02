@@ -95,6 +95,27 @@
   padding: var(--space-22) 0 0;
 }
 
+/* Navegación de la home: 13.5 px, #5B5545 (7.00:1) y 22 px entre enlaces, sin
+   el relleno lateral del subrayado (Strata.dc.html:115-119). Al pasar el puntero
+   y en el estado activo conserva las reglas comunes. */
+.st-topbar--home .st-topbar__nav {
+  gap: var(--space-22);
+}
+
+.st-topbar--home .st-topbar__link {
+  padding-inline: 0;
+  font-size: var(--fs-ui);
+}
+
+.st-topbar--home .st-topbar__link:not(:hover, [aria-current='page'], .st-topbar__link--active) {
+  color: var(--color-text-secondary);
+}
+
+/* Acciones de la home a 11 px (Strata.dc.html:121). */
+.st-topbar--home .st-topbar__actions {
+  gap: var(--space-11);
+}
+
 /* Alto contraste: el subrayado activo es un borde y se conserva. */
 @media (forced-colors: active) {
   .st-topbar {

@@ -1,0 +1,385 @@
+/* ==========================================================================
+   Demo del examen en vivo (Strata.dc.html:168-225; mapa.md, V-4)
+   Escenario de 540 × 430 px (la columna del prototipo a 1200 px) con la tarjeta
+   centrada y dos insignias flotantes que se montan sobre sus esquinas. El
+   escenario mide lo mismo en una o en dos columnas, así las insignias caen
+   siempre igual respecto a la tarjeta.
+   - Las insignias son decorativas: no reciben clics (pointer-events: none), así
+     «Siguiente» y las opciones siguen funcionando donde quedan debajo.
+   - Opción elegida con --color-control-checked (3.88:1 sobre #F2FAFE), como
+     RadioCard: el #0EA5E9 del prototipo da 2.59:1 (design-tokens.md, regla 9).
+   ========================================================================== */
+.st-demo {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: var(--width-demo-stage);
+  min-height: var(--height-demo-stage);
+  margin-inline: auto;
+}
+
+/* ── Tarjeta (Strata.dc.html:169) ──────────────────────────────────────── */
+.st-demo__card {
+  position: relative;
+  width: 100%;
+  max-width: var(--width-demo);
+  padding: var(--space-26);
+  border: var(--border-width) solid var(--color-border-card);
+  border-radius: var(--radius-hero);
+  background-color: var(--color-surface-white);
+  box-shadow: var(--shadow-demo);
+  animation: var(--anim-float-card);
+}
+
+/* Contador y «Guardado» (ilustrativos) */
+.st-demo__meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-12);
+  margin-bottom: var(--space-18);
+  line-height: var(--lh-title);
+}
+
+.st-demo__counter {
+  font-family: var(--font-mono);
+  font-size: var(--fs-micro);
+  font-weight: var(--fw-bold);
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+  color: var(--color-sky-text);
+  white-space: nowrap;
+}
+
+.st-demo__saved {
+  display: flex;
+  align-items: center;
+  gap: var(--space-6);
+  font-size: var(--fs-micro);
+  font-weight: var(--fw-semibold);
+  color: var(--color-text-secondary);
+}
+
+.st-demo__progress {
+  margin-bottom: var(--space-20);
+}
+
+/* Pregunta: 20 px en Satoshi (Strata.dc.html:180). Es un párrafo, no un
+   encabezado: la demo no agrega preguntas de ejemplo al índice de la página. */
+.st-demo__question {
+  margin-bottom: var(--space-18);
+  font-family: var(--font-heading);
+  font-size: var(--fs-h3);
+  font-weight: var(--fw-bold);
+  line-height: var(--lh-title);
+  letter-spacing: var(--tracking-heading);
+  color: var(--color-text);
+  text-wrap: pretty;
+}
+
+/* ── Opciones (Strata.dc.html:181-190) ─────────────────────────────────── */
+.st-demo__options {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-9);
+}
+
+.st-demo__option {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--space-12);
+  padding: var(--space-13) var(--space-15);
+  border: var(--border-width-control) solid var(--color-border-divider);
+  border-radius: var(--radius-control);
+  background-color: var(--color-surface-soft);
+  cursor: pointer;
+  transition:
+    border-color var(--dur-state) var(--ease-base),
+    background-color var(--dur-state) var(--ease-base),
+    transform var(--dur-state) var(--ease-base);
+}
+
+/* Radio nativo: cubre la opción con opacidad 0; recibe clics, foco y flechas. */
+.st-demo__input {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  opacity: 0;
+  cursor: inherit;
+}
+
+/* Aro de 21 px con palomita (Strata.dc.html:184-186). Sin elegir: borde funcional. */
+.st-demo__ring {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: calc(var(--space-20) + var(--space-1));
+  height: calc(var(--space-20) + var(--space-1));
+  border: var(--border-width-thick) solid var(--color-border-control);
+  border-radius: var(--radius-round);
+  background-color: var(--color-surface-white);
+  color: transparent;
+  transition:
+    background-color var(--dur-state) var(--ease-base),
+    border-color var(--dur-state) var(--ease-base);
+}
+
+.st-demo__label {
+  flex: 1 1 auto;
+  min-width: 0;
+  font-size: var(--fs-ui);
+  font-weight: var(--fw-medium);
+  line-height: var(--lh-snug);
+  color: var(--color-text);
+}
+
+/* Hover celeste y desplazamiento de 2 px (Strata.dc.html:183). Va antes de la
+   regla de la elegida para que el hover no aclare su borde. */
+@media (hover: hover) {
+  .st-demo__option:hover {
+    border-color: var(--color-sky);
+  }
+}
+
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .st-demo__option:hover {
+    transform: translateX(var(--space-2));
+  }
+}
+
+.st-demo__option:has(.st-demo__input:checked) {
+  border-color: var(--color-control-checked);
+  background-color: var(--color-sky-tint-soft);
+}
+
+.st-demo__input:checked + .st-demo__ring {
+  border-color: var(--color-control-checked);
+  background-color: var(--color-control-checked);
+  color: var(--color-surface-white);
+}
+
+.st-demo__input:checked ~ .st-demo__label {
+  font-weight: var(--fw-semibold);
+}
+
+.st-demo__option:has(.st-demo__input:focus-visible) {
+  outline: var(--focus-outline-width) solid var(--color-focus);
+  outline-offset: var(--focus-outline-offset);
+}
+
+/* Sin :has(), el foco se marca en el aro: el radio es invisible y su propio
+   contorno no se vería. */
+@supports not selector(:has(*)) {
+  .st-demo__input:focus-visible + .st-demo__ring {
+    outline: var(--focus-outline-width) solid var(--color-focus);
+    outline-offset: var(--focus-outline-offset);
+  }
+}
+
+/* ── Pie de la tarjeta (Strata.dc.html:191-197) ────────────────────────── */
+.st-demo__foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-12);
+  margin-top: var(--space-20);
+}
+
+/* 11 px #6B6558: 5.79:1 sobre blanco */
+.st-demo__note {
+  font-size: var(--fs-eyebrow);
+  color: var(--color-text-tertiary);
+}
+
+/* «Siguiente»: primario navy (D-19) con la medida del prototipo, 10 × 16 px y 12.5 px. */
+.st-demo__next.st-btn {
+  gap: var(--space-7);
+  min-height: 0;
+  padding: var(--space-10) var(--space-16);
+  font-size: var(--fs-meta);
+  white-space: nowrap;
+}
+
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .st-demo__next.st-btn:where(:not([aria-disabled='true'])):hover {
+    transform: translateX(var(--space-2));
+  }
+}
+
+/* ── Insignias flotantes (Strata.dc.html:200-224) ──────────────────────── */
+.st-demo__badge {
+  position: absolute;
+  border: var(--border-width) solid var(--color-border-card);
+  background-color: var(--color-surface-white);
+  pointer-events: none;
+  animation: var(--anim-float-badge);
+}
+
+/* «Respuesta guardada»: arriba a la izquierda, 6.4 s */
+.st-demo__badge--saved {
+  top: var(--space-4);
+  left: calc(var(--space-6) * -1);
+  display: flex;
+  align-items: center;
+  gap: var(--space-10);
+  padding: var(--space-11) var(--space-15);
+  border-radius: var(--radius-feature);
+  box-shadow: var(--shadow-float);
+}
+
+.st-demo__badge-icon {
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: var(--space-30);
+  height: var(--space-30);
+  border-radius: var(--radius-chip);
+  background-color: var(--color-coral-tint);
+  color: var(--color-coral-strong);
+}
+
+.st-demo__badge-text {
+  display: flex;
+  flex-direction: column;
+  line-height: var(--lh-title);
+}
+
+.st-demo__badge-title {
+  font-size: var(--fs-small);
+  font-weight: var(--fw-semibold);
+  color: var(--color-text);
+  white-space: nowrap;
+}
+
+/* 10.5 px #6B6558: 5.79:1 sobre blanco */
+.st-demo__badge-sub {
+  font-size: var(--fs-micro);
+  color: var(--color-text-tertiary);
+  white-space: nowrap;
+}
+
+/* Radar: abajo a la derecha, 7.8 s y desfasada un tercio del ciclo (−2.6 s).
+   min-content: la insignia mide lo que el radar (120 px) y el rótulo se parte en
+   dos líneas en lugar de ensancharla y tapar más la tarjeta. */
+.st-demo__badge--radar {
+  right: calc(var(--space-8) * -1);
+  bottom: calc(var(--space-6) * -1);
+  width: min-content;
+  padding: var(--space-14) var(--space-16) var(--space-12);
+  border-radius: var(--radius-modal);
+  box-shadow: var(--shadow-float-lg);
+  animation-duration: var(--dur-float-badge-alt);
+  animation-delay: calc(var(--dur-float-badge-alt) / -3);
+}
+
+.st-demo__radar-head {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-7);
+  margin-bottom: var(--space-6);
+}
+
+/* El punto queda a media altura de la primera línea del rótulo. */
+.st-demo__radar-head .st-live-dot {
+  margin-top: var(--space-4);
+}
+
+.st-demo__radar-label {
+  font-size: var(--fs-micro);
+  font-weight: var(--fw-bold);
+  line-height: var(--lh-title);
+  letter-spacing: var(--tracking-caps-sm);
+  text-transform: uppercase;
+  color: var(--color-text-secondary);
+}
+
+/* Tamaño fijo de 120 px: sin el max-width: 100 % global, que con min-content
+   lo encogería hasta desaparecer. */
+.st-demo__radar {
+  flex: none;
+  max-width: none;
+}
+
+.st-demo__radar-grid {
+  stroke: var(--color-border-divider);
+  stroke-width: 1;
+}
+
+.st-demo__radar-axis {
+  stroke: var(--color-surface-muted);
+  stroke-width: 1;
+}
+
+/* Tres perfiles que se relevan cada 2.8 s (polyCycle de 8.4 s, Strata.dc.html:220-222) */
+.st-demo__poly {
+  fill: var(--color-radar-fill-home);
+  stroke: var(--color-radar-stroke);
+  stroke-width: 2;
+  stroke-linejoin: round;
+  animation: st-poly-cycle var(--dur-poly) var(--ease-loop) infinite;
+}
+
+.st-demo__poly--2 {
+  animation-delay: calc(var(--dur-poly) / -3);
+}
+
+.st-demo__poly--3 {
+  animation-delay: calc(var(--dur-poly) * -2 / 3);
+}
+
+/* ── Móvil ─────────────────────────────────────────────────────────────── */
+@media (max-width: 640px) {
+  .st-demo__card {
+    padding: var(--space-20);
+  }
+}
+
+/* En teléfonos la tarjeta ocupa todo el ancho: el radar taparía «Siguiente» y
+   se oculta (es decorativo); «Respuesta guardada» sube para montarse en la
+   orilla de la tarjeta sin tapar la barra de progreso. */
+@media (max-width: 560px) {
+  .st-demo__badge--radar {
+    display: none;
+  }
+
+  .st-demo__badge--saved {
+    top: calc(var(--space-18) * -1);
+  }
+}
+
+/* ── Movimiento reducido: todo quieto y un solo perfil visible ─────────── */
+@media (prefers-reduced-motion: reduce) {
+  .st-demo__card,
+  .st-demo__badge,
+  .st-demo__poly {
+    animation: none;
+  }
+
+  .st-demo__poly--2,
+  .st-demo__poly--3 {
+    opacity: 0;
+  }
+}
+
+/* Alto contraste: la opción elegida usa el color del sistema. */
+@media (forced-colors: active) {
+  .st-demo__option:has(.st-demo__input:checked) {
+    border-color: Highlight;
+  }
+
+  .st-demo__input:checked + .st-demo__ring {
+    forced-color-adjust: none;
+    border-color: Highlight;
+    background-color: Highlight;
+    color: HighlightText;
+  }
+}

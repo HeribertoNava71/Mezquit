@@ -1,0 +1,141 @@
+/* ==========================================================================
+   Catálogo exprés de la home (Strata.dc.html:228-261; mapa.md, V-5)
+   Eyebrow, H2 de 34 px y «Ver catálogo completo» a la derecha; debajo, tres
+   tarjetas de vidrio (Card glass con hover lift: −5 px y sombra mayor).
+   Sin precio por prueba (P-02): su lugar lo ocupa la descripción de la API.
+   ========================================================================== */
+.st-home-catalog {
+  padding-top: var(--space-56);
+}
+
+.st-home-catalog__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--space-8) var(--space-20);
+  margin-bottom: var(--space-26);
+}
+
+.st-home-catalog__eyebrow {
+  margin-bottom: var(--space-9);
+  font-size: var(--fs-eyebrow);
+  font-weight: var(--fw-bold);
+  line-height: var(--lh-title);
+  letter-spacing: var(--tracking-eyebrow);
+  text-transform: uppercase;
+  color: var(--color-eyebrow);
+}
+
+.st-home-catalog__title {
+  font-size: var(--fs-h2);
+  line-height: var(--lh-heading);
+  letter-spacing: var(--tracking-h2);
+}
+
+/* «Ver catálogo completo →» (Strata.dc.html:234): en el prototipo es texto
+   alineado al pie del H2. El botón ghost conserva su objetivo táctil de 44 px;
+   el margen negativo (su padding de abajo) lo baja para que el texto quede a la
+   altura del prototipo, y la flecha va a 4 px, como un espacio. */
+.st-home-catalog__ver.st-btn {
+  gap: var(--space-4);
+  margin-bottom: calc(var(--space-12) * -1);
+}
+
+/* auto-fill: con menos de tres pruebas las tarjetas conservan su ancho. */
+.st-home-catalog__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr));
+  gap: var(--space-20);
+  list-style: none;
+}
+
+/* ── Tarjeta (Strata.dc.html:239-258) ──────────────────────────────────── */
+.st-home-catalog__card {
+  display: flex;
+  flex-direction: column;
+}
+
+.st-home-catalog__tag {
+  align-self: flex-start;
+  margin-bottom: var(--space-15);
+}
+
+.st-home-catalog__name {
+  font-size: var(--fs-h3-sm);
+  line-height: var(--lh-title);
+}
+
+/* 12.5 px #5B5545: 7.42:1 sobre blanco */
+.st-home-catalog__meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-9);
+  margin-top: var(--space-11);
+  font-size: var(--fs-meta);
+  line-height: var(--lh-normal);
+  color: var(--color-text-secondary);
+}
+
+.st-home-catalog__desc {
+  margin-top: var(--space-12);
+  font-size: var(--fs-ui-sm);
+  line-height: var(--lh-paragraph);
+  color: var(--color-text-secondary);
+}
+
+.st-home-catalog__actions {
+  display: flex;
+  margin-top: auto;
+  padding-top: var(--space-18);
+}
+
+/* «Previsualizar test»: botón secundario sobre vidrio (Strata.dc.html:255),
+   11 × 14 px, radio 12 y 12.5 px; ocupa la fila porque ya no comparte con «Comprar». */
+.st-home-catalog__preview.st-btn {
+  flex: 1 1 auto;
+  min-height: 0;
+  padding: var(--space-11) var(--space-14);
+  border-color: var(--color-border-ghost);
+  border-radius: var(--radius-control-candidate);
+  background-color: var(--color-surface-ghost);
+  font-size: var(--fs-meta);
+}
+
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .st-home-catalog__preview.st-btn:where(:not([aria-disabled='true'])):hover {
+    transform: translateY(calc(var(--space-1) * -1));
+  }
+}
+
+/* ── Carga: tres esqueletos con la receta de vidrio y el alto de una tarjeta,
+   en la misma rejilla, para que la sección no salte al llegar los datos ── */
+.st-home-catalog__carga .st-carga__tarjetas {
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr));
+  gap: var(--space-20);
+}
+
+.st-home-catalog__carga .st-carga__tarjeta {
+  min-height: 250px; /* alto aproximado de una tarjeta con su descripción */
+  padding: var(--space-24);
+  background: var(--surface-glass-bg);
+  border: var(--surface-glass-border);
+  border-radius: var(--surface-glass-radius);
+  box-shadow: var(--shadow-glass);
+}
+
+/* ── Error o catálogo vacío ── */
+.st-home-catalog__aviso {
+  max-width: var(--width-page-lede);
+}
+
+@media (max-width: 640px) {
+  .st-home-catalog {
+    padding-top: var(--space-40);
+  }
+
+  .st-home-catalog__carga .st-carga__tarjeta {
+    padding: var(--space-20);
+  }
+}

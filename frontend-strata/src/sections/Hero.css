@@ -1,68 +1,109 @@
-.hero {
-  position: relative;
-  min-height: calc(100svh - var(--header-h));
+/* ==========================================================================
+   Hero de la home (Strata.dc.html:127-166; mapa.md, V-3)
+   Texto a la izquierda y demo del examen a la derecha. Las dos columnas solo
+   desde 1180 px: con columnas más angostas la tarjeta demo llena su columna y la
+   insignia del radar taparía «Siguiente» por completo (en el prototipo, a 1200 px,
+   tapa la mitad). Por debajo, la demo baja y queda centrada.
+   ========================================================================== */
+.st-hero {
   display: grid;
-  align-content: center;
-  padding-block: var(--section-py);
-  overflow: hidden;
-}
-
-.hero__inner {
-  max-width: var(--max-width);
-  margin-inline: auto;
-  padding-inline: var(--section-px);
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: var(--sp-12);
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-52);
   align-items: center;
+  padding: var(--space-64) 0 var(--space-40);
 }
 
-@media (min-width: 1024px) {
-  .hero__inner {
-    grid-template-columns: 1fr 1fr;
+@media (min-width: 1180px) {
+  .st-hero {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
-.hero__content {
-  display: flex;
-  flex-direction: column;
-  gap: var(--sp-8);
-  max-width: 560px;
+.st-hero__copy {
+  min-width: 0;
+  max-width: var(--width-hero-copy);
 }
 
-.hero__title {
-  font-family: var(--font-display);
-  font-size: var(--text-hero);
-  font-weight: 700;
-  color: var(--color-brunswick);
-  line-height: 1.05;
-  letter-spacing: -0.02em;
+.st-hero__aside {
+  min-width: 0;
 }
 
-.hero__actions {
+/* ── Titular: 52 px, 1.06 y −0.03em; la segunda frase en navy (Strata.dc.html:134) ── */
+.st-hero__title {
+  margin-top: var(--space-20);
+  font-size: var(--fs-display);
+  line-height: var(--lh-display);
+  letter-spacing: var(--tracking-display);
+  text-wrap: balance;
+  color: var(--color-text);
+}
+
+.st-hero__title-accent {
+  color: var(--color-navy);
+}
+
+/* ── Selector «Para mí» / «Para mi empresa» (Strata.dc.html:136-140) ── */
+.st-hero__toggle {
+  margin-top: var(--space-26);
+}
+
+/* ── Entradilla: 17 px, 1.6, #5B5545 y 470 px; se repite softIn al cambiar de modo ── */
+.st-hero__lead {
+  max-width: var(--width-lead);
+  margin-top: var(--space-20);
+  font-size: var(--fs-lead);
+  line-height: var(--lh-relaxed);
+  color: var(--color-lead);
+  animation: var(--anim-soft-in);
+}
+
+/* ── CTA y enlace (Strata.dc.html:144-150) ── */
+.st-hero__actions {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--sp-4);
   align-items: center;
+  gap: var(--space-16);
+  margin-top: var(--space-28);
 }
 
-.hero__link-secondary {
-  font-size: var(--text-base);
-  color: var(--color-hunter);
-  font-weight: 500;
-  border-bottom: 1px solid currentColor;
-  padding-bottom: 1px;
-  transition: opacity var(--t-fast);
-}
-.hero__link-secondary:hover { opacity: 0.75; }
-
-.hero__texture {
-  width: 100%;
-  max-width: 480px;
-  aspect-ratio: 860 / 760;
-  justify-self: center;
+/* ── Fila de confianza (Strata.dc.html:152-165) ── */
+.st-hero__trust {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-12) var(--space-22);
+  margin-top: var(--space-30);
+  padding-top: var(--space-22);
+  border-top: var(--border-width) solid var(--color-border-subtle);
+  list-style: none;
 }
 
-@media (min-width: 1024px) {
-  .hero__texture { justify-self: end; }
+/* 12.5 px #5B5545: 7.00:1 sobre #FAF8F5 (y más de 4.5:1 en el centro del halo celeste) */
+.st-hero__trust-item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-7);
+  font-size: var(--fs-meta);
+  line-height: var(--lh-normal);
+  color: var(--color-text-secondary);
+  white-space: nowrap;
+}
+
+.st-hero__trust-icon {
+  display: inline-flex;
+  flex: none;
+  color: var(--color-sky-text);
+}
+
+/* ── Móvil ─────────────────────────────────────────────────────────────── */
+@media (max-width: 640px) {
+  .st-hero {
+    gap: var(--space-40);
+    padding: var(--space-40) 0 var(--space-24);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .st-hero__lead {
+    animation: none;
+  }
 }

@@ -44,9 +44,22 @@
   color: var(--color-link);
 }
 
+/* Home: «Entrar» y «Crear cuenta» a 11 px, como el resto de las acciones (Strata.dc.html:121). */
+.st-topbar--home .st-public-bar__session {
+  gap: var(--space-11);
+}
+
 @media (max-width: 767.98px) {
   .st-public-bar__code,
   .st-public-bar__session {
     display: none;
+  }
+
+  /* Home (Fase 6): la barra va dentro del marco, con su padding lateral; el
+     panel del menú móvil sale hasta las orillas de la ventana para no dejar
+     ver la página por los lados. */
+  .st-topbar--home .st-mobile-menu__panel {
+    right: calc(var(--layout-page-pad-x) * -1);
+    left: calc(var(--layout-page-pad-x) * -1);
   }
 }

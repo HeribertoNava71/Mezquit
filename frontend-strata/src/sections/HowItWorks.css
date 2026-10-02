@@ -1,73 +1,96 @@
-.how-it-works {
-  background-color: var(--color-surface-secondary);
-  padding-block: var(--section-py);
+/* ==========================================================================
+   Cómo funciona (Strata.dc.html:263-310; mapa.md, V-6)
+   H2 de 30 px con la insignia coral; tres tarjetas translúcidas (Card step:
+   blanco .66, radio 22 y hover −4 px) unidas por un conector punteado que pasa
+   a la altura de los íconos. Sin margen exterior: lo pone la página.
+   ========================================================================== */
+.st-how__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-12) var(--space-16);
+  margin-bottom: var(--space-24);
 }
 
-.how-it-works__inner {
-  max-width: 720px;
-  margin-inline: auto;
-  padding-inline: var(--section-px);
-  display: flex;
-  flex-direction: column;
-  gap: var(--sp-12);
+.st-how__title {
+  font-size: var(--fs-h2-sm);
+  line-height: var(--lh-heading-sm);
+  letter-spacing: var(--tracking-h2);
 }
 
-.how-it-works__title { font-size: var(--text-4xl); }
-
-.steps {
-  display: flex;
-  flex-direction: column;
+/* Una columna en móvil; tres desde 768 px, con el conector. */
+.st-how__steps {
   position: relative;
-}
-
-.steps::before {
-  content: '';
-  position: absolute;
-  left: 1.25rem;
-  top: 2.5rem;
-  bottom: 2.5rem;
-  width: 1px;
-  background-color: var(--color-timberwolf);
-}
-
-.step {
   display: grid;
-  grid-template-columns: 2.5rem 1fr;
-  gap: var(--sp-6);
-  padding-block: var(--sp-6);
-  align-items: flex-start;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-18);
+  list-style: none;
 }
 
-.step__number {
-  width: 2.5rem;
-  height: 2.5rem;
+@media (min-width: 768px) {
+  .st-how__steps {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  /* Conector: a 44 px (centro del ícono) y a 60 px de cada orilla (Strata.dc.html:271).
+     Va antes de las tarjetas, que lo dejan ver a través de su fondo translúcido. */
+  .st-how__steps::before {
+    content: '';
+    position: absolute;
+    top: var(--space-44);
+    right: calc(var(--space-48) + var(--space-12));
+    left: calc(var(--space-48) + var(--space-12));
+    border-top: var(--border-width) dashed var(--color-connector);
+    pointer-events: none;
+  }
+}
+
+/* ── Paso (Strata.dc.html:272-286) ─────────────────────────────────────── */
+.st-how__step {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-13);
+}
+
+.st-how__step-top {
   display: flex;
   align-items: center;
+  gap: var(--space-11);
+}
+
+/* Caja del ícono: 40 px, radio 14, borde cálido y trazo celeste (gráfico, decorativo). */
+.st-how__icon {
+  display: flex;
+  flex: none;
+  align-items: center;
   justify-content: center;
-  border-radius: 50%;
-  background-color: var(--color-hunter);
-  color: #ffffff;
-  font-size: var(--text-sm);
-  font-weight: 700;
-  font-variant-numeric: tabular-nums;
-  flex-shrink: 0;
-  position: relative;
-  z-index: 1;
+  width: var(--space-40);
+  height: var(--space-40);
+  border: var(--border-width) solid var(--color-border-warm);
+  border-radius: var(--radius-control);
+  background-color: var(--color-surface-white);
+  box-shadow: var(--shadow-icon-box);
+  color: var(--color-sky-strong);
 }
 
-.step__content { padding-top: 0.4rem; }
-
-.step__title {
-  font-family: var(--font-display);
-  font-size: var(--text-2xl);
-  font-weight: 600;
-  color: var(--color-brunswick);
-  line-height: 1.2;
+/* Número en mono. El #857A66 del prototipo da 4.2:1; el terciario, 5.46:1. */
+.st-how__num {
+  font-family: var(--font-mono);
+  font-size: var(--fs-label);
+  font-weight: var(--fw-bold);
+  line-height: var(--lh-title);
+  color: var(--color-text-tertiary);
 }
 
-.step__desc {
-  font-size: var(--text-base);
-  color: var(--color-ink);
-  margin-top: var(--sp-2);
-  opacity: 0.8;
+.st-how__step-title {
+  font-size: var(--fs-h4);
+  line-height: var(--lh-title);
+}
+
+.st-how__step-text {
+  margin-top: var(--space-6);
+  font-size: var(--fs-ui-sm);
+  line-height: var(--lh-paragraph);
+  color: var(--color-text-secondary);
 }

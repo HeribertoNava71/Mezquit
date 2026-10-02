@@ -335,7 +335,7 @@ Son ejemplos; los nombres de clase son ilustrativos.
 | `--fs-micro-sm` | `0.625rem` | 10 px: th, chips de código |
 | `--fs-nano` | `0.59375rem` | 9.5 px: categorías en mayúsculas |
 | `--fs-code-xl` | `1.875rem` | 30 px: código grande (mono) |
-| `--fs-code-lg` | `1.25rem` | 20 px: input de código (mono) |
+| `--fs-code-lg` | `1.25rem` | 20 px: input de código (mono); también el «Enlace o código» de /evaluar (Input variant="token") |
 
 ### Tipografía · pesos, interlineado y tracking
 
@@ -361,7 +361,7 @@ Son ejemplos; los nombres de clase son ilustrativos.
 | `--tracking-snug` | `-0.015em` | Pregunta del examen |
 | `--tracking-title` | `-0.01em` | Título de modal |
 | `--tracking-label` | `0.01em` | Labels del candidato |
-| `--tracking-code-sm` | `0.02em` | Código chico |
+| `--tracking-code-sm` | `0.02em` | Código chico; input del enlace o código del candidato (Input variant="token", sin mayúsculas: el token las distingue) |
 | `--tracking-code` | `0.04em` | Código en tabla |
 | `--tracking-caps-sm` | `0.06em` | Mayúsculas pequeñas, marca «STRATA» |
 | `--tracking-caps` | `0.1em` | th y contadores en mayúsculas |
@@ -384,6 +384,7 @@ Son ejemplos; los nombres de clase son ilustrativos.
 | `--size-logo-sm` | `20px` | Salamandra del pie (Strata.dc.html:314, 1232) |
 | `--size-avatar-lg` | `33px` | Avatar cuadrado de la tabla de candidatos (Strata.dc.html:838) |
 | `--size-stat-badge` | `38px` | Cuadro numérico de la tarjeta de resumen (Strata.dc.html:699) |
+| `--size-end-icon` | `76px` | Ícono del fin del examen: cuadro tinta con radio `--radius-hero` y palomita celeste (Strata.dc.html:1201; Fase 3) |
 
 ### Radios
 
@@ -467,10 +468,11 @@ Son ejemplos; los nombres de clase son ilustrativos.
 |---|---|---|
 | `--z-halos` | `0` | Halos de fondo |
 | `--z-content` | `1` | Main |
-| `--z-mascot` | `1` | Mascota |
-| `--z-home-content` | `2` | Contenido de la home |
-| `--z-bubble` | `4` | Burbuja de la mascota |
+| `--z-mascot` | `1` | Mascota en el prototipo, debajo del contenido. Sin uso: la mascota va en `--z-mascot-layer` |
+| `--z-home-content` | `2` | Contenido de la home en el prototipo. Sin uso desde la Fase 6: el marco de la home va con z-index auto para que los menús de la barra queden sobre la mascota |
+| `--z-bubble` | `4` | Burbuja de la mascota en el prototipo. Sin uso: la burbuja va dentro de `--z-mascot-layer` |
 | `--z-exam-bar` | `10` | Barra del examen (sticky) |
+| `--z-mascot-layer` | `20` | Capa de la mascota (portal en el body; Fase 6): sobre el contenido de la home y bajo la barra, los menús, los overlays y el toast |
 | `--z-topbar` | `30` | Barra superior (sticky) |
 | `--z-dropdown` | `40` | Menú de la pastilla y menú móvil (no están en el prototipo) |
 | `--z-overlay` | `60` | Drawer, modales y su scrim |
@@ -565,7 +567,10 @@ Son ejemplos; los nombres de clase son ilustrativos.
 | `--width-page-title-min` | `260px` | Columna del título del PageHeader antes de que las acciones bajen |
 | `--width-page-lede` | `600px` | Entradilla del PageHeader (560–600 px en Strata.dc.html:610, 688) |
 | `--width-toast` | `560px` | Ancho máximo del toast (en el prototipo crece hasta la mitad de la ventana) |
+| `--width-hero-copy` | `600px` | Columna de texto del hero de la home cuando va en una sola columna (por debajo de 1180 px; Fase 6) |
+| `--width-demo-stage` | `540px` | Escenario de la demo de la home: la columna del prototipo a 1200 px (Strata.dc.html:168; Fase 6) |
 | `--height-modal-max` | `92dvh` | Alto máximo de los modales (92vh en el prototipo; dvh descuenta la barra del navegador móvil) |
+| `--height-demo-stage` | `430px` | Alto mínimo del escenario de la demo de la home (Strata.dc.html:168; Fase 6) |
 
 ### Espaciado
 
