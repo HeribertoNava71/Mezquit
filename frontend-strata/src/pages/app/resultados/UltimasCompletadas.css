@@ -1,0 +1,77 @@
+/* «Últimas completadas»: la tabla de candidatos del prototipo
+   (Strata.dc.html:809-868) sobre el DataTable del sistema, que pasa a
+   tarjetas a 640 px o menos (D-23). */
+.st-resultados-ultimas {
+  min-width: 0;
+}
+
+.st-resultados-ultimas__aviso {
+  margin-block-end: var(--space-14);
+}
+
+/* La celda del candidato es Persona (avatar, nombre y correo; Strata.dc.html:836-843). */
+
+.st-resultados-ultimas__evaluacion,
+.st-resultados-ultimas__creada {
+  margin: 0;
+}
+
+/* Segunda línea de la evaluación: su fecha de creación (11 px, terciario, como
+   el correo de Strata.dc.html:841). #6B6558 sobre el vidrio: 5.46:1 o más. */
+.st-resultados-ultimas__creada {
+  font-size: var(--fs-eyebrow);
+  font-weight: var(--fw-regular);
+  line-height: var(--lh-normal);
+  color: var(--color-text-tertiary);
+}
+
+/* La celda de la evaluación conserva el texto de celda del sistema (12.5 px, 500). */
+.st-resultados-ultimas__evaluacion {
+  line-height: var(--lh-title);
+}
+
+.st-resultados-ultimas__creada {
+  margin-top: var(--space-2);
+}
+
+/* Dato ausente («Sin puesto») en texto terciario, como la columna «Fecha»
+   del prototipo (Strata.dc.html:848). */
+.st-resultados-ultimas__sin-dato {
+  color: var(--color-text-tertiary);
+}
+
+/* Pie: nota a la izquierda (crece y se parte) y enlace a la derecha. */
+.st-resultados-ultimas__nota {
+  flex: 1 1 320px;
+  min-width: 0;
+  margin: 0;
+}
+
+.st-resultados-ultimas__enlace {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  gap: var(--space-5);
+  min-height: var(--space-24);
+  border-radius: var(--radius-code);
+  font-size: var(--fs-small);
+  font-weight: var(--fw-semibold);
+  line-height: var(--lh-title);
+  color: var(--color-link);
+  white-space: nowrap;
+}
+
+.st-resultados-ultimas__enlace:hover {
+  color: var(--color-link-hover);
+}
+
+.st-resultados-ultimas__flecha {
+  flex: none;
+  transition: transform var(--dur-state) var(--ease-base);
+}
+
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .st-resultados-ultimas__enlace:hover .st-resultados-ultimas__flecha {
+    transform: translateX(var(--space-2));
+  }
+}

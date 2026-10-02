@@ -1,0 +1,100 @@
+/* Tiles «Enviar por» (Strata.dc.html:1353-1366): rótulo de 11.5 px y una fila
+   que se ajusta, cada tile de al menos 132 px (a 360 px caben dos por fila) con
+   su caja de sigla celeste de 28 px. Hover: borde celeste y tinte (:1359).
+   Contraste: rótulo #5B5545 sobre blanco 7.42:1 · texto tinta sobre #FAF8F5
+   16.84:1 (16.71:1 con hover) · sigla #0369A1 sobre #E6F6FE 5.36:1. */
+.st-canales {
+  /* Ancho mínimo de cada tile, como el prototipo (min-width: 132px en :1359). */
+  --st-canal-min: 132px;
+
+  min-width: 0;
+}
+
+.st-canales__titulo {
+  margin: 0 0 var(--space-9);
+  font-size: var(--fs-label);
+  font-weight: var(--fw-bold);
+  line-height: var(--lh-title);
+  color: var(--color-text-secondary);
+}
+
+.st-canales__lista {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-9);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.st-canales__item {
+  display: flex;
+  flex: 1 1 var(--st-canal-min);
+  min-width: min(100%, var(--st-canal-min));
+}
+
+/* Tile: enlace (Correo, WhatsApp) o botón (Copiar). 54 px de alto con la sigla de 28. */
+.st-canal {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  gap: var(--space-10);
+  min-width: 0;
+  min-height: var(--size-target);
+  padding: var(--space-13) var(--space-14);
+  border: var(--border-width) solid var(--color-border-neutral);
+  border-radius: var(--radius-control-candidate); /* 12 px, como el tile del prototipo */
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  font: inherit;
+  font-size: var(--fs-meta);
+  font-weight: var(--fw-semibold);
+  line-height: var(--lh-title);
+  text-align: start;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+@media (hover: hover) {
+  .st-canal:hover {
+    border-color: var(--color-sky-strong);
+    background-color: var(--color-sky-tint);
+  }
+}
+
+.st-canal:active {
+  border-color: var(--color-sky-ui);
+}
+
+/* Sigla «@», «WA» y el ícono de copiar: caja celeste de 28 px y radio 9 */
+.st-canal__sigla {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: var(--space-28);
+  height: var(--space-28);
+  border-radius: var(--radius-chip-sm);
+  background-color: var(--color-sky-tint-strong);
+  color: var(--color-sky-text);
+  font-size: var(--fs-small);
+  font-weight: var(--fw-extrabold);
+  line-height: var(--lh-none);
+  letter-spacing: normal;
+}
+
+.st-canal__texto {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.st-canales__error {
+  margin-top: var(--space-10);
+}
+
+/* Alto contraste: el tile conserva su borde como contorno del control */
+@media (forced-colors: active) {
+  .st-canal {
+    border-color: ButtonText;
+  }
+}

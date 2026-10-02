@@ -1,0 +1,50 @@
+/* ==========================================================================
+   Catálogo cargado (Strata.dc.html:620-677)
+   - Barra: SegmentedFilter de categorías a la izquierda (:621-625) y, a la
+     derecha, la búsqueda por texto del repo (R-08), que el prototipo no tiene.
+     A 640 px o menos la búsqueda baja y ocupa la fila.
+   - Grilla: auto-fill de 292 px con 18 px de separación (:629); a 360 px queda
+     una columna.
+   ========================================================================== */
+.st-catalogo {
+  /* Ancho de la búsqueda junto al filtro (no hay token de ancho para este campo). */
+  --st-catalogo-busqueda: 300px;
+}
+
+.st-catalogo__barra {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-12) var(--space-18);
+  margin-bottom: var(--space-22);
+}
+
+.st-catalogo__busqueda {
+  flex: 0 1 var(--st-catalogo-busqueda);
+  min-width: min(100%, 220px);
+}
+
+/* type=search sin la apariencia nativa de Safari (el contenedor dibuja la caja);
+   Chrome, Edge y Safari conservan su botón para borrar. */
+.st-catalogo__busqueda .st-input__field {
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.st-catalogo__busqueda .st-input__field::-webkit-search-decoration {
+  -webkit-appearance: none;
+}
+
+.st-catalogo__grilla {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 292px), 1fr));
+  gap: var(--space-18);
+  list-style: none;
+}
+
+@media (max-width: 640px) {
+  .st-catalogo__busqueda {
+    flex: 1 1 100%;
+  }
+}

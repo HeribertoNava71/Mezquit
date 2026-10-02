@@ -1,67 +1,108 @@
-import { useEffect, useState, type FormEvent } from 'react'
-import { getCredits, requestCredits, type CreditsData } from '@/api/rh'
-import Button from '@/components/ui/Button'
+import { useCallback, useEffect, useRef } from 'react'
+import { useSearchParams } from 'react-router-dom'
+import { Button, EstadoError, PageHeader, estadoErrorTextos, useFocoAlRecuperar } from '@/components/ui'
+import { IconoAgregar } from '@/components/ui/Iconos'
+import { ResumenCreditos } from './creditos/ResumenCreditos'
+import { SolicitarCreditos } from './creditos/SolicitarCreditos'
+import { PARAMETRO_SOLICITAR } from './creditos/solicitud'
+import { TablaMovimientos } from './creditos/TablaMovimientos'
+import { useCreditos } from './creditos/useCreditos'
 import './CreditosPage.css'
 
-const TYPE_LABEL: Record<string, string> = {
-  compra: 'Compra', consumo: 'Consumo', cortesia: 'Cortesía', ajuste: 'Ajuste',
-}
-
+/**
+ * /app/creditos: «Mis licencias» del prototipo con el modelo de créditos
+ * (Strata.dc.html:681-770; mapa.md, RH-4 y RH-5; D-08 y D-09).
+ * - PageHeader con «Solicitar créditos» (drawer) e «Invitar candidatos» (→ /app/evaluaciones/nueva).
+ * - StatCards: disponibles (balance), recibidos y consumidos.
+ * - Tabla «Movimientos» con filtro por tipo y referencias legibles.
+ * - Estados: carga en esqueleto, error con «Reintentar» (distinto del vacío) y
+ *   «Aún no hay movimientos».
+ * - El drawer se abre con ?solicitar=1 y el parámetro se quita al cerrarlo.
+ */
 export default function CreditosPage() {
-  const [data, setData] = useState<CreditsData | null>(null)
-  const [amount, setAmount] = useState('')
-  const [note, setNote] = useState('')
-  const [sent, setSent] = useState(false)
-  const [loading, setLoading] = useState(false)
+  const { estado, reintentar } = useCreditos()
+  const [parametros, setParametros] = useSearchParams()
+  const abierto = parametros.get(PARAMETRO_SOLICITAR) === '1'
+  const botonSolicitar = useRef<HTMLButtonElement>(null)
+  const estabaAbierto = useRef(abierto)
+  // Tras un «Reintentar» que trae los datos, el foco pasa al resumen (el botón ya no existe).
+  const resumenRef = useRef<HTMLElement>(null)
+  useFocoAlRecuperar(estado.fase === 'error', estado.fase === 'listo', resumenRef)
 
-  function load() { getCredits().then(setData).catch(() => {}) }
-  useEffect(load, [])
+  const abrirSolicitud = useCallback(() => {
+    setParametros(
+      (actuales) => {
+        const siguientes = new URLSearchParams(actuales)
+        siguientes.set(PARAMETRO_SOLICITAR, '1')
+        return siguientes
+      },
+      { replace: true },
+    )
+  }, [setParametros])
 
-  async function submit(e: FormEvent) {
-    e.preventDefault()
-    setLoading(true)
-    try { await requestCredits(Number(amount), note); setSent(true); setAmount(''); setNote('') } finally { setLoading(false) }
-  }
+  const cerrarSolicitud = useCallback(() => {
+    setParametros(
+      (actuales) => {
+        const siguientes = new URLSearchParams(actuales)
+        siguientes.delete(PARAMETRO_SOLICITAR)
+        return siguientes
+      },
+      { replace: true },
+    )
+  }, [setParametros])
+
+  // Al cerrar, el drawer devuelve el foco a lo que lo abrió. Si se abrió desde
+  // la URL no hay disparador: el foco va a «Solicitar créditos».
+  useEffect(() => {
+    if (estabaAbierto.current && !abierto) {
+      const activo = document.activeElement
+      if (activo === null || activo === document.body) botonSolicitar.current?.focus()
+    }
+    estabaAbierto.current = abierto
+  }, [abierto])
 
   return (
-    <div className="creditos">
-      <div>
-        <h1 className="creditos__title">Créditos</h1>
-        <p className="creditos__balance">{data?.balance ?? '—'}</p>
-      </div>
+    <div className="st-creditos">
+      <PageHeader
+        eyebrow="Saldo y movimientos"
+        title="Créditos"
+        lede="Cada crédito te permite invitar a un candidato y se descuenta al crear la evaluación. Si te faltan, solicítalos: un asesor revisa cada solicitud."
+        actions={
+          <>
+            <Button ref={botonSolicitar} variant="secondary" aria-haspopup="dialog" onClick={abrirSolicitud}>
+              Solicitar créditos
+            </Button>
+            <Button to="/app/evaluaciones/nueva" iconLeft={<IconoAgregar />}>
+              Invitar candidatos
+            </Button>
+          </>
+        }
+      />
 
-      <div>
-        <h2 className="creditos__section-title">Solicitar más créditos</h2>
-        <form className="creditos__form" onSubmit={submit}>
-          <div className="creditos__field">
-            <label className="creditos__label" htmlFor="amount">Cantidad</label>
-            <input id="amount" className="creditos__input" type="number" min={1} value={amount} onChange={e => setAmount(e.target.value)} required />
-          </div>
-          <div className="creditos__field">
-            <label className="creditos__label" htmlFor="note">Nota (opcional)</label>
-            <textarea id="note" className="creditos__textarea" value={note} onChange={e => setNote(e.target.value)} />
-          </div>
-          <Button type="submit" loading={loading}>Enviar solicitud</Button>
-          {sent && <p className="creditos__ok">Solicitud registrada. Un asesor la revisará.</p>}
-        </form>
-      </div>
+      {estado.fase === 'error' ? (
+        <EstadoError
+          kind={estado.error}
+          titleAs="h2"
+          title={
+            estado.error === 'sesion' || estado.error === 'permiso'
+              ? estadoErrorTextos[estado.error].title
+              : 'No pudimos cargar tus créditos'
+          }
+          message={estadoErrorTextos[estado.error].message}
+          onRetry={reintentar}
+          retrying={estado.reintentando}
+        />
+      ) : (
+        <div className="st-creditos__contenido">
+          <ResumenCreditos ref={resumenRef} creditos={estado.fase === 'listo' ? estado.creditos : null} />
+          <TablaMovimientos
+            movimientos={estado.fase === 'listo' ? estado.creditos.movimientos : null}
+            onSolicitar={abrirSolicitud}
+          />
+        </div>
+      )}
 
-      <div>
-        <h2 className="creditos__section-title">Historial</h2>
-        <table className="creditos__table">
-          <thead><tr><th>Tipo</th><th>Monto</th><th>Referencia</th><th>Fecha</th></tr></thead>
-          <tbody>
-            {(data?.transactions ?? []).map((t, i) => (
-              <tr key={i}>
-                <td>{TYPE_LABEL[t.type] ?? t.type}</td>
-                <td className={`creditos__amount ${t.amount >= 0 ? 'creditos__amount--pos' : 'creditos__amount--neg'}`}>{t.amount >= 0 ? `+${t.amount}` : t.amount}</td>
-                <td>{t.reference ?? '—'}</td>
-                <td>{t.created_at ?? '—'}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+      <SolicitarCreditos open={abierto} onClose={cerrarSolicitud} />
     </div>
   )
 }

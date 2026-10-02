@@ -16,7 +16,6 @@ import RequireAuth from '@/components/RequireAuth'
 import RequireOrganization from '@/components/RequireOrganization'
 import RedirectIfAuthenticated from '@/components/RedirectIfAuthenticated'
 import SessionWatcher from '@/components/SessionWatcher'
-import { AvisoDeRuta } from '@/components/AvisoDeRuta'
 import AppLayout from '@/pages/app/AppLayout'
 import NuevaEvaluacion from '@/pages/app/NuevaEvaluacion'
 import ReporteCandidato from '@/pages/app/ReporteCandidato'
@@ -37,7 +36,8 @@ import AdminPerfilPage from '@/pages/admin/AdminPerfilPage'
 
 /**
  * Rutas. Las URL existentes no cambian; lo nuevo es lo aprobado en D-07:
- * - /app/pruebas: catálogo dentro del panel (por ahora, la PruebasPage pública; Fase 4).
+ * - /app/pruebas: catálogo dentro del panel. Es la misma PruebasPage: detecta el
+ *   panel por la ruta y cambia la entradilla y la acción «Solicitar créditos».
  * - Índice de /admin → /admin/creditos.
  * - /app/* exige sesión y empresa (sin empresa → /perfil con aviso).
  * - /perfil exige sesión (sin sesión → /login).
@@ -64,8 +64,8 @@ export default function App() {
           <Route path="ayuda" element={<AyudaPage />} />
           <Route path="aviso-de-privacidad" element={<AvisoPrivacidadPage />} />
           <Route path="terminos" element={<TerminosPage />} />
-          {/* AvisoDeRuta: el aviso de RequireOrganization; la Fase 7 lo pasa al encabezado de PerfilPage. */}
-          <Route path="perfil" element={<RequireAuth><AvisoDeRuta /><PerfilPage /></RequireAuth>} />
+          {/* El aviso de RequireOrganization (location.state) lo muestra PerfilPage, unificado con el suyo (Fase 7). */}
+          <Route path="perfil" element={<RequireAuth><PerfilPage /></RequireAuth>} />
           <Route path="*" element={<NotFoundPage />} />
         </Route>
         <Route path="/app" element={<RequireAuth><RequireOrganization><AppLayout /></RequireOrganization></RequireAuth>}>

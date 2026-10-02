@@ -1,0 +1,33 @@
+/* Persona: celda «Candidato» del prototipo (Strata.dc.html:836-842). Avatar de
+   33 px, 11 px de separación, nombre 13.5 px/600 y segunda línea de 11 px.
+   Contraste sobre el vidrio de la tabla: nombre tinta 16.9:1 · detalle #6B6558 5.6:1.
+   Los correos largos se parten solo si no caben (break-word, no anywhere): así
+   la columna no se angosta a media palabra. */
+.st-persona {
+  display: flex;
+  align-items: center;
+  gap: var(--space-11);
+  min-width: 0;
+}
+
+.st-persona__texto {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.st-persona__nombre {
+  font-size: var(--fs-ui);
+  font-weight: var(--fw-semibold);
+  line-height: var(--lh-title);
+  color: var(--color-text);
+  overflow-wrap: break-word;
+}
+
+.st-persona__detalle {
+  font-size: var(--fs-eyebrow);
+  font-weight: var(--fw-regular);
+  line-height: var(--lh-title);
+  color: var(--color-text-tertiary);
+  overflow-wrap: break-word;
+}

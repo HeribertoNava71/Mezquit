@@ -1,0 +1,53 @@
+/* Acciones de un candidato (columna «Acciones» del detalle de la evaluación).
+   Botones de tabla del prototipo (Strata.dc.html:854) alineados a la derecha,
+   con 6 px entre ellos, y el aviso de error debajo, con ícono y texto (D-22).
+   Contraste del aviso: #B3261E sobre el vidrio de la tabla, 6.2:1. */
+.st-acciones-inv {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: var(--space-8);
+  min-width: 0;
+}
+
+.st-acciones-inv__botones {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: var(--space-6);
+}
+
+.st-acciones-inv__aviso {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-6);
+  max-width: var(--width-end-text);
+  margin: 0;
+  font-size: var(--fs-label);
+  font-weight: var(--fw-medium);
+  line-height: var(--lh-normal);
+  color: var(--color-error-text);
+  text-align: start;
+  text-wrap: pretty;
+}
+
+/* El ícono baja 2 px para quedar a la altura de la primera línea */
+.st-acciones-inv__icono {
+  flex: none;
+  margin-top: var(--space-2);
+}
+
+/* Modo tarjeta (D-23): las acciones ocupan el ancho de la tarjeta, desde la izquierda */
+@media (max-width: 640px) {
+  .st-acciones-inv {
+    align-items: stretch;
+  }
+
+  .st-acciones-inv__botones {
+    justify-content: flex-start;
+  }
+
+  .st-acciones-inv__aviso {
+    max-width: none;
+  }
+}

@@ -1,0 +1,19 @@
+/* Panel «Pegar lista»: borde punteado de la superficie dashed (Strata.dc.html:1263-1268)
+   sobre blanco, para que el área de texto beige se distinga, y acciones a la derecha. */
+.st-nueva-pegar {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-12);
+  padding: var(--space-16);
+  background-color: var(--color-surface-white);
+  border: var(--surface-dashed-border);
+  border-radius: var(--radius-control);
+  animation: var(--anim-fade-up);
+}
+
+.st-nueva-pegar__acciones {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: var(--space-10);
+}

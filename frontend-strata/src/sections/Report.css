@@ -1,28 +1,223 @@
-.report { display: flex; flex-direction: column; gap: var(--sp-8); }
-.report__header { display: flex; flex-wrap: wrap; justify-content: space-between; gap: var(--sp-4); align-items: baseline; }
-.report__candidate { font-family: var(--font-display); font-size: var(--text-2xl); color: var(--color-brunswick); }
-.report__meta { font-size: var(--text-sm); color: var(--color-ink); opacity: 0.75; }
-.report__badge { font-size: var(--text-xs); font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--color-ink); background: var(--color-surface-secondary); border: 1px solid var(--color-border); border-radius: var(--radius-sm); padding: var(--sp-1) var(--sp-3); }
-.report__test { display: flex; flex-direction: column; gap: var(--sp-4); }
-.report__test-title { font-family: var(--font-display); font-size: var(--text-xl); color: var(--color-brunswick); }
-.report__scale { display: flex; flex-direction: column; gap: var(--sp-2); padding-block: var(--sp-3); border-top: 1px solid var(--color-timberwolf); }
-.report__scale-head { display: flex; justify-content: space-between; gap: var(--sp-3); align-items: baseline; }
-.report__scale-name { font-weight: 600; color: var(--color-brunswick); }
-.report__scale-cat { font-size: var(--text-sm); font-weight: 600; font-variant-numeric: tabular-nums; }
-.report__bar-track { height: 8px; background: var(--color-timberwolf); border-radius: 99px; overflow: hidden; }
-.report__bar-fill { height: 100%; border-radius: 99px; }
-.report__interp { font-size: var(--text-sm); color: var(--color-ink); opacity: 0.85; }
-.report__questions { display: flex; flex-direction: column; gap: var(--sp-2); }
-.report__q { font-size: var(--text-sm); color: var(--color-ink); }
-.report__foot { font-size: var(--text-xs); color: var(--color-ink); opacity: 0.7; line-height: 1.6; border-top: 1px solid var(--color-timberwolf); padding-top: var(--sp-4); }
-
-@media print {
-  .report__badge { border-color: #000; }
+/* ==========================================================================
+   Report · diagnóstico del candidato (Strata.dc.html:872-992; D-14)
+   Banner tinta (Callout tone="dark", :876-885), una sección por prueba
+   (report/SeccionPrueba.css), preguntas para entrevista y pie legal.
+   El mismo componente pinta el ejemplo público (badge «Ejemplo») y se imprime
+   limpio: sin acciones, sin selección y con cada interpretación en su fila.
+   ========================================================================== */
+.st-report {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-22);
+  min-width: 0;
 }
 
-/* Barras, pie, halos y .no-print se ocultan en el layout (global.css y los
-   .css de components/layout). Aquí solo queda lo del reporte; su pie legal
-   (.report__foot) se imprime. */
+/* ── Banner (:876-885) ────────────────────────────────────────────────── */
+/* El Callout dark ya trae fondo tinta, radio 16, padding 17 20, el círculo
+   celeste con la palomita y las acciones a la derecha. Aquí van el rótulo,
+   el nombre y la línea de datos, con el ritmo del prototipo. */
+.st-report-banner .st-report-banner__kicker {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-6) var(--space-10);
+}
+
+/* Rótulo sobre oscuro: 10.5 px, mayúsculas y #7DA2D9 (6.84:1 sobre la tinta) */
+.st-report-banner__eyebrow {
+  font-size: var(--fs-micro);
+  font-weight: var(--fw-bold);
+  line-height: var(--lh-title);
+  letter-spacing: var(--tracking-caps-lg);
+  text-transform: uppercase;
+  color: var(--color-on-dark-eyebrow);
+}
+
+/* Nombre del candidato: el título del banner, en blanco (:881). Es el h1 de la
+   página, así que sube de 15.5 a 19 px para quedar sobre los títulos de prueba. */
+.st-report-banner .st-report-banner__titulo {
+  margin-top: var(--space-4);
+  font-size: var(--fs-h3-sm);
+  line-height: var(--lh-title);
+  color: var(--color-on-dark);
+  overflow-wrap: anywhere;
+}
+
+/* Datos: 12 px en #8FA3C4 (6.97:1), separados por puntos (:882) */
+.st-report-banner .st-report-banner__meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2) var(--space-8);
+  margin-top: var(--space-2);
+  font-size: var(--fs-small);
+  line-height: var(--lh-normal);
+  color: var(--color-on-dark-muted);
+}
+
+.st-report-banner__dato {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+/* En móvil cada dato va en su línea: sin puntos colgando al final de cada renglón */
+@media (max-width: 640px) {
+  .st-report-banner .st-report-banner__meta {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-1);
+  }
+
+  .st-report-banner__meta .st-dot-sep {
+    display: none;
+  }
+}
+
+/* ── Pruebas ──────────────────────────────────────────────────────────── */
+.st-report__pruebas {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-34);
+}
+
+/* ── Preguntas sugeridas para entrevista ──────────────────────────────── */
+/* Tarjeta blanca con la receta de la tarjeta de envío (:957-961). */
+.st-report-preguntas__cabeza {
+  display: flex;
+  align-items: center;
+  gap: var(--space-9);
+}
+
+.st-report-preguntas__icono {
+  flex: none;
+  color: var(--color-sky-text);
+}
+
+.st-report-preguntas__titulo {
+  font-size: var(--fs-h4);
+  line-height: var(--lh-title);
+  color: var(--color-text);
+}
+
+.st-report-preguntas__nota {
+  margin-top: var(--space-6);
+  font-size: var(--fs-meta);
+  line-height: var(--lh-normal);
+  color: var(--color-text-tertiary);
+}
+
+.st-report-preguntas__lista {
+  display: flex;
+  flex-direction: column;
+  margin-top: var(--space-12);
+  list-style: none;
+}
+
+.st-report-preguntas__item {
+  position: relative;
+  padding: var(--space-10) 0 var(--space-10) var(--space-18);
+  border-top: var(--border-width) solid var(--color-surface-muted);
+  font-size: var(--fs-ui-sm);
+  line-height: var(--lh-paragraph);
+  color: var(--color-text-data);
+}
+
+.st-report-preguntas__item:last-child {
+  padding-bottom: 0;
+}
+
+/* Punto celeste de 6 px, centrado en la primera línea (13 px × 1.55 ≈ 20 px de alto) */
+.st-report-preguntas__item::before {
+  content: '';
+  position: absolute;
+  top: calc(var(--space-10) + var(--space-7));
+  left: var(--space-3);
+  width: var(--space-6);
+  height: var(--space-6);
+  border-radius: var(--radius-round);
+  background-color: var(--color-sky);
+}
+
+/* ── Pie legal ────────────────────────────────────────────────────────── */
+.st-report__legal {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-8);
+  padding-top: var(--space-16);
+  border-top: var(--border-width) solid var(--color-border-subtle);
+  font-size: var(--fs-label);
+  line-height: var(--lh-relaxed);
+  color: var(--color-text-tertiary);
+}
+
+.st-report__legal-icono {
+  flex: none;
+  margin-top: var(--space-2);
+  color: var(--color-icon-muted);
+}
+
+@media (forced-colors: active) {
+  .st-report-preguntas__item::before {
+    forced-color-adjust: none;
+    background-color: CanvasText;
+  }
+}
+
+/* ── Impresión ────────────────────────────────────────────────────────── */
+/* Barras, pie del sitio, halos y .no-print (las acciones de la página) se
+   ocultan en global.css y en el layout. Aquí: banner claro, tarjetas sin
+   sombra ni animación y bloques que no se parten. El pie legal se imprime. */
 @media print {
-  .report { gap: 1rem; }
+  .st-report {
+    gap: var(--space-16);
+  }
+
+  .st-report-banner.st-callout--dark {
+    border-color: var(--color-border-cool);
+    background: none;
+    color: var(--color-text-secondary);
+  }
+
+  .st-report-banner.st-callout--dark .st-callout__icon {
+    background: none;
+    color: var(--color-text);
+  }
+
+  .st-report-banner__eyebrow {
+    color: var(--color-text-tertiary);
+  }
+
+  .st-report-banner .st-report-banner__titulo {
+    font-size: var(--fs-h3);
+    color: var(--color-text);
+  }
+
+  .st-report-banner .st-report-banner__meta {
+    color: var(--color-text-secondary);
+  }
+
+  .st-report__pruebas {
+    gap: var(--space-24);
+  }
+
+  .st-report .st-card {
+    box-shadow: none;
+    animation: none;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+
+  .st-report-preguntas,
+  .st-report__legal {
+    break-inside: avoid;
+  }
+
+  .st-report__legal {
+    color: var(--color-text-secondary);
+  }
+
+  .st-report-preguntas__item::before {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
 }

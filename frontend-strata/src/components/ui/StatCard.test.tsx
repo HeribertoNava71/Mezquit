@@ -51,4 +51,31 @@ describe('StatCard', () => {
     expect(screen.getByText('4')).toHaveClass('st-stat__badge', 'st-stat__badge--sky')
     expect(screen.getByText('Enviadas').closest('.st-stat')).toHaveClass('st-stat--inline', 'st-card--glass')
   })
+
+  it('en carga, el cuadro inline muestra un esqueleto y «Cargando…» en lugar de la cifra', () => {
+    const { container } = render(<StatCard layout="inline" label="Disponibles" help="para invitar" value={37} loading />)
+    const cuadro = container.querySelector('.st-stat__badge')
+    expect(cuadro).not.toHaveTextContent('37')
+    expect(cuadro?.querySelector('.st-stat__esqueleto')).toHaveAttribute('aria-hidden', 'true')
+    expect(cuadro).toHaveTextContent('Cargando…')
+    // El rótulo y la ayuda ya se ven mientras carga.
+    expect(screen.getByText('Disponibles')).toBeInTheDocument()
+    expect(screen.getByText('para invitar')).toBeInTheDocument()
+  })
+
+  it('en carga, el diseño stacked oculta la unidad y deja la barra vacía y decorativa', () => {
+    const { container } = render(
+      <StatCard
+        label="Completadas"
+        value={9}
+        unit="de 20 invitados"
+        progress={{ value: 9, max: 20, label: 'Completadas' }}
+        loading
+      />,
+    )
+    expect(container.querySelector('.st-stat__value .st-stat__esqueleto')).not.toBeNull()
+    expect(screen.queryByText('de 20 invitados')).not.toBeInTheDocument()
+    expect(screen.queryByRole('progressbar')).not.toBeInTheDocument()
+    expect(screen.queryByText('9')).not.toBeInTheDocument()
+  })
 })

@@ -138,7 +138,7 @@ button, a, input, td, th {
      existen desde la Fase 2.
    - La utilidad .no-print (por ejemplo, «Descargar PDF» del reporte).
    Halos, contenedor y animación se ajustan en PageLayout.css y
-   RouteTransition.css. El pie legal del reporte (.report__foot) sí se imprime. */
+   RouteTransition.css. El pie legal del reporte (.st-report__legal) sí se imprime. */
 @media print {
   .no-print,
   .st-skip-link,

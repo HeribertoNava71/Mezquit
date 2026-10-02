@@ -1,10 +1,8 @@
-.resumen { display: flex; flex-direction: column; gap: var(--sp-8); }
-.resumen__title { font-size: var(--text-3xl); color: var(--color-brunswick); }
-.resumen__cards { display: grid; grid-template-columns: 1fr; gap: var(--sp-4); }
-@media (min-width: 640px) { .resumen__cards { grid-template-columns: 1fr 1fr; } }
-.resumen__card { padding: var(--sp-6); border: 1px solid var(--color-timberwolf); border-radius: var(--radius-md); display: flex; flex-direction: column; gap: var(--sp-2); }
-.resumen__card-label { font-size: var(--text-sm); color: var(--color-ink); opacity: 0.7; }
-.resumen__card-value { font-family: var(--font-display); font-size: var(--text-3xl); color: var(--color-brunswick); font-variant-numeric: tabular-nums; }
-.resumen__list { display: flex; flex-direction: column; gap: var(--sp-2); }
-.resumen__row { display: flex; justify-content: space-between; padding: var(--sp-3) 0; border-top: 1px solid var(--color-timberwolf); font-size: var(--text-sm); }
-.resumen__link { color: var(--color-hunter); }
+/* «Resultados» (/app): encabezado, StatCards y «Últimas completadas»
+   (Strata.dc.html:684-705 y 809-868). El contenedor de 1200 px y su padding
+   (48/34/88) los pone PageLayout; el PageHeader deja 22 px debajo. */
+.st-resultados {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}

@@ -1,0 +1,72 @@
+/* StatCards de «Resultados» (Strata.dc.html:696-705): tarjetas con cuadro
+   numérico, 14 px entre ellas y 22 px debajo. La tarjeta y su cuadro son el
+   StatCard inline del sistema. El prototipo usa auto-fit de 190 px; con tres
+   tarjetas eso deja rótulos partidos a 768 px, así que la rejilla va por pasos:
+   una columna hasta 640 px, dos (la tercera a todo el ancho) hasta 959 px y
+   tres desde 960 px. */
+.st-resultados-stats {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-14);
+  margin: 0 0 var(--space-22);
+  padding: 0;
+  list-style: none;
+  /* El foco llega aquí por programa tras un «Reintentar»: el anillo sigue la tarjeta. */
+  border-radius: var(--radius-glass);
+}
+
+@media (min-width: 641px) {
+  .st-resultados-stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .st-resultados-stats__tarjeta:last-child:nth-child(odd) {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (min-width: 960px) {
+  .st-resultados-stats {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .st-resultados-stats__tarjeta:last-child:nth-child(odd) {
+    grid-column: auto;
+  }
+}
+
+/* «Ver créditos» y «Ver evaluaciones», en su línea bajo el detalle: texto de
+   enlace navy de 11 px y 700, como «Copiar» de la tabla del prototipo
+   (Strata.dc.html:746), con el hover que cumple como texto. El relleno agranda
+   el área de toque; cada tarjeta tiene un solo enlace (WCAG 2.5.8). */
+.st-resultados-stats__enlace {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  width: fit-content;
+  margin-top: var(--space-4);
+  padding-block: var(--space-2);
+  border-radius: var(--radius-code);
+  font-size: var(--fs-eyebrow);
+  font-weight: var(--fw-bold);
+  line-height: var(--lh-title);
+  color: var(--color-link);
+  white-space: nowrap;
+}
+
+.st-resultados-stats__enlace:hover {
+  color: var(--color-link-hover);
+}
+
+.st-resultados-stats__flecha {
+  flex: none;
+  transition: transform var(--dur-state) var(--ease-base);
+}
+
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .st-resultados-stats__enlace:hover .st-resultados-stats__flecha {
+    transform: translateX(var(--space-2));
+  }
+}
+
+/* La cifra en carga es el esqueleto de StatCard (loading), el mismo de Créditos. */

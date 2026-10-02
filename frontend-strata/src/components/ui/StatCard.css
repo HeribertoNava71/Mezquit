@@ -149,8 +149,31 @@
   align-self: flex-start;
 }
 
+/* ── Carga (loading) ───────────────────────────────────────────────────── */
+/* Barra del color de la cifra al 22 % que late como el punto de «Guardado
+   automático» (--anim-pulse-dot); con movimiento reducido queda quieta. Mide
+   lo que una cifra corta, así la tarjeta no cambia de tamaño al llegar el dato. */
+.st-stat__esqueleto {
+  display: block;
+  width: var(--space-20);
+  height: var(--space-10);
+  border-radius: var(--radius-pill);
+  background-color: color-mix(in srgb, currentColor 22%, transparent);
+  animation: var(--anim-pulse-dot);
+}
+
+/* En la cifra grande (stacked), una barra más ancha y con el alto de la línea */
+.st-stat__value .st-stat__esqueleto {
+  width: var(--space-48);
+  height: var(--space-20);
+}
+
 @media (forced-colors: active) {
   .st-stat__badge {
     border: var(--border-width) solid;
+  }
+
+  .st-stat__esqueleto {
+    background-color: CanvasText;
   }
 }

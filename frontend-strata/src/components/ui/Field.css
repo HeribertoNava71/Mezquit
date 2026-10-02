@@ -35,10 +35,12 @@
   color: var(--color-error-text);
 }
 
-/* Ayuda junto al rótulo (Strata.dc.html:1055): 11 px, terciario (5.79:1 blanco) */
+/* Ayuda junto al rótulo (Strata.dc.html:1055): 11 px, terciario (5.79:1 blanco).
+   Mismo interlineado que el rótulo: con uno mayor, el encabezado de un campo
+   con ayuda medía 2 px más y su control quedaba desalineado del vecino. */
 .st-field__hint {
   font-size: var(--fs-eyebrow);
-  line-height: var(--lh-normal);
+  line-height: var(--lh-title);
   color: var(--color-text-tertiary);
 }
 

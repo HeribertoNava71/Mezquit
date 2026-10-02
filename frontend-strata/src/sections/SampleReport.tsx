@@ -1,8 +1,11 @@
-import Report from '@/sections/Report'
+import { useId, type HTMLAttributes, type ReactNode } from 'react'
 import type { ReportData } from '@/api/report'
+import { Card, cx } from '@/components/ui'
 import { SITE } from '@/config/site'
+import Report from '@/sections/Report'
 import './SampleReport.css'
 
+/** Datos del reporte de ejemplo (R-14). Son de muestra y siempre van con el badge «Ejemplo». */
 const SAMPLE: ReportData = {
   candidate: 'Ejemplo · Candidato',
   position: 'Ejecutivo de ventas',
@@ -22,17 +25,42 @@ const SAMPLE: ReportData = {
   }],
 }
 
-export default function SampleReport() {
+export interface SampleReportProps extends Omit<HTMLAttributes<HTMLElement>, 'title'> {
+  /** Título de la sección. Por defecto, «Este es el reporte que recibes»; null lo quita. */
+  title?: ReactNode
+  /** Nivel del título de la sección; el reporte empieza un nivel abajo. Por defecto, 2. */
+  headingLevel?: 2 | 3
+}
+
+/**
+ * Reporte de ejemplo: el mismo Report del panel, en modo sample (badge
+ * «Ejemplo»), dentro de una tarjeta de vidrio (mapa.md, /pruebas/:slug). Se
+ * puede incrustar en cualquier página pública; D-24 lo quitó de la home.
+ */
+export default function SampleReport({
+  title = 'Este es el reporte que recibes',
+  headingLevel = 2,
+  className,
+  ...rest
+}: SampleReportProps) {
+  const idTitulo = useId()
+  const conTitulo = title != null && title !== false
+  const Titulo = `h${headingLevel}` as const
+
   return (
-    <section className="sample-report" aria-labelledby="sample-title">
-      <div className="sample-report__inner">
-        <div className="sample-report__heading">
-          <h2 className="sample-report__title" id="sample-title">Este es el reporte que recibes</h2>
-        </div>
-        <div className="report-card" style={{ background: 'var(--color-surface)', borderRadius: 'var(--radius-md)', padding: 'var(--sp-8)' }}>
-          <Report data={SAMPLE} />
-        </div>
-      </div>
+    <section
+      {...rest}
+      className={cx('st-sample-report', className)}
+      aria-labelledby={conTitulo ? idTitulo : rest['aria-labelledby']}
+    >
+      {conTitulo && (
+        <Titulo id={idTitulo} className="st-sample-report__title">
+          {title}
+        </Titulo>
+      )}
+      <Card variant="glass" padding="lg" className="st-sample-report__card">
+        <Report data={SAMPLE} sample headingLevel={conTitulo ? ((headingLevel + 1) as 3 | 4) : headingLevel} />
+      </Card>
     </section>
   )
 }

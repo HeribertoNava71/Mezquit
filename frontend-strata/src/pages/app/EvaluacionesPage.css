@@ -1,21 +1,85 @@
-.evals { display: flex; flex-direction: column; gap: var(--sp-6); }
-.evals__head { display: flex; justify-content: space-between; align-items: center; gap: var(--sp-4); flex-wrap: wrap; }
-.evals__title { font-size: var(--text-3xl); color: var(--color-brunswick); }
-.evals__table { width: 100%; border-collapse: collapse; }
-.evals__table th, .evals__table td { text-align: left; padding: var(--sp-3) var(--sp-4); border-bottom: 1px solid var(--color-timberwolf); font-size: var(--text-sm); }
-.evals__table th { color: var(--color-ink); opacity: 0.6; font-weight: 600; }
-.evals__progress { font-variant-numeric: tabular-nums; }
-.evals__link { color: var(--color-hunter); font-weight: 500; }
-.evals__empty { font-size: var(--text-base); opacity: 0.7; }
+/* ==========================================================================
+   /app/evaluaciones · Candidatos (Strata.dc.html:772-870)
+   PageHeader y tabla de vidrio del panel de candidatos. La tabla pasa a
+   tarjetas a 640 px o menos (DataTable, D-23): la pantalla ya no necesita
+   el desplazamiento lateral provisional que le puso la Fase 2.
+   Contraste: nombre tinta sobre vidrio 16.9:1 · puesto, fechas y «Sin…»
+   #6B6558 sobre vidrio 5.6:1 · avance #3D3A33 11.16:1.
+   ========================================================================== */
+.st-evaluaciones__cuerpo {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-14);
+}
 
-/* Transición hasta la Fase 4 (D-23: tablas a tarjetas por debajo de 640 px; QA de
-   la Fase 2). La tabla vieja no cabe en pantallas angostas: el desplazamiento
-   lateral queda dentro de la pantalla y no arrastra la página, la barra ni el
-   pie. El relleno, compensado con margen negativo, deja sitio al anillo de foco
-   que el recorte del desplazamiento cortaría en los bordes. */
-.evals {
-  overflow-x: auto;
-  overscroll-behavior-x: contain;
-  padding: calc(var(--focus-outline-width) + var(--focus-outline-offset));
-  margin: calc(-1 * (var(--focus-outline-width) + var(--focus-outline-offset)));
+/* Evaluación: nombre (13.5 px, 600) y puesto debajo (11 px), como candidato y
+   correo en el prototipo (Strata.dc.html:840-841). */
+.st-evaluaciones__evaluacion {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.st-evaluaciones__nombre {
+  font-size: var(--fs-ui);
+  font-weight: var(--fw-semibold);
+  line-height: var(--lh-title);
+  color: var(--color-text);
+  overflow-wrap: break-word;
+}
+
+.st-evaluaciones__puesto {
+  font-size: var(--fs-eyebrow);
+  font-weight: var(--fw-regular);
+  line-height: var(--lh-title);
+  color: var(--color-text-tertiary);
+  overflow-wrap: break-word;
+}
+
+/* Avance: «X de Y completadas» y la barra de 6 px del saldo (Strata.dc.html:798-803). */
+.st-evaluaciones__avance {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-7);
+  min-width: 0;
+}
+
+.st-evaluaciones__avance-texto {
+  font-size: var(--fs-meta);
+  font-weight: var(--fw-medium);
+  line-height: var(--lh-title);
+  color: var(--color-text-data);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+/* Fechas: 12.5 px en texto terciario (Strata.dc.html:851) */
+.st-evaluaciones__fecha,
+.st-evaluaciones__tenue {
+  font-size: var(--fs-meta);
+  font-weight: var(--fw-medium);
+  color: var(--color-text-tertiary);
+}
+
+.st-evaluaciones__fecha {
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+/* Tableta (641-900 px): «0 de 4 completadas» y «Sin fecha límite» pueden bajar
+   de línea, así la tabla cabe sin desplazamiento lateral desde unos 760 px.
+   La fecha misma (<time>) no se parte. */
+@media (max-width: 900px) {
+  .st-evaluaciones__avance-texto,
+  span.st-evaluaciones__fecha {
+    white-space: normal;
+  }
+}
+
+/* Modo tarjeta: la barra de avance no se estira de más junto a su rótulo */
+@media (max-width: 640px) {
+  .st-evaluaciones__avance {
+    max-width: var(--width-end-text);
+  }
 }

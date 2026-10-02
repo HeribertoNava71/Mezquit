@@ -1,34 +1,63 @@
-import { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
-import { getCredits, listAssessments, type AssessmentSummary } from '@/api/rh'
+import { useRef } from 'react'
+import { Button, EstadoError, PageHeader, useFocoAlRecuperar } from '@/components/ui'
+import { IconoAgregar } from '@/components/ui/Iconos'
+import { EstadisticasResultados } from './resultados/EstadisticasResultados'
+import { UltimasCompletadas } from './resultados/UltimasCompletadas'
+import { useResultados } from './resultados/useResultados'
 import './ResumenPage.css'
 
+/**
+ * «Resultados» en /app (R-15, D-06; mapa.md, sección 2). Antes «Resumen».
+ * - PageHeader con el CTA «Invitar candidatos» → asistente (D-10).
+ * - StatCards: créditos disponibles (GET /api/credits), evaluaciones activas y
+ *   candidatos completados (GET /api/assessments), con «Ver créditos» y «Ver
+ *   evaluaciones» del Resumen anterior.
+ * - «Últimas completadas»: detalle de hasta 5 evaluaciones con completadas
+ *   (agregación limitada de PB-05) y «Ver reporte» de cada candidato.
+ * Si falla GET /api/credits o GET /api/assessments, EstadoError con
+ * «Reintentar» en lugar de las cifras (antes se ignoraba).
+ */
 export default function ResumenPage() {
-  const [balance, setBalance] = useState<number | null>(null)
-  const [assessments, setAssessments] = useState<AssessmentSummary[]>([])
+  const { resumen, completadas, reintentar, reintentarCompletadas } = useResultados()
+  const listo = resumen.fase === 'listo' ? resumen : null
 
-  useEffect(() => {
-    getCredits().then(c => setBalance(c.balance)).catch(() => {})
-    listAssessments().then(setAssessments).catch(() => {})
-  }, [])
-
-  const activas = assessments.filter(a => a.counts.completada < a.counts.total).length
+  // Tras un «Reintentar» que trae los datos, el botón desaparece y el foco
+  // caería en <body>: se lleva a las cifras.
+  const cifrasRef = useRef<HTMLUListElement>(null)
+  useFocoAlRecuperar(resumen.fase === 'error', resumen.fase === 'listo', cifrasRef)
 
   return (
-    <div className="resumen">
-      <h1 className="resumen__title">Resumen</h1>
-      <div className="resumen__cards">
-        <div className="resumen__card">
-          <span className="resumen__card-label">Créditos disponibles</span>
-          <span className="resumen__card-value">{balance ?? '—'}</span>
-          <Link to="/app/creditos" className="resumen__link">Ver créditos</Link>
-        </div>
-        <div className="resumen__card">
-          <span className="resumen__card-label">Evaluaciones activas</span>
-          <span className="resumen__card-value">{activas}</span>
-          <Link to="/app/evaluaciones" className="resumen__link">Ver evaluaciones</Link>
-        </div>
-      </div>
+    <div className="st-resultados">
+      <PageHeader
+        eyebrow="Panel de RR. HH."
+        title="Resultados"
+        lede="Consulta tu saldo, el avance de tus evaluaciones y el reporte de cada candidato que ya terminó."
+        actions={
+          <Button to="/app/evaluaciones/nueva" iconLeft={<IconoAgregar />}>
+            Invitar candidatos
+          </Button>
+        }
+      />
+
+      {resumen.fase === 'error' ? (
+        <EstadoError
+          kind={resumen.tipo}
+          titleAs="h2"
+          title={resumen.tipo === 'sesion' || resumen.tipo === 'permiso' ? undefined : 'No pudimos cargar tus resultados'}
+          onRetry={reintentar}
+          retrying={resumen.reintentando}
+        />
+      ) : (
+        <>
+          <EstadisticasResultados ref={cifrasRef} estado={resumen} />
+          <UltimasCompletadas
+            estado={completadas}
+            totalEvaluaciones={listo ? listo.totalEvaluaciones : null}
+            totalCompletados={listo ? listo.candidatosCompletados : null}
+            onReintentar={reintentarCompletadas}
+          />
+        </>
+      )}
     </div>
   )
 }

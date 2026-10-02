@@ -1,0 +1,106 @@
+/* Radar del reporte (Strata.dc.html:894-913).
+   Retícula de 4 anillos y ejes en #E7E2D8, polígono celeste translúcido con
+   contorno #0EA5E9 y vértices navy de 8 px. El área de 100 % lleva un relleno
+   celeste muy suave: es el fondo de la gráfica, no un «rango esperado»
+   (P-16, PB-18). Las etiquetas van en 11 px; el SVG crece hasta el ancho de su
+   viewBox, así que nunca se ven más grandes. */
+.st-radar {
+  display: flex;
+  justify-content: center;
+  margin-top: var(--space-6);
+}
+
+.st-radar__svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  /* Un nombre algo más ancho que el estimado no se recorta. */
+  overflow: visible;
+}
+
+.st-radar__fondo {
+  fill: var(--color-sky-tint-subtle);
+  stroke: var(--color-border-cool);
+  stroke-width: var(--border-width);
+}
+
+.st-radar__anillo {
+  fill: none;
+  stroke: var(--color-radar-grid);
+  stroke-width: var(--border-width);
+}
+
+.st-radar__eje {
+  stroke: var(--color-radar-grid);
+  stroke-width: var(--border-width);
+}
+
+.st-radar__datos {
+  fill: var(--color-radar-fill);
+  stroke: var(--color-radar-stroke);
+  stroke-width: var(--border-width-thick);
+  stroke-linejoin: round;
+}
+
+.st-radar__vertice {
+  fill: var(--color-radar-vertex);
+}
+
+/* Halo de la escala elegida en la lista: une la fila con su vértice. */
+.st-radar__halo {
+  fill: none;
+  stroke: var(--color-sky-ui);
+  stroke-width: var(--border-width-control);
+}
+
+.st-radar__etiqueta {
+  font-family: var(--font-text);
+  font-size: var(--fs-eyebrow);
+  font-weight: var(--fw-semibold);
+  fill: var(--color-text-secondary);
+}
+
+.st-radar__etiqueta--activa {
+  font-weight: var(--fw-bold);
+  fill: var(--color-text);
+}
+
+/* Alto contraste de Windows: colores del sistema para que la gráfica no desaparezca. */
+@media (forced-colors: active) {
+  .st-radar__fondo,
+  .st-radar__anillo,
+  .st-radar__eje {
+    fill: none;
+    stroke: GrayText;
+  }
+
+  .st-radar__datos,
+  .st-radar__halo {
+    fill: none;
+    stroke: Highlight;
+  }
+
+  .st-radar__vertice {
+    fill: Highlight;
+  }
+
+  .st-radar__etiqueta {
+    fill: CanvasText;
+  }
+}
+
+/* Impresión: sin la marca de la selección (la interactividad no va al papel). */
+@media print {
+  .st-radar {
+    break-inside: avoid;
+  }
+
+  .st-radar__halo {
+    display: none;
+  }
+
+  .st-radar__etiqueta--activa {
+    font-weight: var(--fw-semibold);
+    fill: var(--color-text-secondary);
+  }
+}

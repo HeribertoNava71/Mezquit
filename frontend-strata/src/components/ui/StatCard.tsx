@@ -2,7 +2,22 @@ import type { ReactNode, Ref } from 'react'
 import { Card, type CardProps } from './Card'
 import { cx } from './cx'
 import { ProgressBar, type ProgressBarTone } from './ProgressBar'
+import { VisuallyHidden } from './VisuallyHidden'
 import './StatCard.css'
+
+/**
+ * Cifra en carga: una barra del color de la cifra que late como el punto de
+ * «Guardado automático» (quieta con movimiento reducido) y «Cargando…» para
+ * lectores. Rótulo y ayuda ya se ven: la rejilla no salta al llegar los datos.
+ */
+function CifraEnCarga() {
+  return (
+    <>
+      <span className="st-stat__esqueleto" aria-hidden="true" />
+      <VisuallyHidden>Cargando…</VisuallyHidden>
+    </>
+  )
+}
 
 /**
  * Tono del cuadro numérico del diseño inline (Strata.dc.html:1853-1858): navy (Disponibles),
@@ -55,6 +70,12 @@ export interface StatCardProps extends Omit<CardProps, 'children' | 'padding' | 
   layout?: 'stacked' | 'inline'
   /** Tono del cuadro numérico (solo en inline). Por defecto, navy. */
   tone?: StatCardTone
+  /**
+   * La cifra todavía no llega: en su lugar va un esqueleto que late (y
+   * «Cargando…» para lectores); la unidad se oculta y la barra queda vacía.
+   * Marca aria-busy en el contenedor que agrupa las tarjetas.
+   */
+  loading?: boolean
   ref?: Ref<HTMLElement>
 }
 
@@ -73,16 +94,18 @@ export function StatCard({
   progress,
   layout = 'stacked',
   tone = 'navy',
+  loading = false,
   className,
   ...rest
 }: StatCardProps) {
   const valueClass = cx('st-stat__value', valueFont !== 'text' && `st-stat__value--${valueFont}`)
+  const cifra = loading ? <CifraEnCarga /> : value
 
   if (layout === 'inline') {
     return (
       <Card padding="sm" className={cx('st-stat', 'st-stat--inline', className)} {...rest}>
         <span className={cx('st-stat__badge', `st-stat__badge--${tone}`, valueFont !== 'text' && `st-stat__badge--${valueFont}`)}>
-          {value}
+          {cifra}
         </span>
         <div className="st-stat__body">
           <p className="st-stat__label">{label}</p>
@@ -100,19 +123,19 @@ export function StatCard({
         {meta && <div className="st-stat__meta">{meta}</div>}
       </div>
       <p className="st-stat__figure">
-        <span className={valueClass}>{value}</span>
-        {unit && <span className="st-stat__unit">{unit}</span>}
+        <span className={valueClass}>{cifra}</span>
+        {unit && !loading && <span className="st-stat__unit">{unit}</span>}
       </p>
       {progress && (
         <ProgressBar
           className="st-stat__bar"
-          value={progress.value}
+          value={loading ? 0 : progress.value}
           max={progress.max}
           valueText={progress.valueText}
           tone={progress.tone ?? 'sky-strong'}
           track="divider"
           size={6}
-          {...(progress.label ? { label: progress.label } : { decorative: true as const })}
+          {...(progress.label && !loading ? { label: progress.label } : { decorative: true as const })}
         />
       )}
       {help && <p className="st-stat__help">{help}</p>}

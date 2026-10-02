@@ -228,6 +228,7 @@
   --fs-figure-lg: 1.6875rem; /* 27 px: saldo */
   --fs-figure:    1.4375rem; /* 23 px: precio del catálogo */
   --fs-figure-sm: 1.3125rem; /* 21 px: vista previa */
+  --fs-figure-display: clamp(4.5rem, 3.2rem + 5.4vw, 7rem); /* 72–112 px: «404» de la página no encontrada (Fase 7) */
 
   /* Tipografía · texto */
   --fs-brand:    1.0625rem;  /* 17 px: nombre de la marca en las barras (Strata.dc.html:57) */
@@ -534,6 +535,10 @@
   --width-toast:     560px;      /* toast: en el prototipo crece hasta la mitad de la ventana (left: 50%); aquí, como el fin */
   --width-hero-copy:  600px;     /* columna de texto del hero de la home cuando va en una sola columna (Fase 6) */
   --width-demo-stage: 540px;     /* escenario de la demo de la home: la columna del prototipo a 1200 px (Strata.dc.html:168) */
+  --width-auth:      460px;      /* Fase 7 · tarjeta de /login: dos campos; los 600 px del acceso del candidato los estiraban */
+  --width-auth-wide: 760px;      /* Fase 7 · tarjeta de /registro: dos columnas de campos desde 768 px */
+  --width-reading:   680px;      /* Fase 7 · ancho de lectura de los textos legales (unos 70 caracteres por línea) */
+  --width-wizard:    760px;      /* Fase 4 · panel del asistente de nueva evaluación: el modal de asignación (520 px) ensanchado para las filas de candidatos */
 
   /* Altos máximos */
   --height-modal-max: 92dvh; /* modales (92vh en el prototipo; dvh descuenta la barra del navegador móvil) */

@@ -51,6 +51,15 @@
   text-wrap: balance;
 }
 
+/* Las variantes que no se parten (chico y tinta mediana) repiten el nowrap en
+   la etiqueta: text-wrap es abreviatura de text-wrap-mode y text-wrap-style, así
+   que el balance de arriba reinicia el modo a wrap y anula el white-space: nowrap
+   que la etiqueta heredaría del botón (en tablas, «Ver reporte» se partía en dos). */
+.st-btn--sm > .st-btn__label,
+.st-btn--ink.st-btn--md > .st-btn__label {
+  white-space: nowrap;
+}
+
 /* ── Variantes ─────────────────────────────────────────────────────────── */
 
 /* Primario navy (D-19) */

@@ -8,10 +8,12 @@ import {
   CodeDisplay,
   CopyField,
   DotSeparator,
+  Fecha,
   InvitationStatusBadge,
   INVITATION_STATUSES,
   LiveDot,
   PageHeader,
+  Persona,
   ProgressBar,
   StatCard,
   StepPills,
@@ -111,6 +113,12 @@ export function SeccionEstadisticas() {
           <StatCard key={r.label} layout="inline" tone={r.tone} value={r.n} label={r.label} help={r.help} />
         ))}
       </div>
+      <Muestra titulo="StatCard · en carga (loading, Fase 4)">
+        <Pila separacion="sm">
+          <StatCard label="Completadas" value={9} unit="de 20 invitados" progress={{ value: 9, max: 20 }} help="con reporte listo para revisar" loading />
+          <StatCard layout="inline" tone="navy" label="Disponibles" value={37} help="para invitar candidatos" loading />
+        </Pila>
+      </Muestra>
       <Muestra titulo="StatCard · cifra Satoshi (heading) y mono, sin barra">
         <Pila separacion="sm">
           <StatCard label="Índice global" value={76} valueFont="heading" unit="de 100" help="Cifra de marca en Satoshi" />
@@ -258,6 +266,20 @@ export function SeccionEtiquetas() {
           <Avatar name="Valentina Ríos" shape="square" tone="sky" size="md" />
           <Avatar name="Acme Talento" initials="A" shape="square" />
           <Avatar name="Joaquín Herrera" size="md" decorative={false} />
+        </Fila>
+      </Muestra>
+      <Muestra titulo="Persona · celda «Candidato» (Fase 4)">
+        <Pila separacion="sm">
+          <Persona name="Valentina Ríos" detail="v.rios@correo.com" />
+          <Persona name="Joaquín Herrera" />
+        </Pila>
+      </Muestra>
+      <Muestra titulo="Fecha · formato «04 sep 2026» (Fase 4)">
+        <Fila>
+          <Fecha valor="2026-09-04" />
+          <Fecha valor="2026-09-27 11:42" conHora />
+          <Fecha valor={null} vacio="Sin fecha límite" />
+          <Fecha valor={null} />
         </Fila>
       </Muestra>
     </Seccion>

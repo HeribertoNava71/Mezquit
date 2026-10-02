@@ -3,6 +3,8 @@ export { cx } from './cx'
 export type { ClassDictionary, ClassValue } from './cx'
 export { getFocusableElements, useFocusTrap } from './useFocusTrap'
 export type { UseFocusTrapOptions } from './useFocusTrap'
+// Fase 4: el foco tras un «Reintentar» que trae los datos (antes, un efecto en cada pantalla).
+export { useFocoAlRecuperar } from './useFocoAlRecuperar'
 export { prefersReducedMotion, useReducedMotion } from './useReducedMotion'
 export { VisuallyHidden } from './VisuallyHidden'
 export type { VisuallyHiddenProps } from './VisuallyHidden'

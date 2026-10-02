@@ -13,6 +13,7 @@ import {
   SegmentedFilter,
   SegmentedToggle,
   Select,
+  SelectableListRow,
   Spinner,
   Stepper,
   Tag,
@@ -368,12 +369,22 @@ export function SeccionSeleccion() {
 
 export function SeccionFiltros() {
   const [cantidad, setCantidad] = useState(1)
+  const [fila, setFila] = useState(0)
   return (
     <Seccion
       id="filtros"
       titulo="Filtros, selector y stepper"
       nota="Filtros del catálogo (Strata.dc.html:621-624) y de las tablas (:713-716), selector de la home (:136-140) y cantidad y peso (:665-669, :500-504)."
     >
+      <Muestra titulo="SelectableListRow · fila elegible de una lista (Fase 4)" fondo="ninguno">
+        <Pila separacion="sm">
+          {['Orientación a resultados', 'Colaboración', 'Adaptabilidad'].map((escala, indice) => (
+            <SelectableListRow key={escala} selected={fila === indice} aria-pressed={fila === indice} onClick={() => setFila(indice)}>
+              {escala}
+            </SelectableListRow>
+          ))}
+        </Pila>
+      </Muestra>
       <Muestra titulo="SegmentedFilter md · catálogo" fondo="ninguno">
         <SegmentedFilter
           aria-label="Filtrar por categoría"

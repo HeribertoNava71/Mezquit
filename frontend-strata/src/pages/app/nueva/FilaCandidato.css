@@ -1,0 +1,58 @@
+/* Fila de candidato: caja blanca con borde neutro y radio de control
+   (filas de opción del modal, Strata.dc.html:1394-1398), rótulo en mayúsculas
+   y tres campos en línea que pasan a columna en pantallas angostas. */
+.st-nueva-fila {
+  position: relative;
+  min-width: 0; /* un fieldset no se encoge por debajo de su contenido sin esto */
+  margin: 0;
+  padding: var(--space-14) var(--space-16) var(--space-16);
+  border: var(--border-width) solid var(--color-border-neutral);
+  border-radius: var(--radius-control);
+  background-color: var(--color-surface-white);
+  transition: border-color var(--dur-state) var(--ease-base);
+  animation: var(--anim-row-in);
+}
+
+.st-nueva-fila:focus-within {
+  border-color: var(--color-border-strong);
+}
+
+/* La leyenda flota para quedar dentro de la caja y no sobre el borde. */
+.st-nueva-fila__titulo {
+  float: left;
+  width: 100%;
+  margin-bottom: var(--space-14);
+  padding: 0 var(--space-40) 0 0; /* deja libre el botón «Quitar» */
+  font-size: var(--fs-micro);
+  font-weight: var(--fw-bold);
+  line-height: var(--lh-title);
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+  color: var(--color-text-tertiary);
+}
+
+.st-nueva-fila__quitar {
+  position: absolute;
+  top: var(--space-6);
+  right: var(--space-6);
+}
+
+.st-nueva-fila__campos {
+  clear: both;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr) minmax(0, 0.85fr);
+  gap: var(--space-12);
+  align-items: start;
+}
+
+@media (max-width: 640px) {
+  .st-nueva-fila__campos {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .st-nueva-fila {
+    animation: none;
+  }
+}

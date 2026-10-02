@@ -1,24 +1,41 @@
-.evdet { display: flex; flex-direction: column; gap: var(--sp-6); }
-.evdet__head { display: flex; justify-content: space-between; align-items: baseline; gap: var(--sp-4); flex-wrap: wrap; }
-.evdet__title { font-size: var(--text-3xl); color: var(--color-brunswick); }
-.evdet__sub { font-size: var(--text-sm); opacity: 0.7; }
-.evdet__table { width: 100%; border-collapse: collapse; }
-.evdet__table th, .evdet__table td { text-align: left; padding: var(--sp-3) var(--sp-4); border-bottom: 1px solid var(--color-timberwolf); font-size: var(--text-sm); }
-.evdet__table th { opacity: 0.6; font-weight: 600; }
-.evdet__status { display: inline-flex; align-items: center; gap: var(--sp-1); font-weight: 600; }
-.evdet__actions { display: flex; gap: var(--sp-3); flex-wrap: wrap; }
-.evdet__btn { font-size: var(--text-sm); color: var(--color-hunter); background: none; }
-.evdet__btn:disabled { opacity: 0.4; }
-.evdet__link { font-size: var(--text-sm); color: var(--color-hunter); font-weight: 500; }
+/* ==========================================================================
+   /app/evaluaciones/:id · detalle de la evaluación (Strata.dc.html:772-870)
+   PageHeader con puesto y fechas, y la tabla de candidatos del prototipo:
+   persona (avatar, nombre y correo; componente Persona), badge de estado y
+   acciones. La tabla pasa a tarjetas a 640 px o menos (DataTable, D-23).
+   ========================================================================== */
+.st-btn.st-evaluacion__volver {
+  margin-block-end: var(--space-14);
+}
 
-/* Transición hasta la Fase 4 (D-23: tablas a tarjetas por debajo de 640 px; QA de
-   la Fase 2). La tabla vieja no cabe en pantallas angostas: el desplazamiento
-   lateral queda dentro de la pantalla y no arrastra la página, la barra ni el
-   pie. El relleno, compensado con margen negativo, deja sitio al anillo de foco
-   que el recorte del desplazamiento cortaría en los bordes. */
-.evdet {
-  overflow-x: auto;
-  overscroll-behavior-x: contain;
-  padding: calc(var(--focus-outline-width) + var(--focus-outline-offset));
-  margin: calc(-1 * (var(--focus-outline-width) + var(--focus-outline-offset)));
+/* Metadatos de la entradilla: puesto · Creada el … · Fecha límite: … */
+.st-evaluacion__meta {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-4) var(--space-10);
+}
+
+/* En móvil cada dato va en su línea: sin puntos colgando al final de cada renglón */
+@media (max-width: 640px) {
+  .st-evaluacion__meta {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-2);
+  }
+
+  .st-evaluacion__meta .st-dot-sep {
+    display: none;
+  }
+}
+
+.st-evaluacion__cuerpo {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-14);
+}
+
+/* Carga: esqueleto dentro del vidrio de la tabla, para que no salte el layout */
+.st-evaluacion__carga {
+  margin-top: var(--space-8);
 }

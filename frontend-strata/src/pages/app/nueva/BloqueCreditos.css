@@ -1,0 +1,87 @@
+/* Créditos del paso Confirmar: dos cifras (necesarios y saldo) en una caja
+   beige con borde neutro, como las cajas del modal (Strata.dc.html:1404-1407),
+   y debajo el estado del saldo. */
+.st-nueva-creditos {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-12);
+}
+
+.st-nueva-creditos__titulo {
+  font-family: var(--font-text);
+  font-size: var(--fs-label);
+  font-weight: var(--fw-bold);
+  line-height: var(--lh-title);
+  color: var(--color-text-secondary);
+}
+
+.st-nueva-creditos__cifras {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin: 0;
+  overflow: hidden;
+  border: var(--border-width) solid var(--color-border-neutral);
+  border-radius: var(--radius-control);
+  background-color: var(--color-bg);
+}
+
+.st-nueva-creditos__cifra {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+  min-width: 0;
+  padding: var(--space-14) var(--space-16);
+}
+
+.st-nueva-creditos__cifra + .st-nueva-creditos__cifra {
+  border-left: var(--border-width) solid var(--color-border-neutral);
+}
+
+.st-nueva-creditos__rotulo {
+  font-size: var(--fs-small);
+  font-weight: var(--fw-semibold);
+  line-height: var(--lh-title);
+  color: var(--color-text-secondary);
+}
+
+.st-nueva-creditos__dato {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--space-4) var(--space-6);
+  min-height: var(--space-28);
+  margin: 0;
+}
+
+/* Cifra de 21 px en peso 800, como las cifras del prototipo (Strata.dc.html:798) */
+.st-nueva-creditos__valor {
+  font-size: var(--fs-figure-sm);
+  font-weight: var(--fw-extrabold);
+  line-height: var(--lh-none);
+  letter-spacing: var(--tracking-heading);
+  color: var(--color-text);
+  font-variant-numeric: tabular-nums;
+}
+
+.st-nueva-creditos__unidad {
+  font-size: var(--fs-label);
+  font-weight: var(--fw-medium);
+  color: var(--color-text-tertiary);
+}
+
+.st-nueva-creditos__resto {
+  font-size: var(--fs-meta);
+  line-height: var(--lh-normal);
+  color: var(--color-text-secondary);
+}
+
+@media (max-width: 400px) {
+  .st-nueva-creditos__cifras {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .st-nueva-creditos__cifra + .st-nueva-creditos__cifra {
+    border-left: 0;
+    border-top: var(--border-width) solid var(--color-border-neutral);
+  }
+}

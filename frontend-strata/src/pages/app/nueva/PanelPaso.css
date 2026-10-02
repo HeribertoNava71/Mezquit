@@ -1,0 +1,106 @@
+/* Panel del asistente (lenguaje de Strata.dc.html:1376-1418 y Modal.css):
+   blanco, radio 20, cabecera 22/24/18 con divisor, cuerpo 22/24 con 18 px
+   entre bloques y pie beige con nota a la izquierda y acciones a la derecha.
+   En la página lleva la sombra del vidrio en lugar de la del modal. */
+.st-nueva-panel {
+  width: 100%;
+  max-width: var(--width-wizard);
+  overflow: hidden;
+  background-color: var(--color-surface-white);
+  border: var(--border-width) solid var(--color-border-card);
+  border-radius: var(--radius-modal);
+  box-shadow: var(--shadow-glass);
+}
+
+.st-nueva-panel__cabecera {
+  padding: var(--space-22) var(--space-24) var(--space-18);
+  border-bottom: var(--border-width) solid var(--color-border-divider);
+}
+
+/* Título de 18 px en General Sans, como el del modal */
+.st-nueva-panel__titulo {
+  font-family: var(--font-text);
+  font-size: var(--fs-title-sm);
+  font-weight: var(--fw-bold);
+  line-height: var(--lh-title);
+  letter-spacing: var(--tracking-title);
+  color: var(--color-text);
+}
+
+/* Recibe el foco por código al cambiar de paso (tabIndex -1): no es un control,
+   así que no lleva anillo. El lector anuncia el título. */
+.st-nueva-panel__titulo:focus {
+  outline: none;
+}
+
+.st-nueva-panel__descripcion {
+  margin-top: var(--space-3);
+  font-size: var(--fs-meta);
+  line-height: var(--lh-normal);
+  color: var(--color-text-tertiary);
+}
+
+.st-nueva-panel__cuerpo {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-18);
+  padding: var(--space-22) var(--space-24);
+  animation: var(--anim-soft-in);
+}
+
+.st-nueva-panel__pie {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--space-11);
+  padding: var(--space-18) var(--space-24);
+  background-color: var(--color-bg);
+  border-top: var(--border-width) solid var(--color-border-divider);
+}
+
+/* Como la nota del modal (Modal.css): debajo de 120 px las acciones bajan de línea */
+.st-nueva-panel__nota {
+  flex: 1;
+  min-width: 120px;
+  font-size: var(--fs-label);
+  line-height: var(--lh-normal);
+  color: var(--color-text-tertiary);
+}
+
+.st-nueva-panel__acciones {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: var(--space-11);
+  margin-left: auto;
+}
+
+@media (max-width: 640px) {
+  .st-nueva-panel__cabecera {
+    padding: var(--space-20) var(--space-20) var(--space-16);
+  }
+
+  .st-nueva-panel__cuerpo {
+    padding: var(--space-20);
+  }
+
+  .st-nueva-panel__pie {
+    padding: var(--space-16) var(--space-20);
+  }
+}
+
+/* Teléfonos chicos: la nota arriba y los botones a todo el ancho */
+@media (max-width: 400px) {
+  .st-nueva-panel__nota {
+    flex-basis: 100%;
+  }
+
+  .st-nueva-panel__acciones {
+    width: 100%;
+  }
+
+  .st-nueva-panel__acciones > * {
+    flex: 1 1 auto;
+  }
+}

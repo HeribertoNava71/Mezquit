@@ -5,7 +5,8 @@ import type { SVGProps } from 'react'
 // en CopyField y StepPills). Son decorativos (aria-hidden): el texto o el rol
 // del control dan el significado. Toman el color de currentColor y el tamaño
 // de sus atributos o del CSS del componente; cada uso puede cambiar width,
-// height y strokeWidth. Uso interno; no se exportan desde el barril.
+// height y strokeWidth. No se exportan desde el barril: las pantallas los
+// importan de '@/components/ui/Iconos' (los de «Acciones de página» son para eso).
 
 export type IconoProps = SVGProps<SVGSVGElement>
 
@@ -197,6 +198,46 @@ export function IconoReintentar(props: IconoProps) {
     <svg width="14" height="14" viewBox="0 0 18 18" strokeWidth="1.8" {...base} {...redondo} {...props}>
       <path d="M15.4 11.2A6.6 6.6 0 1 1 13.9 4.6l1.9 1.8" />
       <path d="M15.8 2.6v3.8H12" />
+    </svg>
+  )
+}
+
+/* ── Acciones de página ────────────────────────────────────────────────── */
+/* Los de los botones y enlaces de las pantallas del panel (antes, una copia
+   en cada carpeta de pantalla). */
+
+/** Más de 16 px de «Invitar candidatos» y «Solicitar créditos» (Strata.dc.html:783-784). */
+export function IconoAgregar(props: IconoProps) {
+  return (
+    <svg width="16" height="16" viewBox="0 0 18 18" strokeWidth="1.8" {...base} {...redondo} {...props}>
+      <path d="M9 3.4v11.2M3.4 9h11.2" />
+    </svg>
+  )
+}
+
+/** Flecha a la izquierda: «Volver». */
+export function IconoVolver(props: IconoProps) {
+  return (
+    <svg width="15" height="15" viewBox="0 0 18 18" strokeWidth="1.9" {...base} {...redondo} {...props}>
+      <path d="M14.6 9H3.4M7.6 4.8 3.4 9l4.2 4.2" />
+    </svg>
+  )
+}
+
+/** Flecha a la derecha de los enlaces «Ver …» (la «→» de Strata.dc.html:234 y :884). */
+export function IconoFlechaDerecha(props: IconoProps) {
+  return (
+    <svg width="12" height="12" viewBox="0 0 18 18" strokeWidth="1.9" {...base} {...redondo} {...props}>
+      <path d="M3.4 9h11.2M10.4 4.8 14.6 9l-4.2 4.2" />
+    </svg>
+  )
+}
+
+/** Descarga: flecha hacia una bandeja (Strata.dc.html:983). */
+export function IconoDescargar(props: IconoProps) {
+  return (
+    <svg width="17" height="17" viewBox="0 0 18 18" strokeWidth="1.9" {...base} {...redondo} {...props}>
+      <path d="M9 2.6v9M5.4 8.4 9 12l3.6-3.6M3 14.8h12" />
     </svg>
   )
 }

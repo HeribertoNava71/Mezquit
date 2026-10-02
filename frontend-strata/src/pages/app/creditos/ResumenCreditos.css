@@ -1,0 +1,20 @@
+/* Resumen de créditos: la fila de tarjetas del inventario (Strata.dc.html:696-706),
+   con 14 px entre tarjetas. Tres columnas iguales; a 640 px o menos, una sola
+   columna para que ninguna tarjeta quede sola a medio ancho. */
+.st-cr-resumen {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-14);
+  /* Recibe el foco por programa tras un «Reintentar»: el anillo sigue las tarjetas. */
+  border-radius: var(--radius-glass);
+}
+
+@media (max-width: 640px) {
+  .st-cr-resumen {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-10);
+  }
+}
+
+/* La cifra en carga es el esqueleto de StatCard (loading). */

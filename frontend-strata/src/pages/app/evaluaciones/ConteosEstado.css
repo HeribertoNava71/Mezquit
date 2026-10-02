@@ -1,0 +1,21 @@
+/* Candidatos por estado en la lista de evaluaciones: badges de la tabla
+   (Strata.dc.html:847-849) en fila, con 6 px entre ellos y salto de línea. */
+.st-conteos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-6);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.st-conteos__item {
+  display: flex;
+}
+
+/* Sin candidatos: texto terciario de celda (#6B6558 sobre vidrio, 5.6:1) */
+.st-conteos__vacio {
+  font-size: var(--fs-meta);
+  font-weight: var(--fw-medium);
+  color: var(--color-text-tertiary);
+}

@@ -1,0 +1,10 @@
+/* ==========================================================================
+   Modal «Enlace de invitación» (Strata.dc.html:1323-1374)
+   El panel, la cabecera, el pie y la tarjeta oscura los ponen Modal y
+   CodeDisplay; los tiles «Enviar por», CanalesEnvio (invitaciones/).
+   Aquí solo el nombre del candidato en la descripción.
+   ========================================================================== */
+.st-compartir__candidato {
+  font-weight: var(--fw-semibold);
+  color: var(--color-text-secondary);
+}

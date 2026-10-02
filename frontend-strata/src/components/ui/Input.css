@@ -49,6 +49,14 @@
   outline: none;
 }
 
+/* Fecha y hora en Chrome, Edge y Safari: el navegador suma 1 px arriba y abajo
+   dentro del campo, así que medía 2 px más que uno de texto de la misma fila
+   (fecha de nacimiento junto a teléfono en /registro y /perfil). */
+.st-input__field::-webkit-datetime-edit,
+.st-input__field::-webkit-datetime-edit-fields-wrapper {
+  padding-block: 0;
+}
+
 /* Autocompletado de Chrome y Safari: sin el fondo amarillo o azul del navegador */
 .st-input__field:-webkit-autofill {
   -webkit-text-fill-color: var(--color-text);

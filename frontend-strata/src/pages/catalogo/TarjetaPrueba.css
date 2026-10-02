@@ -1,0 +1,94 @@
+/* ==========================================================================
+   Tarjeta del catálogo (Strata.dc.html:630-675)
+   Card glass con hover outline (borde #CBD5E1 y −2 px) y entrada escalonada.
+   Dos zonas, como el prototipo: cuerpo (17 18 0, crece) y pie (15 18 18).
+   El pie ya no lleva precio, stepper ni «Añadir · Comprar licencias» (P-02,
+   PB-09, PB-10): su lugar lo ocupa «Ver detalle», botón secundario a todo lo ancho.
+   ========================================================================== */
+.st-catalogo-tarjeta {
+  display: flex;
+  flex-direction: column;
+}
+
+.st-catalogo-tarjeta__cuerpo {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  padding: var(--space-17) var(--space-18) 0;
+}
+
+/* Crece para que la fila de datos de todas las tarjetas de una fila de la
+   grilla quede a la misma altura, justo encima del pie. */
+.st-catalogo-tarjeta__principal {
+  flex: 1 1 auto;
+}
+
+/* Fila superior (Strata.dc.html:632-641). El código y «{n} en saldo» del
+   prototipo no existen en la API (D-08): queda la categoría. */
+.st-catalogo-tarjeta__cabecera {
+  display: flex;
+  align-items: center;
+  gap: var(--space-10);
+}
+
+/* Categoría en mayúsculas de 9.5 px, navy, 700 y tracking .12em, como texto
+   sin pastilla (Strata.dc.html:634): 10.2:1 sobre el vidrio. */
+.st-catalogo-tarjeta__categoria {
+  margin: 0;
+  font-size: var(--fs-nano);
+  font-weight: var(--fw-bold);
+  line-height: var(--lh-title);
+  letter-spacing: var(--tracking-caps-lg);
+  text-transform: uppercase;
+  color: var(--color-navy);
+  overflow-wrap: anywhere;
+}
+
+/* 16.5 px, 700, −.02em e interlineado 1.3 (Strata.dc.html:643) */
+.st-catalogo-tarjeta__nombre {
+  margin-top: var(--space-13);
+  font-size: var(--fs-h4);
+  line-height: var(--lh-title);
+  letter-spacing: var(--tracking-heading);
+  overflow-wrap: break-word;
+}
+
+/* 12.5 px #6B6558 (Strata.dc.html:644): 5.46:1 sobre #FAF8F5 */
+.st-catalogo-tarjeta__descripcion {
+  margin-top: var(--space-7);
+  font-size: var(--fs-meta);
+  line-height: var(--lh-normal);
+  color: var(--color-text-tertiary);
+}
+
+/* Fila de datos con divisor punteado #E7E2D8 (Strata.dc.html:645-654):
+   «10 min» y «18 reactivos» en 11.5 px/600, #5B5545 (7.42:1 sobre blanco). */
+.st-catalogo-tarjeta__datos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-6) var(--space-14);
+  margin-top: var(--space-14);
+  padding-top: var(--space-13);
+  border-top: var(--border-width) dashed var(--color-border-neutral);
+}
+
+.st-catalogo-tarjeta__dato {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-6);
+  font-size: var(--fs-label);
+  font-weight: var(--fw-semibold);
+  line-height: var(--lh-normal);
+  color: var(--color-text-secondary);
+  white-space: nowrap;
+}
+
+/* Trazo #8B8574 (3.47:1 sobre #FAF8F5): gráfico decorativo junto al texto */
+.st-catalogo-tarjeta__icono {
+  flex: none;
+  color: var(--color-icon-muted);
+}
+
+.st-catalogo-tarjeta__pie {
+  padding: var(--space-15) var(--space-18) var(--space-18);
+}

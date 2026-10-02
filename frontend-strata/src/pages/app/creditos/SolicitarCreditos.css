@@ -1,0 +1,31 @@
+/* Drawer «Solicitar créditos» (Strata.dc.html:1247-1321; D-09). El Drawer pone
+   la cabecera, el cuerpo beige con 20 px entre bloques y el pie blanco; aquí
+   solo va el formulario. */
+.st-cr-solicitud {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-20);
+}
+
+.st-cr-solicitud__nota {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+/* Contador «12/255» bajo la nota, a la derecha: 10.5 px mono en terciario
+   (5.46:1 sobre #FAF8F5). Cerca del límite pasa al texto de advertencia (5.27:1). */
+.st-cr-solicitud__contador {
+  align-self: flex-end;
+  margin-top: var(--space-6);
+  font-family: var(--font-mono);
+  font-size: var(--fs-micro);
+  font-weight: var(--fw-medium);
+  font-variant-numeric: tabular-nums;
+  line-height: var(--lh-title);
+  color: var(--color-text-tertiary);
+}
+
+.st-cr-solicitud__contador--cerca {
+  color: var(--color-warning-text);
+}

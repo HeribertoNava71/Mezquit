@@ -1,0 +1,23 @@
+/* Candidatos por estado: la fila de saldos del panel de candidatos
+   (Strata.dc.html:790-807), 14 px entre tarjetas. El prototipo usa auto-fit
+   de 206 px; con cuatro tarjetas eso deja una sola en la última fila a 768 px,
+   así que la rejilla va por pasos: dos columnas y cuatro desde 960 px. */
+.st-evaluaciones-estados {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-14);
+  /* 24 px hasta la tabla, como el prototipo (:790): los 14 del cuerpo más 10. */
+  margin-bottom: var(--space-10);
+}
+
+@media (min-width: 960px) {
+  .st-evaluaciones-estados {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 640px) {
+  .st-evaluaciones-estados {
+    gap: var(--space-10);
+  }
+}

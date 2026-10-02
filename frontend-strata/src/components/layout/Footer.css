@@ -111,6 +111,17 @@
   .st-footer__end {
     margin-left: 0;
   }
+
+  /* Fila compacta: un enlace por línea y sin puntos. Al envolverse en dos
+     líneas, el punto separador quedaba al inicio de la segunda. */
+  .st-footer__row {
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .st-footer__item + .st-footer__item::before {
+    display: none;
+  }
 }
 
 @media (forced-colors: active) {

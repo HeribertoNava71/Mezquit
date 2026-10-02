@@ -1,0 +1,29 @@
+/* Paso Candidatos: lista de filas con 12 px entre ellas y acciones debajo. */
+.st-nueva-candidatos__lista {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-12);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.st-nueva-candidatos__error {
+  margin: 0;
+}
+
+.st-nueva-candidatos__acciones {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-10);
+}
+
+/* Resultado de pegar la lista, a la derecha de los botones (baja de línea si no cabe).
+   Vacío no ocupa alto: la región sigue en el árbol para que el lector anuncie el cambio. */
+.st-nueva-candidatos__aviso {
+  margin-left: auto;
+  font-size: var(--fs-meta);
+  line-height: var(--lh-normal);
+  color: var(--color-text-secondary);
+}

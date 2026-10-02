@@ -1,18 +1,12 @@
-.wizard { display: flex; flex-direction: column; gap: var(--sp-6); }
-.wizard__title { font-size: var(--text-3xl); color: var(--color-brunswick); }
-.wizard__step { font-size: var(--text-xs); opacity: 0.7; }
-.wizard__field { display: flex; flex-direction: column; gap: var(--sp-2); }
-.wizard__label { font-size: var(--text-sm); font-weight: 500; color: var(--color-brunswick); }
-.wizard__input, .wizard__textarea {
-  padding: var(--sp-3) var(--sp-4); border: 1.5px solid var(--color-border);
-  border-radius: var(--radius-sm); font-family: var(--font-body); font-size: var(--text-base);
+/* Asistente de nueva evaluación (/app/evaluaciones/nueva): encabezado de página,
+   pastillas de pasos con 22 px debajo (Strata.dc.html:351) y el panel del paso,
+   alineados a la izquierda dentro del contenedor de 1200 px. */
+.st-nueva {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
 }
-.wizard__textarea { min-height: 120px; resize: vertical; }
-.wizard__actions { display: flex; gap: var(--sp-3); }
-.wizard__links { display: flex; flex-direction: column; gap: var(--sp-3); }
-.wizard__link-row {
-  display: flex; align-items: center; justify-content: space-between; gap: var(--sp-3);
-  padding: var(--sp-4); border: 1px solid var(--color-timberwolf); border-radius: var(--radius-sm);
+
+.st-nueva__pasos {
+  margin-bottom: var(--space-22);
 }
-.wizard__copy { font-size: var(--text-sm); color: var(--color-hunter); background: none; }
-.wizard__demo { font-size: var(--text-sm); color: var(--color-ink); opacity: 0.8; }

@@ -50,10 +50,13 @@ vi.mock('@/pages/admin/AdminCreditosPage', () => ({ default: () => <h1>Solicitud
 
 // Perfil y Registro: imitan lo que hacen las pantallas reales al salir y al
 // registrarse (setUser y navigate después de un await), para comprobar que
-// ninguna guarda desvía su navegación.
+// ninguna guarda desvía su navegación. Desde la Fase 7, PerfilPage muestra el
+// aviso que la guarda deja en location.state (ya no va en la ruta): el falso
+// también lo muestra.
 vi.mock('@/pages/PerfilPage', async () => {
   const { useNavigate } = await import('react-router-dom')
   const { useAuth } = await import('@/context/AuthContext')
+  const { AvisoDeRuta } = await import('@/components/AvisoDeRuta')
   return {
     default: function PerfilFalso() {
       const { setUser } = useAuth()
@@ -66,6 +69,7 @@ vi.mock('@/pages/PerfilPage', async () => {
       return (
         <>
           <h1>Mi perfil</h1>
+          <AvisoDeRuta />
           <button type="button" onClick={salir}>
             Salir
           </button>

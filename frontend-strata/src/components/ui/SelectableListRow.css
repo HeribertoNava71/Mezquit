@@ -1,0 +1,69 @@
+/* Fila seleccionable (Strata.dc.html:935, :1961): padding 8 10, radio 14 y
+   fondo #F5FCFF cuando está elegida. Los márgenes negativos alinean el texto
+   con el contenido de la tarjeta y dejan que el fondo sobresalga, como el
+   prototipo. El foco usa la regla global (:focus-visible).
+   Ajuste AA: el fondo #F5FCFF casi no se distingue del blanco (1.02:1), así que
+   la fila elegida lleva además el marcador izquierdo de 3 px de la variante del
+   builder (:455, :538), en el celeste de control marcado (3.9:1 sobre el fondo). */
+.st-select-row {
+  position: relative;
+  display: block;
+  width: calc(100% + var(--space-20));
+  margin-inline: calc(var(--space-10) * -1);
+  padding: var(--space-8) var(--space-10);
+  border: var(--border-width) solid transparent;
+  border-radius: var(--radius-control);
+  background-color: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: var(--transition-state);
+}
+
+@media (hover: hover) {
+  .st-select-row:not(.st-select-row--selected):hover {
+    background-color: var(--color-bg);
+  }
+}
+
+.st-select-row--selected {
+  background-color: var(--color-sky-tint-subtle);
+}
+
+.st-select-row--selected::before {
+  content: '';
+  position: absolute;
+  top: var(--space-8);
+  bottom: var(--space-8);
+  left: 0;
+  width: var(--space-3);
+  border-radius: var(--radius-pill);
+  background-color: var(--color-control-checked);
+}
+
+/* Alto contraste de Windows: el fondo se pierde; la fila elegida lleva borde. */
+@media (forced-colors: active) {
+  .st-select-row--selected {
+    border-color: Highlight;
+  }
+
+  .st-select-row--selected::before {
+    forced-color-adjust: none;
+    background-color: Highlight;
+  }
+}
+
+/* Impresión: sin selección; la fila se lee como texto. */
+@media print {
+  .st-select-row,
+  .st-select-row--selected {
+    background: none;
+    break-inside: avoid;
+  }
+
+  .st-select-row--selected::before {
+    display: none;
+  }
+}

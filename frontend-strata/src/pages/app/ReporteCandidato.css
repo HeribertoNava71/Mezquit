@@ -1,0 +1,32 @@
+/* /app/candidatos/:invitationId/reporte (RH-10). El diagnóstico ocupa 1080 px
+   dentro del contenedor de 1200, alineado a la izquierda (Strata.dc.html:875). */
+.st-reporte-candidato {
+  max-width: var(--width-report);
+}
+
+/* Carga y error ocupan el lugar del reporte. */
+.st-reporte-candidato--estado {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 40vh;
+}
+
+.st-reporte-candidato--estado > .st-carga {
+  align-self: center;
+}
+
+/* Acciones en el banner tinta: «Descargar PDF» (blanco) y «Volver» (enlace
+   celeste, como «Volver al panel →», :884). Bajan de línea si no caben. */
+.st-reporte-candidato__acciones {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-6) var(--space-18);
+}
+
+@media print {
+  .st-reporte-candidato {
+    max-width: none;
+  }
+}

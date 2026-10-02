@@ -1,4 +1,4 @@
-// Barril de controles (botones, campos de formulario y selección). Fase 1.
+// Barril de controles (botones, campos de formulario y selección). Fase 1 (y Fase 4: SelectableListRow).
 // Importa desde '@/components/ui'. Las pantallas viejas siguen importando el
 // Button por defecto desde '@/components/ui/Button' (misma API).
 
@@ -45,6 +45,11 @@ export type { SegmentedFilterOption, SegmentedFilterProps, SegmentedFilterSize }
 
 export { SegmentedToggle } from './SegmentedToggle'
 export type { SegmentedToggleOption, SegmentedToggleProps } from './SegmentedToggle'
+
+// Fila seleccionable de una lista (Strata.dc.html:935): componente del builder
+// que la Fase 4 entrega con las escalas del reporte (D-15).
+export { SelectableListRow } from './SelectableListRow'
+export type { SelectableListRowProps } from './SelectableListRow'
 
 export { Stepper } from './Stepper'
 export type { StepperProps, StepperSize } from './Stepper'

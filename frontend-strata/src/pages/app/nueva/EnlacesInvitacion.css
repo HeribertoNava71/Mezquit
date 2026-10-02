@@ -1,0 +1,46 @@
+/* Enlaces de invitación: por candidato, la tarjeta tinta del modal (CodeDisplay,
+   Strata.dc.html:1333-1340) con nombre, correo y el CopyField oscuro, y los
+   tiles «Enviar por» debajo (CanalesEnvio). Contraste sobre #0F172A: nombre
+   blanco 17.85:1, correo 12.02:1. */
+.st-nueva-enlaces {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-24);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.st-nueva-enlaces__item + .st-nueva-enlaces__item {
+  padding-top: var(--space-24);
+  border-top: var(--border-width) solid var(--color-border-divider);
+}
+
+.st-nueva-enlace {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-16);
+}
+
+/* El rótulo «Enlace de invitación» y el espacio bajo él los pone CodeDisplay. */
+.st-nueva-enlace__nombre {
+  font-family: var(--font-text);
+  font-size: var(--fs-h4);
+  font-weight: var(--fw-bold);
+  line-height: var(--lh-title);
+  letter-spacing: var(--tracking-title);
+  color: var(--color-on-dark);
+  overflow-wrap: anywhere;
+}
+
+.st-nueva-enlace__correo {
+  margin-top: var(--space-2);
+  font-size: var(--fs-meta);
+  line-height: var(--lh-normal);
+  color: var(--color-on-dark-secondary);
+  overflow-wrap: anywhere;
+}
+
+.st-nueva-enlace__copiar {
+  margin-top: var(--space-14);
+}

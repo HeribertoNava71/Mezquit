@@ -1,0 +1,86 @@
+/* Movimientos de créditos: celdas de la tabla del inventario (Strata.dc.html:733-763).
+   La primera columna lleva el peso de la fila, como el código único (:737);
+   el monto va en JetBrains Mono con signo, como los códigos. Contraste sobre el
+   vidrio (#FFFFFF al 72 % sobre #FAF8F5, #FEFDFC): tinta 17.57:1, verde de
+   éxito 5.33:1, navy 10.20:1 y terciario 5.70:1. Con el halo coral detrás, el
+   peor caso (#FEF5F4) deja el verde en 5.05:1 y el terciario en 5.40:1. */
+
+/* ── Fecha: día en tinta y hora en mono terciaria ──────────────────────── */
+.st-cr-movs__fecha {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  column-gap: var(--space-8);
+  row-gap: var(--space-2);
+}
+
+.st-cr-movs__dia {
+  font-weight: var(--fw-semibold);
+  color: var(--color-text);
+  white-space: nowrap;
+}
+
+.st-cr-movs__hora {
+  font-family: var(--font-mono);
+  font-size: var(--fs-label);
+  font-weight: var(--fw-medium);
+  font-variant-numeric: tabular-nums;
+  color: var(--color-text-tertiary);
+  white-space: nowrap;
+}
+
+/* ── Monto: 13 px/700 mono; entradas en verde de texto, salidas en tinta ── */
+.st-cr-movs__monto {
+  font-family: var(--font-mono);
+  font-size: var(--fs-ui-sm);
+  font-weight: var(--fw-bold);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: var(--tracking-code-sm);
+  color: var(--color-text);
+  white-space: nowrap;
+}
+
+.st-cr-movs__monto--entrada {
+  color: var(--color-success-text);
+}
+
+.st-cr-movs__monto--cero {
+  color: var(--color-text-tertiary);
+}
+
+/* ── Referencia ────────────────────────────────────────────────────────── */
+.st-cr-movs__referencia {
+  color: var(--color-text-data);
+}
+
+/* Enlace a la evaluación: navy 600 y subrayado, para no depender solo del
+   color junto a las referencias que son texto (WCAG 1.4.1). */
+.st-cr-movs__enlace {
+  border-radius: var(--radius-code);
+  color: var(--color-link);
+  font-weight: var(--fw-semibold);
+  text-decoration: underline;
+  text-decoration-thickness: var(--border-width);
+  text-underline-offset: var(--space-3);
+}
+
+.st-cr-movs__enlace:hover {
+  color: var(--color-link-hover);
+}
+
+.st-cr-movs__sin-dato {
+  color: var(--color-text-tertiary);
+}
+
+/* ── Pie: nota con ícono (Strata.dc.html:764-767) ──────────────────────── */
+.st-cr-movs__nota {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-9);
+  margin: 0;
+}
+
+.st-cr-movs__nota svg {
+  flex: none;
+  color: var(--color-icon-muted);
+}

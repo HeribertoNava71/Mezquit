@@ -1,0 +1,118 @@
+/* Sección de una prueba del reporte (D-14). Tarjetas blancas con borde frío,
+   radio 18 y padding 24 (Strata.dc.html:888, :924, :957), en la rejilla del
+   prototipo: columnas de 320 px o más con 18 px entre tarjetas (:887). El
+   min() evita el desborde cuando el contenedor mide menos de 320 px. */
+.st-report-test {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-14);
+  min-width: 0;
+}
+
+.st-report-test__titulo {
+  font-size: var(--fs-h3);
+  line-height: var(--lh-title);
+  color: var(--color-text);
+  overflow-wrap: anywhere;
+}
+
+.st-report-test__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(320px, 100%), 1fr));
+  align-items: start;
+  gap: var(--space-18);
+}
+
+.st-report-test__columna {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-18);
+  min-width: 0;
+}
+
+/* ── Encabezado de tarjeta (:890-892, :926-929) ───────────────────────── */
+.st-report-card__cabeza {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-4) var(--space-12);
+}
+
+/* Título y ayuda apilados a la izquierda («Puntuaciones», :927-928) */
+.st-report-card__cabeza--apilada {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-2);
+}
+
+.st-report-card__titulo {
+  font-size: var(--fs-h4);
+  line-height: var(--lh-title);
+  color: var(--color-text);
+}
+
+.st-report-card__nota {
+  font-size: var(--fs-eyebrow);
+  line-height: var(--lh-normal);
+  color: var(--color-text-tertiary);
+}
+
+.st-report-card__vacio {
+  margin-top: var(--space-16);
+}
+
+/* ── Integridad de respuesta ──────────────────────────────────────────── */
+/* Receta de la tarjeta de envío del prototipo (:957-961): ícono celeste de
+   17 px y título de 15 px. Es un dato neutro (2026-09-12-fase2-panel-rh-design.md:20):
+   sin colores de alerta. */
+.st-report-integridad__cabeza {
+  display: flex;
+  align-items: center;
+  gap: var(--space-9);
+}
+
+.st-report-integridad__icono {
+  flex: none;
+  color: var(--color-sky-text);
+}
+
+.st-report-card__titulo.st-report-integridad__titulo {
+  font-size: var(--fs-body-sm);
+}
+
+.st-report-integridad__dato {
+  margin-top: var(--space-10);
+  font-size: var(--fs-ui-sm);
+  line-height: var(--lh-normal);
+  color: var(--color-text-data);
+}
+
+.st-report-integridad__cifra {
+  font-family: var(--font-mono);
+  font-weight: var(--fw-bold);
+  color: var(--color-text);
+}
+
+.st-report-integridad__nota {
+  margin-top: var(--space-4);
+  font-size: var(--fs-label);
+  line-height: var(--lh-normal);
+  color: var(--color-text-tertiary);
+}
+
+/* ── Impresión ────────────────────────────────────────────────────────── */
+@media print {
+  .st-report-test__titulo {
+    break-after: avoid;
+  }
+
+  .st-report-card {
+    break-inside: avoid;
+  }
+
+  /* La ayuda de la lista es interactiva: no va al papel. */
+  .st-report-card__nota--interactiva {
+    display: none;
+  }
+}

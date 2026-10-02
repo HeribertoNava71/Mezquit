@@ -1,20 +1,65 @@
-.pruebas { padding-block: var(--section-py); }
-.pruebas__inner { max-width: var(--max-width); margin-inline: auto; padding-inline: var(--section-px); display: flex; flex-direction: column; gap: var(--sp-8); }
-.pruebas__title { font-size: var(--text-4xl); }
-.pruebas__controls { display: flex; flex-wrap: wrap; gap: var(--sp-4); align-items: center; justify-content: space-between; }
-.pruebas__filters { display: flex; flex-wrap: wrap; gap: var(--sp-2); }
-.pruebas__filter { padding: var(--sp-2) var(--sp-4); border-radius: var(--radius-sm); font-size: var(--text-sm); font-weight: 500; border: 1.5px solid var(--color-border); background: transparent; color: var(--color-ink); cursor: pointer; transition: background-color var(--t-fast), border-color var(--t-fast), color var(--t-fast); }
-.pruebas__filter:hover, .pruebas__filter[aria-pressed='true'] { background: var(--color-hunter); border-color: var(--color-hunter); color: #fff; }
-.pruebas__search { padding: var(--sp-2) var(--sp-4); border: 1.5px solid var(--color-border); border-radius: var(--radius-sm); font-family: var(--font-body); font-size: var(--text-base); min-width: 220px; }
-.pruebas__search:focus { border-color: var(--color-hunter); outline: none; }
-.pruebas__group { display: flex; flex-direction: column; gap: var(--sp-4); }
-.pruebas__group-title { font-family: var(--font-display); font-size: var(--text-xl); color: var(--color-brunswick); font-weight: 600; }
-.pruebas__grid { display: grid; grid-template-columns: 1fr; gap: var(--sp-4); }
-@media (min-width: 640px) { .pruebas__grid { grid-template-columns: 1fr 1fr; } }
-@media (min-width: 1024px) { .pruebas__grid { grid-template-columns: repeat(3, 1fr); } }
-.prueba-card { display: flex; flex-direction: column; gap: var(--sp-2); padding: var(--sp-5); border: 1px solid var(--color-timberwolf); border-radius: var(--radius-md); background: var(--color-surface); transition: border-color var(--t-fast); }
-.prueba-card:hover { border-color: var(--color-hunter); }
-.prueba-card__name { font-family: var(--font-display); font-size: var(--text-lg); font-weight: 600; color: var(--color-brunswick); }
-.prueba-card__desc { font-size: var(--text-sm); color: var(--color-ink); opacity: 0.75; line-height: 1.5; flex-grow: 1; }
-.prueba-card__meta { font-size: var(--text-xs); color: var(--color-hunter); font-weight: 600; font-variant-numeric: tabular-nums; }
-.pruebas__state { font-size: var(--text-base); color: var(--color-ink); opacity: 0.7; }
+/* ==========================================================================
+   Catálogo de pruebas · /pruebas y /app/pruebas (Strata.dc.html:603-679)
+   El contenedor de 1200 px, el padding 48/34/88 y la entrada de pantalla los
+   pone el layout (PageLayout y RouteTransition). Aquí: la zona de contenido y
+   la carga, con la misma geometría que el catálogo cargado (CatalogoPruebas.css
+   y TarjetaPrueba.css) para que nada salte al llegar los datos.
+   ========================================================================== */
+
+/* Recibe el foco tras «Reintentar» si no hay filtro que enfocar; no es un control. */
+.st-pruebas__contenido:focus {
+  outline: none;
+}
+
+/* ── Carga: barra y tarjetas esqueleto ─────────────────────────────────── */
+.st-pruebas__barra-esqueleto {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-12) var(--space-18);
+  margin-bottom: var(--space-22);
+}
+
+/* Pastillas con la pista del filtro (#F1EDE4) y el radio de los controles. Laten
+   con el mismo pulso que las líneas de EstadoCarga (st-skeleton-pulse, de
+   EstadoCarga.css, que la carga del catálogo siempre monta al lado). */
+.st-pruebas__esqueleto {
+  display: block;
+  border-radius: var(--radius-control);
+  background-color: var(--color-surface-track);
+  animation: st-skeleton-pulse var(--dur-pulse) var(--ease-loop) infinite;
+}
+
+/* Alto del SegmentedFilter (unos 40 px) y ancho de unos cinco chips */
+.st-pruebas__esqueleto--filtro {
+  width: min(100%, var(--width-lead));
+  height: var(--space-40);
+}
+
+/* Alto del Input md (44 px) y el ancho de la búsqueda (--st-catalogo-busqueda) */
+.st-pruebas__esqueleto--busqueda {
+  flex: 0 1 300px;
+  height: var(--space-44);
+}
+
+/* Tarjetas: la grilla de 292 px y la receta de vidrio de las tarjetas reales */
+.st-pruebas__tarjetas-esqueleto .st-carga__tarjetas {
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 292px), 1fr));
+  gap: var(--space-18);
+}
+
+.st-pruebas__tarjetas-esqueleto .st-carga__tarjeta {
+  min-height: 232px; /* alto aproximado de una tarjeta con dos líneas de descripción */
+  padding: var(--space-17) var(--space-18) var(--space-18);
+  background: var(--surface-glass-bg);
+  border: var(--surface-glass-border);
+  border-radius: var(--surface-glass-radius);
+  box-shadow: var(--shadow-glass);
+}
+
+@media (max-width: 640px) {
+  .st-pruebas__esqueleto--busqueda {
+    flex: 1 1 100%;
+  }
+}

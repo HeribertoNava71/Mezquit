@@ -1,27 +1,12 @@
-.creditos { display: flex; flex-direction: column; gap: var(--sp-8); }
-.creditos__title { font-size: var(--text-3xl); color: var(--color-brunswick); }
-.creditos__balance { font-family: var(--font-display); font-size: var(--text-4xl); color: var(--color-brunswick); font-variant-numeric: tabular-nums; }
-.creditos__section-title { font-family: var(--font-display); font-size: var(--text-xl); color: var(--color-brunswick); }
-.creditos__table { width: 100%; border-collapse: collapse; }
-.creditos__table th, .creditos__table td { text-align: left; padding: var(--sp-3) var(--sp-4); border-bottom: 1px solid var(--color-timberwolf); font-size: var(--text-sm); }
-.creditos__amount { font-variant-numeric: tabular-nums; font-weight: 600; }
-.creditos__amount--pos { color: var(--color-success); }
-.creditos__amount--neg { color: var(--color-ink); }
-.creditos__form { display: flex; flex-direction: column; gap: var(--sp-4); max-width: 420px; }
-.creditos__field { display: flex; flex-direction: column; gap: var(--sp-2); }
-.creditos__label { font-size: var(--text-sm); font-weight: 500; color: var(--color-brunswick); }
-.creditos__input, .creditos__textarea { padding: var(--sp-3) var(--sp-4); border: 1.5px solid var(--color-border); border-radius: var(--radius-sm); font-family: var(--font-body); font-size: var(--text-base); }
-.creditos__input:focus, .creditos__textarea:focus { border-color: var(--color-hunter); outline: none; }
-.creditos__ok { color: var(--color-success); font-size: var(--text-sm); }
-
-/* Transición hasta la Fase 4 (D-23: tablas a tarjetas por debajo de 640 px; QA de
-   la Fase 2). La tabla vieja no cabe en pantallas angostas: el desplazamiento
-   lateral queda dentro de la pantalla y no arrastra la página, la barra ni el
-   pie. El relleno, compensado con margen negativo, deja sitio al anillo de foco
-   que el recorte del desplazamiento cortaría en los bordes. */
-.creditos > :has(> .creditos__table) {
-  overflow-x: auto;
-  overscroll-behavior-x: contain;
-  padding: calc(var(--focus-outline-width) + var(--focus-outline-offset));
-  margin: calc(-1 * (var(--focus-outline-width) + var(--focus-outline-offset)));
+/* Créditos (/app/creditos): el inventario del prototipo (Strata.dc.html:681-770)
+   con el modelo de créditos (D-08). PageLayout pone el contenedor de 1200 px y
+   el padding 48/34/88; PageHeader deja 22 px debajo. El resumen y la tabla
+   siguen el mismo ritmo de 22 px (:696). La tabla pasa a tarjetas a 640 px o
+   menos (DataTable, D-23): la regla transitoria de la Fase 2 para la tabla
+   vieja ya no existe. */
+.st-creditos__contenido {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-22);
+  min-width: 0;
 }

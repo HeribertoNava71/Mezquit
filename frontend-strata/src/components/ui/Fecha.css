@@ -1,0 +1,5 @@
+/* Fecha «04 sep 2026» (Strata.dc.html:848). Hereda tamaño y color de su
+   contexto; las cifras van tabulares para que las columnas de fechas alineen. */
+.st-fecha {
+  font-variant-numeric: tabular-nums;
+}
