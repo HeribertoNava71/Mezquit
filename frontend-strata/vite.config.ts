@@ -2,9 +2,16 @@
 import react from '@vitejs/plugin-react'
 import path from 'path'
 import { defineConfig } from 'vite'
+import { pluginMock } from './mock/plugin-mock.ts'
 
-export default defineConfig({
-  plugins: [react()],
+export default defineConfig(({ mode }) => ({
+  // Modo demo sin backend (npm run dev:mock): pluginMock solo se aplica con
+  // `vite --mode mock`; ni `npm run dev` ni el build lo usan. Ese modo guarda
+  // las dependencias optimizadas en otra carpeta, para que `npm run dev` y
+  // `npm run dev:mock` (o los dos servidores de npm run test:e2e) corran a la
+  // vez sin volver a optimizar las del otro.
+  cacheDir: mode === 'mock' ? 'node_modules/.vite-mock' : undefined,
+  plugins: [react(), pluginMock()],
   build: {
     // Fase 8 (D-28): las fuentes nunca van en base64 dentro del CSS. Los subconjuntos
     // chicos de JetBrains Mono (menos de 4 KB) se incrustaban en la hoja principal,
@@ -19,11 +26,13 @@ export default defineConfig({
   test: {
     environment: 'jsdom',
     setupFiles: ['./src/test/setup.ts'],
-    include: ['src/**/*.test.{ts,tsx}'],
+    // mock/: el buscador de mocks y el modo demo. Corren en el entorno node: cada
+    // archivo empieza con el comentario «@vitest-environment node».
+    include: ['src/**/*.test.{ts,tsx}', 'mock/**/*.test.ts'],
     restoreMocks: true,
     // Vitest entrega vacío todo .css. src/styles/tokens.test.ts lee las hojas con
     // ?raw para revisar que cada var(--x) esté definida; las demás importaciones
     // de CSS siguen vacías.
     css: { include: [/\.css\?raw$/] },
   },
-})
+}))

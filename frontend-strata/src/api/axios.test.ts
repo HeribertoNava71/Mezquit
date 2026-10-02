@@ -199,3 +199,31 @@ describe('cliente api · sesión vencida y CSRF', () => {
     expect(llamadas).toEqual(['GET /sanctum/csrf-cookie', 'GET /sanctum/csrf-cookie'])
   })
 })
+
+// Modo demo (npm run dev:mock): .env.mock deja VITE_API_URL vacío y el cliente
+// pide /api y /sanctum al mismo servidor de Vite. Nada más arma URL absolutas
+// con VITE_API_URL (SITE.apiBase no se usa).
+describe('cliente api · baseURL', () => {
+  afterEach(() => {
+    vi.unstubAllEnvs()
+  })
+
+  async function cliente(apiUrl: string | undefined): Promise<Modulo['default']> {
+    vi.stubEnv('VITE_API_URL', apiUrl)
+    vi.resetModules()
+    return (await import('./axios')).default
+  }
+
+  it('con VITE_API_URL vacío, las rutas quedan relativas al mismo servidor', async () => {
+    const api = await cliente('')
+    expect(api.defaults.baseURL).toBe('')
+    expect(api.getUri({ url: '/api/user' })).toBe('/api/user')
+    expect(api.getUri({ url: '/sanctum/csrf-cookie' })).toBe('/sanctum/csrf-cookie')
+    expect(api.getUri({ url: '/api/admin/users', params: { search: 'ana', page: 2 } })).toBe('/api/admin/users?search=ana&page=2')
+  })
+
+  it('sin VITE_API_URL usa http://localhost:8000, y con un valor, ese backend', async () => {
+    expect((await cliente(undefined)).getUri({ url: '/api/user' })).toBe('http://localhost:8000/api/user')
+    expect((await cliente('https://api.example.com')).getUri({ url: '/api/catalog' })).toBe('https://api.example.com/api/catalog')
+  })
+})

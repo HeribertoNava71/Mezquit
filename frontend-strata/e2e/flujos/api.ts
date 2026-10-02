@@ -1,12 +1,13 @@
 // API simulada de las pruebas de extremo a extremo (e2e/flujos, Fase 8).
 //
 // Cada prueba arranca con un escenario de e2e/mocks: el mismo formato y el
-// mismo buscador de scripts/captura.mjs («MÉTODO /ruta?consulta», :param, *,
-// prioridad de la entrada más específica). La prueba puede agregar o cambiar
-// entradas con un objeto, igual que en los JSON, o con una función que calcula
-// la respuesta con la petición; así el mock «recuerda» una aprobación o una
-// sesión que vence. Todo /api/* y /sanctum/* se responde aquí con page.route;
-// las hojas de Fontshare se responden vacías para no depender de la red.
+// mismo buscador de mock/coincidencias.mjs, que también usan scripts/captura.mjs
+// y el modo demo («MÉTODO /ruta?consulta», :param, *, prioridad de la entrada
+// más específica). La prueba puede agregar o cambiar entradas con un objeto,
+// igual que en los JSON, o con una función que calcula la respuesta con la
+// petición; así el mock «recuerda» una aprobación o una sesión que vence. Todo
+// /api/* y /sanctum/* se responde aquí con page.route; las hojas de Fontshare
+// se responden vacías para no depender de la red.
 //
 // El fixture `simular` registra cada petición (método, ruta, consulta, cuerpo y
 // la entrada que la respondió) y, al terminar la prueba, falla si hubo
@@ -17,15 +18,20 @@ import { readFileSync } from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { expect, test as base, type ConsoleMessage, type Page, type Request, type Route } from '@playwright/test'
-import { crearBuscador, revisarMocks, type BuscadorDeMocks, type RespuestaDeMock } from '../../scripts/captura.mjs'
+import {
+  crearBuscador,
+  decodificarRuta,
+  esApi,
+  respuestaPorDefecto,
+  revisarMocks,
+  type BuscadorDeMocks,
+  type RespuestaDeMock,
+} from '../../mock/coincidencias.mjs'
 
 export { expect }
 export type { RespuestaDeMock }
 
 const CARPETA_MOCKS = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', 'mocks')
-
-/** Rutas que responde la API simulada (las mismas de scripts/captura.mjs). */
-const ES_API = /^\/(api|sanctum)(\/|$)/
 
 /** Petición que llegó a la API simulada. */
 export interface Peticion {
@@ -79,27 +85,12 @@ export function datosDe<T>(escenario: string, clave: string): T {
   return (body as { data: T }).data
 }
 
-function decodificar(ruta: string): string {
-  try {
-    return decodeURI(ruta)
-  } catch {
-    return ruta
-  }
-}
-
 function leerCuerpo(peticion: Request): unknown {
   try {
     return peticion.postDataJSON()
   } catch {
     return peticion.postData()
   }
-}
-
-/** Sin entrada: la cookie CSRF responde 204, GET /api/user 401 y lo demás 404 (como captura.mjs). */
-function respuestaPorDefecto(metodo: string, ruta: string): RespuestaDeMock {
-  if (metodo === 'GET' && ruta === '/sanctum/csrf-cookie') return { status: 204 }
-  if (ruta === '/api/user') return { status: 401, body: { message: 'Unauthenticated.' } }
-  return { status: 404, body: { message: 'Not Found' } }
 }
 
 /**
@@ -145,7 +136,7 @@ export class ApiSimulada {
 
   /** Instala las rutas en la página. Va antes del primer goto. */
   async instalar(page: Page): Promise<void> {
-    await page.route((url) => ES_API.test(url.pathname), (route) => this.responder(route))
+    await page.route((url) => esApi(url.pathname), (route) => this.responder(route))
     // Fuentes de Fontshare (index.html): hoja vacía; el texto usa la fuente de respaldo.
     await page.route(/^https:\/\/(api|cdn)\.fontshare\.com\//, (route) =>
       route.fulfill({ status: 200, contentType: 'text/css', body: '' }),
@@ -172,7 +163,7 @@ export class ApiSimulada {
     const entrada = this.buscar(metodo, url)
     const peticion: Peticion = {
       metodo,
-      ruta: decodificar(url.pathname),
+      ruta: decodificarRuta(url.pathname),
       consulta: url.searchParams,
       cuerpo: leerCuerpo(request),
       clave: entrada?.clave ?? null,
@@ -185,6 +176,7 @@ export class ApiSimulada {
       const valor = entrada.respuesta
       respuesta = typeof valor === 'function' ? (valor as RespuestaDinamica)(peticion, this) : (valor as RespuestaDeMock)
     } else {
+      // Sin entrada: la cookie CSRF responde 204, GET /api/user 401 y lo demás 404.
       respuesta = respuestaPorDefecto(metodo, url.pathname)
       if (!(metodo === 'GET' && url.pathname === '/sanctum/csrf-cookie')) {
         this.sinEntrada.push(`${metodo} ${url.pathname}${url.search}`)
@@ -213,7 +205,7 @@ export class ApiSimulada {
 function esRespuestaDeLaApi(mensaje: ConsoleMessage): boolean {
   if (!mensaje.text().startsWith('Failed to load resource')) return false
   try {
-    return ES_API.test(new URL(mensaje.location().url).pathname)
+    return esApi(new URL(mensaje.location().url).pathname)
   } catch {
     return false
   }

@@ -1,0 +1,222 @@
+/* ==========================================================================
+   Pastilla del modo demo (solo npm run dev:mock; el build no la incluye)
+   Abajo a la izquierda, sobre la mascota y bajo la barra, los menús, los
+   overlays y el toast (--z-demo). La pastilla es la tinta del sistema en
+   tamaño chico; el panel usa las superficies del menú de la pastilla de
+   usuario (UserMenu.css) y se abre hacia arriba.
+   ========================================================================== */
+.st-modo-demo {
+  position: fixed;
+  bottom: calc(var(--space-12) + env(safe-area-inset-bottom, 0px));
+  left: calc(var(--space-12) + env(safe-area-inset-left, 0px));
+  z-index: var(--z-demo);
+  display: flex;
+  max-width: calc(100vw - 2 * var(--space-12));
+}
+
+.st-modo-demo__boton {
+  box-shadow: var(--shadow-toast);
+}
+
+/* El nombre del escenario va en mono: es el del archivo de e2e/mocks. */
+.st-modo-demo__activo {
+  font-family: var(--font-mono);
+  font-weight: var(--fw-medium);
+}
+
+/* La flecha apunta hacia donde se abre el panel (arriba) y gira al abrir. */
+.st-modo-demo__chevron {
+  transform: rotate(180deg);
+  transition: transform var(--dur-state) var(--ease-base);
+}
+
+.st-modo-demo__boton[aria-expanded='true'] .st-modo-demo__chevron {
+  transform: none;
+}
+
+/* ── Panel ─────────────────────────────────────────────────────────────── */
+/* Columna: la lista de escenarios se desplaza y los atajos y la ayuda quedan
+   siempre a la vista, junto a la pastilla. Si ni así cabe, desplaza el panel. */
+.st-modo-demo__panel {
+  position: absolute;
+  bottom: calc(100% + var(--space-8));
+  left: 0;
+  display: flex;
+  flex-direction: column;
+  width: min(22rem, calc(100vw - 2 * var(--space-12)));
+  max-height: min(36rem, calc(100dvh - var(--space-72)));
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: var(--space-6);
+  border: var(--border-width) solid var(--color-border-card);
+  border-radius: var(--radius-control);
+  background-color: var(--color-surface-white);
+  box-shadow: var(--shadow-float);
+  animation: var(--anim-fade-up);
+}
+
+.st-modo-demo__seccion {
+  flex: none;
+}
+
+.st-modo-demo__seccion--escenarios {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.st-modo-demo__seccion + .st-modo-demo__seccion {
+  margin-top: var(--space-6);
+  padding-top: var(--space-6);
+  border-top: var(--border-width) solid var(--color-border-divider);
+}
+
+/* Rótulo de sección como eyebrow (11 px, 700, mayúsculas) */
+.st-modo-demo__titulo {
+  padding: var(--space-6) var(--space-12) var(--space-4);
+  color: var(--color-text-tertiary);
+  font-family: var(--font-text);
+  font-size: var(--fs-eyebrow);
+  font-weight: var(--fw-bold);
+  letter-spacing: var(--tracking-eyebrow);
+  line-height: var(--lh-title);
+  text-transform: uppercase;
+}
+
+.st-modo-demo__lista,
+.st-modo-demo__atajos {
+  list-style: none;
+}
+
+/* Entre dos y unos seis escenarios y medio a la vista (cada uno mide unos 44 px):
+   el que queda cortado, bajo el desvanecido, avisa que la lista sigue. */
+.st-modo-demo__lista {
+  flex: 1 1 auto;
+  min-height: var(--space-88);
+  max-height: 18.5rem;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+/* Desvanecido pegado al borde de abajo mientras quedan escenarios por ver; al
+   final de la lista cae en su lugar, después del último, y ya no tapa nada. */
+.st-modo-demo__lista::after {
+  content: '';
+  position: sticky;
+  bottom: 0;
+  display: block;
+  height: var(--space-20);
+  background: linear-gradient(transparent, var(--color-surface-white));
+  pointer-events: none;
+}
+
+/* Escenario: nombre en mono y, debajo, qué simula; la palomita marca el activo. */
+.st-modo-demo__opcion {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  column-gap: var(--space-8);
+  min-height: var(--space-40);
+  padding: var(--space-6) var(--space-12);
+  border-radius: var(--radius-tab);
+  color: var(--color-text);
+  line-height: var(--lh-title);
+}
+
+.st-modo-demo__nombre {
+  font-family: var(--font-mono);
+  font-size: var(--fs-meta);
+  font-weight: var(--fw-semibold);
+  overflow-wrap: anywhere;
+}
+
+.st-modo-demo__descripcion {
+  grid-column: 1;
+  color: var(--color-text-tertiary);
+  font-size: var(--fs-small);
+}
+
+.st-modo-demo__marca {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  color: var(--color-sky-text);
+}
+
+/* Puntero y teclado resaltan igual; el aro de foco va por dentro para que el
+   borde del panel no lo recorte. */
+.st-modo-demo__opcion:hover,
+.st-modo-demo__opcion:focus-visible,
+.st-modo-demo__atajo:hover,
+.st-modo-demo__atajo:focus-visible {
+  background-color: var(--color-bg-alt);
+}
+
+.st-modo-demo__opcion:focus-visible,
+.st-modo-demo__atajo:focus-visible {
+  outline-offset: calc(-1 * var(--focus-outline-width));
+}
+
+.st-modo-demo__opcion[aria-current='true'] {
+  background-color: var(--color-sky-tint);
+}
+
+/* Atajos en dos columnas: nombre y, debajo, la ruta en mono. */
+.st-modo-demo__atajos {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-2);
+}
+
+.st-modo-demo__atajo {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  min-height: var(--space-40);
+  padding: var(--space-6) var(--space-12);
+  border-radius: var(--radius-tab);
+  color: var(--color-link);
+  font-size: var(--fs-ui-sm);
+  font-weight: var(--fw-semibold);
+  line-height: var(--lh-title);
+}
+
+.st-modo-demo__ruta {
+  color: var(--color-text-tertiary);
+  font-family: var(--font-mono);
+  font-size: var(--fs-micro);
+  font-weight: var(--fw-regular);
+  overflow-wrap: anywhere;
+}
+
+/* Cómo entrar con cada rol */
+.st-modo-demo__ayuda {
+  flex: none;
+  margin-top: var(--space-6);
+  padding: var(--space-10) var(--space-12) var(--space-6);
+  border-top: var(--border-width) solid var(--color-border-divider);
+  color: var(--color-text-secondary);
+  font-size: var(--fs-small);
+  line-height: var(--lh-normal);
+}
+
+.st-modo-demo__ayuda a {
+  color: var(--color-link);
+  font-weight: var(--fw-semibold);
+  text-decoration: underline;
+  text-underline-offset: var(--space-2);
+}
+
+.st-modo-demo__ayuda code {
+  color: var(--color-text);
+  font-family: var(--font-mono);
+}
+
+@media (forced-colors: active) {
+  .st-modo-demo__opcion[aria-current='true'],
+  .st-modo-demo__opcion:hover,
+  .st-modo-demo__atajo:hover {
+    outline: var(--border-width) solid CanvasText;
+    outline-offset: calc(-1 * var(--border-width));
+  }
+}

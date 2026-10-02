@@ -249,7 +249,7 @@ Ninguno de estos elementos se borró: cada uno espera la aprobación del dueño.
 <a id="backend-real"></a>
 ## Cómo correr el frontend contra el backend real
 
-Sin backend, el sitio carga, pero fallan el catálogo, la demo, el login, el panel y el portal del candidato. Las pruebas automáticas no lo necesitan: simulan la API con los mocks de `e2e/mocks`. Para probar con datos reales:
+Sin backend, el sitio carga, pero fallan el catálogo, la demo, el login, el panel y el portal del candidato. Las pruebas automáticas no lo necesitan: simulan la API con los mocks de `e2e/mocks`. Para recorrerlo completo sin backend está el modo demo: `npm run dev:mock` responde la API con esos mismos mocks y una pastilla cambia de escenario ([README](../../frontend-strata/README.md#modo-demo)). Para probar con datos reales:
 
 ### 1. Backend
 

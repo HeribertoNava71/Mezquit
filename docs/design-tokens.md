@@ -475,6 +475,7 @@ Son ejemplos; los nombres de clase son ilustrativos.
 | `--z-bubble` | `4` | Burbuja de la mascota en el prototipo. Sin uso: la burbuja va dentro de `--z-mascot-layer` |
 | `--z-exam-bar` | `10` | Barra del examen (sticky) |
 | `--z-mascot-layer` | `20` | Capa de la mascota (portal en el body; Fase 6): sobre el contenido de la home y bajo la barra, los menús, los overlays y el toast |
+| `--z-demo` | `25` | Pastilla del modo demo (solo con `npm run dev:mock`): sobre la mascota y bajo la barra con su menú móvil, los overlays y el toast |
 | `--z-topbar` | `30` | Barra superior (sticky) |
 | `--z-dropdown` | `40` | Menú de la pastilla y menú móvil (no están en el prototipo) |
 | `--z-overlay` | `60` | Drawer, modales y su scrim |

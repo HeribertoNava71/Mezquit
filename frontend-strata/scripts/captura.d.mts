@@ -1,40 +1,12 @@
-// Tipos de scripts/captura.mjs para usarlo desde TypeScript (las pruebas de
-// e2e/flujos reutilizan su buscador de mocks). El formato de los JSON de
-// e2e/mocks está explicado en la cabecera de captura.mjs.
+// Tipos de scripts/captura.mjs para usarlo desde TypeScript. El buscador y la
+// revisión de los mocks vienen de mock/coincidencias.mjs (allí está el formato
+// de los JSON de e2e/mocks); este script los vuelve a exportar.
 
 import type { BrowserContext, Page } from '@playwright/test'
+import type { BuscadorDeMocks } from '../mock/coincidencias.mjs'
 
-/** Respuesta de una entrada: { status, body, headers } o { abortar }. */
-export interface RespuestaDeMock {
-  status?: number
-  body?: unknown
-  headers?: Record<string, string>
-  abortar?: true | string
-}
-
-/** Entrada compilada de un JSON de mocks: la clave «MÉTODO /ruta?consulta» y lo que responde. */
-export interface EntradaDeMock {
-  clave: string
-  metodo: string
-  ruta: string
-  /** Lo que la entrada tenga como valor (en los JSON, una RespuestaDeMock). */
-  respuesta: unknown
-  indice: number
-}
-
-/** Busca la entrada más específica que responde una petición, o undefined. */
-export type BuscadorDeMocks = (metodo: string, url: URL) => EntradaDeMock | undefined
-
-export function crearBuscador(mocks: Record<string, unknown>): BuscadorDeMocks
-
-export interface RevisionDeMocks {
-  errores: string[]
-  avisos: string[]
-  resumen: { entradas: number; patrones: number; comentarios: number }
-}
-
-/** Revisa un objeto de mocks; texto es el JSON original (para hallar claves repetidas). */
-export function revisarMocks(datos: unknown, texto?: string): RevisionDeMocks
+export type { BuscadorDeMocks, EntradaDeMock, RespuestaDeMock, RevisionDeMocks } from '../mock/coincidencias.mjs'
+export { crearBuscador, revisarMocks } from '../mock/coincidencias.mjs'
 
 /** Responde /api/* y /sanctum/* de un contexto o una página con el buscador. */
 export function instalarMocks(context: BrowserContext | Page, buscar: BuscadorDeMocks): Promise<void>

@@ -443,6 +443,7 @@
   --z-toast:        80;
   --z-skip-link:    90; /* enlace para saltar al contenido */
   --z-mascot-layer: 20; /* Fase 6 · capa de la mascota en portal (document.body): sobre el contenido de la home (2) y bajo barra (30), menús (40), overlays (60) y toasts (80). --z-mascot y --z-bubble son los del prototipo, que la dejaban debajo del contenido */
+  --z-demo:         25; /* pastilla del modo demo (solo npm run dev:mock): sobre la mascota (20) y bajo la barra con su menú móvil (30), los overlays (60) y los toasts (80) */
 
   /* ------------------------------------------------------------------------
      Movimiento
