@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import type { CompareData, CompareRow } from '@/api/rh'
-import { csvAnterior, filasAnteriores, nombreCsvAnterior, TIPO_CSV_ANTERIOR } from './codigoAnterior'
+import { csvAnterior, filasAnteriores, nombreCsvAnterior, TIPO_CSV_ANTERIOR } from '@/test/comparativaAnterior'
 import {
   anchoMinimoDeTabla,
   descripcionDeCelda,
@@ -13,7 +13,7 @@ import {
   tonoDeCategoria,
 } from './comparativa'
 
-// Orden y CSV contra el código anterior (./codigoAnterior, copia literal de
+// Orden y CSV contra el código anterior (src/test/comparativaAnterior.ts, copia literal de
 // 2026-09-12-fase2-panel-rh.md:1601-1633); formato de la celda según D-14.
 
 // ── Datos ─────────────────────────────────────────────────────────────────

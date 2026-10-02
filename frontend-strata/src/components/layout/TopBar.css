@@ -116,6 +116,38 @@
   gap: var(--space-11);
 }
 
+/* ── Corte del menú móvil por barra (Fase 8; topbar/cortes.ts) ──────────
+   Por debajo del corte, la navegación, la pastilla y las acciones del sitio
+   público pasan al menú móvil. El corte común, 768 px, vive en el .css de cada
+   pieza (NavLinks, UserMenu, MobileMenu y Header); aquí van los de las barras
+   que necesitan más ancho para caber en una fila (medidos con e2e/barras.mjs):
+   RR. HH. con una organización de 30 caracteres, 882 px → 900; la pública con
+   un nombre de 30 caracteres en la pastilla, 938 px → 960. Los media queries no
+   aceptan variables: si cambias un número, cámbialo también en cortes.ts. */
+@media (max-width: 899.98px) {
+  .st-topbar--corte-rh .st-nav-links,
+  .st-topbar--corte-rh .st-user-menu {
+    display: none;
+  }
+
+  .st-topbar--corte-rh .st-mobile-menu {
+    display: flex;
+  }
+}
+
+@media (max-width: 959.98px) {
+  .st-topbar--corte-publica .st-nav-links,
+  .st-topbar--corte-publica .st-user-menu,
+  .st-topbar--corte-publica .st-public-bar__code,
+  .st-topbar--corte-publica .st-public-bar__session {
+    display: none;
+  }
+
+  .st-topbar--corte-publica .st-mobile-menu {
+    display: flex;
+  }
+}
+
 /* Alto contraste: el subrayado activo es un borde y se conserva. */
 @media (forced-colors: active) {
   .st-topbar {

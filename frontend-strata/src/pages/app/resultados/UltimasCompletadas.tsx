@@ -9,11 +9,13 @@ import {
   EstadoVacio,
   Fecha,
   Persona,
+  formatearNumero,
+  textoCantidad,
   type DataTableColumn,
   type EstadoErrorKind,
 } from '@/components/ui'
 import { IconoAgregar, IconoFlechaDerecha } from '@/components/ui/Iconos'
-import { formatearNumero, type FilaCompletada } from './resultados'
+import type { FilaCompletada } from './resultados'
 import type { EstadoCompletadas } from './useResultados'
 import './UltimasCompletadas.css'
 
@@ -101,7 +103,7 @@ function botonInvitar() {
 }
 
 function evaluaciones(n: number): string {
-  return `${formatearNumero(n)} ${n === 1 ? 'evaluación' : 'evaluaciones'}`
+  return textoCantidad(n, 'evaluación', 'evaluaciones')
 }
 
 function mensajeDeFalla(tipo: EstadoErrorKind | null): string {

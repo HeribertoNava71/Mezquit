@@ -157,6 +157,22 @@ describe('MobileMenu', () => {
     expect(boton()).toHaveAttribute('aria-expanded', 'false')
   })
 
+  it('con el corte de su barra (RR. HH., 900 px) escucha ese ancho para cerrarse', async () => {
+    const consultas: string[] = []
+    vi.spyOn(window, 'matchMedia').mockImplementation(
+      (media: string) =>
+        ({
+          matches: false,
+          media,
+          addEventListener: () => consultas.push(media),
+          removeEventListener: () => {},
+        }) as unknown as MediaQueryList,
+    )
+    const user = montar({ corte: 'rh' })
+    await user.click(boton())
+    expect(consultas).toContain('(min-width: 900px)')
+  })
+
   it('con sesión muestra quién es y las opciones de la pastilla, con Operación y Salir (R-06)', async () => {
     const cuenta = cuentaRh()
     const user = montar({ cuenta })

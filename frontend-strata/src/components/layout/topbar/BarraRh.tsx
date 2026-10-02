@@ -21,7 +21,9 @@ const NAV_LABEL = 'Panel de RR. HH.'
  * - Pastilla con las iniciales de la persona y el nombre de la organización
  *   (GET /api/user/profile; si falla, el nombre de la persona). Menú: Mi perfil,
  *   Operación (solo con is_platform_admin), Sitio público y Salir.
- * - Menú móvil con los mismos enlaces y opciones.
+ * - Menú móvil con los mismos enlaces y opciones, por debajo de 900 px
+ *   (topbar/cortes.ts): con una organización de 30 caracteres, la fila cabe
+ *   desde 882 px (e2e/barras.mjs).
  */
 export function BarraRh() {
   const { user } = useAuth()
@@ -45,6 +47,7 @@ export function BarraRh() {
 
   return (
     <TopBar
+      corte="rh"
       below={
         salida.error && (
           <ErrorSalida
@@ -61,7 +64,7 @@ export function BarraRh() {
       <div className="st-topbar__actions">
         {user?.organization_id ? <BalanceIndicator saldo={saldo} /> : null}
         {cuenta && <UserMenu cuenta={cuenta} />}
-        <MobileMenu navLabel={NAV_LABEL} enlaces={ENLACES_RH} cuenta={cuenta} />
+        <MobileMenu navLabel={NAV_LABEL} enlaces={ENLACES_RH} cuenta={cuenta} corte="rh" />
       </div>
     </TopBar>
   )

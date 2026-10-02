@@ -1,10 +1,56 @@
-import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState, type ReactNode } from 'react'
 import { createPortal } from 'react-dom'
 import { cx } from './cx'
 import { IconoCheck, IconoError } from './Iconos'
+import { useOverlayAbierto } from './overlayAbierto'
+import { candidatas, elegirPosicion, type Caja, type PosicionToast } from './posicionToast'
+import { getFocusableElements } from './useFocusTrap'
 import { TOAST_DURATION, TOAST_MAX, ToastContext, type ToastApi, type ToastOptions, type ToastTone } from './useToast'
 import { VisuallyHidden } from './VisuallyHidden'
 import './Toast.css'
+
+/** Distancia por defecto al borde de abajo (--space-26 en Toast.css; Strata.dc.html:1420). */
+const MARGEN_TOAST = 26
+
+/** Cajas visibles de los controles del panel, recortadas por sus contenedores con scroll. */
+function cajasDeControles(panel: HTMLElement): Caja[] {
+  const cajas: Caja[] = []
+  for (const control of getFocusableElements(panel)) {
+    const r = control.getBoundingClientRect()
+    let caja: Caja = { left: r.left, top: r.top, right: r.right, bottom: r.bottom }
+    for (let padre = control.parentElement; padre && padre !== panel.parentElement; padre = padre.parentElement) {
+      const estilo = window.getComputedStyle(padre)
+      if (estilo.overflowX === 'visible' && estilo.overflowY === 'visible') continue
+      const borde = padre.getBoundingClientRect()
+      caja = {
+        left: Math.max(caja.left, borde.left),
+        top: Math.max(caja.top, borde.top),
+        right: Math.min(caja.right, borde.right),
+        bottom: Math.min(caja.bottom, borde.bottom),
+      }
+    }
+    if (caja.right > caja.left && caja.bottom > caja.top) cajas.push(caja)
+  }
+  return cajas
+}
+
+/** Lleva la región a la posición elegida; null la devuelve a la del CSS (abajo y al centro). */
+function aplicarPosicion(region: HTMLElement, posicion: PosicionToast | null) {
+  const estilo = region.style
+  if (!posicion) {
+    for (const propiedad of ['top', 'bottom', 'left', 'right']) estilo.removeProperty(propiedad)
+    delete region.dataset.posicion
+    return
+  }
+  estilo.top = posicion.lado === 'arriba' ? `${posicion.distancia}px` : 'auto'
+  estilo.bottom = posicion.lado === 'abajo' ? `${posicion.distancia}px` : 'auto'
+  estilo.left = `${posicion.izquierda}px`
+  estilo.right = `${posicion.derecha}px`
+  region.dataset.posicion = posicion.lado
+}
+
+const igual = (a: PosicionToast, b: PosicionToast) =>
+  a.lado === b.lado && a.distancia === b.distancia && a.izquierda === b.izquierda && a.derecha === b.derecha
 
 interface ToastItem {
   id: number
@@ -30,7 +76,10 @@ function normalizarDuracion(valor: number | undefined, porDefecto: number): numb
  * Proveedor de toasts (Strata.dc.html:1420-1425): caja tinta con punto celeste,
  * centrada abajo. Monta una sola región role="status" (aria-live polite) en el body,
  * que existe desde el inicio para que los lectores de pantalla anuncien cada toast.
- * Va una vez, cerca de la raíz de la app; los componentes usan useToast().
+ * Con un Modal o un Drawer abierto, la región se mueve a donde tape menos de sus
+ * controles: arriba, en el hueco junto al drawer o sobre el pie del panel
+ * (posicionToast.ts, Fase 8). Va una vez, cerca de la raíz de la app; los
+ * componentes usan useToast().
  */
 export function ToastProvider({ children, max = TOAST_MAX, duration = TOAST_DURATION }: ToastProviderProps) {
   const [items, setItems] = useState<ToastItem[]>([])
@@ -60,12 +109,60 @@ export function ToastProvider({ children, max = TOAST_MAX, duration = TOAST_DURA
 
   const api = useMemo<ToastApi>(() => ({ toast, dismiss }), [toast, dismiss])
 
+  // Con un overlay abierto, el toast no tapa sus controles (a 360 px el drawer
+  // ocupa la pantalla y su botón «Cerrar» quedaba debajo del toast).
+  const overlay = useOverlayAbierto()
+  const regionRef = useRef<HTMLDivElement>(null)
+  useLayoutEffect(() => {
+    const region = regionRef.current
+    if (!region) return
+    if (!overlay || items.length === 0) {
+      aplicarPosicion(region, null)
+      return
+    }
+    const panelOverlay = overlay
+    const regionToasts = region
+    function medir() {
+      const pila = [...regionToasts.children].map((hijo) => hijo.getBoundingClientRect())
+      if (pila.length === 0) return
+      const ancho = Math.max(...pila.map((caja) => caja.width))
+      const alto = Math.max(...pila.map((caja) => caja.bottom)) - Math.min(...pila.map((caja) => caja.top))
+      const pie = panelOverlay.querySelector('[data-overlay-pie]')?.getBoundingClientRect() ?? null
+      const datos = {
+        ventana: { ancho: window.innerWidth, alto: window.innerHeight },
+        toast: { ancho, alto },
+        margen: MARGEN_TOAST,
+        relleno: Number.parseFloat(window.getComputedStyle(regionToasts).paddingLeft) || 0,
+        panel: panelOverlay.getBoundingClientRect(),
+        pie,
+        controles: cajasDeControles(panelOverlay),
+      }
+      const elegida = elegirPosicion(datos)
+      aplicarPosicion(regionToasts, igual(elegida, candidatas(datos)[0]) ? null : elegida)
+    }
+    medir()
+    window.addEventListener('resize', medir)
+    // El cuerpo del overlay se desplaza con sus controles: captura, porque scroll no burbujea.
+    document.addEventListener('scroll', medir, true)
+    return () => {
+      window.removeEventListener('resize', medir)
+      document.removeEventListener('scroll', medir, true)
+    }
+  }, [overlay, items])
+
   return (
     <ToastContext.Provider value={api}>
       {children}
       {typeof document !== 'undefined' &&
         createPortal(
-          <div className="st-toaster" role="status" aria-live="polite" aria-atomic="false" aria-relevant="additions text">
+          <div
+            ref={regionRef}
+            className="st-toaster"
+            role="status"
+            aria-live="polite"
+            aria-atomic="false"
+            aria-relevant="additions text"
+          >
             {items.map((item) => (
               <ToastMensaje key={item.id} item={item} onDismiss={dismiss} />
             ))}

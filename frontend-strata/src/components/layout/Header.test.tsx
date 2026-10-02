@@ -62,6 +62,8 @@ describe('Header (barra pública)', () => {
     const header = screen.getByRole('banner')
     expect(header).toHaveClass('st-topbar')
     expect(header).not.toHaveClass('st-topbar--home')
+    // Corte del menú móvil de la barra pública: 960 px (Fase 8, topbar/cortes.ts).
+    expect(header).toHaveClass('st-topbar--corte-publica')
     expect(barra().getByRole('link', { name: 'Strata, inicio' })).toHaveAttribute('href', '/')
   })
 

@@ -18,11 +18,20 @@
     <!-- Fuentes: Satoshi y General Sans desde el CDN de Fontshare (D-04, opción B).
          Una hoja por familia, como el prototipo: con las dos en la misma URL,
          la API solo devuelve Satoshi y General Sans no carga.
+         Sin bloquear el render (D-28): cada hoja se precarga y se aplica al
+         llegar (onload); sin JavaScript, la aplica <noscript>. display=swap
+         pinta el texto con la fuente de respaldo mientras tanto.
+         La hoja (api.fontshare.com) se pide sin CORS y los archivos de fuente
+         (cdn.fontshare.com) con CORS: cada preconnect abre la conexión que se usa.
          JetBrains Mono se autohospeda con @fontsource (src/styles/typography.css). -->
-    <link rel="preconnect" href="https://api.fontshare.com" crossorigin />
+    <link rel="preconnect" href="https://api.fontshare.com" />
     <link rel="preconnect" href="https://cdn.fontshare.com" crossorigin />
-    <link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,600,700,800&display=swap" />
-    <link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=general-sans@400,500,600,700&display=swap" />
+    <link rel="preload" as="style" href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,600,700,800&display=swap" onload="this.onload=null;this.rel='stylesheet'" />
+    <link rel="preload" as="style" href="https://api.fontshare.com/v2/css?f[]=general-sans@400,500,600,700&display=swap" onload="this.onload=null;this.rel='stylesheet'" />
+    <noscript>
+      <link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,600,700,800&display=swap" />
+      <link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=general-sans@400,500,600,700&display=swap" />
+    </noscript>
 
     <!-- Open Graph. og:image es relativa hasta que exista el dominio (SITE.domain [PENDIENTE]). -->
     <meta property="og:type" content="website" />

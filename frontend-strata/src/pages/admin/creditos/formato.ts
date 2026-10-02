@@ -1,12 +1,12 @@
 // Formato de los datos de una solicitud de créditos (GET /api/admin/credit-requests).
 // Solo presentación: los valores son los que manda el servidor.
 
-const numero = new Intl.NumberFormat('es-MX')
+import { textoCreditos } from '@/components/ui/formatoNumero'
 
 /** «1 crédito», «40 créditos», «1,250 créditos». Sin un número válido, «—». */
 export function creditos(cantidad: number | null | undefined): string {
   if (typeof cantidad !== 'number' || !Number.isFinite(cantidad)) return '—'
-  return `${numero.format(cantidad)} ${Math.abs(cantidad) === 1 ? 'crédito' : 'créditos'}`
+  return textoCreditos(cantidad)
 }
 
 /** Meses abreviados como en el prototipo («09 sep 2026, 11:42», Strata.dc.html:881). */

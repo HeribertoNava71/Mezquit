@@ -85,20 +85,25 @@
   white-space: nowrap;
 }
 
+/* ── Modo tarjeta (a 640 px o menos, o si la tabla no cabe) ──────────── */
+/* En la tarjeta de cada fila, las acciones ocupan el ancho y crecen al
+   objetivo táctil de 44 px. */
+.st-table--tarjetas .st-usuarios__acciones {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.st-table--tarjetas .st-usuarios__acciones .st-btn {
+  flex: 1 1 0;
+  min-height: var(--size-target);
+}
+
 /* ── Móvil ─────────────────────────────────────────────────────────────── */
 @media (max-width: 640px) {
   .st-usuarios__busqueda {
     width: 100%;
   }
 
-  /* En la tarjeta de cada fila, las acciones ocupan el ancho y crecen al
-     objetivo táctil de 44 px. */
-  .st-usuarios__acciones {
-    display: flex;
-    justify-content: flex-start;
-  }
-
-  .st-usuarios__acciones .st-btn,
   .st-usuarios__paginacion .st-btn {
     flex: 1 1 0;
     min-height: var(--size-target);

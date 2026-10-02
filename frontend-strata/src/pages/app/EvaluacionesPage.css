@@ -77,9 +77,8 @@
   }
 }
 
-/* Modo tarjeta: la barra de avance no se estira de más junto a su rótulo */
-@media (max-width: 640px) {
-  .st-evaluaciones__avance {
-    max-width: var(--width-end-text);
-  }
+/* Modo tarjeta (a 640 px o menos, o si la tabla no cabe): la barra de avance
+   no se estira de más junto a su rótulo. */
+.st-table--tarjetas .st-evaluaciones__avance {
+  max-width: var(--width-end-text);
 }

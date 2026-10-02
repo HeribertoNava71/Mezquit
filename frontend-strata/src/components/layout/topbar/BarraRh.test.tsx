@@ -57,6 +57,8 @@ beforeEach(() => {
 describe('BarraRh', () => {
   it('logo a «/», navegación del panel, saldo y pastilla con la organización', async () => {
     montar()
+    // Corte del menú móvil de RR. HH.: 900 px (Fase 8, topbar/cortes.ts).
+    expect(screen.getByRole('banner')).toHaveClass('st-topbar--corte-rh')
     expect(barra().getByRole('link', { name: 'Strata, inicio' })).toHaveAttribute('href', '/')
     const nav = within(barra().getByRole('navigation', { name: 'Panel de RR. HH.' }))
     expect(nav.getAllByRole('link').map((enlace) => enlace.textContent)).toEqual([

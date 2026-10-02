@@ -5,8 +5,10 @@
    Guía de uso, contrastes y equivalencias hex → token: docs/design-tokens.md.
 
    Reglas rápidas:
-   - En código nuevo usa solo estos nombres. Los del bloque «Alias temporales»
-     son del sistema anterior y se retiran en la Fase 8.
+   - Usa solo estos nombres. Los alias temporales del sistema anterior (D-20:
+     --color-hunter, --sp-*, --text-*, --radius-sm…) y --disc-* se retiraron en
+     la Fase 8; su equivalencia está en docs/design-tokens.md, por si vuelven
+     a aparecer (por ejemplo, al portar el código real).
    - Los contrastes (WCAG 2.x) se indican como «x:1 sobre fondo».
    - Las custom properties compuestas (que usan var()) se resuelven en :root.
      Si un contenedor cambia un color base, redefine también la compuesta.
@@ -30,7 +32,11 @@
   --color-surface-pill:    rgba(255, 255, 255, 0.8);  /* pastilla de usuario y eyebrow del hero */
   --color-surface-ghost:   rgba(255, 255, 255, 0.9);  /* botón secundario sobre vidrio («Previsualizar») */
   --color-scrim:           rgba(15, 23, 42, 0.42);    /* fondo detrás de modales y drawer */
-  --color-topbar-bg:       rgba(250, 248, 245, 0.78); /* barra superior translúcida */
+  /* Barra superior translúcida. El prototipo usa .78 (Strata.dc.html:53), pero el
+     banner oscuro del reporte pasa por debajo al desplazar y el enlace inactivo
+     (#6B6558) bajaba a 3.4:1 (medido con e2e/contraste.mjs). Con .92, el peor caso
+     (tinta #0F172A debajo) da 4.63:1; sobre el lienzo no se nota (Fase 8, AA). */
+  --color-topbar-bg:       rgba(250, 248, 245, 0.92);
   --color-exam-bar-bg:     rgba(250, 248, 245, 0.8);  /* barra del examen */
 
   /* ------------------------------------------------------------------------
@@ -41,7 +47,7 @@
   --color-text-secondary:   #5B5545; /* entradillas, labels, apoyo · 7.42:1 blanco, 7.00:1 #FAF8F5 */
   --color-text-tertiary:    #6B6558; /* ayudas, th, notas, nav inactiva · 5.46:1 #FAF8F5, 4.95:1 #F0EDE5 */
   --color-text-placeholder: #756D5C; /* ::placeholder · 4.83:1 #FAF8F5, 4.95:1 #FCFBF9 */
-  --color-text-slate:       #475569; /* texto de la pastilla de saldo · 7.58:1 blanco */
+  --color-text-slate:       #475569; /* texto de la pastilla de saldo y del badge «Ajuste» · 7.58:1 blanco, 6.74:1 #EEF2F6 */
   --color-icon-muted:       #8B8574; /* trazo de íconos de input y reloj (gráfico, ≥3:1) · 3.47:1 #FAF8F5 */
   --color-eyebrow:          var(--color-sky-text);       /* eyebrow de 11 px */
   --color-lead:             var(--color-text-secondary); /* entradilla de 17 px */
@@ -78,6 +84,11 @@
   --color-coral-tint:      #FFF1F1; /* insignia y tag coral */
   --color-coral-border:    #FFD9D9; /* borde de la insignia coral */
   --color-coral-text:      #B93A34; /* texto sobre tinte coral · 5.14:1 #FFF1F1 */
+
+  /* Neutro frío (Fase 8): badge «Ajuste» de Créditos. El coral se confundía con
+     un error; el neutro cálido ya es «Consumo». */
+  --color-slate-tint:      #EEF2F6; /* fondo · texto --color-text-slate 6.74:1 */
+  --color-slate-dot:       #64748B; /* punto (decorativo, siempre con texto) */
   --color-indicator-active: var(--color-coral); /* subrayado de 2 px del enlace activo */
 
   /* ------------------------------------------------------------------------
@@ -174,15 +185,17 @@
 
   /* ------------------------------------------------------------------------
      Color · datos (reporte y gráficas; las barras siempre llevan su valor en texto)
+     El nivel sale de la categoría que calcula el backend con el baremo de cada
+     prueba (D-14), nunca de los umbrales 80/70 del prototipo (Strata.dc.html:1957-1960).
      ------------------------------------------------------------------------ */
-  --color-data-high:         var(--color-navy);       /* ≥ 80 */
-  --color-data-mid:          var(--color-sky-strong); /* ≥ 70 */
-  --color-data-low:          var(--color-sky);        /* < 70 */
-  --color-data-neutral:      var(--color-dot-neutral);
-  --color-data-high-text:    var(--color-navy);       /* 10.36:1 blanco */
-  --color-data-mid-text:     var(--color-sky-deep);   /* 7.56:1 blanco */
-  --color-data-low-text:     var(--color-sky-deeper); /* 9.46:1 blanco */
-  --color-data-neutral-text: var(--color-text-secondary);
+  --color-data-high:         var(--color-navy);       /* categoría «alto» */
+  --color-data-mid:          var(--color-sky-strong); /* categoría «medio» */
+  --color-data-low:          var(--color-sky);        /* categoría «bajo» */
+  --color-data-neutral:      var(--color-dot-neutral); /* sin categoría reconocida */
+  --color-data-high-text:    var(--color-navy);       /* texto de «alto» · 10.36:1 blanco */
+  --color-data-mid-text:     var(--color-sky-deep);   /* texto de «medio» · 7.56:1 blanco */
+  --color-data-low-text:     var(--color-sky-deeper); /* texto de «bajo» · 9.46:1 blanco */
+  --color-data-neutral-text: var(--color-text-secondary); /* texto sin categoría · 7.42:1 blanco */
   --color-data-track:        var(--color-surface-muted);
   --color-radar-stroke:      var(--color-sky-strong);
   --color-radar-fill:        rgba(14, 165, 233, 0.2);
@@ -546,9 +559,11 @@
 }
 
 /* Adaptación a móvil (desktop-first, usable a 360 px). Los breakpoints no
-   pueden ser variables CSS: 640 px (tablas a tarjetas, D-23), 768 px (menú
-   móvil) y 400 px (teléfonos chicos: margen lateral de 16 px). Los márgenes
-   bajan por pasos: 48/34/88 → 32/20/64 → 24/16/56. */
+   pueden ser variables CSS: 640 px (tablas a tarjetas, D-23; también más ancho
+   si la tabla no cabe), el corte del menú móvil de cada barra (768 px; 900 en
+   RR. HH. y 960 en la pública, topbar/cortes.ts) y 400 px (teléfonos chicos:
+   margen lateral de 16 px). Los márgenes bajan por pasos: 48/34/88 → 32/20/64
+   → 24/16/56. */
 @media (max-width: 640px) {
   :root {
     --layout-page-pad-top:  32px;
@@ -575,86 +590,4 @@
     --layout-exam-bar-padding: 12px 16px;
     --layout-end-padding:   24px 16px;
   }
-}
-
-/* ==========================================================================
-   Alias temporales (D-20)
-   Nombres del sistema anterior (Mezquit) apuntando a su equivalente STRATA
-   para que las pantallas aún no rediseñadas se vean coherentes.
-   No los uses en código nuevo. Se retiran en la Fase 8.
-   ========================================================================== */
-:root {
-  /* Color. El primario viejo (hunter) pasa a navy; brunswick (títulos, pie) e
-     ink (cuerpo) a tinta. Los niveles del reporte viejo (sage < fern < hunter)
-     quedan en una escala celeste → navy que cumple 4.5:1 como texto, y fern,
-     que también es el hover del primario viejo, da 7.56:1 con blanco. */
-  --color-hunter:            var(--color-navy);
-  --color-fern:              var(--color-sky-deep);
-  --color-sage:              var(--color-sky-text);
-  --color-brunswick:         var(--color-text);
-  --color-ink:               var(--color-text);
-  --color-timberwolf:        var(--color-border-neutral);
-  --color-surface:           var(--color-surface-white);
-  --color-surface-secondary: var(--color-bg-alt);
-  --color-border:            var(--color-border-control);
-  --color-accent:            var(--color-coral);
-  --color-success:           var(--color-success-text);
-  --color-error:             var(--color-error-text);
-  --color-warning:           var(--color-warning-text);
-  --color-info:              var(--color-info-text);
-
-  /* Fuentes. Cormorant y DM Sans siguen importadas hasta la Fase 8, sin uso. */
-  --font-display: var(--font-heading);
-  --font-body:    var(--font-text);
-
-  /* Escala de texto vieja (fluida) → escala STRATA más cercana */
-  --text-xs:   var(--fs-small);   /* 12 px */
-  --text-sm:   var(--fs-ui-md);   /* 14 px */
-  --text-base: var(--fs-body);    /* 16 px */
-  --text-lg:   var(--fs-lead);    /* 17 px */
-  --text-xl:   var(--fs-h3);      /* 20 px */
-  --text-2xl:  var(--fs-h2-sm);   /* 24–30 px */
-  --text-3xl:  var(--fs-h2);      /* 26–34 px */
-  --text-4xl:  var(--fs-h1);      /* 32–46 px */
-  --text-hero: var(--fs-display); /* 34–52 px */
-
-  /* Espaciado viejo (--sp-N = N × 4 px) → --space-* */
-  --sp-1:  var(--space-4);
-  --sp-2:  var(--space-8);
-  --sp-3:  var(--space-12);
-  --sp-4:  var(--space-16);
-  --sp-5:  var(--space-20);
-  --sp-6:  var(--space-24);
-  --sp-8:  var(--space-32);
-  --sp-10: var(--space-40);
-  --sp-12: var(--space-48);
-  --sp-16: var(--space-64);
-  --sp-20: var(--space-72);
-  --sp-24: var(--space-88);
-
-  /* Radios. sm era el de botones e inputs; md, el de tarjetas; lg, el de la tarjeta de auth. */
-  --radius-sm: var(--radius-control);
-  --radius-md: var(--radius-card);
-  --radius-lg: var(--radius-glass);
-
-  /* Transiciones */
-  --t-fast: var(--dur-state) var(--ease-base);
-  --t-base: var(--dur-lift) var(--ease-base);
-
-  /* Layout. El padding-top del body se retiró en la Fase 2 (las barras nuevas
-     son sticky). --header-h queda para lo viejo que aún lo usa: los min-height
-     de Hero.css y NotFoundPage.css (Fases 6 y 7).
-     --section-px vale 0 dentro de .st-page__content (PageLayout.css) para
-     no duplicar el margen lateral de las pantallas viejas. */
-  --max-width:  var(--layout-max);
-  --section-px: var(--layout-page-pad-x);
-  --section-py: var(--layout-section-pad-y);
-  --header-h:   64px;
-
-  /* DISC: sin uso desde que Report reemplazó al reporte DISC; no necesitan
-     alias y se retiran en la Fase 8 (D-20). */
-  --disc-d: #B84A3E;
-  --disc-i: #D9A33A;
-  --disc-s: #588157;
-  --disc-c: #3F6E96;
 }

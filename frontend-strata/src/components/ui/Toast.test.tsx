@@ -1,6 +1,7 @@
 import { act, fireEvent, render, renderHook, screen, within } from '@testing-library/react'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+import { Drawer } from './Drawer'
 import { ToastProvider } from './Toast'
 import { TOAST_DURATION, useToast, type ToastApi } from './useToast'
 
@@ -133,6 +134,53 @@ describe('Toast', () => {
     expect(caja).toBeInTheDocument()
     dismiss(id)
     expect(region()).toBeEmptyDOMElement()
+  })
+
+  it('con un drawer a pantalla completa (360 px), el toast sube sobre su pie y no tapa «Cerrar» (Fase 8)', () => {
+    // jsdom no calcula cajas: se simulan las de un drawer de 360 × 800 px.
+    const cajas: Record<string, [number, number, number, number]> = {
+      'st-drawer': [0, 0, 360, 800],
+      pie: [0, 708, 360, 800],
+      cerrar: [22, 726, 338, 770],
+      x: [306, 20, 338, 52],
+      'st-toast': [50, 728, 310, 774],
+    }
+    vi.spyOn(Element.prototype, 'getBoundingClientRect').mockImplementation(function (this: Element) {
+      const clave =
+        Object.keys(cajas).find((nombre) => this.classList.contains(nombre)) ??
+        (this.hasAttribute('data-overlay-pie') ? 'pie' : this.getAttribute('aria-label') === 'Cerrar' ? 'x' : this.textContent === 'Cerrar' ? 'cerrar' : null)
+      const [left, top, right, bottom] = clave ? cajas[clave] : [0, 0, 0, 0]
+      return { left, top, right, bottom, x: left, y: top, width: right - left, height: bottom - top, toJSON: () => ({}) } as DOMRect
+    })
+    vi.stubGlobal('innerWidth', 360)
+    vi.stubGlobal('innerHeight', 800)
+
+    let api: ToastApi | null = null
+    function ConDrawer() {
+      const [abierto, setAbierto] = useState(true)
+      return (
+        <Drawer open={abierto} onClose={() => setAbierto(false)} title="Solicitar créditos" footer={<button type="button" onClick={() => setAbierto(false)}>Cerrar</button>}>
+          <p>Solicitud registrada.</p>
+        </Drawer>
+      )
+    }
+    render(
+      <ToastProvider>
+        <Sonda alMontar={(recibida) => (api = recibida)} />
+        <ConDrawer />
+      </ToastProvider>,
+    )
+    act(() => {
+      api!.toast({ message: 'Solicitud registrada', tone: 'success' })
+    })
+    expect(region()).toHaveAttribute('data-posicion', 'abajo')
+    expect(region().style.bottom).toBe(`${800 - 708 + 12}px`)
+
+    // Al cerrar el drawer, la región vuelve a la posición del CSS.
+    fireEvent.click(screen.getByText('Cerrar'))
+    expect(region()).not.toHaveAttribute('data-posicion')
+    expect(region().style.bottom).toBe('')
+    vi.unstubAllGlobals()
   })
 
   it('useToast fuera del proveedor lanza un error claro', () => {

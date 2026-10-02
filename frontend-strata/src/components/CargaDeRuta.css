@@ -1,0 +1,12 @@
+/* Carga del chunk de una pantalla (D-28): EstadoCarga centrado con un alto
+   mínimo, para que el pie no suba mientras llega. Mismo fundido retrasado que
+   la carga de sesión (CargaDeSesion.css): si el chunk llega rápido, no se ve. */
+.st-carga-ruta {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 50svh;
+  padding: var(--space-48) var(--space-24);
+  animation: var(--anim-fade-in);
+  animation-delay: var(--dur-pop);
+}

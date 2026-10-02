@@ -1,13 +1,11 @@
 import { Link } from 'react-router-dom'
-import { cx } from '@/components/ui'
+import { cx, formatearNumero } from '@/components/ui'
 import './PendingIndicator.css'
-
-const numero = new Intl.NumberFormat('es-MX')
 
 /** Texto completo y corto (teléfonos chicos) del contador. */
 function textosPendientes(pendientes: number): { largo: string; corto: string } {
   if (pendientes === 0) return { largo: 'Sin solicitudes pendientes', corto: 'Sin pendientes' }
-  const cifra = numero.format(pendientes)
+  const cifra = formatearNumero(pendientes)
   return pendientes === 1
     ? { largo: `${cifra} solicitud pendiente`, corto: `${cifra} pendiente` }
     : { largo: `${cifra} solicitudes pendientes`, corto: `${cifra} pendientes` }

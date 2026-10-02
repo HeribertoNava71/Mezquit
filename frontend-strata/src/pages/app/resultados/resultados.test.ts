@@ -7,7 +7,6 @@ import {
   contarEvaluacionesActivas,
   diaDeFecha,
   filasDeEvaluacion,
-  formatearNumero,
   seleccionarEvaluaciones,
 } from './resultados'
 
@@ -221,8 +220,5 @@ describe('fechas y cifras', () => {
     expect(diaDeFecha('20/09/2026')).toBeNull()
   })
 
-  it('las cifras llevan separador de miles de es-MX', () => {
-    expect(formatearNumero(0)).toBe('0')
-    expect(formatearNumero(1250)).toBe('1,250')
-  })
+  // Las cifras («1,250») se prueban en components/ui/formatoNumero.test.ts.
 })

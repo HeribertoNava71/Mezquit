@@ -6,11 +6,7 @@
 @import '@fontsource/jetbrains-mono/500.css';
 @import '@fontsource/jetbrains-mono/700.css';
 
-/* Fuentes del sistema anterior: ya no las usa ningún token (--font-display y
-   --font-body apuntan a Satoshi y General Sans). Se retiran en la Fase 8 (D-20). */
-@import '@fontsource/cormorant-garamond/400.css';
-@import '@fontsource/cormorant-garamond/600.css';
-@import '@fontsource/cormorant-garamond/700.css';
-@import '@fontsource/cormorant-garamond/400-italic.css';
-@import '@fontsource/cormorant-garamond/600-italic.css';
-@import '@fontsource-variable/dm-sans';
+/* Fase 8 (D-20 y D-28): se retiraron Cormorant Garamond y DM Sans, las fuentes
+   del sistema anterior: ningún token las usaba y sus @font-face pesaban en la
+   hoja que bloquea el primer pintado. Sus alias (--font-display y --font-body,
+   que ya apuntaban a Satoshi y General Sans) se retiraron con los demás. */

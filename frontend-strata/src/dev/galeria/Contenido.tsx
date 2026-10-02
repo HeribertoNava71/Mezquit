@@ -164,6 +164,7 @@ export function SeccionEtiquetas() {
           <Badge tone="sky">Enviada</Badge>
           <Badge tone="coral">Expirada</Badge>
           <Badge tone="neutral">Consumida</Badge>
+          <Badge tone="slate">Ajuste</Badge>
           <Badge tone="success">Aprobada</Badge>
           <Badge tone="error">Rechazada</Badge>
           <Badge tone="warning">En revisión</Badge>

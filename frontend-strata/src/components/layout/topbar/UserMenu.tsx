@@ -34,7 +34,8 @@ export interface UserMenuProps {
  *   devuelve el foco al botón, y Tab cierra y sigue el orden normal.
  * - Un clic fuera o un cambio de ruta lo cierran.
  *
- * Por debajo de 768 px se oculta: sus opciones viven en el menú móvil.
+ * Por debajo del corte de su barra (768 px; 900 en RR. HH. y 960 en la pública)
+ * se oculta: sus opciones viven en el menú móvil.
  */
 export function UserMenu({ cuenta, className }: UserMenuProps) {
   const { nombre, etiqueta, detalle, opciones, onSalir, saliendo = false } = cuenta

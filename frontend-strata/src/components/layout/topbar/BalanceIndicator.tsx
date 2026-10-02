@@ -1,8 +1,6 @@
 import { Link } from 'react-router-dom'
-import { LiveDot, VisuallyHidden, cx } from '@/components/ui'
+import { LiveDot, VisuallyHidden, cx, textoCreditos } from '@/components/ui'
 import './BalanceIndicator.css'
-
-const numero = new Intl.NumberFormat('es-MX')
 
 export interface BalanceIndicatorProps {
   /** Saldo de GET /api/credits. null mientras carga o si falló: se muestra sin cifra. */
@@ -26,7 +24,7 @@ export function BalanceIndicator({ saldo, to = '/app/creditos', className }: Bal
         <span>Créditos</span>
       ) : (
         <span>
-          {numero.format(saldo)} {uno ? 'crédito' : 'créditos'}{' '}
+          {textoCreditos(saldo)}{' '}
           <VisuallyHidden>{uno ? 'disponible' : 'disponibles'}</VisuallyHidden>
         </span>
       )}

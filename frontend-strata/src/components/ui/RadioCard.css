@@ -196,6 +196,39 @@
   margin-top: var(--space-3);
 }
 
+/* Teléfonos (Fase 8): con detalle y dato lateral, el dato baja a su propia
+   línea, alineado con el texto, en lugar de apretar el título en dos renglones
+   (paso 2 del asistente: «1 crédito por candidato» junto a «Prueba de
+   demostración»). Las opciones del examen no llevan detalle y no cambian. */
+@media (max-width: 480px) {
+  .st-radio-card:has(.st-radio-card__description):has(.st-radio-card__aside) {
+    flex-wrap: wrap;
+    row-gap: var(--space-6);
+  }
+
+  .st-radio-card:has(.st-radio-card__description) .st-radio-card__body {
+    flex-basis: 0;
+  }
+
+  /* Bajo el texto: el ancho del aro más el hueco de cada tamaño */
+  .st-radio-card:has(.st-radio-card__description) .st-radio-card__aside {
+    flex-basis: 100%;
+    padding-inline-start: calc(var(--space-17) + var(--space-11));
+  }
+
+  .st-radio-card--sm:has(.st-radio-card__description) .st-radio-card__aside {
+    padding-inline-start: calc(var(--space-15) + var(--space-9));
+  }
+
+  .st-radio-card--lg:has(.st-radio-card__description) .st-radio-card__aside {
+    padding-inline-start: calc(var(--space-20) + var(--space-14));
+  }
+
+  .st-radio-card--plain:has(.st-radio-card__description) .st-radio-card__aside {
+    padding-inline-start: 0;
+  }
+}
+
 /* Alto contraste: la selección usa los colores del sistema */
 @media (forced-colors: active) {
   .st-radio-card:has(.st-radio-card__input:checked) {

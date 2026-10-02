@@ -1,5 +1,5 @@
 import { useRef } from 'react'
-import { Mascota } from '@/components/mascota/Mascota'
+import { MascotaDiferida } from '@/components/mascota/MascotaDiferida'
 import Hero from '@/sections/Hero'
 import HowItWorks from '@/sections/HowItWorks'
 import { CatalogoExpres } from './home/CatalogoExpres'
@@ -18,6 +18,8 @@ import './HomePage.css'
  * - Cómo funciona (V-6), la misma sección que usa /como-funciona.
  * - Sin el reporte de ejemplo: queda en /pruebas/:slug (D-24).
  * - La mascota recibe la ref del H1 del hero para bajar su opacidad sobre él (V-8).
+ *   Se descarga con GSAP en sus propios chunks, después de la carga (D-28), y el
+ *   pie ofrece ocultarla (ControlMascota en RootLayout; D-27).
  */
 export default function HomePage() {
   const tituloRef = useRef<HTMLHeadingElement>(null)
@@ -28,7 +30,7 @@ export default function HomePage() {
       <Hero tituloRef={tituloRef} duracion={duracionDelCatalogo(catalogo)} aside={<DemoExamen />} />
       <CatalogoExpres catalogo={catalogo} />
       <HowItWorks className="st-home__como" />
-      <Mascota tituloRef={tituloRef} />
+      <MascotaDiferida tituloRef={tituloRef} />
     </div>
   )
 }

@@ -5,7 +5,9 @@ import type { CompareData, CompareRow } from '@/api/rh'
 // comparan contra estas líneas para garantizar que el CSV no cambia: mismas
 // columnas, mismo formato y mismo orden. Solo cambia la forma: las mismas
 // líneas dentro de funciones que reciben lo que antes leían del estado
-// (data, sortScale y asc). No la importes desde la aplicación.
+// (data, sortScale y asc). Vive en src/test, junto a la configuración de las
+// pruebas (Fase 8), para que nada de la aplicación la importe ni entre al bundle.
+// La usan pages/app/comparar/comparativa.test.ts y pages/app/CompararPage.test.tsx.
 
 /** El useMemo `rows` anterior. */
 export function filasAnteriores(data: CompareData, sortScale: string | null, asc: boolean): CompareRow[] {

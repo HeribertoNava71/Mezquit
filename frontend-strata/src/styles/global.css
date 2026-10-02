@@ -109,9 +109,9 @@ button, a, input, td, th {
 }
 
 .section-inner {
-  max-width: var(--max-width);
+  max-width: var(--layout-max);
   margin-inline: auto;
-  padding-inline: var(--section-px);
+  padding-inline: var(--layout-page-pad-x);
 }
 
 /* ── Movimiento reducido ───────────────────────────────────────────────── */

@@ -33,6 +33,8 @@ export { Fecha } from './Fecha'
 export type { FechaProps } from './Fecha'
 export { formatearFecha } from './formatoFecha'
 export type { FechaLegible } from './formatoFecha'
+// Cifras de es-MX («1,250», «1 crédito»): Fase 8, antes una copia en cada pantalla.
+export { formatearNumero, textoCantidad, textoCreditos } from './formatoNumero'
 export { getInitials } from './initials'
 export { InvitationStatusBadge } from './InvitationStatusBadge'
 export type { InvitationStatusBadgeProps } from './InvitationStatusBadge'

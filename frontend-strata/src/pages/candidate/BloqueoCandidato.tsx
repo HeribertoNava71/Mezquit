@@ -2,6 +2,8 @@ import { useLayoutEffect, useRef, type ReactNode } from 'react'
 import { Button, Callout, type CalloutTone } from '@/components/ui'
 import { IconoAdvertencia, IconoBuscar, IconoError, IconoExito, IconoReloj, IconoSinRed } from '@/components/ui/Iconos'
 import { SITE } from '@/config/site'
+import { Pendiente } from '@/pages/publicas/Pendiente'
+import { esCorreoReal } from '@/pages/publicas/marcadores'
 import type { MotivoBloqueo } from './useCandidateFlow'
 import './BloqueoCandidato.css'
 
@@ -29,9 +31,16 @@ interface Contenido {
 }
 
 function contenidoDe(tipo: TipoBloqueo, empresa: string): Contenido {
-  const soporte = (
+  // Mientras SITE.email sea «[PENDIENTE]», el marcador va a la vista y sin mailto
+  // (el mismo criterio del pie, /ayuda y /perfil).
+  const correo = esCorreoReal(SITE.email) ? SITE.email.trim() : null
+  const soporte = correo ? (
     <>
-      Si el problema sigue, escríbenos a <a href={`mailto:${SITE.email}`}>{SITE.email}</a>.
+      Si el problema sigue, escríbenos a <a href={`mailto:${correo}`}>{correo}</a>.
+    </>
+  ) : (
+    <>
+      Si el problema sigue, escríbenos a <Pendiente size="md">{SITE.email}</Pendiente>.
     </>
   )
   switch (tipo) {

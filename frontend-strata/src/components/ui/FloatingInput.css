@@ -4,34 +4,34 @@
 
 .float__input {
   width: 100%;
-  padding: var(--sp-5) var(--sp-4) var(--sp-2);
-  border: 1.5px solid var(--color-border);
-  border-radius: var(--radius-sm);
-  font-family: var(--font-body);
-  font-size: var(--text-base);
-  color: var(--color-ink);
-  background: var(--color-surface);
-  transition: border-color var(--t-base);
+  padding: var(--space-20) var(--space-16) var(--space-8);
+  border: 1.5px solid var(--color-border-control);
+  border-radius: var(--radius-control);
+  font-family: var(--font-text);
+  font-size: var(--fs-body);
+  color: var(--color-text);
+  background: var(--color-surface-white);
+  transition: border-color var(--dur-lift) var(--ease-base);
   appearance: none;
 }
 
 .float__input:focus {
-  border-color: var(--color-hunter);
+  border-color: var(--color-navy);
   outline: none;
 }
 
 .float__input.float__input--error {
-  border-color: var(--color-error);
+  border-color: var(--color-error-text);
   animation: shake 0.35s ease;
 }
 
 .float__label {
   position: absolute;
-  left: var(--sp-4);
+  left: var(--space-16);
   top: 50%;
   transform: translateY(-50%);
-  font-size: var(--text-base);
-  color: var(--color-border);
+  font-size: var(--fs-body);
+  color: var(--color-border-control);
   pointer-events: none;
   transform-origin: left top;
   transition: transform 180ms ease, font-size 180ms ease, color 180ms ease, top 180ms ease;
@@ -40,21 +40,21 @@
 /* Label flotante: cuando tiene foco o valor */
 .float__input:focus + .float__label,
 .float__input:not(:placeholder-shown) + .float__label {
-  top: var(--sp-2);
+  top: var(--space-8);
   transform: translateY(0) scale(0.75);
-  font-size: var(--text-xs);
-  color: var(--color-hunter);
+  font-size: var(--fs-small);
+  color: var(--color-navy);
 }
 
 .float__input--error:focus + .float__label,
 .float__input--error:not(:placeholder-shown) + .float__label {
-  color: var(--color-error);
+  color: var(--color-error-text);
 }
 
 .float__error {
-  font-size: var(--text-xs);
-  color: var(--color-error);
-  margin-top: var(--sp-1);
+  font-size: var(--fs-small);
+  color: var(--color-error-text);
+  margin-top: var(--space-4);
   animation: fadeIn 200ms ease;
 }
 

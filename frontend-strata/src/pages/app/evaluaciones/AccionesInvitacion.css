@@ -37,17 +37,16 @@
   margin-top: var(--space-2);
 }
 
-/* Modo tarjeta (D-23): las acciones ocupan el ancho de la tarjeta, desde la izquierda */
-@media (max-width: 640px) {
-  .st-acciones-inv {
-    align-items: stretch;
-  }
+/* Modo tarjeta (D-23; a 640 px o menos, o si la tabla no cabe): las acciones
+   ocupan el ancho de la tarjeta, desde la izquierda */
+.st-table--tarjetas .st-acciones-inv {
+  align-items: stretch;
+}
 
-  .st-acciones-inv__botones {
-    justify-content: flex-start;
-  }
+.st-table--tarjetas .st-acciones-inv__botones {
+  justify-content: flex-start;
+}
 
-  .st-acciones-inv__aviso {
-    max-width: none;
-  }
+.st-table--tarjetas .st-acciones-inv__aviso {
+  max-width: none;
 }

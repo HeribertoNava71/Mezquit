@@ -8,6 +8,9 @@ import type { AssessmentDetail, AssessmentSummary } from '@/api/rh'
 // con el detalle GET /api/assessments/{id} de unas pocas evaluaciones. El
 // detalle no trae la fecha en que cada candidato terminó (PB-06), así que el
 // orden sigue la fecha de creación de la evaluación.
+//
+// La fecha de la tabla («20 sep 2026») la pinta el componente base Fecha, y las
+// cifras («1,250»), formatearNumero del sistema de diseño.
 
 /** Tope de evaluaciones cuyo detalle se pide en cada carga (PB-05). */
 export const TOPE_EVALUACIONES = 5
@@ -151,13 +154,4 @@ export function agregarCompletadas(
     fallidas += 1
   })
   return { filas, pedidas: seleccion.length, fallidas, error }
-}
-
-// La fecha de la tabla («20 sep 2026») la pinta el componente base Fecha.
-
-const FORMATO_NUMERO = new Intl.NumberFormat('es-MX')
-
-/** Cifra con separador de miles de es-MX (1,250). */
-export function formatearNumero(valor: number): string {
-  return FORMATO_NUMERO.format(valor)
 }

@@ -1,6 +1,6 @@
 import { useId, type Ref } from 'react'
-import { StatCard, VisuallyHidden, type StatCardTone } from '@/components/ui'
-import { formatearCreditos, type Creditos } from './movimientos'
+import { StatCard, VisuallyHidden, formatearNumero, type StatCardTone } from '@/components/ui'
+import type { Creditos } from './movimientos'
 import './ResumenCreditos.css'
 
 export interface ResumenCreditosProps {
@@ -61,7 +61,7 @@ export function ResumenCreditos({ creditos, ref }: ResumenCreditosProps) {
                 <VisuallyHidden>Sin dato</VisuallyHidden>
               </>
             ) : (
-              formatearCreditos(tarjeta.valor)
+              formatearNumero(tarjeta.valor)
             )
           }
         />

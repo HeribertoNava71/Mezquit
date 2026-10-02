@@ -1,7 +1,7 @@
 import { useEffect, useReducer, useRef, useState, type ReactNode } from 'react'
 import { createAssessment, type InvitationLink } from '@/api/assessments'
 import { avisarCambioDeCreditos } from '@/components/layout/topbar/datosBarra'
-import { Button, Callout, EstadoVacio, PageHeader, StepPills, useToast } from '@/components/ui'
+import { Button, Callout, EstadoVacio, PageHeader, StepPills, textoCreditos, useToast } from '@/components/ui'
 import { SITE } from '@/config/site'
 import { TOAST_ENLACE_COPIADO } from './evaluaciones/mensajes'
 import { AvisoEnvio, AvisoErroresServidor } from './nueva/AvisoEnvio'
@@ -30,7 +30,6 @@ import {
   clasificarErrorEnvio,
   construirPayload,
   contarCandidatos,
-  contarCreditos,
   diaSiguiente,
   fechaLocalISO,
   formatoFecha,
@@ -113,7 +112,7 @@ function crearEstado(): EstadoAsistente {
 function textoSaldo(saldo: EstadoSaldo): string {
   switch (saldo.estado) {
     case 'listo':
-      return `Tu saldo actual es de ${contarCreditos(saldo.valor)}.`
+      return `Tu saldo actual es de ${textoCreditos(saldo.valor)}.`
     case 'error':
       return 'No pudimos actualizar tu saldo.'
     case 'cargando':
@@ -311,7 +310,7 @@ export default function NuevaEvaluacion() {
               )
             }
           >
-            Se usaron {contarCreditos(resultado.creditos)}. {textoSaldo(saldo)}
+            Se usaron {textoCreditos(resultado.creditos)}. {textoSaldo(saldo)}
           </Callout>
           {resultado.invitaciones.length > 0 ? (
             <EnlacesInvitacion
@@ -361,7 +360,7 @@ export default function NuevaEvaluacion() {
   // en Confirmar, la fecha límite real o «Sin fecha límite» (P-10).
   let nota: string | undefined
   if (paso === PASO_CANDIDATOS) {
-    nota = enviados.length > 0 ? `${contarCandidatos(enviados.length)} · ${contarCreditos(enviados.length)}` : TEXTO_CREDITO
+    nota = enviados.length > 0 ? `${contarCandidatos(enviados.length)} · ${textoCreditos(enviados.length)}` : TEXTO_CREDITO
   } else if (paso === PASO_CONFIRMAR) {
     nota = estado.fechaLimite ? `Fecha límite: ${formatoFecha(estado.fechaLimite)}` : 'Sin fecha límite'
   }

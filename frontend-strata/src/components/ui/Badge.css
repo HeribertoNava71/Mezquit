@@ -70,6 +70,13 @@
   --st-badge-dot: var(--color-dot-neutral);
 }
 
+/* Neutro frío: «Ajuste» de Créditos (Fase 8) · 6.74:1 */
+.st-badge--slate {
+  --st-badge-bg: var(--color-slate-tint);
+  --st-badge-fg: var(--color-text-slate);
+  --st-badge-dot: var(--color-slate-dot);
+}
+
 /* · 5.04:1 */
 .st-badge--success {
   --st-badge-bg: var(--color-success-bg);

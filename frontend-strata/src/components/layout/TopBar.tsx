@@ -1,5 +1,6 @@
 import type { HTMLAttributes, ReactNode, Ref } from 'react'
 import { cx } from '@/components/ui'
+import type { CorteBarra } from './topbar/cortes'
 import './TopBar.css'
 
 /** default: sticky y translúcida. home: dentro del contenido de la home, sin sticky ni fondo. */
@@ -19,6 +20,12 @@ export interface TopBarProps extends HTMLAttributes<HTMLElement> {
    * Por defecto, default.
    */
   variant?: TopBarVariant
+  /**
+   * Ancho desde el que la barra muestra su diseño de escritorio; por debajo, todo
+   * pasa al menú móvil (topbar/cortes.ts). Pasa el mismo corte a su MobileMenu.
+   * Por defecto, base (768 px).
+   */
+  corte?: CorteBarra
   ref?: Ref<HTMLElement>
 }
 
@@ -29,9 +36,22 @@ export interface TopBarProps extends HTMLAttributes<HTMLElement> {
  * Pásala a PageLayout por la prop topbar, para que quede como hija directa del
  * lienzo y el sticky funcione.
  */
-export function TopBar({ children, below, innerClassName, variant = 'default', className, ref, ...rest }: TopBarProps) {
+export function TopBar({
+  children,
+  below,
+  innerClassName,
+  variant = 'default',
+  corte = 'base',
+  className,
+  ref,
+  ...rest
+}: TopBarProps) {
   return (
-    <header ref={ref} className={cx('st-topbar', variant === 'home' && 'st-topbar--home', className)} {...rest}>
+    <header
+      ref={ref}
+      className={cx('st-topbar', variant === 'home' && 'st-topbar--home', corte !== 'base' && `st-topbar--corte-${corte}`, className)}
+      {...rest}
+    >
       <div className={cx('st-topbar__inner', innerClassName)}>{children}</div>
       {below}
     </header>

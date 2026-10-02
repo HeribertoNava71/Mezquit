@@ -48,7 +48,8 @@ export interface NavLinksProps {
 /**
  * Navegación de texto de la barra en escritorio (Strata.dc.html:60-64): activo
  * en tinta, 600 y con subrayado coral de 2 px; inactivo en #6B6558 y 500
- * (:1770-1774; estilos en TopBar.css). Por debajo de 768 px se oculta y sus
+ * (:1770-1774; estilos en TopBar.css). Por debajo del corte de su barra (768 px;
+ * 900 en RR. HH. y 960 en la pública, topbar/cortes.ts) se oculta y sus
  * enlaces pasan al menú móvil.
  */
 export function NavLinks({ label, enlaces, className }: NavLinksProps) {

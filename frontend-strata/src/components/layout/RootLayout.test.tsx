@@ -72,6 +72,8 @@ describe('RootLayout', () => {
     const pie = screen.getByRole('contentinfo')
     expect(pie).toHaveClass('st-footer', 'st-footer--home')
     expect(within(pie).getByRole('link', { name: 'Acceso interno' })).toHaveAttribute('href', '/login')
+    // WCAG 2.2.2 (D-27): el pie de la home ofrece detener la mascota.
+    expect(within(pie).getByRole('button', { name: 'Ocultar mascota' })).toHaveClass('st-footer__link')
   })
 
   it('al salir de la home vuelve a la variante default', async () => {
@@ -83,5 +85,6 @@ describe('RootLayout', () => {
     expect(container.querySelector('.st-page__frame')).toBeNull()
     expect(screen.getByRole('banner')).toHaveAttribute('data-variant', 'default')
     expect(screen.getByRole('contentinfo')).not.toHaveClass('st-footer--home')
+    expect(screen.queryByRole('button', { name: 'Ocultar mascota' })).not.toBeInTheDocument()
   })
 })

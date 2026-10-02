@@ -13,6 +13,11 @@ describe('Badge', () => {
     expect(punto).toHaveAttribute('aria-hidden', 'true')
   })
 
+  it('tiene un neutro frío (slate), distinto del neutral cálido', () => {
+    render(<Badge tone="slate">Ajuste</Badge>)
+    expect(screen.getByText('Ajuste')).toHaveClass('st-badge', 'st-badge--slate')
+  })
+
   it('usa el tono neutro y el tamaño md por defecto; sm es la pastilla compacta', () => {
     const { rerender } = render(<Badge>Borrador</Badge>)
     expect(screen.getByText('Borrador')).toHaveClass('st-badge--neutral')

@@ -105,7 +105,7 @@ export function Drawer({
       </div>
 
       {hasFooter && (
-        <div className="st-drawer__footer">
+        <div className="st-drawer__footer" data-overlay-pie="">
           {hasContent(footer) && footer}
           {hasContent(footerNote) && <p className="st-drawer__note">{footerNote}</p>}
         </div>

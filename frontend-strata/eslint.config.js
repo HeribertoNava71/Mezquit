@@ -7,7 +7,8 @@ import { defineConfig, globalIgnores } from 'eslint/config'
 
 export default defineConfig([
   // .capturas: capturas y bancos de prueba temporales (scripts/captura.mjs), fuera de git.
-  globalIgnores(['dist', '.capturas']),
+  // test-results, playwright-report y blob-report: salida de npm run test:e2e, fuera de git.
+  globalIgnores(['dist', '.capturas', 'test-results', 'playwright-report', 'blob-report']),
   {
     files: ['**/*.{ts,tsx}'],
     extends: [

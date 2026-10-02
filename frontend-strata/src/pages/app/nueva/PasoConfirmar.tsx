@@ -1,4 +1,4 @@
-import { Button, Callout, Input } from '@/components/ui'
+import { Button, Callout, Input, formatearNumero } from '@/components/ui'
 import { SITE } from '@/config/site'
 import { BloqueCreditos } from './BloqueCreditos'
 import { ID_CAMPO } from './estadoAsistente'
@@ -7,7 +7,6 @@ import {
   PASO_CANDIDATOS,
   PASO_DATOS,
   PRUEBA_DISPONIBLE,
-  formatoNumero,
   type CandidatoBorrador,
   type DatosEvaluacion,
   type IndicePaso,
@@ -100,7 +99,7 @@ export function PasoConfirmar({
             <dl className="st-nueva-resumen__datos">
               <div className="st-nueva-resumen__dato">
                 <dt>
-                  Candidatos <span className="st-nueva-resumen__detalle">({formatoNumero(total)})</span>
+                  Candidatos <span className="st-nueva-resumen__detalle">({formatearNumero(total)})</span>
                 </dt>
                 <dd>
                   <ul className="st-nueva-resumen__candidatos">

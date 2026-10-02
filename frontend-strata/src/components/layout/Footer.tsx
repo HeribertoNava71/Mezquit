@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom'
 import { cx } from '@/components/ui'
 import { hasContent } from '@/components/ui/hasContent'
 import { SITE } from '@/config/site'
+import { Pendiente } from '@/pages/publicas/Pendiente'
+import { esCorreoReal } from '@/pages/publicas/marcadores'
 import { Marca } from './Marca'
 import './Footer.css'
 
@@ -31,14 +33,24 @@ export interface FooterProps {
   variant?: FooterVariant
   /** Elemento extra al inicio de la fila de enlaces (por ejemplo, «Ingresar mi código manualmente»). */
   children?: ReactNode
+  /**
+   * Control extra al final de la lista de enlaces (default y home). En la home,
+   * el botón para ocultar o mostrar la mascota (WCAG 2.2.2; D-27).
+   */
+  trailing?: ReactNode
   className?: string
 }
 
 /**
  * Pie de página de Strata. Conserva los cinco enlaces del pie actual con el
  * layout del pie del prototipo, el lema según D-18 y el titular legal pendiente.
+ * Mientras SITE.email sea «[PENDIENTE]», Contacto y Soporte muestran el marcador
+ * sin enlace: un mailto a una dirección que no existe no lleva a ningún lado
+ * (el mismo criterio de /ayuda, /demo y /perfil).
  */
-export function Footer({ variant = 'default', children, className }: FooterProps) {
+export function Footer({ variant = 'default', children, trailing, className }: FooterProps) {
+  const correo = esCorreoReal(SITE.email) ? SITE.email.trim() : null
+
   if (variant === 'compact') {
     return (
       <footer className={cx('st-footer', 'st-footer--compact', className)}>
@@ -50,11 +62,15 @@ export function Footer({ variant = 'default', children, className }: FooterProps
             </Link>
           </li>
           <li className="st-footer__item">
-            <span>
+            <span className="st-footer__contacto">
               Soporte:{' '}
-              <a href={`mailto:${SITE.email}`} className="st-footer__link">
-                {SITE.email}
-              </a>
+              {correo ? (
+                <a href={`mailto:${correo}`} className="st-footer__link">
+                  {correo}
+                </a>
+              ) : (
+                <Pendiente>{SITE.email}</Pendiente>
+              )}
             </span>
           </li>
         </ul>
@@ -79,9 +95,15 @@ export function Footer({ variant = 'default', children, className }: FooterProps
               </li>
             ))}
             <li>
-              <a href={`mailto:${SITE.email}`} className="st-footer__link">
-                Contacto
-              </a>
+              {correo ? (
+                <a href={`mailto:${correo}`} className="st-footer__link">
+                  Contacto
+                </a>
+              ) : (
+                <span className="st-footer__contacto">
+                  Contacto: <Pendiente>{SITE.email}</Pendiente>
+                </span>
+              )}
             </li>
             {home && (
               <li>
@@ -90,6 +112,7 @@ export function Footer({ variant = 'default', children, className }: FooterProps
                 </Link>
               </li>
             )}
+            {hasContent(trailing) && <li>{trailing}</li>}
           </ul>
         </nav>
         <p className="st-footer__legal">

@@ -2,8 +2,12 @@ import type { HTMLAttributes, ReactNode, Ref } from 'react'
 import { cx } from './cx'
 import './Badge.css'
 
-/** Tono del badge. Sale de la paleta del prototipo; los de estado (success, error, warning), de los tokens. */
-export type BadgeTone = 'navy' | 'sky' | 'coral' | 'neutral' | 'success' | 'error' | 'warning'
+/**
+ * Tono del badge. Sale de la paleta del prototipo; los de estado (success, error,
+ * warning), de los tokens. slate es un neutro frío, distinto del neutral cálido
+ * (Fase 8: «Ajuste» en Créditos).
+ */
+export type BadgeTone = 'navy' | 'sky' | 'coral' | 'neutral' | 'slate' | 'success' | 'error' | 'warning'
 
 /** md: badge de tabla (11.5 px). sm: pastilla compacta de encabezado (10.5 px, como «Borrador · v0.4»). */
 export type BadgeSize = 'sm' | 'md'

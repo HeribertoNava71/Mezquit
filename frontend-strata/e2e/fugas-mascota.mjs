@@ -1,33 +1,44 @@
-// Prueba de fugas de la mascota de la home (Fase 6). Criterios de salida en
-// docs/rediseno/decisiones.md, «Fase 6», y en PROMPT_CLAUDE_CODE.md, «Mascota (inicio)».
+// Prueba de fugas de la mascota de la home (Fase 6; ampliada en la Fase 8). Criterios de
+// salida en docs/rediseno/decisiones.md, «Fase 6», D-27 y D-28, y en PROMPT_CLAUDE_CODE.md,
+// «Mascota (inicio)».
 //
 // Uso, desde frontend-strata y con el sitio en modo desarrollo (window.__stGsap solo existe
 // con import.meta.env.DEV, así que no sirve con vite preview):
-//   npx vite --port 5186 --strictPort
-//   node e2e/fugas-mascota.mjs [--url http://localhost:5186] [--ciclos 20] [--solo fugas|reducido|titular]
+//   npx vite --port 5188 --strictPort
+//   node e2e/fugas-mascota.mjs [--url http://localhost:5188] [--ciclos 20]
+//                              [--solo fugas|reducido|titular|clics|ocultar]
 //
 // Responde /api/* y /sanctum/* con e2e/mocks/visitante.json (sin backend) y usa el Chromium
-// de Playwright. Son tres pruebas:
+// de Playwright. Son cinco pruebas:
 //
-//  1. fugas. Entra y sale de «/» N veces (/pruebas → / → /pruebas) con los enlaces de la
-//     barra, sin recargar la página. En los ciclos impares espera a que la mascota nade, la
-//     hace correr (clic en el selector «Para mí / Para mi empresa») y brincar con su burbuja
-//     (clic en ella) y sale; en los pares sale antes de que entre en escena (temporizador
-//     de 6 s pendiente). Ya en /pruebas comprueba que no queda nada vivo:
+//  1. fugas. Entra y sale de «/» N veces, sin recargar la página, alternando el destino
+//     entre /pruebas, /demo, /como-funciona, /precios (enlaces de la barra) y /ayuda
+//     («Soporte» del pie), y vuelve con el logo. En los ciclos impares espera a que la
+//     mascota nade, la hace correr (clic en el selector «Para mí / Para mi empresa») y
+//     brincar con su burbuja (clic en ella) y sale; en los pares sale antes de que entre:
+//     unos antes de que se descargue su chunk (D-28) y otros con la entrada pendiente.
+//     Ya en el destino comprueba que no queda nada vivo:
 //       - window.__stGsap.globalTimeline.getChildren(true, true, true) vacío;
 //       - window.__stGsap.ticker._listeners con un solo callback (Timeline.updateRoot de GSAP);
 //       - los listeners de window y document (CDP, DOMDebugger.getEventListeners), iguales a
-//         los de antes de la primera visita;
+//         los de ese destino antes de la primera visita a la home;
 //       - ningún temporizador de 1 s o más pendiente (setTimeout envuelto antes de cargar la app);
 //       - ningún .st-mascota en el DOM.
 //     Además, el número de animaciones vivas en la home no crece de un ciclo a otro.
-//  2. reducido. Con prefers-reduced-motion la mascota no se monta, GSAP no se descarga y no
-//     queda ninguna animación corriendo en la home. Si la preferencia se quita con la página
-//     abierta, la mascota se monta y nada; si vuelve, se desmonta sin dejar nada vivo.
+//  2. reducido. Con prefers-reduced-motion la mascota no se monta, ni su chunk ni GSAP se
+//     descargan y no queda ninguna animación corriendo en la home. Si la preferencia se quita
+//     con la página abierta, la mascota se monta y nada; si vuelve, se desmonta sin dejar nada.
 //  3. titular. A 360 × 800 y sin desplazar la página, la mascota da su vuelta: sobre el H1
 //     (ampliado ±70/±50 px, como vigilarTitular) su opacidad baja a .26, y fuera vuelve a .8.
+//  4. clics (D-27). Con la mascota quieta (línea de tiempo de GSAP en pausa), recorre una
+//     rejilla de puntos dentro del cuadro del botón: solo la zona sobre el cuerpo recibe el
+//     puntero; en lo transparente, elementFromPoint da el contenido de abajo. Además hace un
+//     clic real del ratón en un punto transparente y comprueba que llega al contenido.
+//  5. ocultar (D-27, WCAG 2.2.2). «Ocultar mascota» de la burbuja la desmonta sin dejar
+//     tweens, ticker, listeners ni timers, y lo guarda; al recargar no se monta ni se
+//     descarga nada; «Mostrar mascota» del pie la trae de vuelta enseguida.
 //
-// En las tres, la consola no debe tener errores ni advertencias. El único error aceptado es el
+// En todas, la consola no debe tener errores ni advertencias. El único error aceptado es el
 // 401 de GET /api/user (visitante sin sesión), que Chromium anota como recurso fallido.
 // Termina con código 1 si algo falla.
 
@@ -40,10 +51,37 @@ import { crearBuscador, instalarMocks } from '../scripts/captura.mjs'
 const RAIZ = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
 const MOCKS = path.join(RAIZ, 'e2e', 'mocks', 'visitante.json')
 const SALIDA = path.join(RAIZ, '.capturas')
-const PRUEBAS = ['fugas', 'reducido', 'titular']
+const PRUEBAS = ['fugas', 'reducido', 'titular', 'clics', 'ocultar']
 
-/** Espera de entrada de la mascota (motor.ts, RETARDO_ENTRADA_MS) más la entrada (1.6–3.2 s). */
+/** Espera de entrada de la mascota (tiempos.ts: 6 s, con la descarga diferida dentro) más la entrada (1.6–3.2 s). */
 const HASTA_QUE_NADE_MS = 20_000
+/**
+ * Peticiones de los chunks perezosos de la mascota: el componente (Mascota.tsx), el
+ * motor y GSAP. MascotaDiferida.tsx, en el bundle de la home, no cuenta.
+ */
+const DESCARGA_MASCOTA = /\/mascota\/(motor|Mascota)\.tsx?(\?|$)|\/assets\/(motor|Mascota)-|\/gsap|MotionPath/
+/** Clave de la preferencia «ocultar la mascota» (preferencia.ts). */
+const CLAVE_OCULTA = 'strata:mascota-oculta'
+
+/** Destinos de los ciclos de la prueba de fugas: cómo llegar y qué esperar. */
+const DESTINOS = [
+  { ruta: '/pruebas', enlace: (page) => navPrincipal(page).getByRole('link', { name: 'Tests', exact: true }) },
+  { ruta: '/demo', enlace: (page) => navPrincipal(page).getByRole('link', { name: 'Para empresas', exact: true }) },
+  { ruta: '/como-funciona', enlace: (page) => navPrincipal(page).getByRole('link', { name: 'Cómo funciona', exact: true }) },
+  { ruta: '/precios', enlace: (page) => navPrincipal(page).getByRole('link', { name: 'Precios', exact: true }) },
+  { ruta: '/ayuda', enlace: (page) => page.getByRole('contentinfo').getByRole('link', { name: 'Soporte', exact: true }) },
+]
+
+function navPrincipal(page) {
+  return page.getByRole('navigation', { name: 'Navegación principal' })
+}
+
+/** Espera a que el destino termine de cargar (su H1 dentro de main). */
+async function esperarDestino(page, url, ruta) {
+  await page.waitForURL(`${url}${ruta}`)
+  await page.locator('main h1').first().waitFor()
+  await page.waitForLoadState('networkidle').catch(() => {})
+}
 /** Opacidades de motor.ts (OPACIDAD_TITULAR y OPACIDAD_NADO). */
 const OPACIDAD_TITULAR = 0.26
 const OPACIDAD_NADO = 0.8
@@ -51,7 +89,7 @@ const OPACIDAD_NADO = 0.8
 const TRAMO_ESTABLE_MS = 1500
 
 function leerArgumentos(argv) {
-  const opciones = { url: 'http://localhost:5186', ciclos: 20, solo: null }
+  const opciones = { url: 'http://localhost:5188', ciclos: 20, solo: null }
   for (let i = 0; i < argv.length; i++) {
     const arg = argv[i]
     if (arg === '--url') opciones.url = String(argv[++i] ?? '').replace(/\/+$/, '')
@@ -191,16 +229,25 @@ async function probarFugas(browser, buscar, { url, ciclos }, registro) {
   vigilarConsola(page, 'fugas', registro)
   const fallos = []
   try {
-    // Línea base en /pruebas, antes de la primera visita a la home.
+    // Línea base de cada destino antes de la primera visita a la home (cada pantalla
+    // puede tener sus propios listeners). Se recorren con la barra, sin recargar.
     await page.goto(`${url}/pruebas`, { waitUntil: 'networkidle' })
-    await page.getByRole('heading', { level: 1, name: 'Pruebas' }).waitFor()
-    const base = { listeners: await contarListeners(cdp), temporizadores: await temporizadoresLargos(page) }
+    await esperarDestino(page, url, '/pruebas')
+    const bases = new Map()
+    for (const destino of DESTINOS) {
+      if (destino.ruta !== '/pruebas') {
+        await destino.enlace(page).click()
+        await esperarDestino(page, url, destino.ruta)
+      }
+      await page.waitForTimeout(250)
+      bases.set(destino.ruta, { listeners: await contarListeners(cdp), temporizadores: await temporizadoresLargos(page) })
+    }
     const logo = page.getByRole('link', { name: 'Strata, inicio' })
-    const tests = page.getByRole('navigation', { name: 'Navegación principal' }).getByRole('link', { name: 'Tests', exact: true })
     const vivasEnHome = []
 
     for (let ciclo = 1; ciclo <= ciclos; ciclo++) {
       const completo = ciclo % 2 === 1
+      const destino = DESTINOS[(ciclo - 1) % DESTINOS.length]
       await logo.click()
       await page.waitForURL(`${url}/`)
       await page.locator('.st-hero').waitFor()
@@ -210,8 +257,7 @@ async function probarFugas(browser, buscar, { url, ciclos }, registro) {
         await esperarFase(page, ['nado'], HASTA_QUE_NADE_MS)
         const gsap = await estadoGsap(page)
         vivasEnHome.push(gsap?.hijos ?? 0)
-        const extra = diferenciaDeListeners(base.listeners, await contarListeners(cdp))
-        enHome = `en la home: ${gsap?.hijos} animaciones, ticker ${gsap?.ticker}, listeners +[${extra.join(', ')}]`
+        enHome = `en la home: ${gsap?.hijos} animaciones, ticker ${gsap?.ticker}`
         // Carrera hacia el selector (data-mascota-objetivo="selector").
         await page.locator('.st-toggle__option', { hasText: ciclo % 4 === 1 ? 'Para mi empresa' : 'Para mí' }).click()
         await esperarFase(page, ['carrera'], 3_000)
@@ -219,25 +265,29 @@ async function probarFugas(browser, buscar, { url, ciclos }, registro) {
         await esperarFase(page, ['regreso', 'nado'], 8_000)
         await page.evaluate(() => document.querySelector('.st-mascota__boton')?.click())
         await page.locator('.st-mascota__globo').waitFor({ timeout: 3_000 })
-      } else {
-        // Sale con la entrada pendiente (temporizador de 6 s y motor quizá sin iniciar).
-        await page.locator('.st-mascota__boton').waitFor({ state: 'attached', timeout: 5_000 })
+      } else if (ciclo % 4 === 2) {
+        // Sale antes de que se descargue la mascota (espera de 4.5 s de MascotaDiferida, D-28).
         await page.waitForTimeout(800)
+        enHome = `en la home: ${(await hayMascota(page)) ? 'mascota montada' : 'sin descargar la mascota'}`
+      } else {
+        // Sale con la entrada pendiente (mascota montada y motor quizá sin iniciar).
+        await page.locator('.st-mascota__boton').waitFor({ state: 'attached', timeout: 10_000 })
+        await page.waitForTimeout(300)
         enHome = `en la home: fase ${await page.locator('.st-mascota__boton').getAttribute('data-fase')}`
       }
 
-      await tests.click()
-      await page.waitForURL(`${url}/pruebas`)
-      await page.getByRole('heading', { level: 1, name: 'Pruebas' }).waitFor()
+      await destino.enlace(page).click()
+      await esperarDestino(page, url, destino.ruta)
       await page.waitForTimeout(250)
 
-      const revision = await revisarLimpieza(page, cdp, base, { gsapCargado: true })
+      const revision = await revisarLimpieza(page, cdp, bases.get(destino.ruta), { gsapCargado: ciclo > 1 || completo })
       const estado = revision.problemas.length === 0 ? 'ok' : 'FALLA'
+      const tipo = completo ? 'nado, carrera y burbuja' : ciclo % 4 === 2 ? 'sale antes de la descarga' : 'sale antes de entrar'
       console.log(
-        `  ciclo ${String(ciclo).padStart(2)} (${completo ? 'nado, carrera y burbuja' : 'sale antes de entrar'}) · ${enHome} · al salir: ` +
+        `  ciclo ${String(ciclo).padStart(2)} → ${destino.ruta.padEnd(14)} (${tipo}) · ${enHome} · al salir: ` +
           `${revision.gsap?.hijos ?? '—'} animaciones, ticker ${revision.gsap?.ticker ?? '—'} · ${estado}`,
       )
-      for (const problema of revision.problemas) fallos.push(`ciclo ${ciclo}: ${problema}`)
+      for (const problema of revision.problemas) fallos.push(`ciclo ${ciclo} (${destino.ruta}): ${problema}`)
     }
 
     if (vivasEnHome.length > 1 && Math.max(...vivasEnHome) > vivasEnHome[0]) {
@@ -259,7 +309,7 @@ async function probarReducido(browser, buscar, { url }, registro) {
   vigilarConsola(page, 'reducido', registro)
   const descargas = []
   page.on('request', (peticion) => {
-    if (/mascota\/motor|\/gsap|MotionPath/i.test(peticion.url())) descargas.push(peticion.url())
+    if (DESCARGA_MASCOTA.test(peticion.url())) descargas.push(peticion.url())
   })
   const fallos = []
   try {
@@ -384,6 +434,172 @@ async function probarTitular(browser, buscar, { url }, registro) {
   return fallos
 }
 
+// ── 4. Clics a través de la mascota (D-27) ────────────────────────────────
+
+/**
+ * Recorre una rejilla de puntos dentro del cuadro del botón (en sus coordenadas
+ * propias, con su giro y su escala) y dice cuáles reciben el puntero.
+ */
+function sondearCuadro(page) {
+  return page.evaluate(() => {
+    const boton = document.querySelector('.st-mascota__boton')
+    if (!boton) return null
+    const ancho = boton.offsetWidth
+    const alto = boton.offsetHeight
+    const giro = new DOMMatrix(getComputedStyle(boton).transform)
+    const matriz = new DOMMatrix().translate(ancho / 2, alto / 2).multiply(giro).translate(-ancho / 2, -alto / 2)
+    const puntos = []
+    for (let i = 0; i < 20; i++) {
+      for (let j = 0; j < 20; j++) {
+        const lx = ((i + 0.5) / 20) * ancho
+        const ly = ((j + 0.5) / 20) * alto
+        const p = matriz.transformPoint(new DOMPoint(lx, ly))
+        if (p.x < 1 || p.y < 1 || p.x > innerWidth - 1 || p.y > innerHeight - 1) continue
+        const encima = document.elementFromPoint(p.x, p.y)
+        puntos.push({ lx, ly, ancho, alto, x: p.x, y: p.y, deLaMascota: Boolean(encima?.closest('.st-mascota')), debajo: encima?.tagName ?? null })
+      }
+    }
+    return puntos
+  })
+}
+
+async function probarClics(browser, buscar, { url }, registro) {
+  const { context, page } = await nuevaPagina(browser, buscar)
+  vigilarConsola(page, 'clics', registro)
+  const fallos = []
+  try {
+    await page.goto(`${url}/`, { waitUntil: 'networkidle' })
+    await esperarFase(page, ['nado'], HASTA_QUE_NADE_MS)
+    // Quieta para medir: toda la línea de tiempo de GSAP en pausa.
+    await page.evaluate(() => {
+      window.__stGsap?.globalTimeline.pause()
+    })
+    await page.waitForTimeout(100)
+    const puntos = await sondearCuadro(page)
+    if (!puntos?.length) throw new Error('la mascota no está a la vista para sondearla')
+    // La zona táctil (::before de Mascota.css): cápsula de 25–61 % del ancho y 3–69 % del
+    // alto, con los extremos redondos. Se descartan los puntos a menos de 1.5 px del borde.
+    const distanciaAZona = (p) => {
+      const izquierda = 0.25 * p.ancho
+      const derecha = 0.61 * p.ancho
+      const arriba = 0.03 * p.alto
+      const abajo = 0.69 * p.alto
+      // Cápsula vertical (más alta que ancha): el segmento central engrosado por el radio.
+      const radio = (derecha - izquierda) / 2
+      const cx = (izquierda + derecha) / 2
+      const y = Math.min(Math.max(p.ly, arriba + radio), abajo - radio)
+      return Math.hypot(p.lx - cx, p.ly - y) - radio
+    }
+    const clasificados = puntos.map((p) => ({ ...p, distancia: distanciaAZona(p) }))
+    const zona = clasificados.filter((p) => p.distancia < -1.5)
+    const transparentes = clasificados.filter((p) => p.distancia > 1.5)
+    const fueraQueBloquean = transparentes.filter((p) => p.deLaMascota)
+    const zonaQueNoResponde = zona.filter((p) => !p.deLaMascota)
+    console.log(
+      `  cuadro del botón: ${puntos.length} puntos · zona táctil ${zona.length} (reciben el puntero ${zona.length - zonaQueNoResponde.length}) · ` +
+        `fuera de la zona ${transparentes.length} (dejan pasar el clic ${transparentes.length - fueraQueBloquean.length})`,
+    )
+    if (fueraQueBloquean.length > 0) {
+      fallos.push(`${fueraQueBloquean.length} puntos fuera de la zona táctil todavía reciben el puntero: ${fueraQueBloquean.map((p) => `(${Math.round(p.lx)}, ${Math.round(p.ly)})`).join(' ')}`)
+    }
+    if (zonaQueNoResponde.length > 0) fallos.push(`${zonaQueNoResponde.length} puntos de la zona táctil no reciben el puntero`)
+
+    // Clic real del ratón en un punto transparente: llega al contenido de abajo.
+    const objetivo = transparentes.find((p) => !p.deLaMascota && p.debajo)
+    if (!objetivo) throw new Error('no hay un punto transparente sobre contenido para hacer clic')
+    await page.evaluate(() => {
+      window.__clicRecibido = null
+      document.addEventListener(
+        'click',
+        (evento) => {
+          const destino = evento.target instanceof Element ? evento.target : null
+          window.__clicRecibido = destino ? (destino.closest('.st-mascota') ? 'mascota' : destino.tagName.toLowerCase()) : '?'
+          evento.preventDefault()
+        },
+        { capture: true, once: true },
+      )
+    })
+    await page.mouse.click(objetivo.x, objetivo.y)
+    const recibido = await page.evaluate(() => window.__clicRecibido)
+    console.log(`  clic real en (${Math.round(objetivo.x)}, ${Math.round(objetivo.y)}), fuera de la zona táctil: lo recibe <${recibido}>`)
+    if (recibido === 'mascota' || !recibido) fallos.push(`el clic fuera de la zona táctil lo recibió ${recibido ?? 'nadie'}, no el contenido`)
+
+    // Y un clic en la zona táctil la hace hablar.
+    const centro = zona.find((p) => p.deLaMascota && p.distancia < -8)
+    if (centro) {
+      await page.mouse.click(centro.x, centro.y)
+      await page.locator('.st-mascota__globo').waitFor({ timeout: 3_000 })
+      console.log('  clic real en la zona táctil: muestra la burbuja')
+    }
+  } catch (error) {
+    fallos.push(`la prueba no terminó: ${error.message.split('\n')[0]}`)
+  } finally {
+    await context.close()
+  }
+  return fallos
+}
+
+// ── 5. Ocultar y mostrar (D-27, WCAG 2.2.2) ───────────────────────────────
+
+async function probarOcultar(browser, buscar, { url }, registro) {
+  const { context, page } = await nuevaPagina(browser, buscar)
+  vigilarConsola(page, 'ocultar', registro)
+  const descargas = []
+  page.on('request', (peticion) => {
+    if (DESCARGA_MASCOTA.test(peticion.url())) descargas.push(peticion.url())
+  })
+  const fallos = []
+  try {
+    await page.goto(`${url}/`, { waitUntil: 'networkidle' })
+    await esperarFase(page, ['nado'], HASTA_QUE_NADE_MS)
+
+    // «Ocultar mascota» junto a la burbuja. La burbuja sigue a la mascota: para un clic
+    // real del ratón, primero la línea de tiempo de GSAP en pausa (queda quieta).
+    await page.evaluate(() => document.querySelector('.st-mascota__boton')?.click())
+    const ocultar = page.locator('.st-mascota__ocultar')
+    await ocultar.waitFor({ timeout: 3_000 })
+    await page.evaluate(() => {
+      window.__stGsap?.globalTimeline.pause()
+    })
+    await ocultar.click()
+    await page.waitForTimeout(300)
+    const gsap = await estadoGsap(page)
+    const guardada = await page.evaluate((clave) => localStorage.getItem(clave), CLAVE_OCULTA)
+    const enPie = await page.getByRole('contentinfo').getByRole('button', { name: 'Mostrar mascota' }).count()
+    const temporizadores = await temporizadoresLargos(page)
+    console.log(
+      `  oculta desde la burbuja: mascota ${(await hayMascota(page)) ? 'montada' : 'desmontada'}, ${gsap?.hijos} animaciones, ticker ${gsap?.ticker}, ` +
+        `temporizadores largos ${temporizadores.length}, localStorage «${guardada}», pie con «Mostrar mascota»: ${enPie ? 'sí' : 'no'}`,
+    )
+    if (await hayMascota(page)) fallos.push('la mascota sigue montada después de «Ocultar mascota»')
+    if (gsap && gsap.hijos !== 0) fallos.push(`quedan ${gsap.hijos} animaciones vivas`)
+    if (gsap && gsap.ticker !== 1) fallos.push(`el ticker tiene ${gsap.ticker} callbacks (se espera 1)`)
+    if (temporizadores.length > 0) fallos.push(`quedan temporizadores pendientes: ${temporizadores.join(', ')} ms`)
+    if (guardada !== '1') fallos.push('la preferencia no se guardó en localStorage')
+    if (!enPie) fallos.push('el pie no ofrece «Mostrar mascota»')
+
+    // Al recargar, oculta: no se monta ni se descarga nada.
+    descargas.length = 0
+    await page.reload({ waitUntil: 'networkidle' })
+    await page.waitForTimeout(9_000)
+    console.log(`  al recargar: mascota ${(await hayMascota(page)) ? 'montada' : 'sin montar'}, descargas de la mascota o GSAP: ${descargas.length}`)
+    if (await hayMascota(page)) fallos.push('al recargar, la mascota oculta se montó')
+    if (descargas.length > 0) fallos.push(`al recargar se descargó: ${descargas.join(', ')}`)
+
+    // «Mostrar mascota» del pie la trae de vuelta enseguida.
+    const inicio = Date.now()
+    await page.getByRole('contentinfo').getByRole('button', { name: 'Mostrar mascota' }).click()
+    await esperarFase(page, ['nado'], 8_000)
+    console.log(`  «Mostrar mascota»: nada otra vez a los ${((Date.now() - inicio) / 1000).toFixed(1)} s`)
+    await page.evaluate((clave) => localStorage.removeItem(clave), CLAVE_OCULTA)
+  } catch (error) {
+    fallos.push(`la prueba no terminó: ${error.message.split('\n')[0]}`)
+  } finally {
+    await context.close()
+  }
+  return fallos
+}
+
 // ── Principal ──────────────────────────────────────────────────────────────
 
 async function main() {
@@ -396,6 +612,8 @@ async function main() {
     fugas: ['Fugas al entrar y salir de «/»', probarFugas],
     reducido: ['Movimiento reducido', probarReducido],
     titular: ['Opacidad sobre el H1', probarTitular],
+    clics: ['Clics a través de la mascota (D-27)', probarClics],
+    ocultar: ['Ocultar y mostrar la mascota (D-27, WCAG 2.2.2)', probarOcultar],
   }
   try {
     for (const clave of PRUEBAS) {

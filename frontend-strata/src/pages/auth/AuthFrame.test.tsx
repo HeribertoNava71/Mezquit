@@ -41,11 +41,12 @@ describe('AuthFrame', () => {
       .getAllByRole('link')
       .filter((enlace) => enlace.closest('.st-footer'))
       .map((enlace) => [enlace.textContent, enlace.getAttribute('href')])
+    // Con SITE.email aún [PENDIENTE], Soporte muestra el marcador sin mailto (Fase 8).
     expect(enlaces).toEqual([
       ['¿Te invitaron a una evaluación?', '/evaluar'],
       ['Aviso de privacidad', '/aviso-de-privacidad'],
-      [SITE.email, `mailto:${SITE.email}`],
     ])
+    expect(screen.getByRole('contentinfo')).toHaveTextContent(`Soporte: ${SITE.email}`)
   })
 
   it('variante ancha para el registro', () => {

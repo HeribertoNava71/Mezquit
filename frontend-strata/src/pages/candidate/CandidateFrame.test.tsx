@@ -46,11 +46,12 @@ describe('CandidateFrame', () => {
     expect(screen.queryByRole('navigation')).not.toBeInTheDocument()
     expect(screen.queryByRole('banner')).not.toBeInTheDocument()
 
+    // Con SITE.email aún [PENDIENTE], Soporte muestra el marcador sin mailto (Fase 8).
     const enlaces = screen.getAllByRole('link')
     expect(enlaces.map((enlace) => [enlace.textContent, enlace.getAttribute('href')])).toEqual([
       ['¿Problemas con la prueba?', '/ayuda'],
       ['Aviso de privacidad', '/aviso-de-privacidad'],
-      [SITE.email, `mailto:${SITE.email}`],
     ])
+    expect(screen.getByRole('contentinfo')).toHaveTextContent(`Soporte: ${SITE.email}`)
   })
 })

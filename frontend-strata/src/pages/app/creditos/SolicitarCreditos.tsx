@@ -9,11 +9,11 @@ import {
   VisuallyHidden,
   cx,
   getErrorKind,
+  textoCreditos,
   useToast,
   type EstadoErrorKind,
 } from '@/components/ui'
 import { IconoReloj } from '@/components/ui/Iconos'
-import { textoCreditos } from './movimientos'
 import {
   CANTIDAD_MIN,
   MENSAJE_EXITO,

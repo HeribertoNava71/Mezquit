@@ -1,6 +1,14 @@
-import { Button, Callout, EstadoCarga, EstadoError, EstadoVacio, VisuallyHidden } from '@/components/ui'
+import {
+  Button,
+  Callout,
+  EstadoCarga,
+  EstadoError,
+  EstadoVacio,
+  VisuallyHidden,
+  formatearNumero,
+  textoCreditos,
+} from '@/components/ui'
 import { RUTA_SOLICITAR_CREDITOS } from '../creditos/solicitud'
-import { contarCreditos, formatoNumero } from './modelo'
 import type { EstadoSaldo } from './useSaldo'
 import './BloqueCreditos.css'
 
@@ -75,11 +83,11 @@ export function BloqueCreditos({ necesarios, saldo, onCargar }: BloqueCreditosPr
           </>
         }
       >
-        Necesitas {contarCreditos(necesarios)} y tienes {formatoNumero(saldo.valor)}. Solicita más o quita candidatos.
+        Necesitas {textoCreditos(necesarios)} y tienes {formatearNumero(saldo.valor)}. Solicita más o quita candidatos.
       </Callout>
     )
   } else if (saldo.estado === 'listo') {
-    detalle = <p className="st-nueva-creditos__resto">Después de enviar te quedarán {contarCreditos(saldo.valor - necesarios)}.</p>
+    detalle = <p className="st-nueva-creditos__resto">Después de enviar te quedarán {textoCreditos(saldo.valor - necesarios)}.</p>
   }
 
   return (
@@ -90,7 +98,7 @@ export function BloqueCreditos({ necesarios, saldo, onCargar }: BloqueCreditosPr
         <div className="st-nueva-creditos__cifra">
           <dt className="st-nueva-creditos__rotulo">Necesitas</dt>
           <dd className="st-nueva-creditos__dato">
-            <span className="st-nueva-creditos__valor">{formatoNumero(necesarios)}</span>
+            <span className="st-nueva-creditos__valor">{formatearNumero(necesarios)}</span>
             <span className="st-nueva-creditos__unidad">1 por candidato</span>
           </dd>
         </div>
@@ -99,7 +107,7 @@ export function BloqueCreditos({ necesarios, saldo, onCargar }: BloqueCreditosPr
           <dd className="st-nueva-creditos__dato">
             {saldo.estado === 'listo' ? (
               <>
-                <span className="st-nueva-creditos__valor">{formatoNumero(saldo.valor)}</span>
+                <span className="st-nueva-creditos__valor">{formatearNumero(saldo.valor)}</span>
                 <span className="st-nueva-creditos__unidad">{saldo.valor === 1 ? 'crédito' : 'créditos'}</span>
               </>
             ) : cargando ? (

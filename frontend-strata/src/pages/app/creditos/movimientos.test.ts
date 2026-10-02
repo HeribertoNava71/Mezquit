@@ -4,12 +4,10 @@ import {
   TIPOS_MOVIMIENTO,
   contarPorTipo,
   describirReferencia,
-  formatearCreditos,
   formatearMonto,
   getTipoMovimientoMeta,
   prepararCreditos,
   resumirMovimientos,
-  textoCreditos,
 } from './movimientos'
 
 // Respuesta de GET /api/credits del escenario e2e/mocks/rh.json (saldo 37).
@@ -34,7 +32,7 @@ describe('getTipoMovimientoMeta', () => {
       { label: 'Compra', tone: 'navy' },
       { label: 'Consumo', tone: 'neutral' },
       { label: 'Cortesía', tone: 'sky' },
-      { label: 'Ajuste', tone: 'coral' },
+      { label: 'Ajuste', tone: 'slate' },
     ])
   })
 
@@ -74,12 +72,7 @@ describe('describirReferencia', () => {
 })
 
 describe('cifras', () => {
-  it('usa separador de miles de es-MX', () => {
-    expect(formatearCreditos(1250)).toBe('1,250')
-    expect(textoCreditos(1)).toBe('1 crédito')
-    expect(textoCreditos(1500)).toBe('1,500 créditos')
-  })
-
+  // formatearNumero y textoCreditos se prueban en components/ui/formatoNumero.test.ts.
   it('el monto lleva signo: + al sumar y − (signo menos) al restar', () => {
     expect(formatearMonto(20)).toBe('+20')
     expect(formatearMonto(-4)).toBe('−4')

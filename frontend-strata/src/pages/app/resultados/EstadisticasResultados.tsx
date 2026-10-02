@@ -1,8 +1,7 @@
 import type { ReactNode, Ref } from 'react'
 import { Link } from 'react-router-dom'
-import { StatCard, VisuallyHidden, type StatCardTone } from '@/components/ui'
+import { StatCard, VisuallyHidden, formatearNumero, type StatCardTone } from '@/components/ui'
 import { IconoFlechaDerecha } from '@/components/ui/Iconos'
-import { formatearNumero } from './resultados'
 import type { EstadoResumen } from './useResultados'
 import './EstadisticasResultados.css'
 

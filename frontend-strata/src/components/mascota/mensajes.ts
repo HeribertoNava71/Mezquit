@@ -31,6 +31,14 @@ export const MENSAJES_MASCOTA: readonly string[] = [
 /** Nombre accesible del botón de la mascota. */
 export const ETIQUETA_MASCOTA = `Mascota de ${SITE.name}: toca para un consejo`
 
+/** Control para detener la mascota (WCAG 2.2.2; D-27): junto a la burbuja y en el pie de la home. */
+export const TEXTO_OCULTAR = 'Ocultar mascota'
+/** El mismo control en el pie, con la mascota oculta. */
+export const TEXTO_MOSTRAR = 'Mostrar mascota'
+/** Lo que anuncia el pie al cambiar la preferencia. */
+export const AVISO_OCULTA = 'Ocultaste la mascota. Puedes volver a mostrarla desde el pie de la página.'
+export const AVISO_VISIBLE = 'La mascota vuelve en un momento.'
+
 /** La burbuja se oculta sola a los 5.4 s de cada toque (Strata.dc.html:2026). */
 export const DURACION_BURBUJA_MS = 5400
 

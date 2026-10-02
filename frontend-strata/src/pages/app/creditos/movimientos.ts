@@ -1,5 +1,5 @@
 import type { CreditsData } from '@/api/rh'
-import { formatearFecha, type BadgeTone, type FechaLegible } from '@/components/ui'
+import { formatearFecha, formatearNumero, type BadgeTone, type FechaLegible } from '@/components/ui'
 
 // Datos de /app/creditos (mapa.md, RH-5; D-08): saldo, totales y movimientos
 // del ledger de créditos con referencias legibles. Solo funciones puras; las
@@ -24,15 +24,16 @@ export interface TipoMovimientoMeta {
  * - compra   → navy, como «Disponible»: créditos que llegan para usarse.
  * - cortesia → sky, como «Enviada».
  * - consumo  → neutral, como «Consumida».
- * - ajuste   → coral: no existe en el prototipo; tinte de su insignia
- *   (Strata.dc.html:266-268), distinto de los demás. Puede sumar o restar.
+ * - ajuste   → slate, un neutro frío: no existe en el prototipo y puede sumar o
+ *   restar. Fue coral (el tinte de su insignia, Strata.dc.html:266-268), pero se
+ *   confundía con un error (Fase 8); el neutro cálido ya es «Consumo».
  * El texto acompaña siempre al tono.
  */
 const META: Record<TipoMovimiento, TipoMovimientoMeta> = {
   compra: { label: 'Compra', tone: 'navy' },
   consumo: { label: 'Consumo', tone: 'neutral' },
   cortesia: { label: 'Cortesía', tone: 'sky' },
-  ajuste: { label: 'Ajuste', tone: 'coral' },
+  ajuste: { label: 'Ajuste', tone: 'slate' },
 }
 
 /** true si el texto es uno de los cuatro tipos conocidos. */
@@ -88,24 +89,13 @@ export function describirReferencia(referencia: string | null | undefined): Refe
 
 // ── Cifras ──────────────────────────────────────────────────────────────────
 // La fecha («04 sep 2026» y la hora tal como la manda el servidor, sin
-// convertir zonas) sale de formatearFecha, del sistema de diseño.
-
-const numero = new Intl.NumberFormat('es-MX')
-
-/** Cifra de créditos con separador de miles: 1250 → «1,250». */
-export function formatearCreditos(valor: number): string {
-  return numero.format(valor)
-}
-
-/** «1 crédito» o «N créditos». */
-export function textoCreditos(valor: number): string {
-  return `${formatearCreditos(valor)} ${valor === 1 ? 'crédito' : 'créditos'}`
-}
+// convertir zonas) sale de formatearFecha, y las cifras («1,250», «1 crédito»)
+// de formatearNumero y textoCreditos, del sistema de diseño.
 
 /** Monto con signo: «+20», «−4» (signo menos tipográfico) o «0». */
 export function formatearMonto(monto: number): string {
-  if (monto > 0) return `+${formatearCreditos(monto)}`
-  if (monto < 0) return `−${formatearCreditos(Math.abs(monto))}`
+  if (monto > 0) return `+${formatearNumero(monto)}`
+  if (monto < 0) return `−${formatearNumero(Math.abs(monto))}`
   return '0'
 }
 

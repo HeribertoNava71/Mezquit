@@ -1,6 +1,7 @@
 import { gsap } from 'gsap'
 import { MotionPathPlugin } from 'gsap/MotionPathPlugin'
 import { ATRIBUTO_OBJETIVO } from './atributos'
+import { RETARDO_ENTRADA_MS } from './tiempos'
 import {
   GIRO,
   acotar,
@@ -45,8 +46,9 @@ if (import.meta.env.DEV && typeof window !== 'undefined') {
   window.__stGsap = gsap
 }
 
-/** Espera antes de entrar en escena (Strata.dc.html:1629), contada con la pestaña visible. */
-export const RETARDO_ENTRADA_MS = 6000
+// Espera antes de entrar en escena (Strata.dc.html:1629), contada con la pestaña
+// visible. Vive en tiempos.ts para que la home la use sin descargar GSAP.
+export { RETARDO_ENTRADA_MS }
 /** Una vuelta al circuito (Strata.dc.html:1664). */
 export const DURACION_VUELTA_S = 42
 /** curviness del nado (Strata.dc.html:1665). */

@@ -92,11 +92,6 @@
 }
 
 .st-page__content {
-  /* Transición (D-20): las pantallas viejas dibujan su propio contenedor con
-     padding-inline: var(--section-px). Aquí vale 0 para no duplicar el margen
-     lateral. Se retira con los alias en la Fase 8. */
-  --section-px: 0px;
-
   width: 100%;
   max-width: var(--layout-max);
   margin-inline: auto;

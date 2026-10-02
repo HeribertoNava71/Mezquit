@@ -5,7 +5,7 @@ import { MemoryRouter, Route, Routes } from 'react-router-dom'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { compareAssessment, type CompareData, type CompareRow } from '@/api/rh'
 import CompararPage from './CompararPage'
-import { csvAnterior, filasAnteriores, nombreCsvAnterior, TIPO_CSV_ANTERIOR } from './comparar/codigoAnterior'
+import { csvAnterior, filasAnteriores, nombreCsvAnterior, TIPO_CSV_ANTERIOR } from '@/test/comparativaAnterior'
 
 // Comparativa (/app/evaluaciones/:id/comparar) con src/api/rh simulado. Forma
 // de la respuesta: AssessmentController::compare (2026-09-12-fase2-panel-rh.md:751-790).

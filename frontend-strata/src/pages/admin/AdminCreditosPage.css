@@ -58,19 +58,18 @@
   gap: var(--space-7);
 }
 
-/* Tarjeta: las dos acciones a lo ancho, con el objetivo táctil de 44 px. */
-@media (max-width: 640px) {
-  .st-admin-creditos__nota {
-    max-width: none;
-  }
+/* Tarjeta (a 640 px o menos, o si la tabla no cabe): las dos acciones a lo
+   ancho, con el objetivo táctil de 44 px. */
+.st-table--tarjetas .st-admin-creditos__nota {
+  max-width: none;
+}
 
-  .st-admin-creditos__acciones {
-    justify-content: stretch;
-    padding-top: var(--space-4);
-  }
+.st-table--tarjetas .st-admin-creditos__acciones {
+  justify-content: stretch;
+  padding-top: var(--space-4);
+}
 
-  .st-admin-creditos__acciones .st-btn {
-    flex: 1 1 0;
-    min-height: var(--size-target);
-  }
+.st-table--tarjetas .st-admin-creditos__acciones .st-btn {
+  flex: 1 1 0;
+  min-height: var(--size-target);
 }

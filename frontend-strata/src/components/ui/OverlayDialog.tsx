@@ -1,15 +1,18 @@
-import type { HTMLAttributes, MouseEvent, ReactNode, RefObject } from 'react'
+import { useEffect, type HTMLAttributes, type MouseEvent, type ReactNode, type RefObject } from 'react'
 import { createPortal } from 'react-dom'
 import { cx } from './cx'
 import { IconButton } from './IconButton'
 import { IconoCerrar } from './Iconos'
+import { registrarOverlay } from './overlayAbierto'
 import { useFocusTrap } from './useFocusTrap'
 import { useScrollLock } from './useScrollLock'
 import './OverlayDialog.css'
 
 // Base interna de Modal y Drawer: portal en el body, fondo (scrim), panel con
 // role="dialog" y aria-modal, foco atrapado, Escape, bloqueo del scroll y
-// devolución del foco al disparador. No se exporta desde el barril.
+// devolución del foco al disparador. Mientras está abierto, registra su panel
+// para que el toast no tape sus controles (overlayAbierto.ts, Fase 8). No se
+// exporta desde el barril.
 
 /** dialog: diálogo común. alertdialog: pide confirmar algo que no se deshace. */
 export type OverlayRole = 'dialog' | 'alertdialog'
@@ -48,6 +51,12 @@ export function OverlayDialog({
 }: OverlayDialogProps) {
   const panelRef = useFocusTrap<HTMLDivElement>({ active: open, onClose, initialFocus: initialFocusRef })
   useScrollLock(open)
+
+  useEffect(() => {
+    const panel = panelRef.current
+    if (!open || !panel) return
+    return registrarOverlay(panel)
+  }, [open, panelRef])
 
   if (!open || typeof document === 'undefined') return null
 

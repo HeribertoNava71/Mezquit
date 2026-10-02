@@ -1,6 +1,6 @@
 import { isAxiosError } from 'axios'
 import type { CandidateInput, CreateAssessmentPayload } from '@/api/assessments'
-import { formatearFecha, getErrorKind, type EstadoErrorKind } from '@/components/ui'
+import { formatearFecha, getErrorKind, textoCantidad, type EstadoErrorKind } from '@/components/ui'
 
 // ── Lógica pura del asistente de nueva evaluación (/app/evaluaciones/nueva) ──
 // Pasos, validación por paso, lectura de la lista pegada, payload de
@@ -261,8 +261,6 @@ export function validarFechaLimite(valor: string, hoyISO: string): string | unde
   return valor.trim() <= hoyISO ? MENSAJES.fechaPasada : undefined
 }
 
-const FORMATO_NUMERO = new Intl.NumberFormat('es-MX')
-
 /**
  * «15 oct 2026», con el formato de fecha del sistema (el mismo de Candidatos y
  * Créditos). Si no es una fecha, la devuelve tal cual.
@@ -271,18 +269,9 @@ export function formatoFecha(iso: string): string {
   return formatearFecha(iso)?.texto ?? iso
 }
 
-export function formatoNumero(valor: number): string {
-  return FORMATO_NUMERO.format(valor)
-}
-
-/** «1 candidato», «3 candidatos». */
+/** «1 candidato», «3 candidatos». Las cifras («1,250», «3 créditos») salen del sistema de diseño. */
 export function contarCandidatos(n: number): string {
-  return `${formatoNumero(n)} ${n === 1 ? 'candidato' : 'candidatos'}`
-}
-
-/** «1 crédito», «3 créditos». */
-export function contarCreditos(n: number): string {
-  return `${formatoNumero(n)} ${n === 1 ? 'crédito' : 'créditos'}`
+  return textoCantidad(n, 'candidato', 'candidatos')
 }
 
 // ── Payload de POST /api/assessments ───────────────────────────────────────

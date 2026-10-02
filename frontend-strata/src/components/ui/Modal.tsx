@@ -122,7 +122,7 @@ export function Modal({
       </div>
 
       {hasFooter && (
-        <div className="st-modal__footer">
+        <div className="st-modal__footer" data-overlay-pie="">
           {hasContent(footerNote) && <p className="st-modal__note">{footerNote}</p>}
           {hasContent(footer) && <div className="st-modal__actions">{footer}</div>}
         </div>

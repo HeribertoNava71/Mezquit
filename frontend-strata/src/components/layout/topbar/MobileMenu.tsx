@@ -3,12 +3,10 @@ import { NavLink, useLocation } from 'react-router-dom'
 import { Avatar, VisuallyHidden, cx, useFocusTrap } from '@/components/ui'
 import { IconoCerrar } from '@/components/ui/Iconos'
 import { useScrollLock } from '@/components/ui/useScrollLock'
+import { consultaEscritorio, type CorteBarra } from './cortes'
 import { EnlaceNavegacion } from './NavLinks'
 import type { CuentaMenu, EnlaceNav } from './navegacion'
 import './MobileMenu.css'
-
-/** Desde este ancho la barra muestra todo y el menú móvil se cierra (768 px, design-tokens.md, regla 17). */
-const ESCRITORIO = '(min-width: 768px)'
 
 /** Tres líneas: abre el menú. */
 function IconoMenu() {
@@ -40,11 +38,17 @@ export interface MobileMenuProps {
   cuenta?: CuentaMenu | null
   /** Final del panel cuando no hay sesión (en la pública, Entrar y Crear cuenta). */
   pie?: ReactNode
+  /**
+   * Corte de su barra (el mismo que recibe TopBar): desde ese ancho la barra
+   * muestra todo y el menú se cierra. Por defecto, base (768 px).
+   */
+  corte?: CorteBarra
   className?: string
 }
 
 /**
- * Menú móvil de las barras (por debajo de 768 px; el prototipo solo hace wrap).
+ * Menú móvil de las barras (por debajo del corte de cada barra: 768 px, 900 en
+ * RR. HH. y 960 en la pública; el prototipo solo hace wrap).
  * Un botón con aria-expanded abre un panel que cubre el resto de la pantalla
  * con los enlaces del rol y las opciones de la pastilla (mapa.md, sección 3).
  *
@@ -53,7 +57,15 @@ export interface MobileMenuProps {
  * - Navegar, volver a pulsar el botón o pasar a escritorio lo cierran.
  * - Mientras está abierto, la página de fondo no se desplaza.
  */
-export function MobileMenu({ navLabel, enlaces, secundarios = [], cuenta, pie, className }: MobileMenuProps) {
+export function MobileMenu({
+  navLabel,
+  enlaces,
+  secundarios = [],
+  cuenta,
+  pie,
+  corte = 'base',
+  className,
+}: MobileMenuProps) {
   const { key } = useLocation()
   // Entrada del historial en la que se abrió. Al navegar (también con Atrás o
   // Adelante) deja de coincidir y se olvida en el mismo render: volver a esa
@@ -77,13 +89,13 @@ export function MobileMenu({ navLabel, enlaces, secundarios = [], cuenta, pie, c
   // y la trampa no debe retener el foco en elementos ocultos.
   useEffect(() => {
     if (!abierto || typeof window.matchMedia !== 'function') return
-    const consulta = window.matchMedia(ESCRITORIO)
+    const consulta = window.matchMedia(consultaEscritorio(corte))
     const alCambiar = () => {
       if (consulta.matches) setAbiertoEn(null)
     }
     consulta.addEventListener('change', alCambiar)
     return () => consulta.removeEventListener('change', alCambiar)
-  }, [abierto])
+  }, [abierto, corte])
 
   function salir() {
     if (!cuenta || cuenta.saliendo) return

@@ -14,7 +14,8 @@
   display: flex;
 }
 
-/* Por debajo de 768 px los enlaces viven en el menú móvil (mapa.md, sección 3). */
+/* Por debajo de 768 px los enlaces viven en el menú móvil (mapa.md, sección 3).
+   Las barras pública y de RR. HH. suben ese corte a 960 y 900 px (TopBar.css). */
 @media (max-width: 767.98px) {
   .st-nav-links {
     display: none;

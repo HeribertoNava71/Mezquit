@@ -1,4 +1,5 @@
 import {
+  useEffect,
   useId,
   useMemo,
   useRef,
@@ -9,6 +10,7 @@ import {
   type Key,
   type ReactNode,
   type Ref,
+  type RefObject,
 } from 'react'
 import { cx } from './cx'
 import { compareSortValues, readSortValue, type DataTableSortValue } from './dataTableSort'
@@ -55,7 +57,7 @@ export interface DataTableColumn<Row> {
   align?: DataTableAlign
   /** Ancho de la columna (número en px o cualquier medida CSS). */
   width?: number | string
-  /** Oculta la columna en el modo tarjeta (640 px o menos). */
+  /** Oculta la columna en el modo tarjeta (640 px o menos, o cuando la tabla no cabe). */
   hideOnCard?: boolean
   /** Rótulo en el modo tarjeta. Por defecto, el header; false lo quita (por ejemplo, en acciones). */
   cardLabel?: ReactNode
@@ -93,7 +95,8 @@ export interface DataTableProps<Row> extends Omit<HTMLAttributes<HTMLDivElement>
   /** Densidad. Por defecto, comfortable. */
   density?: DataTableDensity
   /**
-   * cards: a 640 px o menos cada fila es una tarjeta con rótulos (D-23).
+   * cards: cada fila es una tarjeta con rótulos a 640 px o menos y, más ancho,
+   * siempre que la tabla no quepa sin desplazarse de lado (D-23).
    * scroll: siempre tabla, con scroll horizontal (comparativa). Por defecto, cards.
    */
   responsive?: 'cards' | 'scroll'
@@ -116,6 +119,71 @@ export interface DataTableProps<Row> extends Omit<HTMLAttributes<HTMLDivElement>
 
 /** Las filas después de esta comparten el último retardo (12 × 28 ms). */
 const STAGGER_LIMIT = 12
+
+/** A 640 px o menos, la tabla siempre va en tarjetas (D-23). */
+const CONSULTA_TARJETAS = '(max-width: 640px)'
+
+function coincideConsulta(consulta: string): boolean {
+  return typeof window !== 'undefined' && typeof window.matchMedia === 'function' && window.matchMedia(consulta).matches
+}
+
+/**
+ * Ancho mínimo que pide la tabla en modo tabla: su minWidth (--st-table-min) o el
+ * del sistema (--width-table-min, 900 px). Se lee de las variables y no de la caja,
+ * así no depende del modo actual: en medio de un cambio de ancho, el navegador
+ * puede medir la tabla con el estilo de tarjeta todavía aplicado.
+ */
+function minimoDeTabla(scroll: HTMLElement): number {
+  const tabla = scroll.firstElementChild
+  if (!(tabla instanceof HTMLElement)) return 0
+  const propio = tabla.style.getPropertyValue('--st-table-min')
+  const valor = propio || window.getComputedStyle(document.documentElement).getPropertyValue('--width-table-min')
+  return Number.parseFloat(valor) || 0
+}
+
+/**
+ * Modo tarjeta (D-23): a 640 px o menos y, más ancho, cuando la tabla no cabe
+ * en su contenedor (Fase 8: entre 641 y unos 1000 px algunas tablas se
+ * desplazaban de lado). Mide el ancho que pide la tabla en modo tabla y vuelve
+ * a ella cuando el contenedor alcanza ese ancho. Sin ResizeObserver (jsdom), solo
+ * el corte de 640 px.
+ */
+function useModoTarjeta(scrollRef: RefObject<HTMLDivElement | null>, activo: boolean): boolean {
+  const [estrecha, setEstrecha] = useState(() => activo && coincideConsulta(CONSULTA_TARJETAS))
+  const [sinEspacio, setSinEspacio] = useState(false)
+  const anchoDeTabla = useRef(0)
+
+  useEffect(() => {
+    if (!activo || typeof window.matchMedia !== 'function') return
+    const consulta = window.matchMedia(CONSULTA_TARJETAS)
+    const alCambiar = () => setEstrecha(consulta.matches)
+    consulta.addEventListener('change', alCambiar)
+    return () => consulta.removeEventListener('change', alCambiar)
+  }, [activo])
+
+  useEffect(() => {
+    const scroll = scrollRef.current
+    if (!activo || !scroll || typeof ResizeObserver === 'undefined') return
+    const medir = () => {
+      const enTarjetas = scroll.parentElement?.classList.contains('st-table--tarjetas') ?? false
+      if (!enTarjetas) {
+        // Modo tabla: si desborda, recuerda cuánto pide y pasa a tarjetas.
+        if (scroll.scrollWidth > scroll.clientWidth + 1) {
+          anchoDeTabla.current = Math.max(anchoDeTabla.current, scroll.scrollWidth, minimoDeTabla(scroll))
+          setSinEspacio(true)
+        }
+      } else if (anchoDeTabla.current > 0 && scroll.clientWidth >= Math.max(anchoDeTabla.current, minimoDeTabla(scroll))) {
+        setSinEspacio(false)
+      }
+    }
+    const observador = new ResizeObserver(medir)
+    observador.observe(scroll)
+    if (scroll.firstElementChild) observador.observe(scroll.firstElementChild)
+    return () => observador.disconnect()
+  }, [activo, scrollRef])
+
+  return activo && (estrecha || sinEspacio)
+}
 
 const ALIGN_CLASS: Record<DataTableAlign, string | undefined> = {
   start: undefined,
@@ -162,9 +230,11 @@ function SortIcon({ direction }: { direction?: DataTableSortDirection }) {
  * cabecera tintada, filas con entrada escalonada y hover, pie con nota o paginación.
  * - Orden controlado (sort + onSortChange) o no (defaultSort), con aria-sort y
  *   botones en los encabezados. Anuncia el orden nuevo por role="status".
- * - A 640 px o menos, cada fila pasa a tarjeta con rótulos (D-23), separada por un
- *   divisor dentro de la superficie de la tabla (sin tarjetas anidadas); la celda
- *   rowHeader es su título y los encabezados ordenables quedan como botones de orden.
+ * - A 640 px o menos, y más ancho si la tabla no cabe, cada fila pasa a tarjeta
+ *   con rótulos (D-23), separada por un divisor dentro de la superficie de la
+ *   tabla (sin tarjetas anidadas); la celda rowHeader es su título y los
+ *   encabezados ordenables quedan como botones de orden. La clase
+ *   st-table--tarjetas marca ese modo (también para el CSS de cada pantalla).
  * - Conserva la semántica de tabla con roles explícitos aunque cambie el display.
  */
 export function DataTable<Row>({
@@ -196,6 +266,7 @@ export function DataTable<Row>({
   const reduceMotion = useReducedMotion()
   const scrollRef = useRef<HTMLDivElement>(null)
   const overflowing = useHorizontalOverflow(scrollRef)
+  const tarjetas = useModoTarjeta(scrollRef, responsive === 'cards')
   const [internalSort, setInternalSort] = useState<DataTableSort | null>(defaultSort)
   const [announcement, setAnnouncement] = useState('')
 
@@ -246,6 +317,7 @@ export function DataTable<Row>({
         `st-table--${variant}`,
         `st-table--${density}`,
         `st-table--${responsive}`,
+        tarjetas && 'st-table--tarjetas',
         hasSortable && 'st-table--sortable',
         isEmpty && 'st-table--empty',
         className,

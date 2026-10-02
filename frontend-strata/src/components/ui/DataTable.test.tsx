@@ -1,4 +1,4 @@
-import { render, screen, within } from '@testing-library/react'
+import { act, render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { useState } from 'react'
 import { afterEach, describe, expect, it, vi } from 'vitest'
@@ -208,6 +208,58 @@ describe('DataTable', () => {
     )
   })
 
+  it('a 640 px o menos marca el modo tarjeta (st-table--tarjetas)', () => {
+    vi.stubGlobal(
+      'matchMedia',
+      vi.fn((consulta: string) => ({
+        matches: consulta === '(max-width: 640px)',
+        media: consulta,
+        addEventListener: () => {},
+        removeEventListener: () => {},
+      })),
+    )
+    render(<DataTable columns={COLUMNAS} rows={FILAS} getRowKey={(fila) => fila.id} caption="Candidatos" />)
+    expect(screen.getByRole('table', { name: 'Candidatos' }).closest('.st-table')).toHaveClass('st-table--tarjetas')
+  })
+
+  it('más ancho, pasa a tarjetas si la tabla no cabe y vuelve cuando el contenedor alcanza su ancho (Fase 8)', () => {
+    // ResizeObserver falso: guarda el callback para dispararlo a mano.
+    let medir: (() => void) | null = null
+    vi.stubGlobal(
+      'ResizeObserver',
+      class {
+        constructor(callback: () => void) {
+          medir = callback
+        }
+        observe() {}
+        disconnect() {}
+      },
+    )
+    const medidas = { scrollWidth: 760, clientWidth: 601 }
+    vi.spyOn(HTMLElement.prototype, 'scrollWidth', 'get').mockImplementation(function (this: HTMLElement) {
+      return this.classList.contains('st-table__scroll') ? medidas.scrollWidth : 0
+    })
+    vi.spyOn(HTMLElement.prototype, 'clientWidth', 'get').mockImplementation(function (this: HTMLElement) {
+      return this.classList.contains('st-table__scroll') ? medidas.clientWidth : 0
+    })
+
+    render(<DataTable columns={COLUMNAS} rows={FILAS} getRowKey={(fila) => fila.id} caption="Candidatos" minWidth={0} />)
+    const raiz = screen.getByRole('table', { name: 'Candidatos' }).closest('.st-table')
+    expect(raiz).not.toHaveClass('st-table--tarjetas')
+
+    act(() => medir?.())
+    expect(raiz).toHaveClass('st-table--tarjetas')
+
+    // En tarjetas no desborda; con 700 px aún no cabe la tabla (pide 760).
+    Object.assign(medidas, { scrollWidth: 700, clientWidth: 700 })
+    act(() => medir?.())
+    expect(raiz).toHaveClass('st-table--tarjetas')
+
+    Object.assign(medidas, { scrollWidth: 800, clientWidth: 800 })
+    act(() => medir?.())
+    expect(raiz).not.toHaveClass('st-table--tarjetas')
+  })
+
   it('con responsive="scroll" no pasa a tarjetas y acepta un ancho mínimo propio', () => {
     render(
       <DataTable
@@ -222,6 +274,7 @@ describe('DataTable', () => {
     const tabla = screen.getByRole('table', { name: 'Comparativa' })
     expect(tabla.closest('.st-table')).toHaveClass('st-table--scroll')
     expect(tabla.closest('.st-table')).not.toHaveClass('st-table--cards')
+    expect(tabla.closest('.st-table')).not.toHaveClass('st-table--tarjetas')
     expect(tabla.style.getPropertyValue('--st-table-min')).toBe('640px')
   })
 

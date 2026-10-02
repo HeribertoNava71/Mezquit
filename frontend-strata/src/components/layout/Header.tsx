@@ -42,7 +42,9 @@ export interface HeaderProps {
  * - Con sesión: la pastilla con el menú Mi perfil, Panel de RR. HH. (con
  *   organización), Operación (con is_platform_admin) y Salir. Salir hace
  *   POST /api/logout, setUser(null) y lleva al inicio, como antes.
- * - Por debajo de 768 px, todo pasa al menú móvil, con Ayuda, Salir y Operación (R-06).
+ * - Por debajo de 960 px (topbar/cortes.ts), todo pasa al menú móvil, con Ayuda,
+ *   Salir y Operación (R-06). Con un nombre de 30 caracteres en la pastilla, la
+ *   fila cabe desde 938 px (e2e/barras.mjs).
  */
 export function Header({ variant = 'default' }: HeaderProps) {
   const { user, loading } = useAuth()
@@ -68,6 +70,7 @@ export function Header({ variant = 'default' }: HeaderProps) {
   return (
     <TopBar
       variant={variant}
+      corte="publica"
       below={
         salida.error && (
           <ErrorSalida
@@ -103,6 +106,7 @@ export function Header({ variant = 'default' }: HeaderProps) {
         )}
         <MobileMenu
           navLabel={NAV_LABEL}
+          corte="publica"
           enlaces={ENLACES_MOVIL}
           secundarios={SECUNDARIOS_MOVIL}
           cuenta={loading ? null : cuenta}

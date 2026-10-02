@@ -2,7 +2,9 @@
    Mascota de la home (Strata.dc.html:101-106; lógica :1571-1755)
    Portal en el body con capa propia (--z-mascot-layer): por encima del
    contenido de la home y por debajo de barras, menús, overlays y toasts.
-   La capa cubre la ventana pero no recibe clics; solo el botón de la mascota.
+   La capa y el cuadro del botón no reciben clics (D-27): solo la zona sobre el
+   cuerpo de la salamandra (::before) y «Ocultar mascota». Lo que se ve a través
+   de las partes transparentes sigue respondiendo al clic.
    El motor (motor.ts) escribe el transform del botón y de la burbuja.
    ========================================================================== */
 
@@ -14,7 +16,8 @@
 }
 
 /* Botón de 100 px que se desplaza. El motor lo centra en su punto con
-   translate(-50%, -50%) y le aplica giro y escala alrededor del centro. */
+   translate(-50%, -50%) y le aplica giro y escala alrededor del centro.
+   El cuadro (100 × 142 px, casi todo transparente) deja pasar el puntero. */
 .st-mascota__boton {
   position: absolute;
   top: 0;
@@ -26,11 +29,25 @@
   /* El anillo de foco (global.css) toma forma de cápsula alrededor de la salamandra. */
   border-radius: var(--radius-pill);
   background: none;
-  cursor: pointer;
-  pointer-events: auto;
+  pointer-events: none;
   touch-action: manipulation;
   -webkit-tap-highlight-color: transparent;
   will-change: transform;
+}
+
+/* Zona táctil: una cápsula sobre la cabeza y el tronco de la salamandra
+   (mascota.png, 594 × 846). Gira y escala con el botón. Mide unos 36 × 94 px:
+   pasa el mínimo de 24 px de WCAG 2.5.8. El clic sobre ella es del botón. */
+.st-mascota__boton::before {
+  content: '';
+  position: absolute;
+  top: 3%;
+  left: 25%;
+  width: 36%;
+  height: 66%;
+  border-radius: var(--radius-pill);
+  pointer-events: auto;
+  cursor: pointer;
 }
 
 /* Antes de entrar en escena no se ve ni se alcanza con Tab ni con un lector de pantalla. */
@@ -41,8 +58,8 @@
 
 /* La carrera termina junto al CTA pulsado (+66 px) y ahí gira y espera 400 ms.
    En el prototipo quedaba debajo del contenido; aquí va encima, así que
-   mientras corre deja pasar los clics al CTA y a sus vecinos. */
-.st-mascota__boton[data-fase='carrera'] {
+   mientras corre ni su zona táctil recibe clics: pasan al CTA y a sus vecinos. */
+.st-mascota__boton[data-fase='carrera']::before {
   pointer-events: none;
 }
 
@@ -61,12 +78,16 @@
 }
 
 /* ── Burbuja (Strata.dc.html:103-105) ──────────────────────────────────── */
-/* El contenedor es la región aria-live y lo coloca el motor; el globo lleva
-   el aspecto y la entrada bubbleIn. */
+/* El motor coloca el contenedor; dentro van la región aria-live con el globo
+   (aspecto y entrada bubbleIn) y «Ocultar mascota». Solo el botón recibe clics. */
 .st-mascota__burbuja {
   position: absolute;
   top: 0;
   left: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-6);
   width: var(--width-bubble);
   max-width: calc(100vw - var(--space-24));
   pointer-events: none;
@@ -83,6 +104,29 @@
   line-height: var(--lh-normal);
   text-wrap: pretty;
   animation: var(--anim-bubble-in);
+}
+
+/* «Ocultar mascota» (WCAG 2.2.2; D-27): pastilla blanca bajo el consejo, con
+   objetivo de 28 px. Tinta sobre blanco: 17.85:1. */
+.st-mascota__ocultar {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--space-28);
+  padding: var(--space-4) var(--space-12);
+  border: var(--border-width) solid var(--color-border-strong);
+  border-radius: var(--radius-pill);
+  background-color: var(--color-surface-white);
+  box-shadow: var(--shadow-chip);
+  color: var(--color-text);
+  font-size: var(--fs-small);
+  font-weight: var(--fw-semibold);
+  line-height: var(--lh-title);
+  pointer-events: auto;
+  animation: var(--anim-bubble-in);
+}
+
+.st-mascota__ocultar:hover {
+  border-color: var(--color-navy);
 }
 
 /* ── Movimiento reducido, alto contraste e impresión ───────────────────── */

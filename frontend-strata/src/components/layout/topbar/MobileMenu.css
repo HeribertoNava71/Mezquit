@@ -1,5 +1,6 @@
 /* ==========================================================================
-   Menú móvil de las barras (por debajo de 768 px)
+   Menú móvil de las barras (por debajo de 768 px; las barras pública y de
+   RR. HH. lo muestran hasta su propio corte, en TopBar.css)
    El prototipo solo hace wrap de la barra (brechas.md, R-06). El botón usa la
    superficie de la pastilla; el panel cubre el resto de la pantalla con el
    lienzo #FAF8F5, así no hace falta un fondo aparte ni se tapa la barra.

@@ -1,8 +1,9 @@
 /* ==========================================================================
    Barra pública (Strata.dc.html:110-125)
    El marco, la navegación y el enlace activo vienen de TopBar.css; aquí solo
-   las acciones propias del sitio público. Por debajo de 768 px pasan al menú
-   móvil y en la barra quedan el logo y el botón del menú.
+   las acciones propias del sitio público. Por debajo de su corte (960 px,
+   .st-topbar--corte-publica en TopBar.css) pasan al menú móvil y en la barra
+   quedan el logo y el botón del menú.
    ========================================================================== */
 
 /* «Tengo un código»: 13 px, 600 y navy (Strata.dc.html:122). El hover #0EA5E9
@@ -54,12 +55,13 @@
   .st-public-bar__session {
     display: none;
   }
+}
 
-  /* Home (Fase 6): la barra va dentro del marco, con su padding lateral; el
-     panel del menú móvil sale hasta las orillas de la ventana para no dejar
-     ver la página por los lados. */
-  .st-topbar--home .st-mobile-menu__panel {
-    right: calc(var(--layout-page-pad-x) * -1);
-    left: calc(var(--layout-page-pad-x) * -1);
-  }
+/* Home (Fase 6): la barra va dentro del marco, con su padding lateral; el
+   panel del menú móvil sale hasta las orillas de la ventana para no dejar ver
+   la página por los lados. Sin media query: el panel solo existe abierto, y
+   solo se abre por debajo del corte de la barra. */
+.st-topbar--home .st-mobile-menu__panel {
+  right: calc(var(--layout-page-pad-x) * -1);
+  left: calc(var(--layout-page-pad-x) * -1);
 }

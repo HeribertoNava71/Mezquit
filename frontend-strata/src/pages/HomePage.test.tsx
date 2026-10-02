@@ -12,12 +12,12 @@ vi.mock('@/context/AuthContext', () => ({
 
 // La mascota es de otro entregable (Fase 6 · mascota); aquí solo importa el hueco.
 const mascota = vi.hoisted(() => ({ tituloRef: undefined as RefObject<HTMLElement | null> | undefined }))
-vi.mock('@/components/mascota/Mascota', () => {
-  function Mascota(props: { tituloRef?: RefObject<HTMLElement | null> }) {
+vi.mock('@/components/mascota/MascotaDiferida', () => {
+  function MascotaDiferida(props: { tituloRef?: RefObject<HTMLElement | null> }) {
     mascota.tituloRef = props.tituloRef
     return <div data-testid="mascota" />
   }
-  return { Mascota, default: Mascota }
+  return { MascotaDiferida, default: MascotaDiferida }
 })
 
 const CATEGORIAS: CatalogCategory[] = [

@@ -5,6 +5,8 @@ import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } 
 import { Mascota } from './Mascota'
 import { DURACION_BURBUJA_MS, MENSAJES_MASCOTA } from './mensajes'
 import { OPACIDAD_NADO, OPACIDAD_TITULAR, RETARDO_ENTRADA_MS } from './motor'
+import { CLAVE_MASCOTA_OCULTA, guardarMascotaOculta, reiniciarPreferenciaMascota } from './preferencia'
+import { RETARDO_REAPARICION_MS } from './tiempos'
 
 // GSAP real, movido a mano: sin updateRoot en el ticker, avanzarGsap() renderiza
 // la línea de tiempo raíz al segundo pedido y luego corre los listeners del
@@ -33,6 +35,8 @@ afterEach(() => {
   vi.unstubAllGlobals()
   delete (document as { visibilityState?: unknown }).visibilityState
   restaurarVentana()
+  window.localStorage.clear()
+  reiniciarPreferenciaMascota()
 })
 
 /** Espera los import() pendientes (el motor de la mascota). */
@@ -75,6 +79,11 @@ function cuerpoMascota() {
 
 function burbuja() {
   return screen.getByRole('status')
+}
+
+/** Contenedor que coloca el motor: la región viva y «Ocultar mascota». */
+function contenedorBurbuja() {
+  return document.querySelector('.st-mascota__burbuja') as HTMLElement
 }
 
 /** Lleva la mascota hasta el nado: 6 s de espera y la entrada (3.2 s como máximo). */
@@ -395,8 +404,9 @@ describe('Mascota', () => {
       hastaElNado()
       fireEvent.click(botonMascota())
       // Al empezar el nado está en el borde derecho.
-      expect(burbuja()).toHaveAttribute('data-lado', 'izquierda')
-      expect(burbuja().style.transform).toMatch(/^translate3d\(\d+px, \d+px, 0\)$/)
+      expect(contenedorBurbuja()).toContainElement(burbuja())
+      expect(contenedorBurbuja()).toHaveAttribute('data-lado', 'izquierda')
+      expect(contenedorBurbuja().style.transform).toMatch(/^translate3d\(\d+px, \d+px, 0\)$/)
     })
 
     it('se cierra con Escape y sola a los 5.4 s', async () => {
@@ -412,6 +422,100 @@ describe('Mascota', () => {
       expect(burbuja()).not.toBeEmptyDOMElement()
       avanzarTimers(1)
       expect(burbuja()).toBeEmptyDOMElement()
+    })
+  })
+
+  describe('ocultar (WCAG 2.2.2; D-27)', () => {
+    it('la burbuja ofrece «Ocultar mascota», fuera de la región viva', async () => {
+      await montar(<Mascota />)
+      hastaElNado()
+      expect(screen.queryByRole('button', { name: 'Ocultar mascota' })).not.toBeInTheDocument()
+      fireEvent.click(botonMascota())
+      const ocultar = screen.getByRole('button', { name: 'Ocultar mascota' })
+      expect(contenedorBurbuja()).toContainElement(ocultar)
+      expect(burbuja()).not.toContainElement(ocultar)
+    })
+
+    it('al ocultarla la detiene por completo: sin tweens, ticker, listeners ni timers, y lo recuerda', async () => {
+      const tickerRemove = vi.spyOn(gsap.ticker, 'remove')
+      const ventanaRemove = vi.spyOn(window, 'removeEventListener')
+      await montar(<Mascota />)
+      hastaElNado()
+      fireEvent.click(botonMascota())
+      expect(animacionesVivas().length).toBeGreaterThan(0)
+
+      fireEvent.click(screen.getByRole('button', { name: 'Ocultar mascota' }))
+
+      expect(document.querySelector('.st-mascota')).toBeNull()
+      expect(animacionesVivas()).toHaveLength(0)
+      expect(vi.getTimerCount()).toBe(0)
+      expect(tickerRemove).toHaveBeenCalled()
+      expect(ventanaRemove.mock.calls.map(([tipo]) => tipo)).toEqual(expect.arrayContaining(['click', 'resize']))
+      expect(window.localStorage.getItem(CLAVE_MASCOTA_OCULTA)).toBe('1')
+    })
+
+    it('con el foco en «Ocultar mascota», al ocultarla el foco pasa al contenido sin desplazar', async () => {
+      render(<main id="main-content" />)
+      await montar(<Mascota />)
+      hastaElNado()
+      fireEvent.click(botonMascota())
+      const ocultar = screen.getByRole('button', { name: 'Ocultar mascota' })
+      act(() => ocultar.focus())
+      fireEvent.click(ocultar)
+      expect(document.activeElement).toBe(document.getElementById('main-content'))
+    })
+
+    it('oculta desde una visita anterior: no se monta ni descarga el motor', async () => {
+      window.localStorage.setItem(CLAVE_MASCOTA_OCULTA, '1')
+      const ventanaAdd = vi.spyOn(window, 'addEventListener')
+      await montar(<Mascota />)
+      avanzarTimers(RETARDO_ENTRADA_MS * 2)
+      expect(document.querySelector('.st-mascota')).toBeNull()
+      expect(ventanaAdd.mock.calls.filter(([tipo]) => tipo === 'click' || tipo === 'resize')).toHaveLength(0)
+      expect(animacionesVivas()).toHaveLength(0)
+    })
+
+    it('al volver a mostrarla entra casi de inmediato', async () => {
+      act(() => guardarMascotaOculta(true))
+      await montar(<Mascota />)
+      expect(document.querySelector('.st-mascota')).toBeNull()
+      act(() => guardarMascotaOculta(false))
+      await esperarMotor()
+      expect(botonMascota()).toHaveAttribute('data-fase', 'espera')
+      avanzarTimers(RETARDO_REAPARICION_MS)
+      expect(botonMascota()).toHaveAttribute('data-fase', 'entrada')
+    })
+
+    it('sin localStorage (bloqueado) se muestra, y ocultarla vale para la pestaña', async () => {
+      vi.spyOn(Storage.prototype, 'getItem').mockImplementation(() => {
+        throw new Error('bloqueado')
+      })
+      vi.spyOn(Storage.prototype, 'setItem').mockImplementation(() => {
+        throw new Error('bloqueado')
+      })
+      await montar(<Mascota />)
+      hastaElNado()
+      fireEvent.click(botonMascota())
+      fireEvent.click(screen.getByRole('button', { name: 'Ocultar mascota' }))
+      expect(document.querySelector('.st-mascota')).toBeNull()
+    })
+
+    it('con el puntero o el foco en «Ocultar mascota», la burbuja espera', async () => {
+      await montar(<Mascota />)
+      hastaElNado()
+      fireEvent.click(botonMascota())
+      const ocultar = screen.getByRole('button', { name: 'Ocultar mascota' })
+      fireEvent.focus(ocultar)
+      avanzarTimers(DURACION_BURBUJA_MS * 2)
+      expect(burbuja()).not.toBeEmptyDOMElement()
+      fireEvent.blur(ocultar)
+      avanzarTimers(DURACION_BURBUJA_MS)
+      expect(burbuja()).toBeEmptyDOMElement()
+
+      fireEvent.click(botonMascota())
+      fireEvent.mouseEnter(screen.getByRole('button', { name: 'Ocultar mascota' }))
+      avanzarTimers(DURACION_BURBUJA_MS * 2)
+      expect(burbuja()).not.toBeEmptyDOMElement()
     })
   })
 
