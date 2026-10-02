@@ -3,7 +3,7 @@
 // Uso (desde cualquier carpeta): node scripts/generate-favicons.mjs
 //
 // Origen: public/brand/strata-mark.png, copiado del prototipo aprobado
-// (Plataforma Strata de evaluaciones psicométricas/assets/). Si cambia el
+// (diseno/assets/). Si cambia el
 // emblema, reemplaza ese archivo y vuelve a correr el script.
 //
 // Salida en public/: logo.png, favicon-16.png, favicon-32.png,

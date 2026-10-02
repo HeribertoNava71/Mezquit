@@ -2,10 +2,10 @@
 
 Sistema de diseño del rediseño STRATA, definido en la Fase 1. Reemplaza la paleta y las fuentes Mezquit (T-05).
 
-- **Dónde están.** En `frontend-strata/src/styles/tokens.css`: custom properties en `:root` y, al final, el bloque «Alias temporales (D-20)». `global.css` aplica la base: fondo, tipografía, transición de estado, foco visible y movimiento reducido. `animations.css` contiene los keyframes `st-*`.
+- **Dónde están.** En `frontend-strata/src/styles/tokens.css`: custom properties en `:root` (los alias temporales de D-20 se retiraron en la Fase 8; ver «Nombres del sistema anterior»). `global.css` aplica la base: fondo, tipografía, transición de estado, foco visible y movimiento reducido. `animations.css` contiene los keyframes `st-*`.
 - **De dónde salen.** Del brief del dueño (PROMPT_CLAUDE_CODE.md, secciones «Sistema de diseño», «Layout» y «Movimiento») y del prototipo aprobado (Strata.dc.html), resumidos en [auditoria.md §3](rediseno/auditoria.md). Aplican las decisiones D-04 (fuentes), D-19 (primario y contraste), D-20 (alias) y D-22 (avisos) de [decisiones.md](rediseno/decisiones.md).
 - **Contraste.** Es cálculo propio con la fórmula de WCAG 2.x (luminancia relativa). AA pide 4.5:1 en texto normal y 3:1 en texto grande (24 px, o 18.66 px en negrita). También pide 3:1 en componentes de interfaz, indicadores de foco y gráficos que transmiten información (criterio 1.4.11). Los fondos translúcidos se componen sobre #FAF8F5; «vidrio» es rgba(255,255,255,.72) sobre #FAF8F5.
-- **Nombres.** Son semánticos, en inglés y con el prefijo de su grupo: `--color-*`, `--fs-*`, `--space-*`, `--radius-*`, etc. Ningún nombre STRATA coincide con uno del sistema anterior; así, en la Fase 8 los alias se borran sin tocar nada más.
+- **Nombres.** Son semánticos, en inglés y con el prefijo de su grupo: `--color-*`, `--fs-*`, `--space-*`, `--radius-*`, etc. Ningún nombre STRATA coincide con uno del sistema anterior; así, en la Fase 8 los alias se borraron sin tocar ningún token STRATA. `src/styles/tokens.test.ts` falla si alguna `var(--x)` sin respaldo no está definida en ningún lado.
 
 ## Reglas de uso
 
@@ -43,7 +43,7 @@ Sistema de diseño del rediseño STRATA, definido en la Fase 1. Reemplaza la pal
     - El escalonado se escribe `animation-delay: calc(var(--i) * var(--stagger-card))` (o `--stagger-row`), con `style={{ '--i': index }}`.
     - Con prefers-reduced-motion, la regla global anula animaciones, transiciones y retardos. Lo que se anima con JS consulta `useReducedMotion()`; la mascota queda quieta u oculta.
 16. **Capas.** Solo `--z-*`. Los menús de la barra usan `--z-dropdown`; modales, drawer y su fondo, `--z-overlay`. El toast queda encima de todo.
-17. **Móvil (640 px o menos).** Los tokens de layout se reducen solos, por pasos: el padding de página pasa de 48/34/88 a 32/20/64 px y, a 400 px o menos, a 24/16/56 px (margen lateral de 16 px en teléfonos chicos). Desde 640 px, las tablas pasan a tarjetas (D-23). Los breakpoints no pueden ser variables CSS: son 400 px, 640 px y 768 px (menú móvil).
+17. **Móvil (640 px o menos).** Los tokens de layout se reducen solos, por pasos: el padding de página pasa de 48/34/88 a 32/20/64 px y, a 400 px o menos, a 24/16/56 px (margen lateral de 16 px en teléfonos chicos). A 640 px o menos, las tablas pasan a tarjetas (D-23), y también más ancho cuando la tabla no cabe en su contenedor (DataTable, clase `st-table--tarjetas`, Fase 8). Los breakpoints no pueden ser variables CSS: son 400 px, 640 px y el corte del menú móvil de cada barra: 768 px (super admin), 900 px (RR. HH.) y 960 px (pública), medidos en la Fase 8 con `e2e/barras.mjs` (topbar/cortes.ts y TopBar.css).
 
 ## Recetas
 
@@ -134,7 +134,7 @@ Son ejemplos; los nombres de clase son ilustrativos.
 | `--color-surface-pill` | `rgba(255, 255, 255, 0.8)` | Pastilla de usuario y eyebrow del hero | Fondo: tinta 17.65:1 · secundario 7.33:1 · saldo 7.49:1 |
 | `--color-surface-ghost` | `rgba(255, 255, 255, 0.9)` | Botón secundario sobre vidrio («Previsualizar») | Fondo: navy 10.30:1 |
 | `--color-scrim` | `rgba(15, 23, 42, 0.42)` | Fondo detrás de modales y drawer | Decorativo |
-| `--color-topbar-bg` | `rgba(250, 248, 245, 0.78)` | Barra superior translúcida | Fondo: tinta 16.84:1 · terciario 5.46:1 |
+| `--color-topbar-bg` | `rgba(250, 248, 245, 0.92)` | Barra superior translúcida. El prototipo usa .78; con el banner oscuro del reporte debajo, el enlace inactivo bajaba a 3.4:1 (Fase 8) | Fondo: tinta 16.84:1 · terciario 5.46:1 · con #0F172A debajo, terciario 4.63:1 |
 | `--color-exam-bar-bg` | `rgba(250, 248, 245, 0.8)` | Barra del examen | Fondo: tinta 16.84:1 · terciario 5.46:1 |
 
 ### Color · texto
@@ -182,6 +182,8 @@ Son ejemplos; los nombres de clase son ilustrativos.
 | `--color-coral-tint` | `#FFF1F1` | Insignia y tag coral | Fondo: coral-text 5.14:1 |
 | `--color-coral-border` | `#FFD9D9` | Borde de la insignia coral | Decorativo |
 | `--color-coral-text` | `#B93A34` | Texto sobre tinte coral | 5.14:1 #FFF1F1 |
+| `--color-slate-tint` | `#EEF2F6` | Fondo del badge slate (neutro frío): «Ajuste» de Créditos, que en coral se confundía con un error (Fase 8) | Fondo: `--color-text-slate` 6.74:1 |
+| `--color-slate-dot` | `#64748B` | Punto del badge slate | Decorativo: siempre con texto |
 | `--color-indicator-active` | `var(--color-coral)` = `#FF6B6B` | Subrayado de 2 px del enlace activo | Gráfico 2.62:1 sobre #FAF8F5: complementa el color y el peso del enlace activo, y aria-current |
 
 ### Color · bordes y puntos
@@ -268,13 +270,13 @@ Son ejemplos; los nombres de clase son ilustrativos.
 
 | Token | Valor | Uso | Contraste (WCAG 2.x) |
 |---|---|---|---|
-| `--color-data-high` | `var(--color-navy)` = `#1E3A8A` | ≥ 80 | Gráfico 8.85:1 sobre la pista |
-| `--color-data-mid` | `var(--color-sky-strong)` = `#0EA5E9` | ≥ 70 | Gráfico 2.37:1 sobre la pista: siempre con su valor en texto |
-| `--color-data-low` | `var(--color-sky)` = `#38BDF8` | < 70 | Gráfico 1.83:1 sobre la pista: siempre con su valor en texto |
+| `--color-data-high` | `var(--color-navy)` = `#1E3A8A` | Categoría «alto» del backend (D-14; no los umbrales 80/70 del prototipo) | Gráfico 8.85:1 sobre la pista |
+| `--color-data-mid` | `var(--color-sky-strong)` = `#0EA5E9` | Categoría «medio» | Gráfico 2.37:1 sobre la pista: siempre con su valor en texto |
+| `--color-data-low` | `var(--color-sky)` = `#38BDF8` | Categoría «bajo» | Gráfico 1.83:1 sobre la pista: siempre con su valor en texto |
 | `--color-data-neutral` | `var(--color-dot-neutral)` = `#A8A296` | Rango neutro o bajo | Gráfico 2.17:1: siempre con texto |
-| `--color-data-high-text` | `var(--color-navy)` = `#1E3A8A` | Texto del nivel ≥ 80 | 10.36:1 blanco |
-| `--color-data-mid-text` | `var(--color-sky-deep)` = `#075985` | Texto del nivel ≥ 70 | 7.56:1 blanco |
-| `--color-data-low-text` | `var(--color-sky-deeper)` = `#0C4A6E` | Texto del nivel < 70 | 9.46:1 blanco |
+| `--color-data-high-text` | `var(--color-navy)` = `#1E3A8A` | Texto de «alto» | 10.36:1 blanco |
+| `--color-data-mid-text` | `var(--color-sky-deep)` = `#075985` | Texto de «medio» | 7.56:1 blanco |
+| `--color-data-low-text` | `var(--color-sky-deeper)` = `#0C4A6E` | Texto de «bajo» | 9.46:1 blanco |
 | `--color-data-neutral-text` | `var(--color-text-secondary)` = `#5B5545` | Texto del rango neutro | 7.42:1 blanco |
 | `--color-data-track` | `var(--color-surface-muted)` = `#F0EDE5` | Pista de las barras | Fondo de la barra |
 | `--color-radar-stroke` | `var(--color-sky-strong)` = `#0EA5E9` | Contorno del polígono del radar | Gráfico 2.77:1 sobre blanco: el radar lleva sus valores en texto |
@@ -567,7 +569,7 @@ Son ejemplos; los nombres de clase son ilustrativos.
 | `--width-page-title-min` | `260px` | Columna del título del PageHeader antes de que las acciones bajen |
 | `--width-page-lede` | `600px` | Entradilla del PageHeader (560–600 px en Strata.dc.html:610, 688) |
 | `--width-toast` | `560px` | Ancho máximo del toast (en el prototipo crece hasta la mitad de la ventana) |
-| `--width-hero-copy` | `600px` | Columna de texto del hero de la home cuando va en una sola columna (por debajo de 1180 px; Fase 6) |
+| `--width-hero-copy` | `600px` | Columna de texto del hero de la home cuando va en una sola columna (por debajo de 1180 px; Fase 6, [D-30](rediseno/decisiones.md#d-30)) |
 | `--width-demo-stage` | `540px` | Escenario de la demo de la home: la columna del prototipo a 1200 px (Strata.dc.html:168; Fase 6) |
 | `--height-modal-max` | `92dvh` | Alto máximo de los modales (92vh en el prototipo; dvh descuenta la barra del navegador móvil) |
 | `--height-demo-stage` | `430px` | Alto mínimo del escenario de la demo de la home (Strata.dc.html:168; Fase 6) |
@@ -640,7 +642,7 @@ Para pasar un estilo en línea de Strata.dc.html a tokens.
 | rgba(255,255,255,.72 / .85 / .66 / .8 / .9) | `--surface-glass-bg` · `--surface-secondary-bg` · `--surface-step-bg` · `--color-surface-pill` · `--color-surface-ghost` | rgba(255,255,255,.9) como borde: `--color-border-step`. |
 | rgba(255,255,255,.92) | `--color-border-glass` | |
 | rgba(15,23,42,.42) | `--color-scrim` | |
-| rgba(250,248,245,.78) · rgba(250,248,245,.8) | `--color-topbar-bg` · `--color-exam-bar-bg` | |
+| rgba(250,248,245,.78) · rgba(250,248,245,.8) | `--color-topbar-bg` · `--color-exam-bar-bg` | La barra superior pasa a .92 por contraste (Fase 8) |
 | rgba(255,107,107,.2) · rgba(56,189,248,.2) · rgba(30,58,138,.1) | `--halo-coral` · `--halo-sky` · `--halo-navy` | En la home: `--halo-*-home` (.26, .24 y .12). El extremo transparente del gradiente es `transparent`. |
 | rgba(15,23,42,…) en sombras | `--shadow-*` | Ver la tabla de sombras. |
 | rgba(255,107,107,…) en sombras de CTA | `--shadow-primary*` | Navy por D-19. |
@@ -663,15 +665,22 @@ Para pasar un estilo en línea de Strata.dc.html a tokens.
 | letter-spacing .08em | `--tracking-caps` |
 | font-family 'Plus Jakarta Sans' (no se carga) | `--font-text` |
 
-## Alias temporales (D-20)
+## Nombres del sistema anterior (alias retirados en la Fase 8)
 
-Los nombres del sistema anterior siguen definidos, pero apuntan a su equivalente STRATA. Así, las pantallas que aún no se rediseñan se ven coherentes con la nueva paleta y las nuevas fuentes. No los uses en código nuevo. Se retiran en la Fase 8, junto con Cormorant Garamond y DM Sans, que siguen importadas pero ya no las usa ningún token.
+Entre las Fases 1 y 7, los nombres del sistema anterior siguieron definidos como alias temporales (D-20) que apuntaban a su equivalente STRATA, para que las pantallas aún sin rediseñar se vieran coherentes. En la Fase 8 (2026-10-02) se retiraron junto con los `--disc-*`:
 
-| Nombre anterior | Valor anterior | Ahora apunta a | Motivo |
+- Los últimos usos estaban en código sin uso (FloatingInput.css, UserDropdown.css, GrainTexture.css y Trust.css) y en la clase `.section-inner` de global.css, que ningún componente pone. Se migraron al equivalente de esta tabla; esos archivos quedan en la propuesta de limpieza de [rediseno/estado-final.md](rediseno/estado-final.md).
+- Se quitó también `--section-px: 0px` de `.st-page__content` (PageLayout.css), que solo existía para los contenedores viejos.
+- Capturas antes y después de 5 rutas al azar, a 1440, 768 y 360 px: sin cambio visual (14 de 15 idénticas píxel a píxel; la otra, dentro del ruido entre corridas).
+- Cormorant Garamond y DM Sans ya se habían retirado en la QA de la Fase 8 (D-28): ningún token las usaba y sus `@font-face` pesaban en la hoja que bloquea el primer pintado.
+
+La tabla queda como referencia por si un nombre viejo vuelve a aparecer (por ejemplo, al portar el código real, [PB-01](rediseno/pendientes-backend.md#pb-01)): ya no está definido, así que hay que cambiarlo por su equivalente. `src/styles/tokens.test.ts` lo detecta.
+
+| Nombre anterior | Valor anterior | Equivalente STRATA | Motivo |
 |---|---|---|---|
 | `--color-hunter` | #3A5A40 | `--color-navy` (#1E3A8A) | El primario viejo pasa a navy (D-19); también cubre enlaces, foco viejo y nivel «alto». |
 | `--color-fern` | #567F55 | `--color-sky-deep` (#075985) | Era el hover del primario (blanco encima: 7.56:1) y el nivel «medio» del reporte. |
-| `--color-sage` | #A3B18A | `--color-sky-text` (#0369A1) | Trazos decorativos y nivel «bajo». Report.tsx lo usa como texto: antes daba unos 2.3:1 y ahora 5.93:1. |
+| `--color-sage` | #A3B18A | `--color-sky-text` (#0369A1) | Trazos decorativos (GrainTexture) y nivel «bajo». Como texto, el viejo daba unos 2.3:1; el equivalente, 5.93:1. |
 | `--color-brunswick` | #344E41 | `--color-text` (#0F172A) | Títulos, pie y cabecera del reporte de ejemplo. |
 | `--color-ink` | #1E2B24 | `--color-text` (#0F172A) | Texto de cuerpo. |
 | `--color-timberwolf` | #DAD7CD | `--color-border-neutral` (#E7E2D8) | Bordes tenues, bandas de sección y pistas. |
@@ -681,8 +690,8 @@ Los nombres del sistema anterior siguen definidos, pero apuntan a su equivalente
 | `--color-accent` | #E0A526 | `--color-coral` | Acento. |
 | `--color-success` | #2E6B3F | `--color-success-text` (#157A3A) | |
 | `--color-error` | #B3261E | `--color-error-text` (#B3261E) | Mismo valor. |
-| `--color-warning` | #B45309 | `--color-warning-text` (#A84E07) | Sin uso hoy. |
-| `--color-info` | #2B5F8A | `--color-info-text` (#075985) | Sin uso hoy. |
+| `--color-warning` | #B45309 | `--color-warning-text` (#A84E07) | Ya no tenía uso al retirarse. |
+| `--color-info` | #2B5F8A | `--color-info-text` (#075985) | Ya no tenía uso al retirarse. |
 | `--font-display` | Cormorant Garamond | `--font-heading` (Satoshi) | |
 | `--font-body` | DM Sans | `--font-text` (General Sans) | |
 | `--text-xs` · `--text-sm` · `--text-base` · `--text-lg` | Escala fluida de 12–14 a 18–21 px | `--fs-small` · `--fs-ui-md` · `--fs-body` · `--fs-lead` | 12, 14, 16 y 17 px. |
@@ -690,11 +699,13 @@ Los nombres del sistema anterior siguen definidos, pero apuntan a su equivalente
 | `--sp-1` … `--sp-24` | N × 4 px | `--space-4` … `--space-88` | sp-20 y sp-24 (sin uso) van a 72 y 88 px. |
 | `--radius-sm` · `--radius-md` · `--radius-lg` | 4 · 8 · 16 px | `--radius-control` (14) · `--radius-card` (18) · `--radius-glass` (24) | Botones e inputs, tarjetas, tarjeta de auth. |
 | `--t-fast` · `--t-base` | 150 ms · 250 ms ease | `--dur-state` (.18s) · `--dur-lift` (.22s), ambos con `--ease-base` | |
-| `--max-width` · `--section-px` · `--section-py` | 1200 px · fluido · fluido | `--layout-max` · `--layout-page-pad-x` · `--layout-section-pad-y` | Dentro de `.st-page__content` (PageLayout), `--section-px` vale 0 para que las pantallas viejas no dupliquen el margen lateral del contenedor nuevo. |
-| `--header-h` | 64 px | Se conserva en 64 px | El padding-top del body se retiró en la Fase 2 (las barras son sticky). Solo lo usan los min-height de Hero.css y NotFoundPage.css (Header.css se reescribió y AppLayout.css y AdminLayout.css se borraron en la Fase 2); se retira cuando esas pantallas se rediseñen (Fases 6 y 7). |
-| `--disc-d` · `--disc-i` · `--disc-s` · `--disc-c` | Sin cambio | — | Sin uso. No necesitan alias y se retiran en la Fase 8. |
+| `--max-width` · `--section-px` · `--section-py` | 1200 px · fluido · fluido | `--layout-max` · `--layout-page-pad-x` · `--layout-section-pad-y` | Dentro de `.st-page__content` (PageLayout), `--section-px` valía 0 para que las pantallas viejas no duplicaran el margen lateral del contenedor nuevo; esa regla se retiró con los alias. |
+| `--header-h` | 64 px | — | Sin equivalente. Lo usaban el padding-top del body, retirado en la Fase 2 (las barras son sticky), y los min-height de Hero.css y NotFoundPage.css, que dejaron de usarlo al rediseñarse (Fases 6 y 7). Se retiró sin uso. |
+| `--disc-d` · `--disc-i` · `--disc-s` · `--disc-c` | #B84A3E · #D9A33A · #588157 · #3F6E96 | — | Sin uso desde que Report reemplazó al reporte DISC. Se retiraron sin equivalente. |
 
 ## Decisiones de la Fase 1
+
+Registradas como [D-29](rediseno/decisiones.md#d-29) en decisiones.md.
 
 - **Foco.** El borde #0EA5E9 del prototipo da 2.77:1 sobre blanco, y su anillo rgba(56,189,248,.16) es casi invisible. El foco usa #0284C7, un celeste un tono más oscuro: 4.10:1 sobre blanco, 3.86:1 sobre #FAF8F5, 3.51:1 sobre #F1EDE4, 3.47:1 sobre #E8ECF7 y 4.36:1 sobre tinta. Se dibuja como outline de 2 px separado 2 px, o, en controles con borde, como borde más anillo de 1 px con el halo del prototipo por fuera. Sobre navy, #0284C7 da 2.53:1; por eso `st-on-dark` cambia a #38BDF8 (4.84:1 sobre navy y 8.33:1 sobre tinta).
 - **Estados.**
@@ -716,9 +727,10 @@ Los nombres del sistema anterior siguen definidos, pero apuntan a su equivalente
 ## Pendientes
 
 - Validar en pantalla, con el dueño, el primario navy (D-19) y los bordes de control #8B8574.
-- FloatingInput (login y registro) usa `--color-border` como color de la etiqueta en reposo: da 3.68:1, menos de 4.5:1. Ya fallaba antes (3.57:1). Se corrige cuando esas pantallas pasen al Input nuevo (Fase 7).
-- polyCycle con movimiento reducido deja visibles los tres polígonos del radar de la home; la Fase 6 debe ocultar dos.
+- La etiqueta en reposo de FloatingInput (antes `--color-border`, ahora `--color-border-control`) da 3.68:1, menos de 4.5:1. Ya no se ve en ninguna pantalla: login y registro usan Input desde la Fase 7 y FloatingInput quedó sin uso (propuesta de limpieza en [rediseno/estado-final.md](rediseno/estado-final.md)). Si se revive, hay que corregirla.
+- ~~polyCycle con movimiento reducido deja visibles los tres polígonos del radar de la home; la Fase 6 debe ocultar dos.~~ Resuelto en la Fase 6: con movimiento reducido, DemoExamen.css oculta dos perfiles y deja uno quieto.
 - Halos de la home (Fase 6). En el centro del halo coral de la home (rgba(255,107,107,.26) sobre #FAF8F5, que compone #FBD3D1), el texto terciario baja a 4.24:1, el de éxito a 3.97:1 y el foco a 3.00:1. El secundario se mantiene en 5.44:1. Esos textos van dentro de una superficie o en secundario (regla 13).
 - Pesos de Satoshi. El CDN de Fontshare solo trae 300, 400, 500, 700 y 900, así que `--fw-semibold` y `--fw-extrabold` se pintan en 700 en los títulos, igual que en el prototipo. Las cifras de datos van en General Sans, que llega hasta 700 (QA visual de la Fase 1). Si se quiere un peso más grueso para las cifras, hay que pedir Satoshi 900 (decisión del dueño).
 - El enlace para saltar al contenido (`.st-skip-link`) lo monta PageLayout desde la Fase 2, cuando la pantalla tiene barra superior. Su capa (`--z-skip-link`, 90) queda por encima de las tres barras, que ya son `.st-topbar` (`--z-topbar`, 30); la barra fija vieja (z-index 100) ya no existe.
-- El padding-top del body se retiró en la Fase 2. `--header-h` queda mientras Hero.css y NotFoundPage.css lo usen. Los alias, las fuentes Cormorant Garamond y DM Sans y los `--disc-*` se retiran en la Fase 8.
+- El padding-top del body se retiró en la Fase 2. En la Fase 8 se retiraron los alias (también `--header-h`, que ya nadie usaba) y los `--disc-*`; las fuentes Cormorant Garamond y DM Sans ya se habían retirado en la QA de la misma fase (D-28). Ver «Nombres del sistema anterior».
+- Fuentes (QA de la Fase 8, D-28): las hojas de Fontshare se precargan y se aplican al llegar, sin bloquear el primer pintado (`display=swap`), y Vite ya no incrusta en base64 los subconjuntos chicos de JetBrains Mono dentro del CSS (`build.assetsInlineLimit` en vite.config.ts).

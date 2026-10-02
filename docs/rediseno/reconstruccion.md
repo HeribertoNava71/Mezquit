@@ -4,6 +4,8 @@
 
 Las citas siguen el formato archivo:línea, como en [auditoria.md](auditoria.md). Los planes están en `docs/superpowers/plans`, y dentro de una celda «:NNNN» se refiere al último archivo citado.
 
+> **Estado al cierre del rediseño (2026-10-02).** De «Lo que falta», ya se resolvió casi todo: las imágenes de `public/` se generan desde `public/brand/strata-mark.png` (Fase 2), hay pruebas con Vitest y Playwright, el README es propio, D-26 nombra `frontend-strata/` y el lint pasa sin avisos. De las cinco supresiones de ESLint queda una, la de AuthContext.tsx (L-22 en [estado-final.md](estado-final.md#limpieza)). Sigue pendiente el código real (PB-01); la guía para compararlo y migrar, que amplía la sección final de este documento, está en [estado-final.md](estado-final.md#migracion). Este documento describe la base del commit 817a5df tal como se hizo.
+
 ## Resumen
 
 - El código real del frontend sigue sin aparecer ([PB-01](pendientes-backend.md#pb-01)). Para no frenar el rediseño, se reconstruyó a partir de los 7 planes de implementación (D-26).

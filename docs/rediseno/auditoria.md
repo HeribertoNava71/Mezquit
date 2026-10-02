@@ -42,7 +42,7 @@
 
 ## 1. Frontend actual (reconstruido desde docs/superpowers)
 
-**Alcance.** Esta sección reconstruye el estado final aplicando en orden los 7 planes de `docs/superpowers/plans`, junto con sus specs (`docs/superpowers/specs`) y `docs/design-tokens.md`, y respeta lo que cada plan elimina. Es un estado reconstruido, no código verificado (ver «Bloqueo»); las dudas están en 1.10. Las citas siguen el formato archivo:línea: los planes y specs se citan por su nombre de archivo, y `Strata.dc.html` y `PROMPT_CLAUDE_CODE.md` están en «Plataforma Strata de evaluaciones psicométricas/». Dentro de una celda, «:NNNN» se refiere al último archivo citado.
+**Alcance.** Esta sección reconstruye el estado final aplicando en orden los 7 planes de `docs/superpowers/plans`, junto con sus specs (`docs/superpowers/specs`) y `docs/design-tokens.md`, y respeta lo que cada plan elimina. Es un estado reconstruido, no código verificado (ver «Bloqueo»); las dudas están en 1.10. Las citas siguen el formato archivo:línea: los planes y specs se citan por su nombre de archivo, y `Strata.dc.html` y `PROMPT_CLAUDE_CODE.md` están en «diseno/». Dentro de una celda, «:NNNN» se refiere al último archivo citado.
 
 **Orden de aplicación.** Es el orden indicado para esta auditoría, con una excepción: evaluation-module va antes que sales-site.
 
@@ -411,7 +411,7 @@ Para no resucitarlo:
 
 ## 2. Prototipo (Strata.dc.html)
 
-**Fuente.** `Plataforma Strata de evaluaciones psicométricas/Strata.dc.html` (2,234 líneas). El markup va de `<x-dc>` a `</x-dc>` (Strata.dc.html:9-1438). La lógica está en `class Component extends DCLogic` (Strata.dc.html:1440-1775) y en `renderVals()` (Strata.dc.html:1776-2230). `state.pantalla` decide qué pantalla se ve (Strata.dc.html:1507-1508, 2011-2015), y todos los datos del `state` son ficticios (PROMPT_CLAUDE_CODE.md:20). Los puntos dudosos se comprobaron contra el archivo y están en «Comprobaciones puntuales». Los tokens de diseño están en la sección 3.
+**Fuente.** `diseno/Strata.dc.html` (2,234 líneas). El markup va de `<x-dc>` a `</x-dc>` (Strata.dc.html:9-1438). La lógica está en `class Component extends DCLogic` (Strata.dc.html:1440-1775) y en `renderVals()` (Strata.dc.html:1776-2230). `state.pantalla` decide qué pantalla se ve (Strata.dc.html:1507-1508, 2011-2015), y todos los datos del `state` son ficticios (PROMPT_CLAUDE_CODE.md:20). Los puntos dudosos se comprobaron contra el archivo y están en «Comprobaciones puntuales». Los tokens de diseño están en la sección 3.
 
 **Dos rasgos del runtime que afectan al port.** `support.js` no se porta (PROMPT_CLAUDE_CODE.md:10), pero explica dos comportamientos del prototipo:
 

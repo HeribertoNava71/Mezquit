@@ -39,7 +39,9 @@ Necesitan aprobación del dueño (PROMPT_CLAUDE_CODE.md:54).
 > **Estado (2026-10-01).** El dueño aprobó todas las recomendaciones y pidió ejecutar las fases sin más preguntas («dale con las fases a full, no preguntes solo ejecuta»). La columna «Recomendación» pasa a ser la decisión vigente, con dos ajustes:
 >
 > - **D-04 se resuelve con la opción B.** No se pudo verificar que la licencia de Fontshare permita publicar los archivos de Satoshi y General Sans en un repo público. Por eso se cargan desde el CDN de Fontshare. JetBrains Mono se autohospeda con `@fontsource/jetbrains-mono` (licencia OFL).
-> - **D-26 (nueva) · Frontend reconstruido como base.** PB-01 sigue abierto: el código real no apareció en el remoto ni en la máquina. Para no detener el rediseño, el frontend se reconstruye desde los planes de `docs/superpowers/plans` en la carpeta nueva `frontend-strata/`, en un commit separado (`chore(frontend): reconstruir…`), y el rediseño se construye encima. No se usa `frontend/` porque quitar su gitlink necesita aprobación explícita; reemplazarlo queda para la migración final (D-01). Las desviaciones de la reconstrucción quedan en [reconstruccion.md](reconstruccion.md). Cuando llegue el código real: diff contra ese commit base y portar las diferencias. El gitlink de `backend/` no se toca (regla 1).
+> - **D-26 (nueva) · Frontend reconstruido como base.** PB-01 sigue abierto: el código real no apareció en el remoto ni en la máquina. Para no detener el rediseño, el frontend se reconstruye desde los planes de `docs/superpowers/plans` en la carpeta nueva `frontend-strata/`, en un commit separado (`chore(frontend): reconstruir…`), y el rediseño se construye encima. No se usa `frontend/` porque quitar su gitlink necesita aprobación explícita; reemplazarlo queda para la migración final (D-01). Las desviaciones de la reconstrucción quedan en [reconstruccion.md](reconstruccion.md). Cuando llegue el código real: diff contra ese commit base y portar las diferencias. El gitlink de `backend/` no se toca (regla 1). Detalle en [D-26](#d-26).
+>
+> **Estado (2026-10-02).** D-27 a D-31 se tomaron durante la ejecución (Fases 1, 6 y 8) sin consulta previa, porque el prototipo chocaba con AA, con WCAG 2.2 o con el rendimiento que pide la spec. Cada una explica su motivo y su evidencia, y el dueño puede revertirla. Lo que todavía espera al dueño o al psicólogo está en [Por aprobar al cierre](#por-aprobar) y el cierre completo, en [estado-final.md](estado-final.md).
 
 | ID | Tema | Recomendación | Bloquea |
 |---|---|---|---|
@@ -68,6 +70,12 @@ Necesitan aprobación del dueño (PROMPT_CLAUDE_CODE.md:54).
 | D-23 | Tablas en móvil | Tarjetas bajo 640 px | Fase 4 |
 | D-24 | Ejemplo en la home | Quitarlo de la home | Fase 6 |
 | D-25 | Eventos de integridad | Solo blur | Fase 3 |
+| D-26 | Código real ausente | Reconstruir el frontend en `frontend-strata/` como base | Fase 1 |
+| D-27 | Mascota: clics y cómo ocultarla | Zona táctil sobre el cuerpo y «Ocultar mascota» (WCAG 2.2.2) | Fase 8 |
+| D-28 | Rendimiento de la home | Carga perezosa por ruta, mascota y GSAP en sus chunks, fuentes sin bloqueo | Fase 8 |
+| D-29 | Tokens de accesibilidad | Foco #0284C7, borde funcional #8B8574, éxito #157A3A y advertencia #A84E07 | Fase 1 |
+| D-30 | Hero de la home | Dos columnas solo desde 1180 px | Fase 6 |
+| D-31 | Ajustes de la QA | Barra a .92, menú móvil por barra, tablas que no caben a tarjetas, toast y badge «Ajuste» | Fase 8 |
 
 <a id="d-01"></a>
 ### D-01 · Cómo obtener el código real
@@ -82,6 +90,7 @@ Necesitan aprobación del dueño (PROMPT_CLAUDE_CODE.md:54).
 ### D-02 · Mover el prototipo a `diseno/` y versionarlo
 
 - **Contexto.** El brief cita `diseno/Strata.dc.html`, `diseno/support.js`, `diseno/assets/` y `diseno/uploads/`, y propone `npx serve diseno` (PROMPT_CLAUDE_CODE.md:7-14). Hoy el prototipo está sin versionar en «Plataforma Strata de evaluaciones psicométricas/», junto con el brief.
+- **Estado (2026-10-02).** Ejecutada: el prototipo se movió a `diseno/` y se versionó (Strata.dc.html, support.js, assets/ y PROMPT_CLAUDE_CODE.md); `diseno/.gitignore` excluye uploads/ y .thumbnail. Para verlo: `npx serve diseno` y abrir Strata.dc.html.
 - **Opciones.** A) Mover a `diseno/` y versionar Strata.dc.html, support.js, assets/ y el brief, sin uploads/ (excluida en .gitignore). B) Dejarlo fuera del repo. C) Versionarlo completo.
 - **Recomendación.** A. Coincide con las rutas del brief, mantiene estables las referencias por número de línea de estos documentos y excluye uploads/, que no va a producción (PROMPT_CLAUDE_CODE.md:12). Las imágenes que use el frontend (mascota.png, strata-salamandra.png, strata-logo.png y strata-mark.png, :11) se copian a `frontend/public/` o `src/assets/`.
 - **Impacto.** Un commit `chore(diseno): versionar el prototipo aprobado`. Las rutas relativas `assets/…` del prototipo siguen funcionando.
@@ -298,9 +307,162 @@ Necesitan aprobación del dueño (PROMPT_CLAUDE_CODE.md:54).
 - **Recomendación.** A en la Fase 3: B registra datos que el reporte no muestra. La bandera multidispositivo depende de PB-34; cuando exista, el reporte la muestra junto a las pérdidas de foco, como dato neutro.
 - **Impacto.** En la Fase 3 solo se conserva blur; el texto de integridad del reporte sigue siendo neutro (2026-09-12-fase2-panel-rh-design.md:20).
 
+<a id="d-26"></a>
+### D-26 · Frontend reconstruido como base
+
+Aprobada por el dueño el 2026-10-01, junto con las demás recomendaciones.
+
+- **Contexto.** [PB-01](pendientes-backend.md#pb-01) sigue abierto: el código real del frontend no está en el repo, ni en el remoto, ni en la máquina (auditoria.md, «Bloqueo»). Sin código no se podía empezar la Fase 1 ni correr build, lint y pruebas.
+- **Decisión.** Reconstruir el frontend desde los 7 planes de `docs/superpowers/plans` en la carpeta nueva `frontend-strata/`, en un commit propio, y construir el rediseño encima. `frontend/` y `backend/` no se tocan: quitar el gitlink de `frontend/` necesita aprobación explícita y queda para la migración final (D-01).
+- **Implementación.** Commit base 817a5df, `chore(frontend): reconstruir frontend desde docs/superpowers (base del rediseño)`. El método, las 9 desviaciones y las supresiones de lint están en [reconstruccion.md](reconstruccion.md).
+- **Impacto.** Las Fases 1 a 8 están sobre esa base. Cuando llegue el código real: diff contra 817a5df, portar las diferencias al rediseño y mover la carpeta a `frontend/` (guía en [estado-final.md](estado-final.md#migracion)).
+
+<a id="d-27"></a>
+### D-27 · Mascota: clics y cómo ocultarla
+
+Decisión tomada por el orquestador en la Fase 8.
+
+- **Contexto.** Desde la Fase 6 la mascota va en una capa por encima del contenido de la home. Su botón mide 100 × 142 px y casi todo es transparente, así que tapaba los clics del contenido que quedaba debajo. Además se mueve sola más de 5 s: WCAG 2.2.2 (nivel A) pide un mecanismo para pausarla, detenerla u ocultarla.
+- **Decisión.**
+  - El cuadro del botón no recibe el puntero (`pointer-events: none`). Solo una cápsula sobre la cabeza y el tronco de la salamandra (`::before`, unos 36 × 94 px, más que los 24 px de WCAG 2.5.8) recibe el toque; el clic en lo transparente llega al contenido.
+  - «Ocultar mascota» junto a la burbuja y en el pie de la home; en el pie, el mismo botón cambia a «Mostrar mascota» y una región viva anuncia el cambio. La preferencia se guarda en localStorage (con try/catch: sin almacenamiento, vale para la pestaña). Oculta, la mascota no se monta: sin tweens, ticker, listeners ni timers, y su chunk no se descarga. Al ocultarla desde la burbuja, el foco pasa al contenido (main) sin desplazar la página. Con movimiento reducido no existe y el control no se muestra.
+- **Implementación.** `src/components/mascota/`: Mascota.tsx y Mascota.css (zona táctil y botón de la burbuja), preferencia.ts, ControlMascota.tsx (pie de la home, por `trailing` de Footer desde RootLayout) y sus pruebas.
+- **Verificación.** `e2e/fugas-mascota.mjs --solo clics`: en una rejilla de unos 390 puntos dentro del cuadro, los de la cápsula reciben el puntero y los demás dejan pasar el clic; un clic real del ratón en lo transparente llega al contenido. `--solo ocultar`: oculta sin dejar animaciones, ticker ni timers; al recargar no se monta ni se descarga; «Mostrar mascota» la trae de vuelta.
+
+<a id="d-28"></a>
+### D-28 · Rendimiento de la home
+
+Decisión tomada por el orquestador en la Fase 8.
+
+- **Contexto.** El Lighthouse móvil de la home dio unos 74 en la Fase 6, contra la meta de 90 de la spec de la fase 3 del repo (2026-09-11-fase3-sitio-ventas-design.md:99); en la QA, con tres corridas en la misma máquina, el mismo código dio una mediana de 63 (tabla de abajo). Todo el sitio iba en un solo bundle (604 KB, 183 KB comprimidos) y las hojas de Fontshare bloqueaban el primer pintado.
+- **Decisión.** Carga perezosa por ruta con React.lazy y Suspense en App.tsx (EstadoCarga como respaldo), sin cambiar URL ni guardas; la mascota y GSAP en sus propios chunks, que solo se descargan en la home; fuentes de Fontshare sin bloquear el render (precarga de la hoja con onload y <noscript>, con `display=swap`).
+- **Implementación.**
+  - App.tsx: cada pantalla salvo la home es `lazy()` y va dentro de `<Perezosa>` (Suspense con CargaDeRuta, que muestra EstadoCarga en el hueco del contenido con un fundido retrasado). La home, RootLayout, la barra, el pie y las guardas siguen en el bundle principal: la home no espera un chunk más. Las guardas envuelven a la pantalla o al layout igual que antes.
+  - Mascota: la home monta MascotaDiferida, que espera 4.5 s y un momento libre del navegador, descarga Mascota.tsx (y este, al montarse, motor.ts con GSAP) y le pasa lo que falta de los 6 s de entrada: entra a la misma hora que antes. Con movimiento reducido u oculta no descarga nada.
+  - index.html: precarga de las dos hojas de Fontshare con onload y <noscript>; el preconnect a api.fontshare.com sin crossorigin (la hoja se pide sin CORS) y el de cdn.fontshare.com con él (las fuentes sí).
+  - Además, en la QA: vite.config.ts ya no incrusta en base64 los subconjuntos chicos de JetBrains Mono en la hoja principal (eran 27 KB de fuentes dentro del CSS que bloquea el pintado); se retiraron Cormorant Garamond y DM Sans, sin uso desde la Fase 1 (D-20); strata-salamandra.png (36 → 9 KB) y mascota.png (63 → 16 KB) pasan a PNG con paleta, sin cambio visible.
+- **Resultado.** Lighthouse 13, perfil móvil (simulado: 4G lenta y CPU ×4), sobre `vite preview`, 3 corridas en la misma máquina:
+
+  | | Rendimiento | FCP | LCP | TBT | CLS | Speed Index | Accesibilidad |
+  |---|---|---|---|---|---|---|---|
+  | Antes (bundle único) | 63 (63, 56, 71) | 3.7 s | 4.4 s | 406 ms | 0 | 5.2 s | 100 |
+  | Después | 82 (75, 82, 84) | 3.1 s | 3.5 s | 17 ms | 0 | 5.1 s | 100 |
+
+  Peso de la home: 508 → 346 KB transferidos; JS 215 → 132 KB; CSS 52 → 24 KB; el bloqueo de render estimado baja de 1,720 a 150 ms. Bundle principal: 604 KB (183 comprimidos) → 257 KB (80) más el chunk compartido de React Router, axios y los componentes base (157 KB, 54).
+- **Por qué no llega a 90.** El sitio se pinta en el cliente: el H1 de la home (el LCP) no existe hasta que llegan y corren unos 133 KB comprimidos de JS (React 19, React Router 7, axios y la home). Con la red y la CPU que simula Lighthouse, eso deja el FCP en unos 3.1 s y el LCP en 3.5 s aunque el TBT ya sea casi cero. Se probó además, sin mejora en el resultado simulado: `content-visibility: auto` en las secciones bajo el pliegue, quitar halos, blur y animaciones, y marcar los CSS como únicos efectos secundarios para separar más los chunks. En esta máquina, además, el primer cuadro del Chromium sin interfaz tarda (el proceso de GPU trabaja unos 1.4 s antes de pintarlo, también con aceleración por hardware), y la simulación arrastra al camino crítico las fuentes que empezaron antes (Fontshare y JetBrains Mono). Llegar a 90 pide prerenderizar el HTML de la home (SSG) o renderizar en el servidor, un cambio de stack que necesita la aprobación del dueño.
+
+<a id="d-29"></a>
+### D-29 · Tokens de accesibilidad de la Fase 1
+
+Decisión tomada en la Fase 1 al definir tokens.css. Aplica T-12: el prototipo manda en apariencia salvo que choque con AA.
+
+- **Contexto.** Varios valores del prototipo no llegan a AA. El foco #0EA5E9 da 2.77:1 sobre blanco y su anillo rgba(56,189,248,.16) casi no se ve. Los bordes de input y radio (#E7E2D8, #E5E0D8, #D6CFC2 y #C9C2B4) dan entre 1.29 y 1.77:1, y WCAG 1.4.11 pide 3:1 en componentes. El verde #16A34A como texto da 3.30:1. El prototipo no define advertencia ni error.
+- **Decisión.** Cuatro valores nuevos, cada uno en su token; el resto de la paleta sale del prototipo.
+
+  | Uso | Prototipo | Token y valor | Contraste (cálculo propio, WCAG 2.x) |
+  |---|---|---|---|
+  | Foco y control marcado | #0EA5E9 | `--color-focus` y `--color-control-checked`, los dos con `--color-sky-ui` = #0284C7 | 4.10:1 sobre blanco, 3.86:1 sobre #FAF8F5 y 3.47:1 en el peor fondo claro (#E8ECF7). Sobre navy da 2.53:1: dentro de `st-on-dark` el foco pasa a #38BDF8 (4.84:1) |
+  | Borde funcional (input, select, textarea, casilla y radio sin marcar) | #E7E2D8 a #C9C2B4 | `--color-border-control` = #8B8574, el tono de los íconos de input del prototipo | 3.68:1 sobre blanco y 3.47:1 sobre #FAF8F5 |
+  | Texto de éxito | #16A34A | `--color-success-text` = #157A3A; #16A34A queda en `--color-success-icon`, solo para íconos y bordes | 5.42:1 sobre blanco y 5.04:1 sobre su fondo #F0F9F3 |
+  | Texto e ícono de advertencia | No existe | `--color-warning-text` = #A84E07 | 5.59:1 sobre blanco y 5.21:1 sobre #FEF6E9 |
+
+  El error usa el #B3261E del repo (D-19). Los bordes claros del prototipo siguen en tarjetas, divisores y botones, que se reconocen por su texto.
+- **Implementación.** `src/styles/tokens.css` y [design-tokens.md](../design-tokens.md) (reglas 8 a 10 y «Decisiones de la Fase 1»).
+- **Verificación.** QA de la Fase 1: 93 paradas de Tab con un indicador de 3:1 o más. QA de la Fase 8: axe sin violaciones y `e2e/contraste.mjs` con todos los pares de tokens en su mínimo.
+- **Pendiente.** Validar en pantalla, con el dueño, los bordes #8B8574 (se ven más marcados que en el prototipo) y el primario navy de D-19.
+
+<a id="d-30"></a>
+### D-30 · Hero de la home a dos columnas desde 1180 px
+
+Decisión tomada en la Fase 6.
+
+- **Contexto.** El hero del prototipo usa `repeat(auto-fit, minmax(420px, 1fr))` con 52 px de separación (Strata.dc.html:127): pasa a dos columnas en cuanto caben dos de 420 px, desde 960 px de ventana (892 px de contenido más el padding de 34 px por lado). Con columnas tan angostas, la tarjeta de la demo llena su columna y la insignia del radar tapa por completo el botón «Siguiente»; en el prototipo, a 1200 px, ya tapa la mitad.
+- **Decisión.** Una columna por debajo de 1180 px, con el texto a 600 px como máximo y la demo debajo, centrada. Dos columnas iguales desde 1180 px.
+- **Implementación.** `src/sections/Hero.css` (`@media (min-width: 1180px)`), con `--width-hero-copy` y `--width-demo-stage` en tokens.css.
+- **Impacto.** Entre 960 y 1179 px la home se ve distinta del prototipo: la demo queda debajo del texto, no a su lado.
+
+<a id="d-31"></a>
+### D-31 · Ajustes de AA y responsive de la QA de la Fase 8
+
+Decisiones tomadas en la QA de la Fase 8. Las mediciones están en «Resultado de la QA», dentro de la Fase 8 del plan.
+
+- **Barra superior a .92 de opacidad** (`--color-topbar-bg`; el prototipo usa .78). Sobre el banner oscuro del reporte, el enlace inactivo de la barra sticky bajaba a 3.42–3.67:1; con .92 sube a 4.64–4.76:1 (T-12: AA manda).
+- **Menú móvil por barra.** El corte pasa de 768 px a 960 px en la barra pública y la de la home, y a 900 px en la de RR. HH.; la de super admin sigue en 768 px. Entre 768 y unos 870 px las barras se partían en dos filas, y el prototipo solo hace wrap. Implementación: `components/layout/topbar/cortes.ts` y TopBar.css.
+- **Tablas que no caben pasan a tarjetas.** Además de a 640 px o menos (D-23), DataTable usa el modo tarjeta cuando la tabla no cabe en su contenedor (clase `st-table--tarjetas`). Antes, /admin/usuarios y /admin/creditos se desplazaban de lado hasta 370 px. Solo la comparativa conserva el desplazamiento, por diseño.
+- **Toast con un modal o un drawer abierto.** Se coloca donde tapa menos controles: abajo, arriba, junto al drawer o sobre el pie del panel (`components/ui/posicionToast.ts`). En el prototipo siempre va abajo al centro, y tapaba «Cerrar» del drawer durante 2.6 s.
+- **Badge «Ajuste» de Créditos en tono slate** (neutro frío, 6.74:1), para distinguirlo de «Consumo» (neutro cálido) y del coral de error. El prototipo no tiene movimientos de ajuste.
+- **Pie compacto a 360 px.** Los enlaces apilados quedan sin margen negativo y con 4 px entre ellos (WCAG 2.5.8, tamaño del objetivo).
+
+<a id="por-aprobar"></a>
+## Por aprobar al cierre
+
+Textos y criterios que se escribieron durante la ejecución y necesitan el visto bueno del dueño o del psicólogo. Ninguno bloquea el uso del sitio: hoy todos describen solo lo que el producto ya hace (D-16 y D-18). Otras decisiones abiertas del dueño (rendimiento, halos, limpieza y datos [PENDIENTE]) están en [estado-final.md](estado-final.md#decisiones-del-dueno).
+
+<a id="microcopy"></a>
+### Microcopy nuevo de la home y del candidato
+
+Cada fila cambia un texto del prototipo, o agrega uno que el prototipo no tiene. Para aprobar, rechazar o reescribir, cita el ID.
+
+| ID | Dónde | Prototipo | Texto actual | Por qué cambió |
+|---|---|---|---|---|
+| MC-01 | Home · eyebrow del hero (`sections/Hero.tsx`) | «Sin registro · Tu informe llega a tu correo» | «Evaluaciones psicométricas en línea» | El candidato no recibe informe (D-16) y RR. HH. sí crea cuenta |
+| MC-02 | Home · selector del hero | «Para mí (Sin registro)» · «Para mi Empresa (B2B)» | «Para mí» · «Para mi empresa» | «Para mí» se dirige al candidato invitado, no a una compra sin registro (D-13) |
+| MC-03 | Home · entradilla «Para mí» | «Realiza un test vocacional o de personalidad en 15 minutos. Sin contraseñas, directo a tu email.» | «¿Te invitó una empresa? Responde con el enlace que te envió, sin crear cuenta. Tus respuestas se guardan solas.» | No hay compra individual ni entrega por correo (D-13, D-16, PB-21) |
+| MC-04 | Home · entradilla «Para mi empresa» | «Compra licencias por volumen, envía enlaces únicos a tus candidatos y compara diagnósticos desde un solo panel.» | «Crea evaluaciones, envía enlaces únicos a tus candidatos y compara sus resultados desde un solo panel.» | Créditos en lugar de licencias, sin compra (D-08, D-09) |
+| MC-05 | Home · CTA y enlace del hero | «Comprar Test Individual — $15 USD» y «Ya tengo un código»; «Comprar licencias — desde $24 USD» y «Entrar al portal de RR. HH.» | «Tengo un código» y «Cómo funciona»; «Crear cuenta de empresa» y «Entrar al portal de RR. HH.» | Sin precios ni pago (PB-09, PB-10) |
+| MC-06 | Home · fila de confianza | «15–35 min» · «Informe PDF por correo» · «Datos cifrados» | «{mín}–{máx} min por prueba», calculado con GET /api/catalog («Duración según la prueba» si la llamada falla) · «Reporte para RR. HH.» · «Guardado automático» | Sin cifras fijas ni afirmaciones sin respaldo (D-18) |
+| MC-07 | Home · insignia de la demo (`pages/home/DemoExamen.tsx`) | «Diagnóstico enviado · a tu correo · hace 2 s» | «Respuesta guardada · Puedes pausar y retomar» | Sin correo al candidato (D-16) |
+| MC-08 | Home · insignia del radar de la demo | «Perfil en vivo» | «Reporte listo para RR. HH.» | El candidato no ve su perfil (C-09) |
+| MC-09 | Home · título del catálogo exprés (`pages/home/CatalogoExpres.tsx`) | «Elige tu test y empieza hoy» | «Elige las pruebas de tu evaluación» | Sin compra: las pruebas se eligen al crear una evaluación |
+| MC-10 | Home · insignia de «Cómo funciona» (`sections/HowItWorks.tsx`) | «Sin crear cuenta. Cero fricción.» | «El candidato responde sin crear cuenta» | RR. HH. sí crea cuenta; solo el candidato responde sin ella |
+| MC-11 | Home y /como-funciona · los tres pasos | «Eliges tu test» (pago en un clic) · «Respondes desde tu celular o laptop» · «Recibes tu informe PDF» | «Creas la evaluación» · «El candidato responde con su enlace» · «Lees e imprimes el reporte», cada uno con su texto | El flujo real, sin pago ni informe al candidato (D-16, D-18) |
+| MC-12 | Pie · lema | «Psicometría validada para Latinoamérica» | «[PENDIENTE: afirmación verificable]» (`SITE.claim`) | Afirmación sin respaldo (D-18) |
+| MC-13 | Home · mensajes de la mascota (`components/mascota/mensajes.ts`) | 6 mensajes, entre ellos «Tu test dura 15 minutos. Sin contraseñas ni registro.» y «Tu informe llega en PDF a tu correo, con diagnóstico por dimensión.» | 6 mensajes: bienvenida, «Tengo un código», regeneración, guardado automático, cuenta de empresa y «En las pruebas de personalidad no hay respuestas correctas ni incorrectas…» | Sin duración fija ni promesas de correo (D-16, D-18) |
+| MC-14 | Home · control de la mascota | No existe | «Ocultar mascota» y «Mostrar mascota», con sus avisos | WCAG 2.2.2 (D-27) |
+| MC-15 | Candidato · insignia del acceso (`pages/candidate/AccesoVerificado.tsx`) | «Licencia verificada: {código}» | «Invitación verificada» | No hay licencias ni códigos cortos (D-08, PB-11) |
+| MC-16 | Candidato · título del acceso | «{empresa} te ha invitado a realizar la evaluación de {prueba}» | «{organización} te ha invitado a realizar una evaluación para el puesto de {puesto}» | Una evaluación puede tener varias pruebas (S-19); el puesto llega del portal |
+| MC-17 | Candidato · entradilla del acceso | «Confirma tus datos para comenzar. No necesitas crear una cuenta ni contraseña.» | «Lee las instrucciones y acepta el aviso de privacidad para comenzar. No necesitas crear una cuenta ni contraseña.» (o «…continúa donde te quedaste», si ya aceptó) | Sin formulario de datos (D-11) |
+| MC-18 | Candidato · «Antes de empezar» (4 puntos) | No existe | «Una afirmación por pantalla…», «No hay respuestas correctas ni incorrectas…», «Tus respuestas se guardan solas…» y la regla de «Anterior» según allows_back | Sustituye a los reactivos de práctica (PB-31). También va al psicólogo (PS-02) |
+| MC-19 | Candidato · descripción del consentimiento | No existe (solo la casilla) | «Recabamos tus respuestas para generar un reporte que verá {organización}. Se conservan de forma confidencial.» | Explica para qué se usan las respuestas. «Se conservan de forma confidencial» debe coincidir con el aviso de privacidad, hoy [PENDIENTE] |
+| MC-20 | Candidato · franja de garantías | «~35 minutos de duración estimada» · «Guardado automático de respuestas» · «Tus datos viajan cifrados» | «~{suma de las duraciones} minutos de duración estimada» · «Guardado automático de respuestas» · «Puedes pausar y retomar con el mismo enlace» | Duración real y sin afirmación de cifrado (D-18) |
+| MC-21 | Candidato · /evaluar (`pages/candidate/EvaluarLanding.tsx`) | «Ingresa tu código de licencia» y «Tengo un enlace de invitación» | «Ingresa tu enlace o código», «Lo encontrarás en el correo de invitación de la empresa. Pega el enlace completo o solo el código.» y el error «Pega el enlace completo o el código que te dieron.» | Un solo campo acepta enlace o token (CA-3, PB-11) |
+| MC-22 | Candidato · examen (`pages/candidate/ExamenFoco.tsx`) | Toast «Selecciona una opción para continuar»; «Siguiente pregunta» y «Finalizar examen» | «Elige una opción para continuar.» junto al botón deshabilitado; «Siguiente pregunta», «Siguiente prueba» y «Finalizar examen» | Sin avanzar sin responder (S-03) y con varias pruebas (S-19) |
+| MC-23 | Candidato · texto del fin (`pages/candidate/FinEvaluacion.tsx`) | «Tus resultados han sido enviados a la empresa evaluadora. Recibirás una copia del reporte en {correo}.» | «Tus respuestas se enviaron a {organización}. La empresa se pondrá en contacto contigo.» | Sin copia al candidato (D-16); es el texto del repo (2026-09-11-fase1-nucleo.md:2922) |
+| MC-24 | Candidato · resumen y aviso del fin | «Test aplicado» · «Reactivos respondidos {total} de {total}» · «Enviado a»; «El código {código} quedó consumido. No es necesario hacer nada más.» | «Prueba(s) aplicada(s)» · «Reactivos respondidos {respondidos} de {total}» · «Enviado a {organización}»; «Tus respuestas quedaron registradas. No es necesario hacer nada más.» y, si el navegador no deja cerrar la pestaña, «Ya puedes cerrar esta pestaña.» | Datos reales, sin códigos (CA-5) |
+| MC-25 | Candidato · bloqueos (`pages/candidate/BloqueoCandidato.tsx`) | No existen | «Esta evaluación ya se completó», «Esta invitación ya venció», «No encontramos tu invitación», «Esta evaluación ya no admite respuestas», «No pudimos conectarnos» y «No pudimos cargar tu invitación», cada uno con su texto y su contacto | Estados que exige el backend (R-28) |
+
+<a id="psicologo"></a>
+### Preguntas para el psicólogo
+
+| ID | Tema | Qué hace hoy el frontend | Pregunta |
+|---|---|---|---|
+| PS-01 | Animación entre reactivos (D-21) | Cada reactivo entra con softIn de 0.34 s, como en el prototipo; con movimiento reducido no hay animación. La spec del portal pedía no animar entre reactivos (2026-09-11-fase1-nucleo-design.md:92). El cronómetro de `elapsed_ms` arranca cuando el reactivo aparece, así que incluye esos 0.34 s (`useCandidateFlow.ts`) | ¿Se conserva la animación? Si se conserva, ¿el tiempo por reactivo debe empezar al terminar la animación? ¿Importa que un candidato con movimiento reducido vea el examen sin animación? |
+| PS-02 | Redacción de las instrucciones | Sobre cada reactivo: «Indica qué tanto te describe la siguiente afirmación:» (del prototipo). En «Antes de empezar»: «Una afirmación por pantalla… elige la que mejor te describa en el trabajo», «No hay respuestas correctas ni incorrectas. Responde con sinceridad, a tu ritmo.», el guardado automático y la regla de «Anterior». Bajo cada reactivo se repite «No hay respuestas correctas ni incorrectas.». Son textos fijos para todas las pruebas; hoy solo la prueba de demostración tiene reactivos (Likert, PB-04) | ¿Se aprueban? En las pruebas de razonamiento sí hay respuestas correctas (la mascota ya lo acota a las de personalidad) y «en el trabajo» quizá no aplique a todos los instrumentos. ¿Las instrucciones deben venir de cada prueba? Si es así, hace falta un campo nuevo en el backend, que se registraría como pendiente |
+| PS-03 | Criterios ya registrados en otros puntos | Sin reactivos de práctica (PB-31); sin la sección o escala de cada reactivo (PB-29); puntaje «{normalized} · {categoría}» sin baremo real (D-14, PB-18); integridad como dato neutro, «N vez(ces) que la pantalla perdió el foco» (D-25) | Confirmar cada criterio o indicar el cambio |
+
 ## Plan de implementación por fases
 
 Sigue las fases del brief (PROMPT_CLAUDE_CODE.md:170-179), ajustadas a los hallazgos. Cada fase termina con un resumen breve al dueño (:181).
+
+<a id="estado-ejecucion"></a>
+### Estado de ejecución (2026-10-02)
+
+Todo el trabajo está en la rama feat/rediseno-strata, sobre `frontend-strata/` (D-26). El detalle de cada fase, lo pendiente y la guía de migración están en [estado-final.md](estado-final.md).
+
+| Fase | Estado | Commit | Pruebas al cerrar |
+|---|---|---|---|
+| 0 · Auditoría y plan | Hecha | 1c9e116 | — |
+| Base · Reconstrucción del frontend (D-26) | Hecha | 817a5df | — |
+| 1 · Tokens, fuentes, estilos y componentes base | Hecha | f43a2d6 y 8ba6e6d (QA visual) | 203 |
+| 2 · Layout, barras por rol, pie, guardas y sesión | Hecha | 4d68302 | 416 |
+| 3 · Candidato: acceso, examen y fin | Hecha | eb70a3e | 547 |
+| 4 · Portal de RR. HH. | Hecha | d06b6c5 | — |
+| 5 · Test Builder | Bloqueada por PB-20 (D-15) | — | — |
+| 6 · Inicio y mascota | Hecha | 0dd3050 | — |
+| 7 · Pantallas del repo sin prototipo | Hecha | 6f557cb | 1119 |
+| 8 · QA final | Hecha, salvo la regresión contra el backend real (PB-01) | Commit de cierre | 1159 unitarias y 19 de extremo a extremo |
+
+Los commits no siguen el orden numérico: el de la Fase 6 se registró antes que los de las Fases 4 y 7. «—» en pruebas: el commit no lo registró.
 
 ### Antes de la Fase 1
 
@@ -311,6 +473,7 @@ Sigue las fases del brief (PROMPT_CLAUDE_CODE.md:170-179), ajustadas a los halla
   - tsconfig: si declara `paths` para el alias `@`, que los planes solo muestran en vite.config.ts (2026-09-10-sales-site.md:467-482).
   - ESLint, App.tsx, layouts y componentes.
 - Commit de la Fase 0: `docs(rediseno): auditoría y plan`.
+- **Estado (2026-10-02).** El plan y las decisiones se aprobaron el 2026-10-01. El código real no llegó (PB-01): en su lugar se usó la reconstrucción de D-26 (817a5df), así que la validación contra el código real queda para la migración ([estado-final.md](estado-final.md#migracion)). axios quedó en 1.20.0, por encima del mínimo para withXSRFToken, y el alias `@` se declaró en tsconfig.app.json (reconstruccion.md, desviación 1).
 
 ### Riesgos que condicionan el plan
 
@@ -337,6 +500,7 @@ Sigue las fases del brief (PROMPT_CLAUDE_CODE.md:170-179), ajustadas a los halla
 - **Dependencias o bloqueos.** PB-01, D-04, D-05, D-19, D-20 y D-22.
 - **Criterios de salida.** Comunes, más: contraste AA de cada par texto/fondo de los tokens; pruebas de teclado de Modal, Drawer, RadioGroup y SegmentedFilter.
 - **Commits previstos.** `chore(calidad): scripts de lint y pruebas`, `feat(estilos): tokens y fuentes STRATA`, `feat(ui): controles base`, `feat(ui): tarjetas, tabla y badges`, `feat(ui): toast, modal y drawer`, `feat(ui): estados de carga, vacío y error`.
+- **Estado (2026-10-02).** Hecha en dos commits: f43a2d6 (sistema y componentes, 203 pruebas) y 8ba6e6d (ajuste fino contra el prototipo: 182 pares de elementos comparados por estilos computados). Vitest y Testing Library, Playwright y `scripts/captura.mjs` quedaron desde esta fase (D-05). Los tokens de contraste se tomaron aquí (D-29). Queda validar en pantalla el navy y los bordes #8B8574 con el dueño.
 
 ### Fase 2 · Layout: barra superior por rol, pie, halos y transición
 
@@ -352,6 +516,7 @@ Sigue las fases del brief (PROMPT_CLAUDE_CODE.md:170-179), ajustadas a los halla
 - **Dependencias o bloqueos.** D-03, D-06 y D-07; PB-02 y PB-03 son opcionales.
 - **Criterios de salida.** Comunes, más: menú de la pastilla y menú móvil operables con teclado (Escape devuelve el foco); el operador llega a /admin desde /app; en móvil se puede salir desde el sitio público; ninguna llamada a /api/credits sin organización; con la sesión cerrada en otra pestaña, una acción en /app lleva a /login con aviso y vuelve a la ruta de origen tras entrar.
 - **Commits previstos.** `feat(layout): PageLayout con halos y transición`, `feat(layout): barra superior por rol`, `feat(layout): pie común`, `feat(rutas): índice de /admin, guardas y sesión vencida`.
+- **Estado (2026-10-02).** Hecha en 4d68302 (416 pruebas). Incluye la marca Strata (D-03) con favicons generados desde strata-mark.png, csrf() antes de POST /api/leads, los mocks por rol de `e2e/mocks` y los siete puntos aprobados de D-07. En la QA de la Fase 8 el corte del menú móvil pasó a 900 y 960 px (D-31).
 
 ### Fase 3 · Flujo del candidato: acceso, examen y fin
 
@@ -366,6 +531,7 @@ Sigue las fases del brief (PROMPT_CLAUDE_CODE.md:170-179), ajustadas a los halla
 - **Dependencias o bloqueos.** D-11, D-12, D-16, D-21 y D-25; PB-14 y PB-31 son opcionales.
 - **Criterios de salida.** Comunes, más, con la prueba demo: responder, cerrar a la mitad y reabrir (retoma en el primer reactivo sin respuesta); un enlace completado o vencido muestra el bloqueo; el consentimiento se guarda antes del primer reactivo; el blur queda registrado; 360 px y botones de 44 px o más; opciones operables con teclado. Además: simular fallo de red en el consentimiento, en la carga de reactivos y en el cierre; completar la evaluación en otra pestaña y comprobar que la primera pasa al bloqueo con el 409.
 - **Commits previstos.** `feat(candidato): acceso e invitación verificada`, `feat(candidato): examen en modo foco`, `feat(candidato): fin, errores y estados de bloqueo`.
+- **Estado (2026-10-02).** Hecha en eb70a3e (547 pruebas), sin cambios en `src/api/candidate.ts`. El portal se reescribió sobre una máquina de estados (`useCandidateFlow.ts`) y recorre todas las pruebas de tests[] (S-19). Los criterios con backend real (cerrar a la mitad y reabrir, completar en otra pestaña) se probaron con mocks, también en `e2e/flujos/candidato.spec.ts`; falta repetirlos contra el backend (PB-01). La animación entre reactivos y la redacción de las instrucciones esperan al psicólogo ([PS-01 y PS-02](#psicologo)).
 
 ### Fase 4 · Portal de RR. HH.: Tests, Créditos, Candidatos y Resultados
 
@@ -379,6 +545,7 @@ Sigue las fases del brief (PROMPT_CLAUDE_CODE.md:170-179), ajustadas a los halla
 - **Dependencias o bloqueos.** D-06 a D-10, D-14 y D-23; PB-04 a PB-08, PB-13, PB-17 y PB-34 son opcionales.
 - **Criterios de salida.** Comunes, más: crear una evaluación (incluido el 422 por saldo con enlace a créditos); copiar enlace; reenviar (y el 409); ver el reporte (y 403, 409 y 404 con mensajes distintos); solicitar créditos (y el 422); imprimir el reporte con su pie legal; un usuario de otra organización ve el estado 403; «Comparar candidatos» lleva a la comparativa; créditos, evaluaciones, detalle y resumen muestran carga, vacío y error por separado.
 - **Commits previstos.** `feat(rh): catálogo de pruebas`, `feat(rh): créditos y solicitud`, `feat(rh): evaluaciones y candidatos`, `feat(rh): asistente de nueva evaluación`, `feat(rh): reporte del candidato`, `feat(rh): resultados`.
+- **Estado (2026-10-02).** Hecha en d06b6c5, con /app/pruebas (D-07, punto 1) y los canales de D-10, opción a). «Últimas completadas» usa la agregación limitada mientras no exista PB-05. La impresión del reporte tiene sus reglas @media print y su prueba de extremo a extremo (una sola llamada a window.print con el título del documento); falta revisar la vista previa en los navegadores. Surgieron PB-36 (fecha límite) y PB-37 (teléfono del candidato).
 
 ### Fase 5 · Test Builder
 
@@ -387,6 +554,7 @@ Sigue las fases del brief (PROMPT_CLAUDE_CODE.md:170-179), ajustadas a los halla
 - **Dependencias o bloqueos.** PB-20 y un contrato acordado con el compañero y el psicólogo.
 - **Criterios de salida.** PB-20 resuelto o pospuesto de forma explícita. Si llega el contrato, se planea la fase.
 - **Commits previstos.** Ninguno, salvo `docs(rediseno): contrato del Test Builder` si se acuerda.
+- **Estado (2026-10-02).** Bloqueada: PB-20 sigue sin contrato. No hay pantalla ni enlace del builder. StepPills, Stepper y SelectableListRow ya están en `src/components/ui`; ChoiceChip no se construyó porque solo lo usa el builder.
 
 ### Fase 6 · Inicio y mascota
 
@@ -395,6 +563,7 @@ Sigue las fases del brief (PROMPT_CLAUDE_CODE.md:170-179), ajustadas a los halla
 - **Dependencias o bloqueos.** D-13, D-16, D-18 y D-24. GSAP ya está aprobado (PROMPT_CLAUDE_CODE.md:38).
 - **Criterios de salida.** Comunes, más: entrar y salir de `/` veinte veces sin listeners, ticker ni tweens vivos (verificable con gsap.globalTimeline.getChildren()); la mascota baja su opacidad sobre el H1; objetivo de Lighthouse móvil de la spec: rendimiento de 90 o más y accesibilidad de 95 o más (2026-09-11-fase3-sitio-ventas-design.md:99).
 - **Commits previstos.** `feat(inicio): home STRATA`, `feat(inicio): mascota con GSAP`.
+- **Estado (2026-10-02).** Hecha en 0dd3050. La prueba de 20 ciclos sin fugas pasa (e2e/fugas-mascota.mjs). El hero va a dos columnas desde 1180 px (D-30). El rendimiento en Lighthouse móvil dio unos 74 contra la meta de 90; la QA de la Fase 8 lo subió a 82, con accesibilidad 100 (D-28), y llegar a 90 pide prerender o SSR. En la Fase 8 la mascota ganó la zona táctil reducida y «Ocultar mascota» (D-27). El microcopy de la home espera la aprobación del dueño ([MC-01 a MC-14](#microcopy)).
 
 ### Fase 7 · Pantallas del repo sin equivalente en el prototipo
 
@@ -408,6 +577,7 @@ Sigue las fases del brief (PROMPT_CLAUDE_CODE.md:170-179), ajustadas a los halla
 - **Dependencias o bloqueos.** D-07 y D-18; PB-22, PB-23, PB-24, PB-27 y PB-32 mejoran estas pantallas pero no las bloquean.
 - **Criterios de salida.** Comunes, más: registro con todos sus campos y errores 422 por campo; login con redirección por organización; perfil con errores por campo; leads con los 6 campos; comparativa ordenable con teclado y CSV; admin: aprobar y rechazar (y el 409), usuarios con búsqueda, paginación y 409 al borrarse a sí mismo, y perfil del operador que actualiza el correo en la sesión.
 - **Commits previstos.** `feat(auth): login y registro`, `feat(perfil): mi perfil`, `feat(sitio): páginas públicas`, `feat(rh): comparativa`, `feat(admin): solicitudes, usuarios y perfil`.
+- **Estado (2026-10-02).** Hecha en 6f557cb (1119 pruebas en verde y QA visual a 1440 y 360 px). Agregó PB-35 (mensajes 422 en español). Sin «¿Olvidaste tu contraseña?» (PB-23) ni promesas de verificación de correo (PB-32); la empresa en /perfil queda en solo lectura (PB-22).
 
 ### Fase 8 · QA final
 
@@ -416,3 +586,40 @@ Sigue las fases del brief (PROMPT_CLAUDE_CODE.md:170-179), ajustadas a los halla
 - **Dependencias o bloqueos.** Fases 1 a 7 cerradas.
 - **Criterios de salida.** Todos los criterios de aceptación del brief (PROMPT_CLAUDE_CODE.md:183-191).
 - **Commits previstos.** `fix(a11y): …`, `chore(estilos): retirar tokens y fuentes anteriores`, `docs(rediseno): cierre del rediseño`.
+- **Resultado de la QA (2026-10-02).** Recorridos con Playwright en `frontend-strata/e2e/` (rutas y mocks en `comun.mjs`; cada script explica su uso en la cabecera): `a11y.mjs` (axe), `recorrido.mjs` (desborde, consola y movimiento), `barras.mjs`, `tablas.mjs`, `teclado.mjs`, `contraste.mjs`, `toast-overlay.mjs`, `capturas.mjs` y `fugas-mascota.mjs`. 49 rutas con su mock: visitante, candidato y sus variantes, RR. HH. (también vacío, error, 403, 409 y 404), super admin, sin organización y sesión vencida.
+  - Accesibilidad (axe, wcag2a, wcag2aa, wcag21a, wcag21aa y wcag22aa; 49 rutas a 1440 y 360 px más 37 estados con algo abierto: pastilla, menú móvil, modales, drawer, pasos del asistente, examen, fin y mascota). Antes: 22 serias (target-size: el pie compacto a 360 px encimaba sus enlaces en /login, /registro, /evaluar y el portal del candidato), 0 críticas, 0 moderadas y 0 menores. Después: 0 en todos los niveles.
+  - Teclado: menú de la pastilla, menú móvil, filtros, tabla ordenable, asistente, examen, modal y drawer, con Tab, Mayús+Tab, Enter, Espacio, Escape y flechas: 43 de 43 pasos, con foco visible en cada uno.
+  - Contraste: todos los pares de tokens llegan a 4.5:1 (el centro exacto del halo coral de la home queda como aviso: ahí no hay texto suelto). Los 917 nodos que axe no decide (vidrio, tintes y halos) se midieron con el fondo real en la posición más desfavorable: todos llegan a su mínimo. Esa cifra no incluía los nodos de los estados con algo abierto que no existen en la ruta base, que `contraste.mjs` omitía sin avisar; se midieron en la verificación final (abajo). La barra sticky sobre el banner oscuro del reporte bajaba a 3.42:1; con la barra a .92 de opacidad, 4.64:1.
+  - Responsive: `scrollWidth <= innerWidth` en las 49 rutas a 360, 768 y 1440 px, también con el menú móvil o la pastilla abiertos (250 mediciones). Capturas de todas las rutas en `.capturas/f8-*` (scripts/captura.mjs).
+  - Movimiento: con prefers-reduced-motion, 49 de 49 rutas sin animaciones corriendo y sin mascota. Sin la preferencia: entrada de 0.5 s, escalonado de 55 ms y transiciones de 0.18 s (0.2 s en los CTA, como el prototipo).
+  - Consola: 0 mensajes inesperados en 98 cargas sin movimiento reducido. Esperados (respuestas de error de los mocks): 401 sin sesión o con la sesión vencida, 403, 404, 409 y 500, y las fallas de red de candidato-sin-red.
+  - Fugas de la mascota: 20 ciclos entre «/» y /pruebas, /demo, /como-funciona, /precios y /ayuda, saliendo con la mascota nadando, antes de su descarga y antes de su entrada: 0 animaciones, ticker con su único callback, mismos listeners y ningún timer pendiente; 2 animaciones vivas por ciclo, sin crecer.
+  - Mascota (D-27) y rendimiento (D-28): ver sus decisiones.
+  - Pendientes de las fases anteriores, corregidos:
+    - Barras pública y de RR. HH. partidas entre 768 y unos 870 px: medido con `e2e/barras.mjs`, la pública cabe en una fila desde 862 px (938 con un nombre de 30 caracteres en la pastilla) y la de RR. HH., desde 882 px con una organización de 30 caracteres. El menú móvil llega ahora hasta 960 y 900 px (topbar/cortes.ts y TopBar.css); la de super admin sigue en 768. De 700 a 1100 px ninguna barra se parte ni desborda.
+    - Tablas: además de a 640 px o menos, DataTable pasa a tarjetas cuando la tabla no cabe en su contenedor (clase `st-table--tarjetas`). Antes se desplazaban de lado /app (641–645 px), /app/evaluaciones (641–766), /admin/usuarios (641–1000) y /admin/creditos (641–969); ahora ninguna de 600 a 1000 px, de 1 en 1 (`e2e/tablas.mjs`), salvo la comparativa, que se desplaza por diseño (D-23).
+    - Toast: con un modal o un drawer abierto se coloca donde tapa menos controles (arriba, junto al drawer o sobre su pie; posicionToast.ts). Verificado a 360, 768 y 1440 px con el drawer de créditos y el modal del enlace.
+    - Badge «Ajuste» de Créditos: tono slate (neutro frío, 6.74:1) en lugar de coral.
+    - Paso 2 del asistente a 360 px: en la RadioCard con detalle, «1 crédito por candidato» baja a su propia línea, alineado con el texto.
+    - Pie: con SITE.email [PENDIENTE], Contacto (pie común) y Soporte (pie compacto) muestran el marcador sin mailto; lo mismo en el contacto de soporte del bloqueo del candidato.
+    - Comentarios de `--color-data-*` en tokens.css y design-tokens.md: la categoría del backend, no los umbrales 80/70 (D-14).
+    - Cifras: formatearNumero, textoCantidad y textoCreditos en `components/ui/formatoNumero.ts`, en lugar de las copias de Créditos, el asistente, Resultados, Solicitudes y las barras. Los textos no cambian.
+    - `comparar/codigoAnterior.ts` pasa a `src/test/comparativaAnterior.ts`: solo lo importan las pruebas.
+  - Quedaban al cerrar la QA: Lighthouse móvil de 82 contra la meta de 90 (D-28; pide prerender o SSR, decisión del dueño); la regresión contra el backend real (PB-01) y la revisión de la impresión del reporte en los navegadores, que siguen pendientes; el retiro de los alias de tokens y la propuesta de limpieza, que se hicieron después («Limpieza», abajo); y un cuadro en modo tabla que puede verse al cargar o al cambiar el ancho entre 641 px y el ancho que pide una tabla, antes de pasar a tarjetas.
+- **Pruebas de extremo a extremo (2026-10-02).** `npm run test:e2e` corre 19 recorridos con @playwright/test en Chromium (`playwright.config.ts`: servidor de desarrollo de Vite en el puerto 5189 y prefers-reduced-motion emulado). Las pruebas están en `frontend-strata/e2e/flujos/`; cada una simula la API con page.route a partir de los JSON de `e2e/mocks` (`e2e/flujos/api.ts`, con el buscador de `scripts/captura.mjs`) y falla si la página pide una ruta que el mock no tiene o registra un error. Recorridos: candidato (enlace pegado, consentimiento, 32 preguntas en 2 pruebas con un POST por respuesta, un solo cierre, fin; 409 al cerrar y expirada), RR. HH. (entrar, asistente con el payload exacto y los enlaces, 422 por saldo, copiar, reenviar con y sin 409, compartir, reporte por prueba y «Descargar PDF»), créditos (?solicitar=1 sin cambio de saldo), super admin (redirección, aprobar con confirmación, búsqueda con retardo y 409 al eliminarse), sesión vencida con regreso a la ruta de origen y guardas. Los envíos se prueban con doble clic: cada uno sale una sola vez. Pasan también a 360 px. No apareció ningún bug funcional de la app.
+  - Hallazgo de rendimiento, para el dueño: con movimiento, la animación infinita de los tres halos de fondo (glowDrift de 18 s, idéntica al prototipo) mantiene ocupado un núcleo de CPU por pestaña (98 %, medido con CDP en /app a 1280 px) cuando el navegador dibuja por software (Chromium sin GPU, como en headless, máquinas virtuales o escritorios remotos) y cerca de 40 % en el Chromium completo en modo headless con las banderas de GPU (no se comprobó que la usara); sin animar los halos, 1 %. Con cuatro navegadores en paralelo, eso frena al servidor de Vite y las pruebas no terminan; por eso la suite emula prefers-reduced-motion (el movimiento lo cubren `e2e/recorrido.mjs` y `e2e/fugas-mascota.mjs`). Opciones medidas: `animation-timing-function: steps(45, jump-none)` en cada tramo (unos 5 cambios por segundo; cada salto mueve el halo menos de 1 px) baja a 28 %; no animar los halos, a 1 %. El prototipo manda en las animaciones, así que no se cambió.
+- **Limpieza (2026-10-02).** Se retiraron los alias temporales de D-20 y los `--disc-*`, después de migrar sus últimos usos al equivalente exacto; las capturas de 5 rutas al azar, antes y después, no muestran cambio visual. `src/styles/tokens.test.ts` falla si alguna `var(--x)` queda sin definir, por ejemplo si vuelve un nombre viejo al portar el código real. La propuesta de limpieza del código muerto (L-01 a L-21) espera al dueño: [estado-final.md](estado-final.md#limpieza).
+- **Documentación (2026-10-02).** [estado-final.md](estado-final.md) (cierre, pendientes, desviaciones, cómo correr contra el backend real y guía de migración), `frontend-strata/README.md`, columna «Estado» en mapa.md y brechas.md, PB-36 y PB-37, y en este documento D-26, D-29 a D-31, el microcopy por aprobar y las preguntas para el psicólogo.
+- **Verificación final (2026-10-02).** Cada criterio de aceptación del brief (PROMPT_CLAUDE_CODE.md:183-191) se volvió a comprobar con evidencia nueva:
+  - Funciones: contra el commit base 817a5df siguen las 26 rutas con página (más /app/pruebas y el índice de /admin de D-07), las 33 llamadas a la API con sus payloads y todas las funciones de `src/api`. De la base solo cambiaron `axios.ts` (sesión vencida y 419) y `candidate.ts` (`asegurarCsrf`), y no se borró ningún .ts ni .tsx, solo 4 hojas .css reemplazadas. Falta la regresión contra el backend real (PB-01).
+  - Backend: los gitlinks de `backend/` y `frontend/` apuntan a los mismos commits que en main, y la rama solo toca `frontend-strata/` y `docs/`.
+  - Estados: cada pantalla que consume la API tiene carga, vacío (cuando aplica) y error.
+  - Accesibilidad:
+    - axe: 135 análisis sin violaciones; teclado: 43 de 43 pasos.
+    - Barrido de Tab en las 49 rutas a 1440 y 360 px: 1508 paradas de foco sin problemas reales. Los avisos eran de tiempo: el anillo aparece en el cuadro siguiente.
+    - Contraste en página: 932 nodos llegan a su mínimo. `contraste.mjs` ahora cuenta los que no mide, que en esta corrida fueron 34.
+    - Esos estados (examen, fin, asistente, modal, drawer, diálogos y menús) se midieron por píxeles sobre el fondo pintado: 497 elementos en 33 estados, todos con 4.5:1 o más. La excepción es el drawer de créditos a 360 px: el toast de confirmación tapa unos 2.5 s su título y su descripción, como prevé D-31.
+  - Consola y fugas: 0 mensajes inesperados en 98 cargas y fugas de la mascota 5 de 5. Con la mascota nadando durante 70 s, la memoria se queda en unos 12 MB y los nodos y listeners no cambian.
+  - Prototipo: se compararon la home, el catálogo, créditos, candidatos, el acceso y el examen, a 1440 y 360 px, junto al prototipo. Coinciden en color, tipografía, espaciado y movimiento, salvo las desviaciones aprobadas ([estado-final.md](estado-final.md#desviaciones)). A 360 px el prototipo se desborda y la app no.
+  - Batería: `npm run build`, `npm run lint`, `npm run typecheck`, `npm test` (145 archivos, 1159 pruebas) y `npm run test:e2e` (19 recorridos), todo en verde.
+- **Estado (2026-10-02).** Hecha, salvo lo que necesita el backend real o una decisión del dueño: la regresión contra el backend (PB-01), la vista previa de impresión en los navegadores, el Lighthouse de 90 y la propuesta de limpieza.

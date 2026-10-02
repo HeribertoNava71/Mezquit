@@ -14,7 +14,9 @@
 //    home al 26 %, el de menor luminancia) y, para la barra superior, también sobre la
 //    superficie tinta #0F172A (el banner oscuro del reporte pasa por debajo al desplazar).
 // 2. Página (--pagina). Para cada nodo que axe dejó sin decidir, toma el color del
-//    texto y apila los fondos de sus ancestros sobre ese mismo peor fondo.
+//    texto y apila los fondos de sus ancestros sobre ese mismo peor fondo. Abre solo la
+//    ruta base: los nodos de un estado con algo abierto (modal, drawer, examen, fin…)
+//    que no existen ahí no se miden, y el resumen dice cuántos son.
 //
 // Texto normal: 4.5:1. Texto grande (24 px, o 18.66 px en negrita): 3:1.
 // Termina con código 1 si algún par de texto normal no llega a 4.5:1.
@@ -300,7 +302,12 @@ async function revisarPagina() {
           { selectores: items.map((i) => i.nodo.target) },
         )
         for (const m of medidas) {
-          if (m.falta) continue
+          // Nodo de un estado con algo abierto (modal, drawer, examen…) que no existe en la
+          // ruta base: no se mide aquí. Se cuenta para que el resumen no lo dé por revisado.
+          if (m.falta) {
+            resumen.set('falta', (resumen.get('falta') ?? 0) + 1)
+            continue
+          }
           const minimo = m.grande ? 3 : 4.5
           const ok = m.ratio >= minimo
           const etiqueta = `${ancho}px ${escenario} ${ruta} · ${m.selector} «${m.texto}»`
@@ -319,6 +326,13 @@ async function revisarPagina() {
     await browser.close()
   }
   console.log(`  ${resumen.get('ok') ?? 0} nodos llegan a su mínimo con el peor fondo; ${resumen.get('FALLA') ?? 0} no.`)
+  const sinMedir = resumen.get('falta') ?? 0
+  if (sinMedir > 0) {
+    console.log(
+      `  ${sinMedir} nodos no se midieron: son de estados con algo abierto (modal, drawer, examen, fin…) ` +
+        'y no existen en la ruta base. Revísalos con el estado abierto.',
+    )
+  }
   return fallos
 }
 

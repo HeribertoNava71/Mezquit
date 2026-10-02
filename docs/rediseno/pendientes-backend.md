@@ -15,6 +15,8 @@ Cómo leer cada ítem:
 
 Para responder, anota en cada ítem «Estado: aceptado, rechazado o hecho» y el contrato final. Advertencia: el inventario del frontend se reconstruyó desde los planes de `docs/superpowers/plans` porque `frontend/` y `backend/` son gitlinks vacíos; PB-01 es el primer paso.
 
+> **Estado al cierre del rediseño (2026-10-02).** El frontend rediseñado (`frontend-strata/`) ya hace lo que dice «Mientras no exista» en cada ítem, sin simular nada, y no cambió ningún endpoint ni contrato. Durante las fases surgieron dos ítems nuevos: [PB-36](#pb-36) (la fecha límite vence al empezar el día) y [PB-37](#pb-37) (teléfono del candidato en las invitaciones); [PB-35](#pb-35) suma dos pantallas. Lo que el frontend necesita primero: PB-01 (el código real, para la regresión), PB-22 (callejón sin salida en /perfil) y PB-36. Cómo correr el frontend contra tu backend está en [estado-final.md](estado-final.md#backend-real).
+
 ## Resumen
 
 | ID | Necesidad | Prioridad | Pantalla | Decisión |
@@ -53,9 +55,11 @@ Para responder, anota en cada ítem «Estado: aceptado, rechazado o hecho» y el
 | PB-32 | Verificación de correo | Baja | Registro, perfil | — |
 | PB-33 | Marca STRATA en los datos sembrados del backend | Baja | Barra superior, admin de usuarios | D-03 |
 | PB-34 | Bandera multidispositivo en la integridad | Baja | Resultados | D-25 |
-| PB-35 | Mensajes de validación (422) en español | Media | Registro, perfil, /demo, admin de usuarios | — |
+| PB-35 | Mensajes de validación (422) en español | Media | Registro, perfil, /demo, admin de usuarios, créditos, asistente | — |
+| PB-36 | Fecha límite: vence al empezar el día y acepta fechas pasadas | Media | Asistente, portal del candidato | — |
+| PB-37 | Teléfono del candidato en las invitaciones | Baja | Enlaces de invitación, detalle de evaluación | D-10 |
 
-**Por prioridad.** Alta: PB-01, PB-22 y PB-20 (esta solo si se quiere la Fase 5). Media: PB-03, PB-04, PB-05, PB-06, PB-07, PB-08, PB-13, PB-14, PB-23 y PB-35. Baja: el resto, casi todo ligado a decisiones de producto.
+**Por prioridad.** Alta: PB-01, PB-22 y PB-20 (esta solo si se quiere la Fase 5). Media: PB-03, PB-04, PB-05, PB-06, PB-07, PB-08, PB-13, PB-14, PB-23, PB-35 y PB-36. Baja: el resto, casi todo ligado a decisiones de producto.
 
 ## Ítems
 
@@ -76,7 +80,7 @@ Para responder, anota en cada ítem «Estado: aceptado, rechazado o hecho» y el
 
   Alternativa: publicar los dos repos y crear `.gitmodules` con `path` y `url`, fijando los commits actuales.
 - **Seguridad:** el repo Mezquit en GitHub es público. Publicar los repos embebidos como submódulos publicaría también su historial, con el `.env` versionado. Con el monorepo el código se copia sin su `.git` y ese historial no viaja. En los dos casos: `.env` en `.gitignore`, solo `.env.example` versionado y, si un repo con ese historial llegó a subirse a algún remoto, rotar la APP_KEY y las credenciales.
-- **Mientras no exista:** no se toca código; los documentos describen un estado reconstruido.
+- **Mientras no exista:** el rediseño se construyó sobre una reconstrucción del frontend hecha desde los planes, en `frontend-strata/` (D-26). La regresión contra el backend real y el reemplazo del gitlink de `frontend/` esperan este punto; los pasos están en [estado-final.md](estado-final.md#migracion).
 
 <a id="pb-02"></a>
 ### PB-02 · Nombre de la organización en GET /api/user
@@ -504,7 +508,25 @@ Para responder, anota en cada ítem «Estado: aceptado, rechazado o hecho» y el
 ### PB-35 · Mensajes de validación (422) en español
 
 - **Necesidad:** los FormRequest no definen `messages()` (RegisterRequest, 2026-09-12-registro-login-crud-usuarios.md:244-265; UpdateProfileRequest, UpdatePasswordRequest y AdminUpdateUserRequest, :509-588; StoreLeadRequest, 2026-09-10-sales-site.md:593-611) y ningún plan configura el idioma de Laravel (APP_LOCALE ni archivos `lang/es`). Si el backend real tampoco los tiene (por confirmar con PB-01), cada 422 llega con el texto en inglés de Laravel, por ejemplo «The email has already been taken.», y la UI lo muestra tal cual junto al campo, como siempre hizo.
-- **Pantalla que lo pide:** /registro, /perfil, /admin/perfil, /demo y /admin/usuarios/:id (errores por campo, Fase 7).
+- **Pantalla que lo pide:** /registro, /perfil, /admin/perfil, /demo y /admin/usuarios/:id (errores por campo, Fase 7). También el drawer «Solicitar créditos» de /app/creditos, que traduce en el frontend los mensajes de sus propias reglas (`pages/app/creditos/solicitud.ts`), y el asistente de /app/evaluaciones/nueva, que muestra los 422 por campo de POST /api/assessments tal como llegan (Fase 4).
 - **Prioridad:** Media: los campos funcionan, pero el texto sale en otro idioma.
 - **Propuesta (PROPUESTA):** `APP_LOCALE=es` (y `APP_FALLBACK_LOCALE`) con las traducciones de validación en `lang/es/validation.php` y nombres de atributo en español (`attributes`), o `messages()` en cada FormRequest.
 - **Mientras no exista:** el frontend valida en el cliente, con textos en español, lo que ya exigía el servidor y es seguro repetir (obligatorios del login, confirmación de contraseña, fecha anterior a hoy, largo mínimo y nombre del usuario en el admin). Los 422 del servidor se muestran tal como llegan, en su campo.
+
+<a id="pb-36"></a>
+### PB-36 · Fecha límite: vence al empezar el día y acepta fechas pasadas
+
+- **Necesidad:** POST /api/assessments valida `deadline` solo como `nullable|date` (2026-09-11-fase1-nucleo.md:1404) y guarda `expires_at` con esa fecha (:1456), es decir, a las 00:00 de ese día. GET /api/evaluar/{token} marca la invitación como expirada en cuanto `expires_at` pasó (:1677): vence al empezar el día límite, aunque el correo de invitación dice «Fecha límite: dd/mm/aaaa» (:1373) y el candidato entiende que puede responder ese día. Con una fecha de hoy o anterior, los enlaces nacen vencidos y los créditos se consumen igual. Además, consent, answers y complete solo revisan el `status` (:1799): si la fecha pasa a mitad del examen, el backend sigue aceptando respuestas hasta que alguien vuelve a pedir GET /api/evaluar/{token} (inferencia del código del plan). Surgió en la Fase 4, al diseñar el asistente.
+- **Pantalla que lo pide:** asistente de nueva evaluación (fecha límite) y portal del candidato.
+- **Prioridad:** Media: un candidato puede encontrar vencida su invitación el mismo día que el correo le da como límite.
+- **Propuesta (PROPUESTA):** validar `deadline` con `after:today` (422 por campo) y vencer al final del día: `expires_at` a las 23:59:59 de esa fecha, en la zona horaria de la aplicación, o comparar con el fin del día. Revisar también `expires_at` en `assertAnswerable`, para que answers y complete respondan 409 en cuanto venza.
+- **Mientras no exista:** el asistente solo acepta fechas posteriores a hoy (`validarFechaLimite`, `pages/app/nueva/modelo.ts`) y el mensaje para compartir por correo o WhatsApp dice «Responde antes del dd/mm/aaaa» (`pages/app/invitaciones/mensaje.ts`). El texto del correo automático es del backend y no cambia.
+
+<a id="pb-37"></a>
+### PB-37 · Teléfono del candidato en las invitaciones
+
+- **Necesidad:** el asistente envía el teléfono opcional de cada candidato y el backend lo guarda (2026-09-11-fase1-nucleo.md:1403, :1449), pero no lo devuelven ni POST /api/assessments (:1460) ni GET /api/assessments/{id} (:1479-1484). Por eso el canal «WhatsApp» de D-10 abre `https://wa.me/?text=…` sin número, y RR. HH. elige el contacto a mano. Surgió en la Fase 4, con los canales para compartir.
+- **Pantalla que lo pide:** pantalla de enlaces del asistente y modal «Enlace de invitación» del detalle de la evaluación.
+- **Prioridad:** Baja.
+- **Propuesta (PROPUESTA):** `"phone": "+525512345678"` (o `null`) en cada invitación de las dos respuestas, en formato internacional. Con el número, el frontend abriría `https://wa.me/<número>?text=…`.
+- **Mientras no exista:** WhatsApp se abre sin destinatario, con el mensaje y el enlace real (`pages/app/invitaciones/mensaje.ts`).
