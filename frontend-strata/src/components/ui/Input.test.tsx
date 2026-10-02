@@ -70,6 +70,23 @@ describe('Input', () => {
     expect(campo.closest('.st-input')).toHaveClass('st-input--code')
   })
 
+  it('variante token: aspecto de código sin forzar mayúsculas (el token distingue mayúsculas)', async () => {
+    const user = userEvent.setup()
+    render(<Input label="Enlace o código" variant="token" />)
+    const campo = screen.getByRole('textbox', { name: 'Enlace o código' })
+    const caja = campo.closest('.st-input')
+    expect(caja).toHaveClass('st-input--token')
+    expect(caja).not.toHaveClass('st-input--code')
+    expect(campo).toHaveAttribute('autocapitalize', 'none')
+    expect(campo).toHaveAttribute('autocomplete', 'off')
+    expect(campo).toHaveAttribute('spellcheck', 'false')
+    // El rótulo es el del candidato (tamaño lg del Field).
+    expect(campo.closest('.st-field')).toHaveClass('st-field--lg')
+
+    await user.type(campo, 'AbC123xyz')
+    expect(campo).toHaveValue('AbC123xyz')
+  })
+
   it('un clic en el ícono lleva el foco al input', async () => {
     const user = userEvent.setup()
     render(<Input label="Correo" icon={<svg data-testid="icono" />} />)

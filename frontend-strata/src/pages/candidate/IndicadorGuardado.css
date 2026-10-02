@@ -1,0 +1,46 @@
+/* Indicador de guardado de la barra del examen (Strata.dc.html:1154-1157):
+   punto celeste de 6 px con pulseDot y texto de 11 px terciario (5.46:1 sobre
+   la barra). Guardado lleva la palomita verde de íconos; el error, ícono y
+   texto en rojo (6.17:1) y «Reintentar» con objetivo táctil de 44 px. */
+.st-guardado {
+  display: flex;
+  flex: none;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-4) var(--space-10);
+}
+
+.st-guardado__texto {
+  display: flex;
+  align-items: center;
+  gap: var(--space-6);
+  font-size: var(--fs-eyebrow);
+  font-weight: var(--fw-medium);
+  line-height: var(--lh-title);
+  color: var(--color-text-tertiary);
+  white-space: nowrap;
+}
+
+/* La región de estado se oculta mientras se muestra el error (hidden). */
+.st-guardado__texto[hidden] {
+  display: none;
+}
+
+.st-guardado__icono {
+  flex: none;
+  color: var(--color-success-icon);
+}
+
+.st-guardado--error .st-guardado__texto,
+.st-guardado--error .st-guardado__icono {
+  color: var(--color-error-text);
+}
+
+/* Botón ghost mediano (44 px de alto) con el texto a 12 px, a la escala de la
+   barra. Los márgenes negativos conservan el objetivo táctil de 44 px sin que
+   la barra crezca (ni empuje la pregunta) cuando aparece el error: el botón
+   ocupa en la fila lo mismo que el texto de la prueba (unos 34 px). */
+.st-guardado .st-guardado__reintentar {
+  margin-block: calc(var(--space-5) * -1);
+  font-size: var(--fs-small);
+}

@@ -112,19 +112,30 @@
   font-weight: var(--fw-bold);
 }
 
-.st-input--code {
+/* Código (Strata.dc.html:1111) y token del candidato: 20 px mono, centrado. */
+.st-input--code,
+.st-input--token {
   border-width: var(--border-width-control);
   border-radius: var(--radius-control-candidate);
   background-color: var(--color-surface-soft);
   font-family: var(--font-mono);
   font-size: var(--fs-code-lg);
   font-weight: var(--fw-bold);
-  letter-spacing: var(--tracking-code-lg);
   text-align: center;
+}
+
+.st-input--code {
+  letter-spacing: var(--tracking-code-lg);
   text-transform: uppercase;
 }
 
-.st-input.st-input--code .st-input__field {
+/* Token: distingue mayúsculas y minúsculas; tracking corto porque el enlace es largo. */
+.st-input--token {
+  letter-spacing: var(--tracking-code-sm);
+}
+
+.st-input.st-input--code .st-input__field,
+.st-input.st-input--token .st-input__field {
   padding: var(--space-16) var(--space-18);
 }
 

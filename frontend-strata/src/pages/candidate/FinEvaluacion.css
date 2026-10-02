@@ -1,0 +1,154 @@
+/* ==========================================================================
+   Fin del examen (Strata.dc.html:1198-1228)
+   Columna de 560 px centrada en el alto: ícono tinta de 76 px con popIn,
+   H1 de 32 px en 800, entradilla de 15 px, tres tarjetas de vidrio con los
+   datos reales, aviso celeste y acciones. Entra con screenIn.
+   ========================================================================== */
+
+.st-fin {
+  display: flex;
+  flex: 1 0 auto;
+  align-items: center;
+  justify-content: center;
+  padding: var(--layout-end-padding);
+  animation: var(--anim-screen-in);
+}
+
+.st-fin__inner {
+  width: 100%;
+  max-width: var(--width-end);
+  text-align: center;
+}
+
+/* Ícono: cuadro tinta de 76 px, radio 26 y palomita celeste (8.33:1) */
+.st-fin__icono {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--size-end-icon);
+  height: var(--size-end-icon);
+  margin: 0 auto var(--space-26);
+  border-radius: var(--radius-hero);
+  background-color: var(--color-surface-dark);
+  color: var(--color-sky);
+  animation: st-pop-in var(--dur-pop-lg) var(--ease-spring-pop) backwards;
+}
+
+/* Satoshi 32 px, 800 (se pinta en 700), tracking -.025em */
+.st-fin__titulo {
+  font-size: var(--fs-title-xl);
+  font-weight: var(--fw-extrabold);
+  line-height: var(--lh-heading-sm);
+  letter-spacing: var(--tracking-h2);
+  text-wrap: pretty;
+}
+
+/* Recibe el foco al llegar (tabIndex -1); no es un control. */
+.st-fin__titulo:focus {
+  outline: none;
+}
+
+/* Terciario: 5.46:1 sobre #FAF8F5 */
+.st-fin__texto {
+  max-width: var(--width-end-text);
+  margin: var(--space-14) auto 0;
+  font-size: var(--fs-body-sm);
+  line-height: var(--lh-relaxed);
+  color: var(--color-text-tertiary);
+}
+
+/* ── Datos (Strata.dc.html:1208-1215) ────────────────────────────────────── */
+.st-fin__resumen {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: var(--space-12);
+  margin-top: var(--space-32);
+  text-align: left;
+}
+
+/* Rótulo de 10 px en versales (5.46:1 sobre el vidrio) */
+.st-fin__dato-etiqueta {
+  font-size: var(--fs-micro-sm);
+  font-weight: var(--fw-bold);
+  line-height: var(--lh-title);
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+  color: var(--color-text-tertiary);
+}
+
+.st-fin__dato-valor {
+  margin-top: var(--space-7);
+  font-size: var(--fs-body-sm);
+  font-weight: var(--fw-bold);
+  line-height: var(--lh-title);
+  color: var(--color-text);
+  overflow-wrap: break-word;
+}
+
+/* Varias pruebas: una por línea */
+.st-fin__linea {
+  display: block;
+}
+
+.st-fin__aviso {
+  margin-top: var(--space-14);
+}
+
+/* ── Acciones (Strata.dc.html:1222-1225) ─────────────────────────────────── */
+.st-fin__acciones {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space-11);
+  margin-top: var(--space-26);
+}
+
+/* Receta del candidato (Strata.dc.html:1223-1224): «Cerrar ventana» en 14 px,
+   14 × 22 y radio 12; «Conocer Strata» en 13.5 px, 14 × 20 y radio 13. */
+.st-fin__acciones .st-btn.st-fin__cerrar-ventana {
+  padding: var(--space-14) var(--space-22);
+  border-radius: var(--radius-control-candidate);
+  font-size: var(--fs-ui-md);
+}
+
+.st-fin__acciones .st-btn.st-fin__conocer {
+  padding: var(--space-14) var(--space-20);
+  border-radius: var(--radius-option);
+  font-size: var(--fs-ui);
+}
+
+/* «Ya puedes cerrar esta pestaña.»: secundario, 7.00:1 */
+.st-fin__cerrar {
+  margin-top: var(--space-14);
+  font-size: var(--fs-ui-sm);
+  font-weight: var(--fw-medium);
+  color: var(--color-text-secondary);
+}
+
+/* Vacía mide 0: sin display: none, la región viva sigue en el árbol de
+   accesibilidad y el aviso se anuncia cuando aparece. */
+.st-fin__cerrar:empty {
+  margin-top: 0;
+}
+
+/* Teléfonos chicos: una tarjeta por fila, para que los nombres largos
+   (organización, pruebas) no se partan a media palabra. */
+@media (max-width: 400px) {
+  .st-fin__resumen {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .st-fin,
+  .st-fin__icono {
+    animation: none;
+  }
+}
+
+@media print {
+  .st-fin,
+  .st-fin__icono {
+    animation: none;
+  }
+}

@@ -18,8 +18,11 @@ export type InputSize = FieldSize
  * - mono: JetBrains Mono en peso 700, para cifras y rangos (Strata.dc.html:559).
  * - code: código de licencia, 20 px mono, centrado y en mayúsculas (Strata.dc.html:1111).
  *   Solo cambia cómo se ve: si el backend espera mayúsculas, normaliza el valor en onChange.
+ * - token: enlace o código de invitación del candidato (/evaluar). Mismo aspecto que code,
+ *   sin mayúsculas ni autocapitalización: el token distingue mayúsculas y minúsculas
+ *   (mapa.md, CA-3). Tracking corto porque un enlace es largo.
  */
-export type InputVariant = 'default' | 'mono' | 'code'
+export type InputVariant = 'default' | 'mono' | 'code' | 'token'
 
 export interface InputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'size' | 'prefix'> {
   /** Rótulo del campo. Obligatorio: es su nombre accesible (ocúltalo con hideLabel). */
@@ -83,6 +86,8 @@ export function Input({
   const prefixId = `${ids.controlId}-prefix`
   const suffixId = `${ids.controlId}-suffix`
   const isCode = variant === 'code'
+  // code y token comparten el aspecto del input de código del candidato.
+  const isCodeLike = isCode || variant === 'token'
 
   // Un clic en el ícono, el prefijo o el relleno lleva el foco al input.
   function focusField(event: MouseEvent<HTMLDivElement>) {
@@ -104,7 +109,7 @@ export function Input({
       error={error}
       errorId={ids.errorId}
       required={required}
-      size={isCode ? 'lg' : size}
+      size={isCodeLike ? 'lg' : size}
       className={className}
     >
       <div
@@ -132,10 +137,10 @@ export function Input({
           </span>
         )}
         <input
-          autoComplete={isCode ? 'off' : undefined}
-          autoCapitalize={isCode ? 'characters' : undefined}
-          autoCorrect={isCode ? 'off' : undefined}
-          spellCheck={isCode || variant === 'mono' ? false : undefined}
+          autoComplete={isCodeLike ? 'off' : undefined}
+          autoCapitalize={isCode ? 'characters' : isCodeLike ? 'none' : undefined}
+          autoCorrect={isCodeLike ? 'off' : undefined}
+          spellCheck={isCodeLike || variant === 'mono' ? false : undefined}
           {...rest}
           ref={ref}
           id={ids.controlId}

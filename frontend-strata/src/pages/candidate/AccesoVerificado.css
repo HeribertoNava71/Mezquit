@@ -1,0 +1,250 @@
+/* ==========================================================================
+   Invitación verificada (Strata.dc.html:1013-1105)
+   Cabecera tinta con la insignia, el título y las pruebas; cuerpo con la
+   entradilla, las instrucciones, el consentimiento y el CTA; franja de tres
+   garantías sobre el beige. Va dentro de la tarjeta de CandidateFrame.
+   ========================================================================== */
+
+/* ── Cabecera tinta (Strata.dc.html:1014-1027) ───────────────────────────── */
+.st-acceso__head {
+  padding: var(--space-26) var(--space-34) var(--space-22);
+  background-color: var(--color-surface-dark);
+  color: var(--color-on-dark);
+}
+
+/* Insignia (Strata.dc.html:1015): 12 px a la derecha, 8 al inicio por el ícono
+   y gap de 7 (el Tag lg usa 13, 9 y 8). El alto (6 px arriba y abajo con el
+   interlineado 1.3 del Tag) queda en 29 px, como los 28 del prototipo con su
+   interlineado normal. */
+.st-acceso__head .st-tag.st-acceso__insignia {
+  gap: var(--space-7);
+  padding-inline: var(--space-8) var(--space-12);
+}
+
+/* Palomita de la insignia: del color de la tinta sobre el círculo verde */
+.st-icono-verificado__palomita {
+  stroke: var(--color-surface-dark);
+}
+
+/* 25 px blanco (17.85:1) */
+.st-acceso__title {
+  margin-top: var(--space-15);
+  font-size: var(--fs-title-lg);
+  line-height: var(--lh-title);
+  color: var(--color-on-dark);
+  text-wrap: pretty;
+}
+
+/* Recibe el foco al llegar (tabIndex -1); no es un control. */
+.st-acceso__title:focus {
+  outline: none;
+}
+
+.st-acceso__tests {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+  margin-top: var(--space-14);
+  list-style: none;
+}
+
+.st-acceso__test {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-4) var(--space-11);
+}
+
+/* Nombre de la prueba: celeste sobre tinta (8.33:1), versales */
+.st-acceso__test-name {
+  font-size: var(--fs-label);
+  font-weight: var(--fw-semibold);
+  letter-spacing: var(--tracking-caps-sm);
+  text-transform: uppercase;
+  color: var(--color-on-dark-link);
+}
+
+/* Duración y reactivos: 12.02:1 */
+.st-acceso__test-meta {
+  font-size: var(--fs-small);
+  color: var(--color-on-dark-secondary);
+}
+
+/* ── Cuerpo (Strata.dc.html:1029-1082) ───────────────────────────────────── */
+.st-acceso__body {
+  padding: var(--space-26) var(--space-34) var(--space-24);
+}
+
+.st-acceso__intro {
+  font-size: var(--fs-ui-md);
+  line-height: var(--lh-relaxed);
+  color: var(--color-text-secondary);
+}
+
+/* Instrucciones numeradas, en el lenguaje de los avisos del acceso
+   (avisosAcceso, Strata.dc.html:1995-2000): número mono celeste y texto. */
+.st-acceso__instrucciones {
+  margin-top: var(--space-18);
+}
+
+.st-acceso__instrucciones-titulo {
+  font-family: var(--font-text);
+  font-size: var(--fs-eyebrow);
+  font-weight: var(--fw-bold);
+  line-height: var(--lh-title);
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+  color: var(--color-sky-text);
+}
+
+.st-acceso__pasos {
+  display: grid;
+  gap: var(--space-10);
+  margin-top: var(--space-10);
+  list-style: none;
+}
+
+.st-acceso__paso {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: baseline;
+  gap: var(--space-12);
+}
+
+/* #0369A1 sobre blanco: 5.93:1 */
+.st-acceso__paso-num {
+  font-family: var(--font-mono);
+  font-size: var(--fs-small);
+  font-weight: var(--fw-bold);
+  color: var(--color-sky-text);
+}
+
+.st-acceso__paso-texto {
+  font-size: var(--fs-ui-sm);
+  line-height: var(--lh-normal);
+  color: var(--color-text-secondary);
+}
+
+.st-acceso__paso-texto strong {
+  font-weight: var(--fw-semibold);
+  color: var(--color-text);
+}
+
+/* Consentimiento (Checkbox consent) o constancia de que ya existe */
+.st-acceso__consent {
+  margin-top: var(--space-18);
+}
+
+/* Verde de texto #157A3A (5.42:1); el ícono en el verde de íconos */
+.st-acceso__consentido {
+  display: flex;
+  align-items: center;
+  gap: var(--space-8);
+  margin-top: var(--space-18);
+  font-size: var(--fs-small);
+  font-weight: var(--fw-medium);
+  color: var(--color-success-text);
+}
+
+.st-acceso__consentido-icono {
+  flex: none;
+  color: var(--color-success-icon);
+}
+
+/* Avisos (error de consentimiento, evaluación sin pruebas) */
+.st-acceso__aviso {
+  margin-top: var(--space-16);
+}
+
+/* CTA y ayuda (Strata.dc.html:1076-1081) */
+.st-acceso__cta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-12) var(--space-16);
+  margin-top: var(--space-22);
+}
+
+/* CTA del acceso (Strata.dc.html:1077): 14.5 px, 14 × 26 con gap de 9, radio
+   del candidato (12) y la sombra del CTA en navy (D-19). Al pasar el cursor
+   sube 1 px, como el prototipo, solo si se permite el movimiento. */
+.st-acceso__cta .st-acceso__iniciar {
+  gap: var(--space-9);
+  padding: var(--space-14) var(--space-26);
+  border-radius: var(--radius-control-candidate);
+  font-size: var(--fs-ui-lg);
+}
+
+.st-acceso__cta .st-acceso__iniciar:where(:not([aria-disabled='true'])) {
+  box-shadow: var(--shadow-primary);
+}
+
+.st-acceso__cta .st-acceso__iniciar:where(:not([aria-disabled='true'])):hover {
+  box-shadow: var(--shadow-primary-hover);
+}
+
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .st-acceso__cta .st-acceso__iniciar:where(:not([aria-disabled='true'])):hover {
+    transform: translateY(-1px);
+  }
+
+  .st-acceso__cta .st-acceso__iniciar:where(:not([aria-disabled='true'])):active {
+    transform: translateY(1px);
+  }
+}
+
+/* Terciario: 5.79:1 sobre blanco */
+.st-acceso__ayuda {
+  font-size: var(--fs-label);
+  line-height: var(--lh-normal);
+  color: var(--color-text-tertiary);
+}
+
+/* ── Garantías (Strata.dc.html:1085-1104) ────────────────────────────────── */
+.st-acceso__garantias {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-12) var(--space-16);
+  padding: var(--space-16) var(--space-30);
+  border-top: var(--border-width) solid var(--color-border-divider);
+  background-color: var(--color-bg);
+  list-style: none;
+}
+
+/* Secundario sobre #FAF8F5: 7.00:1 */
+.st-acceso__garantia {
+  display: flex;
+  align-items: center;
+  gap: var(--space-9);
+  font-size: var(--fs-label);
+  line-height: var(--lh-snug);
+  color: var(--color-text-secondary);
+}
+
+.st-acceso__garantia-icono {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: var(--space-26);
+  height: var(--space-26);
+  border-radius: var(--radius-tab);
+  background-color: var(--color-sky-tint-strong);
+  color: var(--color-sky-text);
+}
+
+/* ── Móvil ───────────────────────────────────────────────────────────────── */
+@media (max-width: 640px) {
+  .st-acceso__head {
+    padding: var(--space-22) var(--space-20) var(--space-20);
+  }
+
+  .st-acceso__body {
+    padding: var(--space-22) var(--space-20) var(--space-24);
+  }
+
+  .st-acceso__garantias {
+    grid-template-columns: minmax(0, 1fr);
+    padding: var(--space-16) var(--space-20);
+  }
+}

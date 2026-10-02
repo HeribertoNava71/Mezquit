@@ -1,7 +1,46 @@
-.evaluar-landing { min-height: 100svh; display: grid; place-items: center; padding: var(--sp-6); background: var(--color-surface); }
-.evaluar-landing__card { width: 100%; max-width: 440px; display: flex; flex-direction: column; gap: var(--sp-5); }
-.evaluar-landing__title { font-size: var(--text-3xl); color: var(--color-brunswick); }
-.evaluar-landing__text { font-size: var(--text-base); color: var(--color-ink); opacity: 0.85; }
-.evaluar-landing__input { padding: var(--sp-3) var(--sp-4); border: 1.5px solid var(--color-border); border-radius: var(--radius-sm); font-family: var(--font-body); font-size: var(--text-base); }
-.evaluar-landing__input:focus { border-color: var(--color-hunter); outline: none; }
-.evaluar-landing__error { font-size: var(--text-sm); color: var(--color-error); }
+/* /evaluar: acceso manual (Strata.dc.html:1107-1120). Tarjeta con padding
+   32/34/28, título de 24–25 px, entradilla de 14 px y el input de código
+   (variante token del Input: 20 px mono, centrado, sin mayúsculas). */
+.st-evaluar {
+  padding: var(--space-32) var(--space-34) var(--space-28);
+}
+
+.st-evaluar__titulo {
+  font-size: var(--fs-title-lg);
+  line-height: var(--lh-title);
+}
+
+/* Secundario: 7.42:1 sobre blanco */
+.st-evaluar__texto {
+  margin: var(--space-10) 0 var(--space-22);
+  font-size: var(--fs-ui-md);
+  line-height: var(--lh-relaxed);
+  color: var(--color-text-secondary);
+}
+
+.st-evaluar__acciones {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-16);
+  margin-top: var(--space-18);
+}
+
+/* CTA del paso 1 (Strata.dc.html:1113): 14 px, 13 × 24 con gap de 9, radio
+   del candidato (12) y la sombra del CTA en navy (D-19). */
+.st-evaluar__acciones .st-evaluar__continuar {
+  gap: var(--space-9);
+  padding: var(--space-13) var(--space-24);
+  border-radius: var(--radius-control-candidate);
+  font-size: var(--fs-ui-md);
+}
+
+.st-evaluar__acciones .st-evaluar__continuar:where(:not([aria-disabled='true'])) {
+  box-shadow: var(--shadow-primary);
+}
+
+@media (max-width: 640px) {
+  .st-evaluar {
+    padding: var(--space-24) var(--space-20);
+  }
+}

@@ -336,6 +336,7 @@
   --size-logo-sm:         20px;  /* salamandra del pie (Strata.dc.html:314, 1232) */
   --size-avatar-lg:       33px;  /* avatar cuadrado de la tabla de candidatos (Strata.dc.html:838) */
   --size-stat-badge:      38px;  /* cuadro numérico de la tarjeta de resumen (Strata.dc.html:699) */
+  --size-end-icon:        76px;  /* ícono del fin del examen, cuadro tinta con palomita (Strata.dc.html:1201) */
 
   /* ------------------------------------------------------------------------
      Radios

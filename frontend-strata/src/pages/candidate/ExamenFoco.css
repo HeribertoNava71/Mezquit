@@ -1,0 +1,195 @@
+/* ==========================================================================
+   Examen en modo foco (Strata.dc.html:1138-1196)
+   Barra translúcida sticky (rgba(250,248,245,.8), blur de 16 px, z-index 10)
+   con fila de 900 px y barra de avance de 4 px a todo lo ancho; columna de
+   760 px con el encabezado de la pregunta, la tarjeta blanca y la navegación.
+   La pantalla entra con screenIn y cada pregunta con softIn (D-21); sin
+   animación con movimiento reducido.
+   ========================================================================== */
+
+.st-examen {
+  display: flex;
+  flex: 1 0 auto;
+  flex-direction: column;
+  animation: var(--anim-screen-in);
+}
+
+/* ── Barra (Strata.dc.html:1141-1162) ────────────────────────────────────── */
+.st-examen__barra {
+  position: sticky;
+  top: 0;
+  z-index: var(--z-exam-bar);
+  background-color: var(--color-exam-bar-bg);
+  -webkit-backdrop-filter: blur(var(--blur-topbar));
+  backdrop-filter: blur(var(--blur-topbar));
+}
+
+/* Sin backdrop-filter, el fondo translúcido dejaría leer la pregunta de abajo. */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .st-examen__barra {
+    background-color: var(--color-bg);
+  }
+}
+
+.st-examen__barra-inner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-8) var(--space-16);
+  max-width: var(--width-exam-bar);
+  margin-inline: auto;
+  padding: var(--layout-exam-bar-padding);
+}
+
+/* Prueba (14 px, 700) y organización (11 px, terciario 5.46:1) */
+.st-examen__contexto {
+  flex: 1 1 150px;
+  min-width: 0;
+}
+
+.st-examen__prueba {
+  font-family: var(--font-text);
+  font-size: var(--fs-ui-md);
+  font-weight: var(--fw-bold);
+  line-height: var(--lh-title);
+  letter-spacing: var(--tracking-title);
+  text-wrap: pretty;
+}
+
+.st-examen__org {
+  margin-top: var(--space-1);
+  font-size: var(--fs-eyebrow);
+  line-height: var(--lh-title);
+  color: var(--color-text-tertiary);
+}
+
+/* ── Cuerpo (Strata.dc.html:1164-1196) ───────────────────────────────────── */
+.st-examen__cuerpo {
+  display: flex;
+  flex: 1 0 auto;
+  align-items: flex-start;
+  justify-content: center;
+  padding: var(--layout-exam-padding);
+}
+
+.st-examen__columna {
+  width: 100%;
+  max-width: var(--width-exam);
+}
+
+/* Carga de los reactivos: dentro de una superficie, no sobre los halos */
+.st-examen__estado {
+  display: flex;
+  justify-content: center;
+  padding: var(--space-48) var(--space-24);
+  border: var(--surface-white-border);
+  border-radius: var(--surface-white-radius);
+  background: var(--surface-white-bg);
+}
+
+/* Prueba sin reactivos: recibe el foco al aparecer (tabIndex -1); no es un control. */
+.st-examen__vacio:focus {
+  outline: none;
+}
+
+/* «PREGUNTA i DE n» (#0369A1, 5.60:1 sobre #FAF8F5) y «Prueba k de m» */
+.st-examen__encabezado {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-6) var(--space-14);
+  margin-bottom: var(--space-18);
+}
+
+.st-examen__contador {
+  font-size: var(--fs-label);
+  font-weight: var(--fw-bold);
+  line-height: var(--lh-title);
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+  color: var(--color-sky-text);
+}
+
+.st-examen__prueba-n {
+  font-size: var(--fs-label);
+  line-height: var(--lh-title);
+  color: var(--color-text-tertiary);
+}
+
+/* Tarjeta de la pregunta: blanca con borde frío y radio 18 (Card white, padding lg) */
+.st-examen__tarjeta {
+  animation: var(--anim-soft-in);
+}
+
+.st-examen__indicacion {
+  margin-bottom: var(--space-5);
+  font-size: var(--fs-small);
+  font-weight: var(--fw-semibold);
+  line-height: var(--lh-normal);
+  color: var(--color-text-tertiary);
+}
+
+/* Pregunta: Satoshi 23 px, 700, interlineado 1.4 */
+.st-examen__pregunta {
+  margin-bottom: var(--space-26);
+  font-size: var(--fs-title);
+  line-height: var(--lh-snug);
+  letter-spacing: var(--tracking-snug);
+  text-wrap: pretty;
+}
+
+/* Recibe el foco en cada pregunta (tabIndex -1); no es un control. */
+.st-examen__pregunta:focus {
+  outline: none;
+}
+
+/* Error al finalizar */
+.st-examen__aviso {
+  margin-top: var(--space-16);
+}
+
+/* Navegación (Strata.dc.html:1185-1191) */
+.st-examen__nav {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-12);
+  margin-top: var(--space-22);
+}
+
+.st-examen__nota {
+  font-size: var(--fs-label);
+  line-height: var(--lh-normal);
+  color: var(--color-text-tertiary);
+}
+
+/* Botones del examen con la receta del candidato (Strata.dc.html:1186-1188):
+   radio 12; «Anterior» en 13.5 px (el secundario mediano usa 13) y
+   «Siguiente» en 14 px, 14 × 24 con gap de 9. */
+.st-examen__nav .st-btn.st-examen__anterior {
+  border-radius: var(--radius-control-candidate);
+  font-size: var(--fs-ui);
+}
+
+.st-examen__nav .st-btn.st-examen__siguiente {
+  gap: var(--space-9);
+  margin-left: auto;
+  padding: var(--space-14) var(--space-24);
+  border-radius: var(--radius-control-candidate);
+  font-size: var(--fs-ui-md);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .st-examen,
+  .st-examen__tarjeta {
+    animation: none;
+  }
+}
+
+@media print {
+  .st-examen,
+  .st-examen__tarjeta {
+    animation: none;
+  }
+}

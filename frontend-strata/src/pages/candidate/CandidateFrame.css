@@ -1,0 +1,103 @@
+/* ==========================================================================
+   Marco del acceso del candidato (Strata.dc.html:996-1011 y 1122-1136)
+   Columna de 600 px centrada en el alto, con padding 48/24 (32/20 a 640 px y
+   24/16 a 400 px), fila de marca, tarjeta blanca con borde cálido y fila de
+   enlaces (Footer compacto). Entra con screenIn, como cada pantalla del
+   prototipo; sin animación con movimiento reducido.
+   ========================================================================== */
+
+.st-cand-frame {
+  display: flex;
+  flex: 1 0 auto;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--layout-access-padding);
+  animation: var(--anim-screen-in);
+}
+
+.st-cand-frame__inner {
+  width: 100%;
+  max-width: var(--width-access);
+}
+
+/* ── Fila de marca (Strata.dc.html:999-1009) ─────────────────────────────── */
+.st-cand-frame__brand {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-10) var(--space-16);
+  margin-bottom: var(--space-16);
+  padding-inline: var(--space-2);
+}
+
+/* Inicial de la organización y su nombre: Satoshi 15.5 px, 600 */
+.st-cand-frame__org {
+  display: flex;
+  align-items: center;
+  gap: var(--space-10);
+  min-width: 0;
+}
+
+.st-cand-frame__org-name {
+  min-width: 0;
+  font-family: var(--font-heading);
+  font-size: var(--fs-h5);
+  font-weight: var(--fw-semibold);
+  line-height: var(--lh-title);
+  letter-spacing: var(--tracking-heading);
+  color: var(--color-text);
+  overflow-wrap: anywhere;
+}
+
+/* «Powered by» y emblema de Strata: texto terciario (5.46:1 sobre #FAF8F5) */
+.st-cand-frame__powered {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: var(--space-6);
+}
+
+.st-cand-frame__powered-text {
+  font-size: var(--fs-micro);
+  color: var(--color-text-tertiary);
+  white-space: nowrap;
+}
+
+.st-cand-frame__mark {
+  width: var(--space-15);
+  height: var(--space-15);
+  object-fit: contain;
+  border-radius: var(--radius-code);
+  opacity: 0.85;
+}
+
+.st-cand-frame__strata {
+  font-family: var(--font-heading);
+  font-size: var(--fs-label);
+  font-weight: var(--fw-semibold);
+  letter-spacing: var(--tracking-caps-sm);
+  text-transform: uppercase;
+  color: var(--color-text-tertiary);
+}
+
+/* ── Contenido de la tarjeta ─────────────────────────────────────────────── */
+/* Carga inicial («Verificando tu invitación…») */
+.st-cand-frame__estado {
+  display: flex;
+  justify-content: center;
+  padding: var(--space-48) var(--space-24);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .st-cand-frame {
+    animation: none;
+  }
+}
+
+@media print {
+  .st-cand-frame {
+    animation: none;
+  }
+}
