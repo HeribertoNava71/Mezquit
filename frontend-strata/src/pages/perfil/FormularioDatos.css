@@ -1,0 +1,53 @@
+/* Datos de la cuenta en solo lectura (correo y empresa) dentro de «Datos
+   personales». Caja beige secundaria con borde de tarjeta; rótulos como los de
+   los campos (11.5 px, 700, secundario) para que se lean como datos del mismo
+   formulario, pero sin aspecto de control editable. */
+
+.st-perfil-cuenta {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+}
+
+.st-perfil-cuenta__datos {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr));
+  gap: var(--space-12) var(--space-16);
+  padding: var(--space-13) var(--space-16);
+  border: var(--border-width) solid var(--color-border-card);
+  border-radius: var(--radius-control);
+  background: var(--color-bg-alt);
+}
+
+.st-perfil-cuenta__dato {
+  min-width: 0;
+}
+
+/* #5B5545 sobre #F7F5F0: 6.8:1 */
+.st-perfil-cuenta__rotulo {
+  font-size: var(--fs-label);
+  font-weight: var(--fw-bold);
+  line-height: var(--lh-title);
+  color: var(--color-text-secondary);
+}
+
+.st-perfil-cuenta__valor {
+  margin-top: var(--space-4);
+  font-size: var(--fs-ui);
+  font-weight: var(--fw-semibold);
+  line-height: var(--lh-normal);
+  color: var(--color-text);
+  overflow-wrap: anywhere;
+}
+
+/* Sin empresa: terciario (#6B6558 sobre #F7F5F0: 5.3:1) */
+.st-perfil-cuenta__valor--vacio {
+  font-weight: var(--fw-medium);
+  color: var(--color-text-tertiary);
+}
+
+.st-perfil-cuenta__nota {
+  font-size: var(--fs-small);
+  line-height: var(--lh-normal);
+  color: var(--color-text-tertiary);
+}

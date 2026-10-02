@@ -1,0 +1,167 @@
+/* /admin/usuarios/:id con el lenguaje del paso «Datos generales» del builder
+   (Strata.dc.html:360-437): tarjetas de vidrio con título de 16 px, nota de
+   12.5 px y campos a 15 px; columna lateral con los datos de solo lectura y
+   la zona de peligro. Una sola columna a 768 px o menos; campos en una
+   columna y botones a todo el ancho a 640 px o menos. */
+.st-usuario {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+/* «Volver a usuarios»: enlace ghost sobre el encabezado, con el margen de
+   «Volver a candidatos» del detalle de la evaluación */
+.st-usuario__volver {
+  align-self: flex-start;
+  margin-block-end: var(--space-14);
+}
+
+.st-usuario__rejilla {
+  display: grid;
+  grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+  align-items: start;
+  gap: var(--space-18);
+}
+
+.st-usuario__lateral {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-18);
+  min-width: 0;
+}
+
+/* ── Tarjetas ──────────────────────────────────────────────────────────── */
+.st-usuario__tarjeta,
+.st-usuario__formulario {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-20);
+  min-width: 0;
+}
+
+.st-usuario__cabecera {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+/* Título con la pastilla «Solo lectura» a la derecha */
+.st-usuario__cabecera--fila {
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-8) var(--space-12);
+}
+
+/* Título de tarjeta (Strata.dc.html:362): 16 px, 700, Satoshi (h2 global) */
+.st-usuario__titulo {
+  font-size: var(--fs-h4);
+  line-height: var(--lh-title);
+  color: var(--color-text);
+}
+
+/* Nota bajo el título (Strata.dc.html:363): 12.5 px en terciario */
+.st-usuario__descripcion,
+.st-usuario__nota {
+  font-size: var(--fs-meta);
+  line-height: var(--lh-normal);
+  color: var(--color-text-tertiary);
+}
+
+/* ── Formulario ────────────────────────────────────────────────────────── */
+.st-usuario__campos {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-15) var(--space-12);
+}
+
+.st-usuario__acciones {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-16);
+}
+
+/* ── Datos de solo lectura ─────────────────────────────────────────────── */
+.st-usuario__datos {
+  display: flex;
+  flex-direction: column;
+}
+
+.st-usuario__dato {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding-block: var(--space-12);
+  border-top: var(--border-width) solid var(--color-border-divider);
+}
+
+.st-usuario__dato:first-child {
+  padding-top: 0;
+  border-top: 0;
+}
+
+.st-usuario__dato:last-child {
+  padding-bottom: 0;
+}
+
+/* Rótulo como el de los campos (11.5 px, 700, secundario) */
+.st-usuario__dato dt {
+  font-size: var(--fs-label);
+  font-weight: var(--fw-bold);
+  line-height: var(--lh-title);
+  color: var(--color-text-secondary);
+}
+
+.st-usuario__dato dd {
+  font-size: var(--fs-ui);
+  font-weight: var(--fw-medium);
+  line-height: var(--lh-normal);
+  color: var(--color-text);
+  overflow-wrap: anywhere;
+}
+
+.st-usuario__sin-dato {
+  font-weight: var(--fw-regular);
+  color: var(--color-text-tertiary);
+}
+
+/* ── Zona de peligro ───────────────────────────────────────────────────── */
+/* Tarjeta blanca con el borde de error (decorativo: el título lo dice) */
+.st-card.st-usuario__peligro {
+  border-color: var(--color-error-border);
+}
+
+/* #B3261E sobre blanco: 6.54:1 */
+.st-usuario__titulo--peligro {
+  color: var(--color-error-text);
+}
+
+.st-usuario__eliminar {
+  align-self: flex-start;
+}
+
+/* ── Móvil ─────────────────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .st-usuario__rejilla {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .st-usuario__volver {
+    min-height: var(--size-target);
+    margin-block-end: var(--space-8);
+  }
+
+  .st-usuario__campos {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .st-usuario__guardar,
+  .st-usuario__eliminar {
+    flex: 1 1 100%;
+    align-self: stretch;
+  }
+}

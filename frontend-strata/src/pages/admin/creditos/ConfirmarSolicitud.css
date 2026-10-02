@@ -1,0 +1,66 @@
+/* Datos de la solicitud en el modal de confirmación (S-15). Caja beige como la
+   de interpretación del reporte (Strata.dc.html:946) y rótulos como los del
+   modal «Asignar test» (:1386: 11.5 px, 700, texto secundario).
+   Contraste sobre #FAF8F5: rótulo #5B5545 7.00:1 · valor #0F172A 16.84:1 ·
+   «Sin nota» #6B6558 5.46:1. */
+.st-confirmar-solicitud__datos {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-14) var(--space-16);
+  margin: 0;
+  padding: var(--space-16);
+  border: var(--border-width) solid var(--color-border-divider);
+  border-radius: var(--radius-control);
+  background-color: var(--color-bg);
+}
+
+.st-confirmar-solicitud__dato {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  min-width: 0;
+}
+
+.st-confirmar-solicitud__dato--nota {
+  grid-column: 1 / -1;
+}
+
+.st-confirmar-solicitud__datos dt {
+  font-size: var(--fs-label);
+  font-weight: var(--fw-bold);
+  line-height: var(--lh-title);
+  color: var(--color-text-secondary);
+}
+
+.st-confirmar-solicitud__datos dd {
+  margin: 0;
+  font-size: var(--fs-ui);
+  font-weight: var(--fw-medium);
+  line-height: var(--lh-normal);
+  color: var(--color-text);
+  overflow-wrap: anywhere;
+}
+
+.st-confirmar-solicitud__datos .st-confirmar-solicitud__cifra {
+  font-weight: var(--fw-bold);
+  font-variant-numeric: tabular-nums;
+}
+
+.st-confirmar-solicitud__datos .st-confirmar-solicitud__nota {
+  white-space: pre-line;
+}
+
+.st-confirmar-solicitud__datos .st-confirmar-solicitud__sin-nota {
+  color: var(--color-text-tertiary);
+}
+
+/* Teléfonos chicos: cantidad y saldo en una fila; fecha y nota debajo, a lo ancho. */
+@media (max-width: 400px) {
+  .st-confirmar-solicitud__datos {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .st-confirmar-solicitud__dato:nth-child(3) {
+    grid-column: 1 / -1;
+  }
+}

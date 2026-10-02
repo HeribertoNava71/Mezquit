@@ -1,24 +1,115 @@
-.ausuarios { display: flex; flex-direction: column; gap: var(--sp-6); }
-.ausuarios__head { display: flex; gap: var(--sp-4); align-items: center; flex-wrap: wrap; justify-content: space-between; }
-.ausuarios__title { font-size: var(--text-3xl); color: var(--color-brunswick); }
-.ausuarios__search { padding: var(--sp-2) var(--sp-4); border: 1.5px solid var(--color-border); border-radius: var(--radius-sm); font-family: var(--font-body); font-size: var(--text-base); min-width: 220px; }
-.ausuarios__table { width: 100%; border-collapse: collapse; }
-.ausuarios__table th, .ausuarios__table td { text-align: left; padding: var(--sp-3) var(--sp-4); border-bottom: 1px solid var(--color-timberwolf); font-size: var(--text-sm); }
-.ausuarios__table th { opacity: 0.6; font-weight: 600; }
-.ausuarios__actions { display: flex; gap: var(--sp-3); }
-.ausuarios__link { color: var(--color-hunter); }
-.ausuarios__del { color: var(--color-error); background: none; font-size: var(--text-sm); }
-.ausuarios__confirm { font-size: var(--text-xs); color: var(--color-error); }
-.ausuarios__pages { display: flex; gap: var(--sp-3); align-items: center; font-size: var(--text-sm); }
+/* /admin/usuarios con el lenguaje de «Candidatos y exámenes asignados»
+   (Strata.dc.html:772-870): encabezado con la acción a la derecha, tabla de
+   vidrio con la celda de persona (:836-843) y pie con el total y
+   Anterior/Siguiente (:861-867). A 640 px o menos la tabla pasa a tarjetas
+   (D-23, modo cards de DataTable); ya no hace falta la contención transitoria
+   de la Fase 2. */
+.st-usuarios {
+  /* Ancho del buscador junto al título (el de los CTA del encabezado del prototipo). */
+  --st-usuarios-busqueda: 22.5rem;
 
-/* Transición hasta la Fase 7 (D-23: tablas a tarjetas por debajo de 640 px; QA de
-   la Fase 2). La tabla vieja no cabe en pantallas angostas: el desplazamiento
-   lateral queda dentro de la pantalla y no arrastra la página, la barra ni el
-   pie. El relleno, compensado con margen negativo, deja sitio al anillo de foco
-   que el recorte del desplazamiento cortaría en los bordes. */
-.ausuarios {
-  overflow-x: auto;
-  overscroll-behavior-x: contain;
-  padding: calc(var(--focus-outline-width) + var(--focus-outline-offset));
-  margin: calc(-1 * (var(--focus-outline-width) + var(--focus-outline-offset)));
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+/* ── Buscador (en las acciones del PageHeader) ─────────────────────────── */
+.st-usuarios__busqueda {
+  width: min(100%, var(--st-usuarios-busqueda));
+}
+
+/* ── Celdas ────────────────────────────────────────────────────────────── */
+
+/* Persona: avatar cuadrado celeste y nombre (Strata.dc.html:836-843) */
+.st-usuarios__persona {
+  display: flex;
+  align-items: center;
+  gap: var(--space-11);
+  min-width: 0;
+}
+
+/* 13.5 px, 600, tinta */
+.st-usuarios__nombre {
+  min-width: 0;
+  font-size: var(--fs-ui);
+  font-weight: var(--fw-semibold);
+  line-height: var(--lh-title);
+  color: var(--color-text);
+  overflow-wrap: break-word;
+}
+
+/* Fecha y «sin dato»: 12.5 px en terciario, como la fecha de la tabla (Strata.dc.html:851) */
+.st-usuarios__fecha,
+.st-usuarios__sin-dato {
+  font-weight: var(--fw-regular);
+  color: var(--color-text-tertiary);
+}
+
+.st-usuarios__fecha {
+  white-space: nowrap;
+}
+
+/* «Editar» y «Eliminar» en una sola línea, como la acción de la tabla del prototipo (:854) */
+.st-usuarios__acciones {
+  display: inline-flex;
+  flex-wrap: nowrap;
+  justify-content: flex-end;
+  gap: var(--space-6);
+}
+
+/* «Eliminar»: botón neutro con el texto de error (#B3261E, 6.54:1 sobre blanco);
+   la confirmación del Modal lleva el botón de peligro. */
+.st-usuarios__eliminar.st-btn--neutral {
+  color: var(--color-error-text);
+}
+
+.st-usuarios__eliminar.st-btn--neutral:where(:not([aria-disabled='true'])):hover {
+  border-color: var(--color-error-text);
+  color: var(--color-error-hover);
+}
+
+/* ── Pie: total y paginación (Strata.dc.html:861-867) ──────────────────── */
+.st-usuarios__rango {
+  margin: 0;
+}
+
+.st-usuarios__paginacion {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-6);
+}
+
+.st-usuarios__pagina {
+  margin-inline-end: var(--space-6);
+  white-space: nowrap;
+}
+
+/* ── Móvil ─────────────────────────────────────────────────────────────── */
+@media (max-width: 640px) {
+  .st-usuarios__busqueda {
+    width: 100%;
+  }
+
+  /* En la tarjeta de cada fila, las acciones ocupan el ancho y crecen al
+     objetivo táctil de 44 px. */
+  .st-usuarios__acciones {
+    display: flex;
+    justify-content: flex-start;
+  }
+
+  .st-usuarios__acciones .st-btn,
+  .st-usuarios__paginacion .st-btn {
+    flex: 1 1 0;
+    min-height: var(--size-target);
+  }
+
+  .st-usuarios__paginacion {
+    flex: 1 1 100%;
+  }
+
+  .st-usuarios__pagina {
+    flex: 1 1 100%;
+    margin-inline-end: 0;
+  }
 }

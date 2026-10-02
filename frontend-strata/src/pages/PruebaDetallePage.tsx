@@ -1,78 +1,96 @@
-import { useEffect, useState } from 'react'
-import { Link, useParams } from 'react-router-dom'
-import { getTest, type TestDetail } from '@/api/catalog'
-import Report from '@/sections/Report'
-import type { ReportData } from '@/api/report'
-import { SITE } from '@/config/site'
+import { useParams } from 'react-router-dom'
+import { Button, EstadoCarga, EstadoError, PageHeader, VisuallyHidden } from '@/components/ui'
+import { IconoFlechaIzquierda, IconoReactivos, IconoReloj } from './publicas/iconos'
+import { ReporteEjemplo } from './publicas/ReporteEjemplo'
+import { usePruebaDetalle } from './publicas/usePruebaDetalle'
 import './PruebaDetallePage.css'
 
-const SAMPLE: ReportData = {
-  candidate: 'Ejemplo · Candidato',
-  position: 'Puesto de referencia',
-  assessment: 'Evaluación de muestra',
-  organization: SITE.name,
-  completed_at: 'Sep 2026',
-  sample: true,
-  interview_questions: ['Cuéntame de una situación reciente relacionada con «Orientación a resultados».'],
-  tests: [{
-    name: 'Resultado de ejemplo',
-    integrity: { blur_count: 0 },
-    scales: [
-      { code: 'A', name: 'Escala A', normalized: 74, percentile: 74, category: 'alto', interpretation: 'Puntaje alto: es una fortaleza marcada del candidato.' },
-      { code: 'B', name: 'Escala B', normalized: 52, percentile: 52, category: 'medio', interpretation: 'Puntaje medio: dentro del promedio esperado.' },
-      { code: 'C', name: 'Escala C', normalized: 28, percentile: 28, category: 'bajo', interpretation: 'Puntaje bajo: podría ser un área a explorar en entrevista.' },
-    ],
-  }],
+/**
+ * «Volver al catálogo»: enlace de texto con flecha, siempre arriba
+ * (Strata.dc.html:1117), del mismo tamaño que «Volver a candidatos» del
+ * detalle de la evaluación.
+ */
+function VolverAlCatalogo() {
+  return (
+    <Button variant="ghost" size="sm" to="/pruebas" iconLeft={<IconoFlechaIzquierda />} className="st-detalle__volver">
+      Volver al catálogo
+    </Button>
+  )
 }
 
+function reactivos(cantidad: number): string {
+  return cantidad === 1 ? 'reactivo' : 'reactivos'
+}
+
+/**
+ * /pruebas/:slug (mapa.md, sección 2; R-11): datos de la prueba desde
+ * GET /api/catalog/{slug} y el reporte de ejemplo.
+ * - PageHeader: eyebrow = categoría, H1 = nombre y entradilla = descripción;
+ *   debajo, la duración y «[ n ] reactivos» en mono.
+ * - El reporte de ejemplo va en tarjeta de vidrio con la etiqueta «Ejemplo».
+ * - Estados: carga; 404 «Prueba no encontrada», sin reintento; y error de red
+ *   o del servidor con «Reintentar». Antes todo error se mostraba como 404.
+ */
 export default function PruebaDetallePage() {
   const { slug = '' } = useParams()
-  const [test, setTest] = useState<TestDetail | null>(null)
-  const [error, setError] = useState(false)
+  const detalle = usePruebaDetalle(slug)
 
-  useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect -- reconstrucción: efecto de carga del plan tal cual; ver docs/rediseno/reconstruccion.md
-    setTest(null)
-    setError(false)
-    getTest(slug).then(setTest).catch(() => setError(true))
-  }, [slug])
-
-  if (error) return (
-    <section className="detalle"><div className="detalle__inner">
-      <Link to="/pruebas" className="detalle__back">← Volver al catálogo</Link>
-      <h1 className="detalle__title">Prueba no encontrada</h1>
-      <p className="detalle__state">Esta prueba no existe o no está disponible.</p>
-    </div></section>
-  )
-
-  if (!test) return (
-    <section className="detalle"><div className="detalle__inner"><p className="detalle__state">Cargando…</p></div></section>
-  )
-
-  return (
-    <section className="detalle">
-      <div className="detalle__inner">
-        <Link to="/pruebas" className="detalle__back">← Volver al catálogo</Link>
-        <div>
-          <p className="detalle__cat">{test.category_label}</p>
-          <h1 className="detalle__title">{test.name}</h1>
-        </div>
-        <p className="detalle__desc">{test.description}</p>
-        <div className="detalle__facts">
-          <div className="detalle__fact">
-            <span className="detalle__fact-label">Duración estimada</span>
-            <span className="detalle__fact-value">{test.duration_min} min</span>
-          </div>
-          <div className="detalle__fact">
-            <span className="detalle__fact-label">Reactivos</span>
-            <span className="detalle__fact-value">[ {test.item_count} ]</span>
-          </div>
-        </div>
-        <div className="detalle__report">
-          <p className="detalle__report-intro">Así se ve un reporte de esta categoría:</p>
-          <Report data={SAMPLE} />
-        </div>
+  if (detalle.estado !== 'listo') {
+    return (
+      <div className="st-detalle">
+        <VolverAlCatalogo />
+        {/* Sin la prueba no hay título visible: este H1 nombra la página para los lectores de pantalla. */}
+        <VisuallyHidden as="h1">Detalle de la prueba</VisuallyHidden>
+        {detalle.estado === 'cargando' ? (
+          <EstadoCarga variant="bloque" count={4} label="Cargando la prueba…" className="st-detalle__carga" />
+        ) : detalle.kind === 'no-encontrado' ? (
+          <EstadoError
+            kind="no-encontrado"
+            titleAs="h2"
+            title="Prueba no encontrada"
+            message="Esta prueba no existe o no está disponible."
+            className="st-detalle__estado"
+          />
+        ) : (
+          <EstadoError
+            kind={detalle.kind}
+            titleAs="h2"
+            title={detalle.kind === 'servidor' ? 'No pudimos cargar la prueba' : undefined}
+            onRetry={detalle.reintentar}
+            retrying={detalle.reintentando}
+            className="st-detalle__estado"
+          />
+        )}
       </div>
-    </section>
+    )
+  }
+
+  const { prueba } = detalle
+  return (
+    <div className="st-detalle">
+      <VolverAlCatalogo />
+      <PageHeader
+        eyebrow={prueba.category_label}
+        title={prueba.name}
+        lede={prueba.description || undefined}
+        className="st-detalle__header"
+      />
+      <ul className="st-detalle__meta" aria-label="Datos de la prueba">
+        <li className="st-detalle__dato">
+          <IconoReloj className="st-detalle__icono" />
+          <span>
+            <VisuallyHidden>Duración estimada: </VisuallyHidden>
+            {prueba.duration_min} min
+          </span>
+        </li>
+        <li className="st-detalle__dato">
+          <IconoReactivos className="st-detalle__icono" />
+          <span>
+            [ {prueba.item_count} ] {reactivos(prueba.item_count)}
+          </span>
+        </li>
+      </ul>
+      <ReporteEjemplo className="st-detalle__ejemplo" />
+    </div>
   )
 }

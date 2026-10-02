@@ -1,0 +1,42 @@
+/* Confirmación de «Eliminar usuario»: cuerpo del Modal. La ficha de la persona
+   repite la celda de candidato de la tabla del prototipo (Strata.dc.html:836-843)
+   dentro de una caja beige con el divisor del modal. */
+.st-eliminar-usuario__ficha {
+  display: flex;
+  align-items: center;
+  gap: var(--space-11);
+  min-width: 0;
+  padding: var(--space-13) var(--space-15);
+  border: var(--border-width) solid var(--color-border-divider);
+  border-radius: var(--radius-control);
+  background-color: var(--color-bg);
+}
+
+.st-eliminar-usuario__persona {
+  min-width: 0;
+}
+
+/* Tinta sobre #FAF8F5 */
+.st-eliminar-usuario__nombre {
+  font-size: var(--fs-ui);
+  font-weight: var(--fw-semibold);
+  line-height: var(--lh-title);
+  color: var(--color-text);
+  overflow-wrap: anywhere;
+}
+
+/* Terciario sobre #FAF8F5: 5.46:1 */
+.st-eliminar-usuario__correo {
+  margin-top: var(--space-2);
+  font-size: var(--fs-label);
+  line-height: var(--lh-normal);
+  color: var(--color-text-tertiary);
+  overflow-wrap: anywhere;
+}
+
+/* Secundario sobre blanco: 7.42:1 */
+.st-eliminar-usuario__texto {
+  font-size: var(--fs-ui-sm);
+  line-height: var(--lh-paragraph);
+  color: var(--color-text-secondary);
+}

@@ -1,0 +1,20 @@
+/* /como-funciona: el encabezado de página, los pasos y dos secciones más,
+   separadas por el espacio de sección de la home (64 px; 48 px a 640 px o menos). */
+.st-como {
+  min-width: 0;
+}
+
+/* Los pasos quedan cerca del H1: son el contenido principal de la página. */
+.st-como__pasos {
+  padding-top: var(--space-26);
+}
+
+.st-como__seccion {
+  padding-top: var(--layout-section-pad-y);
+}
+
+@media (max-width: 640px) {
+  .st-como__pasos {
+    padding-top: var(--space-16);
+  }
+}

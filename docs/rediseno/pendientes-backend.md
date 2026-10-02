@@ -53,8 +53,9 @@ Para responder, anota en cada ítem «Estado: aceptado, rechazado o hecho» y el
 | PB-32 | Verificación de correo | Baja | Registro, perfil | — |
 | PB-33 | Marca STRATA en los datos sembrados del backend | Baja | Barra superior, admin de usuarios | D-03 |
 | PB-34 | Bandera multidispositivo en la integridad | Baja | Resultados | D-25 |
+| PB-35 | Mensajes de validación (422) en español | Media | Registro, perfil, /demo, admin de usuarios | — |
 
-**Por prioridad.** Alta: PB-01, PB-22 y PB-20 (esta solo si se quiere la Fase 5). Media: PB-03, PB-04, PB-05, PB-06, PB-07, PB-08, PB-13, PB-14 y PB-23. Baja: el resto, casi todo ligado a decisiones de producto.
+**Por prioridad.** Alta: PB-01, PB-22 y PB-20 (esta solo si se quiere la Fase 5). Media: PB-03, PB-04, PB-05, PB-06, PB-07, PB-08, PB-13, PB-14, PB-23 y PB-35. Baja: el resto, casi todo ligado a decisiones de producto.
 
 ## Ítems
 
@@ -498,3 +499,12 @@ Para responder, anota en cada ítem «Estado: aceptado, rechazado o hecho» y el
 - **Prioridad:** Baja.
 - **Propuesta (PROPUESTA):** en consent, answers y events, comparar el user agent de la petición con el del consentimiento; si cambia, registrar un evento multidevice una sola vez por attempt; en GET /api/invitations/{id}/report, agregar `integrity.multidevice` (booleano o conteo) por prueba. Si se decide enviar también eventos focus con payload (D-25), el reporte tendría que exponerlos.
 - **Mientras no exista:** el reporte muestra solo las pérdidas de foco (blur).
+
+<a id="pb-35"></a>
+### PB-35 · Mensajes de validación (422) en español
+
+- **Necesidad:** los FormRequest no definen `messages()` (RegisterRequest, 2026-09-12-registro-login-crud-usuarios.md:244-265; UpdateProfileRequest, UpdatePasswordRequest y AdminUpdateUserRequest, :509-588; StoreLeadRequest, 2026-09-10-sales-site.md:593-611) y ningún plan configura el idioma de Laravel (APP_LOCALE ni archivos `lang/es`). Si el backend real tampoco los tiene (por confirmar con PB-01), cada 422 llega con el texto en inglés de Laravel, por ejemplo «The email has already been taken.», y la UI lo muestra tal cual junto al campo, como siempre hizo.
+- **Pantalla que lo pide:** /registro, /perfil, /admin/perfil, /demo y /admin/usuarios/:id (errores por campo, Fase 7).
+- **Prioridad:** Media: los campos funcionan, pero el texto sale en otro idioma.
+- **Propuesta (PROPUESTA):** `APP_LOCALE=es` (y `APP_FALLBACK_LOCALE`) con las traducciones de validación en `lang/es/validation.php` y nombres de atributo en español (`attributes`), o `messages()` en cada FormRequest.
+- **Mientras no exista:** el frontend valida en el cliente, con textos en español, lo que ya exigía el servidor y es seguro repetir (obligatorios del login, confirmación de contraseña, fecha anterior a hoy, largo mínimo y nombre del usuario en el admin). Los 422 del servidor se muestran tal como llegan, en su campo.

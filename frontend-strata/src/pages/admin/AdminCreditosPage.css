@@ -1,20 +1,76 @@
-.admincred { display: flex; flex-direction: column; gap: var(--sp-6); }
-.admincred__title { font-size: var(--text-3xl); color: var(--color-brunswick); }
-.admincred__table { width: 100%; border-collapse: collapse; }
-.admincred__table th, .admincred__table td { text-align: left; padding: var(--sp-3) var(--sp-4); border-bottom: 1px solid var(--color-timberwolf); font-size: var(--text-sm); }
-.admincred__actions { display: flex; gap: var(--sp-3); }
-.admincred__approve { color: var(--color-success); font-weight: 600; background: none; }
-.admincred__reject { color: var(--color-error); font-weight: 600; background: none; }
-.admincred__empty { opacity: 0.7; }
+/* Solicitudes de créditos (/admin/creditos; mapa.md, sección 2; R-30).
+   PageHeader y DataTable de vidrio, que a 640 px o menos pasa a tarjetas (D-23):
+   ya no hace falta la contención transitoria de la Fase 2.
+   Contraste sobre el vidrio (≈ blanco) y su hover (#FDFCFA): cifra solicitada
+   #0F172A 17.85:1 · celdas #3D3A33 11.16:1 · fecha y «Sin nota» #6B6558 5.6:1. */
+.st-admin-creditos {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
 
-/* Transición hasta la Fase 7 (D-23: tablas a tarjetas por debajo de 640 px; QA de
-   la Fase 2). La tabla vieja no cabe en pantallas angostas: el desplazamiento
-   lateral queda dentro de la pantalla y no arrastra la página, la barra ni el
-   pie. El relleno, compensado con margen negativo, deja sitio al anillo de foco
-   que el recorte del desplazamiento cortaría en los bordes. */
-.admincred {
-  overflow-x: auto;
-  overscroll-behavior-x: contain;
-  padding: calc(var(--focus-outline-width) + var(--focus-outline-offset));
-  margin: calc(-1 * (var(--focus-outline-width) + var(--focus-outline-offset)));
+/* Recibe el foco por código al actualizar la lista; no es un control. */
+.st-admin-creditos__encabezado:focus {
+  outline: none;
+}
+
+/* Empresa: encabezado de fila y título de la tarjeta en móvil. 13.5 px, 600,
+   tinta (17.85:1), como el nombre de las tablas de Candidatos y Usuarios. */
+.st-admin-creditos__empresa {
+  font-size: var(--fs-ui);
+  font-weight: var(--fw-semibold);
+  line-height: var(--lh-title);
+  color: var(--color-text);
+  overflow-wrap: break-word;
+}
+
+.st-admin-creditos__cifra {
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.st-admin-creditos__cifra--solicitada {
+  font-weight: var(--fw-bold);
+  color: var(--color-text);
+}
+
+/* Notas de hasta 500 caracteres: se parten en líneas y respetan sus saltos. */
+.st-admin-creditos__nota {
+  display: block;
+  max-width: 36ch;
+  white-space: pre-line;
+  overflow-wrap: anywhere;
+}
+
+.st-admin-creditos__sin-nota,
+.st-admin-creditos__fecha {
+  color: var(--color-text-tertiary);
+}
+
+.st-admin-creditos__fecha {
+  white-space: nowrap;
+}
+
+.st-admin-creditos__acciones {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: var(--space-7);
+}
+
+/* Tarjeta: las dos acciones a lo ancho, con el objetivo táctil de 44 px. */
+@media (max-width: 640px) {
+  .st-admin-creditos__nota {
+    max-width: none;
+  }
+
+  .st-admin-creditos__acciones {
+    justify-content: stretch;
+    padding-top: var(--space-4);
+  }
+
+  .st-admin-creditos__acciones .st-btn {
+    flex: 1 1 0;
+    min-height: var(--size-target);
+  }
 }

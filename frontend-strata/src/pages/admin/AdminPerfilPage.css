@@ -1,4 +1,10 @@
-.adminperfil { display: flex; flex-direction: column; gap: var(--sp-6); max-width: 480px; }
-.adminperfil__title { font-size: var(--text-3xl); color: var(--color-brunswick); }
-.adminperfil__ok { font-size: var(--text-sm); color: var(--color-success); animation: fadeIn 300ms ease; }
-.adminperfil__error { font-size: var(--text-sm); color: var(--color-error); }
+/* ==========================================================================
+   /admin/perfil · Mi perfil de operador
+   PageHeader y una tarjeta de vidrio con el formulario (estilos en
+   pages/perfil/TarjetaFormulario.css). La tarjeta llega a 600 px, el ancho
+   de la tarjeta de acceso (Strata.dc.html:997), y se alinea con el título.
+   ========================================================================== */
+
+.st-admin-perfil__tarjeta {
+  max-width: var(--width-access);
+}

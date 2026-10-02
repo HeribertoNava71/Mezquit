@@ -1,21 +1,56 @@
-.notfound {
-  min-height: calc(100svh - var(--header-h));
+/* ==========================================================================
+   404 · composición del fin del examen (Strata.dc.html:1198-1226): cuadro
+   tinta de 76 px y radio 26 con el ícono celeste (entra con popIn), cifra
+   grande, texto y botón, todo centrado en el alto disponible.
+   ========================================================================== */
+.st-404 {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: var(--sp-6);
-  padding-inline: var(--section-px);
+  min-height: min(60vh, 560px);
+  min-height: min(60svh, 560px);
   text-align: center;
 }
-.notfound__code {
-  font-family: var(--font-display);
-  font-size: var(--text-hero);
-  color: var(--color-brunswick);
-  line-height: 1;
+
+.st-404__icono {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--size-end-icon);
+  height: var(--size-end-icon);
+  margin-bottom: var(--space-26);
+  border-radius: var(--radius-hero);
+  background-color: var(--color-surface-dark);
+  color: var(--color-sky);
+  animation: var(--anim-pop-in);
+  animation-duration: var(--dur-pop-lg);
 }
-.notfound__msg {
-  font-size: var(--text-lg);
-  color: var(--color-ink);
-  opacity: 0.8;
+
+/* Satoshi 800 (se pinta en 700) en tinta: 16.84:1 sobre #FAF8F5 */
+.st-404__codigo {
+  font-size: var(--fs-figure-display);
+  font-weight: var(--fw-extrabold);
+  line-height: var(--lh-none);
+  letter-spacing: var(--tracking-display);
+  color: var(--color-text);
+}
+
+/* Secundario: 7.00:1 sobre #FAF8F5 */
+.st-404__texto {
+  max-width: var(--width-end-text);
+  margin-top: var(--space-14);
+  font-size: var(--fs-body-sm);
+  line-height: var(--lh-relaxed);
+  color: var(--color-text-secondary);
+}
+
+.st-404__cta.st-btn {
+  margin-top: var(--space-26);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .st-404__icono {
+    animation: none;
+  }
 }

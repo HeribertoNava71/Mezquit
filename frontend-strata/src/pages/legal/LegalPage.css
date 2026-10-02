@@ -1,3 +1,21 @@
-.legal { padding-block: var(--section-py); }
-.legal__inner { max-width: 720px; margin-inline: auto; padding-inline: var(--section-px); display: flex; flex-direction: column; gap: var(--sp-6); }
-.legal__body { font-size: var(--text-base); color: var(--color-ink); line-height: 1.7; }
+/* Textos legales: el documento en ancho de lectura (unos 70 caracteres por
+   línea) sobre la tarjeta secundaria (blanco .85, borde #EFE9DF, radio 18). */
+.st-legal {
+  min-width: 0;
+}
+
+.st-legal__documento {
+  max-width: var(--width-reading);
+  margin-top: var(--space-8);
+}
+
+/* #3D3A33 de 16 px con interlineado amplio: 11.34:1 sobre blanco */
+.st-legal__parrafo {
+  font-size: var(--fs-body);
+  line-height: var(--lh-relaxed);
+  color: var(--color-text-data);
+}
+
+.st-legal__parrafo + .st-legal__parrafo {
+  margin-top: var(--space-16);
+}

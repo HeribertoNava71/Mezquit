@@ -1,0 +1,57 @@
+/* ==========================================================================
+   TarjetaFormulario · formularios de /perfil y /admin/perfil
+   Receta de «Datos generales» del builder (Strata.dc.html:353-372): vidrio
+   con padding de 24 px, título de 16 px, apoyo de 12.5 px en terciario y
+   campos separados 15 px (12 px entre columnas).
+   ========================================================================== */
+
+.st-perfil-form__form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-20);
+}
+
+.st-perfil-form__titulo {
+  font-size: var(--fs-h4);
+  line-height: var(--lh-title);
+  color: var(--color-text);
+}
+
+.st-perfil-form__descripcion {
+  margin-top: var(--space-4);
+  font-size: var(--fs-meta);
+  line-height: var(--lh-normal);
+  color: var(--color-text-tertiary);
+}
+
+/* Campos apilados (contraseñas) o en rejilla de dos columnas (datos personales). */
+.st-perfil-form__campos {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-15);
+}
+
+.st-perfil-form__campos--rejilla {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-15) var(--space-12);
+  align-items: start;
+}
+
+/* Un campo que ocupa las dos columnas. */
+.st-perfil-form__campo--ancho {
+  grid-column: 1 / -1;
+}
+
+.st-perfil-form__acciones {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-12);
+}
+
+@media (max-width: 560px) {
+  .st-perfil-form__campos--rejilla {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

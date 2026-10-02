@@ -1,107 +1,118 @@
-.contact {
-  background-color: var(--color-timberwolf);
-  padding-block: var(--section-py);
-}
-
-.contact__inner {
-  max-width: var(--max-width);
-  margin-inline: auto;
-  padding-inline: var(--section-px);
+/* ==========================================================================
+   Formulario de leads y agenda de /demo (mapa.md, sección 2; R-13 y R-38)
+   - Tarjeta blanca del acceso del candidato (Strata.dc.html:1011: borde cálido
+     y radio 18) con los campos grandes del candidato (:1039-1066).
+   - Agenda en tarjeta de vidrio a la derecha desde 1024 px; debajo antes.
+   ========================================================================== */
+.st-contacto {
   display: grid;
-  grid-template-columns: 1fr;
-  gap: var(--sp-12);
+  grid-template-columns: minmax(0, 1fr);
+  align-items: start;
+  gap: var(--space-20);
 }
 
 @media (min-width: 1024px) {
-  .contact__inner { grid-template-columns: 1fr 1fr; }
+  .st-contacto {
+    grid-template-columns: minmax(0, 1.65fr) minmax(0, 1fr);
+    gap: var(--space-24);
+  }
 }
 
-/* Formulario */
-.contact__form-side { display: flex; flex-direction: column; gap: var(--sp-8); }
-.contact__title { font-size: var(--text-4xl); }
+/* ── Tarjeta del formulario ────────────────────────────────────────────── */
+.st-contacto__titulo {
+  font-size: var(--fs-title-lg);
+  line-height: var(--lh-title);
+}
 
-.contact-form {
+/* Terciario: 5.79:1 sobre blanco */
+.st-contacto__nota {
+  margin-top: var(--space-6);
+  font-size: var(--fs-small);
+  line-height: var(--lh-normal);
+  color: var(--color-text-tertiary);
+}
+
+.st-contacto__form {
   display: flex;
   flex-direction: column;
-  gap: var(--sp-5);
 }
 
-.form-field {
+/* Una columna en teléfonos; dos desde 640 px, en el orden de siempre:
+   Nombre y Empresa, Correo y Sector, Tamaño y Evaluaciones al mes. */
+.st-contacto__campos {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-16) var(--space-18);
+  margin-top: var(--space-22);
+}
+
+@media (min-width: 640px) {
+  .st-contacto__campos {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.st-contacto__falla {
+  margin-top: var(--space-22);
+}
+
+/* CTA y nota en una fila, como «Iniciar evaluación» (Strata.dc.html:1075-1081) */
+.st-contacto__acciones {
   display: flex;
-  flex-direction: column;
-  gap: var(--sp-2);
-}
-
-.form-label {
-  font-size: var(--text-sm);
-  font-weight: 500;
-  color: var(--color-brunswick);
-}
-
-.form-input,
-.form-select {
-  width: 100%;
-  padding: var(--sp-3) var(--sp-4);
-  border: 1.5px solid var(--color-border);
-  border-radius: var(--radius-sm);
-  background-color: var(--color-surface);
-  font-family: var(--font-body);
-  font-size: var(--text-base);
-  color: var(--color-ink);
-  transition: border-color var(--t-fast);
-  appearance: none;
-}
-
-.form-input:focus,
-.form-select:focus { border-color: var(--color-hunter); outline: none; }
-
-.form-input.form-input--error,
-.form-select.form-input--error { border-color: var(--color-error); }
-
-.form-error {
-  font-size: var(--text-xs);
-  color: var(--color-error);
-  display: flex;
+  flex-wrap: wrap;
   align-items: center;
-  gap: var(--sp-1);
+  gap: var(--space-12) var(--space-16);
+  margin-top: var(--space-22);
 }
 
-.contact__reply-note {
-  font-size: var(--text-sm);
-  color: var(--color-ink);
-  opacity: 0.7;
+/* Terciario: 5.79:1 sobre blanco */
+.st-contacto__respuesta {
+  font-size: var(--fs-label);
+  line-height: var(--lh-normal);
+  color: var(--color-text-tertiary);
 }
 
-/* Estado de éxito */
-.contact__success {
-  padding: var(--sp-8);
-  background-color: var(--color-surface);
-  border-radius: var(--radius-md);
-  border-left: 3px solid var(--color-success);
+.st-contacto__exito {
+  margin-top: var(--space-18);
+}
+
+/* ── Agenda ────────────────────────────────────────────────────────────── */
+.st-contacto__agenda {
   display: flex;
   flex-direction: column;
-  gap: var(--sp-3);
-}
-.contact__success-title {
-  font-family: var(--font-display);
-  font-size: var(--text-2xl);
-  color: var(--color-brunswick);
+  align-items: flex-start;
 }
 
-/* Lado agenda */
-.contact__agenda-side {
+/* Caja de ícono de los pasos (Strata.dc.html:276-277) */
+.st-contacto__agenda-icono {
   display: flex;
-  flex-direction: column;
+  flex: none;
+  align-items: center;
   justify-content: center;
-  gap: var(--sp-6);
+  width: var(--space-40);
+  height: var(--space-40);
+  margin-bottom: var(--space-14);
+  border: var(--border-width) solid var(--color-border-warm);
+  border-radius: var(--radius-control);
+  background-color: var(--color-surface-white);
+  box-shadow: var(--shadow-icon-box);
+  color: var(--color-sky-strong);
 }
 
-.contact__agenda-title {
-  font-size: var(--text-3xl);
+.st-contacto__agenda-titulo {
+  font-size: var(--fs-h3);
+  line-height: var(--lh-title);
 }
 
-.contact__agenda-desc {
-  font-size: var(--text-base);
-  color: var(--color-ink);
-  opacity: 0.8;
+/* Secundario: 7.42:1 sobre blanco */
+.st-contacto__agenda-texto {
+  margin-top: var(--space-8);
+  font-size: var(--fs-ui-sm);
+  line-height: var(--lh-paragraph);
+  color: var(--color-text-secondary);
+}
+
+.st-contacto__agenda-accion {
+  margin-top: var(--space-18);
+  max-width: 100%;
 }

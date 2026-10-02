@@ -1,124 +1,396 @@
-import { useState, type ChangeEvent, type FormEvent } from 'react'
+import { useEffect, useId, useRef, useState, type ChangeEvent, type FormEvent } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { register, type RegisterPayload } from '@/api/auth'
-import { useAuth } from '@/context/AuthContext'
-import Button from '@/components/ui/Button'
-import FloatingInput from '@/components/ui/FloatingInput'
+import { Button, Callout, Checkbox, Input, Select, VisuallyHidden, estadoErrorTextos } from '@/components/ui'
+import { IconoReintentar } from '@/components/ui/Iconos'
 import PasswordStrength from '@/components/ui/PasswordStrength'
-import { SITE } from '@/config/site'
+import { useAuth } from '@/context/AuthContext'
+import { AuthFrame } from './AuthFrame'
+import { erroresPorCampo, tipoDeFalla, type FallaDeEnvio } from './fallas'
+import { IconoFlecha } from './iconos'
+import { PLACEHOLDER_OPCION, SECTORES, TAMANOS_DE_EMPRESA } from './opcionesEmpresa'
+import { MENSAJE_NO_COINCIDEN, estadoConfirmacion } from './validacion'
 import './Auth.css'
 
+/** Cuerpo de POST /api/register: los mismos 12 campos y valores iniciales de siempre. */
 const EMPTY: RegisterPayload = {
   name: '', last_name: '', email: '', password: '', password_confirmation: '',
   company_name: '', sector: '', company_size: '', phone: '', birth_date: '', position: '',
   privacy_accepted: false,
 }
 
+type Campo = keyof RegisterPayload
+type Errores = Partial<Record<Campo, string>>
+
+function esCampo(nombre: string): nombre is Campo {
+  return Object.hasOwn(EMPTY, nombre)
+}
+
+interface FallaDelRegistro {
+  tipo: FallaDeEnvio
+  /** Mensajes de un 422 que no corresponden a ningún campo del formulario. */
+  mensajes?: string[]
+}
+
+interface AvisoDeFalla {
+  title?: string
+  mensajes: string[]
+  reintentar: boolean
+}
+
+function avisoDe(falla: FallaDelRegistro): AvisoDeFalla {
+  switch (falla.tipo) {
+    case 'validacion':
+      return {
+        title: 'Revisa tus datos',
+        mensajes: falla.mensajes ?? ['Algunos datos no son válidos. Revísalos e inténtalo de nuevo.'],
+        reintentar: false,
+      }
+    case 'limite':
+      return {
+        mensajes: ['Hiciste demasiados intentos seguidos. Espera un minuto y vuelve a intentarlo.'],
+        reintentar: false,
+      }
+    case 'red':
+      return { title: estadoErrorTextos.red.title, mensajes: [estadoErrorTextos.red.message], reintentar: true }
+    case 'servidor':
+      return { title: 'No pudimos crear tu cuenta', mensajes: [estadoErrorTextos.servidor.message], reintentar: true }
+  }
+}
+
+/**
+ * /registro (R-02, R-03, S-13; mapa.md, sección 2): tarjeta ancha con el marco
+ * del acceso, en dos columnas desde 768 px, con las secciones «Datos
+ * personales» y «Empresa (opcional)».
+ * - Conserva los 9 campos, la casilla del aviso de privacidad (sin marcar), el
+ *   cuerpo exacto de POST /api/register y la redirección de siempre:
+ *   /app/evaluaciones/nueva con empresa o /perfil sin ella.
+ * - Suma Sector y Tamaño de la empresa, que el contrato ya aceptaba (R-03).
+ * - «Confirmar contraseña» se valida en vivo con los estados válido y error del
+ *   Input, además del 422 del servidor; si no coincide, no se envía.
+ * - Los 422 se muestran en su campo y el foco va al primero; las fallas de
+ *   conexión o del servidor, en un aviso con «Reintentar» (D-22).
+ * - Ningún texto promete un correo de verificación (PB-32).
+ */
 export default function Registro() {
+  // El estado vive en el formulario: al teclear no se vuelve a pintar el marco (halos, marca y pie).
+  return (
+    <AuthFrame width="wide">
+      <FormularioDeRegistro />
+    </AuthFrame>
+  )
+}
+
+function FormularioDeRegistro() {
   const { setUser } = useAuth()
   const navigate = useNavigate()
+  const tituloId = useId()
+  const fuerzaId = useId()
   const [form, setForm] = useState<RegisterPayload>(EMPTY)
-  const [errors, setErrors] = useState<Partial<Record<keyof RegisterPayload, string>>>({})
+  const [errors, setErrors] = useState<Errores>({})
   const [loading, setLoading] = useState(false)
-  const [globalError, setGlobalError] = useState('')
+  const [falla, setFalla] = useState<FallaDelRegistro | null>(null)
+  // La persona salió de «Confirmar contraseña» o intentó enviar: ya no se espera a que termine de escribir.
+  const [confirmacionTerminada, setConfirmacionTerminada] = useState(false)
+  // Cambia con cada envío que deja errores en los campos; el efecto enfoca el primero.
+  const [enfocarError, setEnfocarError] = useState(0)
+  const formulario = useRef<HTMLFormElement>(null)
+  const botonCrear = useRef<HTMLButtonElement>(null)
 
-  function set(k: keyof RegisterPayload, v: string | boolean) {
-    setForm(p => ({ ...p, [k]: v }))
-    if (errors[k]) setErrors(p => ({ ...p, [k]: undefined }))
+  useEffect(() => {
+    if (enfocarError === 0) return
+    formulario.current?.querySelector<HTMLElement>('[aria-invalid="true"]')?.focus()
+  }, [enfocarError])
+
+  function set(k: Campo, v: string | boolean) {
+    setForm((p) => ({ ...p, [k]: v }))
+    // Al editar un campo se quita su error del servidor. Al cambiar la contraseña
+    // también el de la confirmación: el estado en vivo vuelve a compararlas.
+    const limpiar: Campo[] = k === 'password' ? ['password', 'password_confirmation'] : [k]
+    setErrors((p) => {
+      if (!limpiar.some((campo) => p[campo])) return p
+      const siguientes = { ...p }
+      for (const campo of limpiar) delete siguientes[campo]
+      return siguientes
+    })
   }
 
   function str(e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) {
-    set(e.target.name as keyof RegisterPayload, e.target.value)
+    const { name, value } = e.target
+    if (esCampo(name)) set(name, value)
   }
 
-  async function submit(e: FormEvent) {
-    e.preventDefault()
+  const confirmacion = estadoConfirmacion(form.password, form.password_confirmation, confirmacionTerminada)
+  const errorConfirmacion =
+    errors.password_confirmation ?? (confirmacion === 'no-coincide' ? MENSAJE_NO_COINCIDEN : undefined)
+
+  async function crearCuenta() {
+    if (loading) return
+    // Confirmación distinta: el error ya se ve en el campo y el servidor la rechazaría (same:password).
+    if (estadoConfirmacion(form.password, form.password_confirmation, true) === 'no-coincide') {
+      setConfirmacionTerminada(true)
+      setFalla(null)
+      setEnfocarError((n) => n + 1)
+      return
+    }
+
     setLoading(true)
-    setGlobalError('')
+    setFalla(null)
     setErrors({})
     try {
       const user = await register(form)
       setUser(user)
       navigate(user.organization_id ? '/app/evaluaciones/nueva' : '/perfil')
     } catch (err: unknown) {
-      const resp = (err as { response?: { data?: { errors?: Record<string, string[]>; message?: string } } }).response
-      if (resp?.data?.errors) {
-        const mapped: Partial<Record<keyof RegisterPayload, string>> = {}
-        for (const k in resp.data.errors) mapped[k as keyof RegisterPayload] = resp.data.errors[k][0]
-        setErrors(mapped)
+      const porCampo = erroresPorCampo(err)
+      if (porCampo) {
+        const campos: Errores = {}
+        const otros: string[] = []
+        for (const [campo, mensaje] of Object.entries(porCampo)) {
+          if (esCampo(campo)) campos[campo] = mensaje
+          else otros.push(mensaje)
+        }
+        setErrors(campos)
+        setFalla(otros.length > 0 ? { tipo: 'validacion', mensajes: otros } : null)
+        setEnfocarError((n) => n + 1)
       } else {
-        setGlobalError('Ocurrió un error. Intenta de nuevo.')
+        setFalla({ tipo: tipoDeFalla(err) })
       }
-    } finally {
       setLoading(false)
     }
   }
 
+  function enviar(evento: FormEvent<HTMLFormElement>) {
+    evento.preventDefault()
+    void crearCuenta()
+  }
+
+  function reintentar() {
+    // El aviso se quita al reenviar: el foco pasa al botón, que muestra la carga.
+    botonCrear.current?.focus()
+    void crearCuenta()
+  }
+
+  const aviso = falla ? avisoDe(falla) : null
+
   return (
-    <div className="auth">
-      <form className="auth__card" onSubmit={submit} noValidate>
-        <div className="auth__brand">
-          <img src="/logo.png" alt={SITE.name} className="auth__logo" />
-          <span className="auth__brand-name">{SITE.name}</span>
-        </div>
-        <h1 className="auth__title">Crear cuenta</h1>
+    <form ref={formulario} className="st-auth-form" onSubmit={enviar} noValidate aria-labelledby={tituloId}>
+      <header className="st-auth-form__head st-auth-form__head--divider">
+        <h1 id={tituloId} className="st-auth-form__title">
+          Crear cuenta
+        </h1>
+        <p className="st-auth-form__lede">
+          Si registras tu empresa, entrarás directo al portal de RR. HH. para crear tu primera evaluación.
+        </p>
+      </header>
 
-        {globalError && <p className="auth__error-global">{globalError}</p>}
-
-        <p className="auth__section">Datos personales</p>
-        <div className="auth__grid">
-          <FloatingInput id="name" name="name" label="Nombre" autoComplete="given-name"
-            value={form.name} onChange={str} error={errors.name} required />
-          <FloatingInput id="last_name" name="last_name" label="Apellido" autoComplete="family-name"
-            value={form.last_name} onChange={str} error={errors.last_name} required />
-          <div className="auth__grid--full">
-            <FloatingInput id="email" name="email" type="email" label="Correo electrónico" autoComplete="email"
-              value={form.email} onChange={str} error={errors.email} required />
-          </div>
-          <div>
-            <FloatingInput id="password" name="password" type="password" label="Contraseña (mín. 8 caracteres)" autoComplete="new-password"
-              value={form.password} onChange={str} error={errors.password} required />
-            <PasswordStrength password={form.password} />
-          </div>
-          <FloatingInput id="password_confirmation" name="password_confirmation" type="password" label="Confirmar contraseña" autoComplete="new-password"
-            value={form.password_confirmation} onChange={str} error={errors.password_confirmation} required />
-          <FloatingInput id="birth_date" name="birth_date" type="date" label="Fecha de nacimiento" autoComplete="bday"
-            value={form.birth_date ?? ''} onChange={str} error={errors.birth_date} />
-          <FloatingInput id="phone" name="phone" type="tel" label="Teléfono" autoComplete="tel"
-            value={form.phone ?? ''} onChange={str} error={errors.phone} />
-        </div>
-
-        <p className="auth__section">Empresa (opcional)</p>
-        <div className="auth__grid">
-          <FloatingInput id="company_name" name="company_name" label="Empresa / Organización" autoComplete="organization"
-            value={form.company_name ?? ''} onChange={str} error={errors.company_name} />
-          <FloatingInput id="position" name="position" label="Puesto" autoComplete="organization-title"
-            value={form.position ?? ''} onChange={str} error={errors.position} />
-        </div>
-
-        <label className="auth__privacy">
-          <input
-            type="checkbox"
-            className="auth__privacy-check"
-            checked={form.privacy_accepted}
-            onChange={e => set('privacy_accepted', e.target.checked)}
-            aria-describedby={errors.privacy_accepted ? 'privacy-error' : undefined}
+      <fieldset className="st-auth-form__grupo">
+        <legend className="st-auth-form__legend">Datos personales</legend>
+        <div className="st-auth-form__grid">
+          <Input
+            size="lg"
+            name="name"
+            label="Nombre"
+            autoComplete="given-name"
+            maxLength={255}
+            aria-required="true"
+            value={form.name}
+            onChange={str}
+            error={errors.name}
           />
-          <span>
-            Acepto el{' '}
-            <Link to="/aviso-de-privacidad" target="_blank">aviso de privacidad</Link>
-            {' '}y el uso de mis datos para la evaluación de candidatos.
-            {errors.privacy_accepted && (
-              <span id="privacy-error" style={{ display: 'block', color: 'var(--color-error)', fontSize: 'var(--text-xs)' }}>
-                {errors.privacy_accepted}
-              </span>
-            )}
-          </span>
-        </label>
+          <Input
+            size="lg"
+            name="last_name"
+            label="Apellido"
+            autoComplete="family-name"
+            maxLength={255}
+            aria-required="true"
+            value={form.last_name}
+            onChange={str}
+            error={errors.last_name}
+          />
+          <Input
+            size="lg"
+            type="email"
+            name="email"
+            label="Correo electrónico"
+            className="st-auth-form__celda--completa"
+            autoComplete="email"
+            autoCapitalize="none"
+            spellCheck={false}
+            maxLength={255}
+            aria-required="true"
+            value={form.email}
+            onChange={str}
+            error={errors.email}
+          />
+          <div className="st-auth-form__celda">
+            <Input
+              size="lg"
+              type="password"
+              name="password"
+              label="Contraseña"
+              hint="Mínimo 8 caracteres"
+              autoComplete="new-password"
+              aria-required="true"
+              aria-describedby={form.password ? fuerzaId : undefined}
+              value={form.password}
+              onChange={str}
+              error={errors.password}
+            />
+            <PasswordStrength password={form.password} id={fuerzaId} />
+          </div>
+          <Input
+            size="lg"
+            type="password"
+            name="password_confirmation"
+            label="Confirmar contraseña"
+            autoComplete="new-password"
+            aria-required="true"
+            value={form.password_confirmation}
+            onChange={(e) => {
+              setConfirmacionTerminada(false)
+              str(e)
+            }}
+            onBlur={() => setConfirmacionTerminada(true)}
+            valid={confirmacion === 'coincide'}
+            error={errorConfirmacion}
+          />
+          <Input
+            size="lg"
+            type="date"
+            name="birth_date"
+            label="Fecha de nacimiento"
+            hint="Opcional"
+            autoComplete="bday"
+            value={form.birth_date ?? ''}
+            onChange={str}
+            error={errors.birth_date}
+          />
+          <Input
+            size="lg"
+            type="tel"
+            name="phone"
+            label="Teléfono"
+            hint="Opcional"
+            autoComplete="tel"
+            maxLength={30}
+            value={form.phone ?? ''}
+            onChange={str}
+            error={errors.phone}
+          />
+        </div>
+      </fieldset>
 
-        <Button type="submit" loading={loading} size="lg">Crear cuenta</Button>
-        <p className="auth__foot">¿Ya tienes cuenta? <Link to="/login">Entra aquí</Link></p>
-      </form>
-    </div>
+      <fieldset className="st-auth-form__grupo">
+        <legend className="st-auth-form__legend">Empresa (opcional)</legend>
+        <p className="st-auth-form__grupo-texto">
+          El sector y el tamaño solo se guardan si escribes el nombre de tu empresa.
+        </p>
+        <div className="st-auth-form__grid">
+          <Input
+            size="lg"
+            name="company_name"
+            label="Empresa / Organización"
+            autoComplete="organization"
+            maxLength={255}
+            value={form.company_name ?? ''}
+            onChange={str}
+            error={errors.company_name}
+          />
+          <Input
+            size="lg"
+            name="position"
+            label="Puesto"
+            autoComplete="organization-title"
+            maxLength={255}
+            value={form.position ?? ''}
+            onChange={str}
+            error={errors.position}
+          />
+          <Select
+            size="lg"
+            name="sector"
+            label="Sector"
+            placeholder={PLACEHOLDER_OPCION}
+            options={SECTORES}
+            value={form.sector ?? ''}
+            onChange={str}
+            error={errors.sector}
+          />
+          <Select
+            size="lg"
+            name="company_size"
+            label="Tamaño de la empresa"
+            placeholder={PLACEHOLDER_OPCION}
+            options={TAMANOS_DE_EMPRESA}
+            value={form.company_size ?? ''}
+            onChange={str}
+            error={errors.company_size}
+          />
+        </div>
+      </fieldset>
+
+      <Checkbox
+        variant="consent"
+        name="privacy_accepted"
+        aria-required="true"
+        checked={form.privacy_accepted}
+        onChange={(e) => set('privacy_accepted', e.target.checked)}
+        error={errors.privacy_accepted}
+        label={
+          <>
+            Acepto el{' '}
+            <Link to="/aviso-de-privacidad" target="_blank" rel="noopener noreferrer">
+              aviso de privacidad
+              <VisuallyHidden> (se abre en otra pestaña)</VisuallyHidden>
+            </Link>{' '}
+            y el uso de mis datos para la evaluación de candidatos.
+          </>
+        }
+      />
+
+      {aviso && (
+        <Callout
+          tone="error"
+          live="alert"
+          className="st-auth-form__falla"
+          title={aviso.title}
+          actions={
+            aviso.reintentar && (
+              <Button variant="secondary" iconLeft={<IconoReintentar />} onClick={reintentar}>
+                Reintentar
+              </Button>
+            )
+          }
+        >
+          {aviso.mensajes.length === 1 ? (
+            aviso.mensajes[0]
+          ) : (
+            <ul className="st-auth-form__falla-lista">
+              {aviso.mensajes.map((mensaje) => (
+                <li key={mensaje}>{mensaje}</li>
+              ))}
+            </ul>
+          )}
+        </Callout>
+      )}
+
+      <div className="st-auth-form__cta">
+        <Button
+          ref={botonCrear}
+          type="submit"
+          className="st-auth-form__enviar"
+          loading={loading}
+          loadingText="Creando cuenta…"
+          iconRight={loading ? undefined : <IconoFlecha />}
+        >
+          Crear cuenta
+        </Button>
+        <p className="st-auth-form__cambio">
+          ¿Ya tienes cuenta? <Link to="/login">Entra aquí</Link>
+        </p>
+      </div>
+    </form>
   )
 }

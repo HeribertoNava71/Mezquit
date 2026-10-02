@@ -1,11 +1,85 @@
-.comparar { display: flex; flex-direction: column; gap: var(--sp-6); }
-.comparar__head { display: flex; justify-content: space-between; align-items: baseline; gap: var(--sp-4); flex-wrap: wrap; }
-.comparar__title { font-size: var(--text-3xl); color: var(--color-brunswick); }
-.comparar__wrap { overflow-x: auto; }
-.comparar__table { width: 100%; border-collapse: collapse; min-width: 480px; }
-.comparar__table th, .comparar__table td { text-align: left; padding: var(--sp-3) var(--sp-4); border-bottom: 1px solid var(--color-timberwolf); font-size: var(--text-sm); white-space: nowrap; }
-.comparar__th { cursor: pointer; user-select: none; color: var(--color-brunswick); font-weight: 600; }
-.comparar__th:hover { color: var(--color-hunter); }
-.comparar__cell { font-variant-numeric: tabular-nums; }
-.comparar__cat { font-weight: 600; }
-.comparar__empty { opacity: 0.7; }
+/* Comparativa de candidatos (/app/evaluaciones/:id/comparar; mapa.md, sección 2;
+   R-23). PageHeader y DataTable blanca con scroll horizontal (D-23: es la única
+   tabla que no pasa a tarjetas). Aquí solo se ajusta la tabla a la comparativa:
+   encabezados de escala en varias líneas y la columna del candidato fija al
+   desplazar, para no perder de quién es cada fila. */
+.st-comparar {
+  --st-comparar-nombre-max: 9.5rem; /* columna fija en teléfonos: deja ver al menos una escala */
+
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+/* «Volver al detalle»: enlace ghost sobre el encabezado, con el mismo margen
+   que «Volver a candidatos» del detalle de la evaluación. */
+.st-btn.st-comparar__volver {
+  align-self: flex-start;
+  margin-block-end: var(--space-14);
+}
+
+/* ── Encabezados de escala ─────────────────────────────────────────────── */
+/* Los nombres de escala son largos («Orientación a resultados»): parten en
+   líneas para que quepan más escalas antes de desplazar. */
+.st-comparar__tabla .st-table__th {
+  white-space: normal;
+  vertical-align: bottom;
+}
+
+.st-comparar__tabla .st-table__sort {
+  text-align: start;
+  text-wrap: balance;
+}
+
+/* ── Columna del candidato, fija ───────────────────────────────────────── */
+.st-comparar__tabla .st-table__th:first-child,
+.st-comparar__tabla .st-table__cell--row-header {
+  position: sticky;
+  inset-inline-start: 0;
+  z-index: 1;
+  box-shadow: inset calc(var(--border-width) * -1) 0 0 var(--color-border-divider);
+}
+
+/* Fondos opacos: lo que se desplaza pasa por debajo. La cabecera compone su
+   tinte beige sobre blanco, igual que el resto de su fila. */
+.st-comparar__tabla .st-table__th:first-child {
+  background: linear-gradient(var(--color-bg-thead), var(--color-bg-thead)), var(--color-surface-white);
+}
+
+.st-comparar__tabla .st-table__cell--row-header {
+  background-color: var(--color-surface-white);
+  font-size: var(--fs-ui);
+  font-weight: var(--fw-semibold);
+  color: var(--color-text);
+}
+
+/* En escritorio el nombre va en una línea: sobra espacio y la tabla ya se
+   desplaza si no cabe. «Candidato» nunca se corta a mitad de palabra. */
+.st-comparar__tabla .st-table__th:first-child {
+  white-space: nowrap;
+}
+
+@media (min-width: 641px) {
+  .st-comparar__tabla .st-table__cell--row-header {
+    white-space: nowrap;
+  }
+}
+
+.st-comparar__tabla .st-table__row:hover .st-table__cell--row-header,
+.st-comparar__tabla .st-table__row:focus-within .st-table__cell--row-header {
+  background-color: var(--color-surface-hover);
+}
+
+/* Teléfonos: la columna fija no pasa de 9.5rem, para que se vea al menos una
+   escala; el nombre se parte en líneas y, si una palabra no cabe, dentro de
+   ella. El encabezado conserva «Candidato» entero. */
+@media (max-width: 640px) {
+  .st-comparar__tabla .st-table__th:first-child,
+  .st-comparar__tabla .st-table__cell--row-header {
+    max-width: var(--st-comparar-nombre-max);
+  }
+
+  .st-comparar__tabla .st-table__cell--row-header {
+    overflow-wrap: anywhere;
+  }
+}

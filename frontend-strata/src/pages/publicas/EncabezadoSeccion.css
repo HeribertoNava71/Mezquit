@@ -1,0 +1,39 @@
+/* Encabezado de sección de las páginas públicas (Strata.dc.html:229-233 y
+   :265-269): eyebrow de 11 px, H2 de 30 px (el de «Cómo funciona», para que
+   las secciones de una misma página midan igual) y entradilla de 15 px. */
+.st-seccion-head {
+  margin-bottom: var(--space-24);
+}
+
+.st-seccion-head__eyebrow {
+  margin-bottom: var(--space-9);
+  font-size: var(--fs-eyebrow);
+  font-weight: var(--fw-bold);
+  line-height: var(--lh-title);
+  letter-spacing: var(--tracking-eyebrow);
+  text-transform: uppercase;
+  color: var(--color-eyebrow);
+}
+
+.st-seccion-head__fila {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-12) var(--space-16);
+}
+
+.st-seccion-head__title {
+  font-size: var(--fs-h2-sm);
+  line-height: var(--lh-heading-sm);
+  letter-spacing: var(--tracking-h2);
+  text-wrap: balance;
+}
+
+/* Secundario: 7.00:1 sobre #FAF8F5 */
+.st-seccion-head__lede {
+  max-width: var(--width-page-lede);
+  margin-top: var(--space-10);
+  font-size: var(--fs-body-sm);
+  line-height: var(--lh-paragraph);
+  color: var(--color-text-secondary);
+}

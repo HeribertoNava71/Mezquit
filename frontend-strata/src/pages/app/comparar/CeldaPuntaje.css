@@ -1,0 +1,74 @@
+/* Celda de la comparativa: «{normalized} · {categoría}» (D-14; Strata.dc.html:938
+   y el punto de la interpretación, :947). El punto y el texto de la categoría
+   toman el color de su nivel (bajo, medio, alto); la categoría siempre va en
+   texto. Contraste del texto sobre la tabla blanca y su hover (#FDFCFA):
+   alto #1E3A8A 10.36:1 · medio #075985 7.56:1 · bajo #0C4A6E 9.46:1 ·
+   otra #5B5545 7.42:1 · número #0F172A 17.85:1. El punto es decorativo. */
+.st-celda-puntaje {
+  --st-celda-color: var(--color-data-neutral-text);
+  --st-celda-punto: var(--color-data-neutral);
+
+  display: inline-block;
+  font-weight: var(--fw-bold);
+  white-space: nowrap;
+}
+
+/* Lo que se ve («81 · Alto»); los lectores de pantalla oyen la descripción. */
+.st-celda-puntaje__visible {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-6);
+}
+
+.st-celda-puntaje--alto {
+  --st-celda-color: var(--color-data-high-text);
+  --st-celda-punto: var(--color-data-high);
+}
+
+.st-celda-puntaje--medio {
+  --st-celda-color: var(--color-data-mid-text);
+  --st-celda-punto: var(--color-data-mid);
+}
+
+.st-celda-puntaje--bajo {
+  --st-celda-color: var(--color-data-low-text);
+  --st-celda-punto: var(--color-data-low);
+}
+
+.st-celda-puntaje__punto {
+  flex: none;
+  width: var(--space-7);
+  height: var(--space-7);
+  border-radius: var(--radius-round);
+  background-color: var(--st-celda-punto);
+}
+
+/* Cifras alineadas entre filas: dos dígitos ocupan siempre lo mismo. */
+.st-celda-puntaje__valor {
+  min-width: 2ch;
+  color: var(--color-text);
+  font-variant-numeric: tabular-nums;
+  text-align: end;
+}
+
+.st-celda-puntaje__sep {
+  font-weight: var(--fw-medium);
+  color: var(--color-text-tertiary);
+}
+
+.st-celda-puntaje__categoria {
+  color: var(--st-celda-color);
+}
+
+.st-celda-puntaje--vacia {
+  font-weight: var(--fw-medium);
+  color: var(--color-text-tertiary);
+}
+
+/* Alto contraste de Windows: el punto perdería su fondo; toma el color del texto. */
+@media (forced-colors: active) {
+  .st-celda-puntaje__punto {
+    forced-color-adjust: none;
+    background-color: CanvasText;
+  }
+}
