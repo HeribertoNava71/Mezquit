@@ -1,0 +1,2234 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet data-dc-atomics>
+<link rel="preconnect" href="https://api.fontshare.com" crossorigin>
+<link rel="preconnect" href="https://cdn.fontshare.com" crossorigin>
+<link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,600,700,800&display=swap" rel="stylesheet">
+<link href="https://api.fontshare.com/v2/css?f[]=general-sans@400,500,600,700&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/MotionPathPlugin.min.js"></script>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#F7F5F0;font-family:'General Sans','Plus Jakarta Sans',system-ui,sans-serif;color:#0F172A;-webkit-font-smoothing:antialiased}
+h1,h2,h3,h4{font-family:'Satoshi','General Sans',system-ui,sans-serif;letter-spacing:-.02em;font-weight:700}
+a{color:#1E3A8A;text-decoration:none}
+a:hover{color:#0EA5E9}
+input,button,select,textarea{font-family:inherit}
+::placeholder{color:#756D5C}
+@keyframes slideIn{from{transform:translateX(24px);opacity:0}to{transform:translateX(0);opacity:1}}
+@keyframes fadeUp{from{transform:translateY(8px);opacity:0}to{transform:translateY(0);opacity:1}}
+@keyframes pulseDot{0%,100%{opacity:1}50%{opacity:.35}}
+@keyframes popIn{from{transform:scale(.86);opacity:0}to{transform:scale(1);opacity:1}}
+@keyframes screenIn{from{opacity:0;transform:translateY(14px) scale(.992)}to{opacity:1;transform:none}}
+@keyframes riseIn{from{opacity:0;transform:translateY(9px)}to{opacity:1;transform:none}}
+@keyframes softIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+@keyframes rowIn{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}
+@keyframes floatCard{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+@keyframes floatBadge{0%,100%{transform:translateY(0) rotate(-.4deg)}50%{transform:translateY(-13px) rotate(.5deg)}}
+@keyframes polyCycle{0%,27%{opacity:1}34%,93%{opacity:0}100%{opacity:1}}
+@keyframes livePulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.82)}}
+@keyframes bubbleIn{from{opacity:0;transform:translateY(8px) scale(.9)}to{opacity:1;transform:none}}
+@keyframes glowDrift{0%,100%{transform:translate3d(0,0,0) scale(1)}50%{transform:translate3d(-18px,22px,0) scale(1.06)}}
+button,a,input,td,th{transition:background-color .18s ease,border-color .18s ease,color .18s ease,box-shadow .18s ease,opacity .18s ease}
+@media (prefers-reduced-motion:reduce){*{animation-duration:.01ms !important;animation-iteration-count:1 !important;transition-duration:.01ms !important}}
+</style>
+</helmet>
+<div style="position:relative;display:flex;flex-direction:column;min-height:100vh;background:#FAF8F5">
+
+<div style="position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden">
+  <div style="position:absolute;top:-240px;right:-140px;width:660px;height:660px;border-radius:50%;background:radial-gradient(circle,rgba(255,107,107,.2),rgba(255,107,107,0) 70%);animation:glowDrift 18s ease-in-out infinite"></div>
+  <div style="position:absolute;top:260px;left:-260px;width:600px;height:600px;border-radius:50%;background:radial-gradient(circle,rgba(56,189,248,.2),rgba(56,189,248,0) 70%);animation:glowDrift 18s ease-in-out infinite"></div>
+  <div style="position:absolute;bottom:-320px;left:34%;width:720px;height:560px;border-radius:50%;background:radial-gradient(circle,rgba(30,58,138,.1),rgba(30,58,138,0) 70%);animation:glowDrift 18s ease-in-out infinite"></div>
+</div>
+<sc-if value="{{ conShell }}" hint-placeholder-val="{{ true }}">
+<header style="position:sticky;top:0;z-index:30;background:rgba(250,248,245,.78);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)">
+  <div style="max-width:1200px;margin:0 auto;display:flex;align-items:center;gap:30px;padding:20px 34px;flex-wrap:wrap;row-gap:12px">
+    <div onClick="{{ irHome }}" style="display:flex;align-items:center;gap:9px;flex:none;cursor:pointer" style-hover="opacity:.75">
+      <img src="assets/strata-salamandra.png" alt="Strata" style="width:30px;height:30px;object-fit:contain">
+      <span style="font-family:'Satoshi',sans-serif;font-size:17px;font-weight:700;letter-spacing:-.02em;color:#0F172A">Strata</span>
+    </div>
+    <sc-if value="{{ esEmpresa }}" hint-placeholder-val="{{ true }}">
+    <nav style="display:flex;align-items:center;gap:24px;flex-wrap:wrap">
+      <div onClick="{{ irCatalogo }}" style="display:flex;align-items:center;padding:6px 1px;font-size:14px;white-space:nowrap;cursor:pointer;color:{{ navCatalogo.c }};font-weight:{{ navCatalogo.w }};border-bottom:2px solid {{ navCatalogo.b }}" style-hover="color:#0F172A">Tests</div>
+      <div onClick="{{ irInventario }}" style="display:flex;align-items:center;padding:6px 1px;font-size:14px;white-space:nowrap;cursor:pointer;color:{{ navInventario.c }};font-weight:{{ navInventario.w }};border-bottom:2px solid {{ navInventario.b }}" style-hover="color:#0F172A">Mis licencias</div>
+      <div onClick="{{ irPanel }}" style="display:flex;align-items:center;padding:6px 1px;font-size:14px;white-space:nowrap;cursor:pointer;color:{{ navPanel.c }};font-weight:{{ navPanel.w }};border-bottom:2px solid {{ navPanel.b }}" style-hover="color:#0F172A">Candidatos</div>
+      <div onClick="{{ irResultados }}" style="display:flex;align-items:center;padding:6px 1px;font-size:14px;white-space:nowrap;cursor:pointer;color:{{ navResultados.c }};font-weight:{{ navResultados.w }};border-bottom:2px solid {{ navResultados.b }}" style-hover="color:#0F172A">Resultados</div>
+    </nav>
+    <div style="display:flex;align-items:center;gap:14px;margin-left:auto;flex-wrap:wrap">
+      <span onClick="{{ irCatalogo }}" style="display:inline-flex;align-items:center;gap:7px;font-size:13px;font-weight:600;color:#1E3A8A;cursor:pointer;white-space:nowrap" style-hover="color:#0EA5E9"><span style="width:7px;height:7px;border-radius:50%;background:#38BDF8"></span>{{ saldoTotal }} licencias</span>
+      <div onClick="{{ fueraAlcance }}" style="display:flex;align-items:center;gap:9px;padding:4px 14px 4px 4px;border-radius:999px;background:rgba(255,255,255,.8);border:1px solid #EBE5DA;cursor:pointer;flex:none" style-hover="border-color:#1E3A8A">
+        <span style="width:30px;height:30px;flex:none;border-radius:50%;background:#1E3A8A;color:#DBEAFE;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700">MR</span>
+        <span style="font-size:13px;font-weight:600;color:#0F172A;white-space:nowrap">{{ empresa }}</span>
+      </div>
+    </div>
+    </sc-if>
+    <sc-if value="{{ esAdmin }}">
+    <nav style="display:flex;align-items:center;gap:24px;flex-wrap:wrap">
+      <div onClick="{{ irBuilderDatos }}" style="display:flex;align-items:center;padding:6px 1px;font-size:14px;white-space:nowrap;cursor:pointer;color:{{ navBuilderDatos.c }};font-weight:{{ navBuilderDatos.w }};border-bottom:2px solid {{ navBuilderDatos.b }}" style-hover="color:#0F172A">Test Builder</div>
+      <div onClick="{{ irBuilderReactivos }}" style="display:flex;align-items:center;padding:6px 1px;font-size:14px;white-space:nowrap;cursor:pointer;color:{{ navBuilderReactivos.c }};font-weight:{{ navBuilderReactivos.w }};border-bottom:2px solid {{ navBuilderReactivos.b }}" style-hover="color:#0F172A">Reactivos</div>
+      <div onClick="{{ irBuilderAlgoritmo }}" style="display:flex;align-items:center;padding:6px 1px;font-size:14px;white-space:nowrap;cursor:pointer;color:{{ navBuilderAlgoritmo.c }};font-weight:{{ navBuilderAlgoritmo.w }};border-bottom:2px solid {{ navBuilderAlgoritmo.b }}" style-hover="color:#0F172A">Algoritmos</div>
+    </nav>
+    <div style="display:flex;align-items:center;gap:14px;margin-left:auto;flex-wrap:wrap">
+      <span style="font-size:13px;font-weight:500;color:#5B5545;white-space:nowrap">14 tests publicados</span>
+      <div onClick="{{ fueraAlcance }}" style="display:flex;align-items:center;gap:9px;padding:4px 14px 4px 4px;border-radius:999px;background:rgba(255,255,255,.8);border:1px solid #EBE5DA;cursor:pointer;flex:none" style-hover="border-color:#1E3A8A">
+        <span style="width:30px;height:30px;flex:none;border-radius:50%;background:#1E3A8A;color:#DBEAFE;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700">LO</span>
+        <span style="font-size:13px;font-weight:600;color:#0F172A;white-space:nowrap">Dr. Luis Ordóñez</span>
+      </div>
+    </div>
+    </sc-if>
+  </div>
+</header>
+</sc-if>
+
+<main style="position:relative;z-index:1;flex:1;min-width:0;display:flex;flex-direction:column">
+
+<!-- ═══ HOME PÚBLICA ═══ -->
+<sc-if value="{{ esHome }}">
+<div style="position:relative;min-height:100vh;background:#FAF8F5;overflow:hidden;animation:screenIn .5s cubic-bezier(.22,.61,.36,1) both">
+  <div style="position:absolute;top:-240px;right:-140px;width:660px;height:660px;border-radius:50%;background:radial-gradient(circle,rgba(255,107,107,.26),rgba(255,107,107,0) 70%);pointer-events:none;animation:glowDrift 18s ease-in-out infinite"></div>
+  <div style="position:absolute;top:200px;left:-260px;width:600px;height:600px;border-radius:50%;background:radial-gradient(circle,rgba(56,189,248,.24),rgba(56,189,248,0) 70%);pointer-events:none;animation:glowDrift 18s ease-in-out infinite"></div>
+  <div style="position:absolute;bottom:-320px;left:34%;width:720px;height:560px;border-radius:50%;background:radial-gradient(circle,rgba(30,58,138,.12),rgba(30,58,138,0) 70%);pointer-events:none;animation:glowDrift 18s ease-in-out infinite"></div>
+
+  <img id="strata-mascot" ref="{{ mascotRef }}" onClick="{{ salaTocar }}" src="assets/mascota.png" alt="Salamandra de Strata" title="Tócame" style="position:fixed;left:0;top:0;width:100px;z-index:1;opacity:0;cursor:pointer;will-change:transform;filter:drop-shadow(0 14px 22px rgba(15,23,42,.2))">
+  <sc-if value="{{ salaHablando }}">
+    <div ref="{{ mascotBurbuja }}" style="position:fixed;left:0;top:0;z-index:4;width:232px;padding:12px 14px;border-radius:16px;background:#0F172A;box-shadow:0 18px 38px -18px rgba(15,23,42,.5);pointer-events:none;animation:bubbleIn .3s cubic-bezier(.34,1.4,.64,1) both">
+      <p style="margin:0;font-size:12.5px;line-height:1.5;color:#fff;text-wrap:pretty">{{ salaMensaje }}</p>
+    </div>
+  </sc-if>
+
+  <div style="position:relative;z-index:2;max-width:1200px;margin:0 auto;padding:0 34px 72px">
+
+    <header style="display:flex;align-items:center;gap:26px;padding:22px 0 0;flex-wrap:wrap;row-gap:12px">
+      <div style="display:flex;align-items:center;gap:9px;flex:none">
+        <img src="assets/strata-salamandra.png" alt="Strata" style="width:30px;height:30px;object-fit:contain">
+        <span style="font-family:'Satoshi',sans-serif;font-size:17px;font-weight:700;letter-spacing:-.02em;color:#0F172A">Strata</span>
+      </div>
+      <nav style="display:flex;align-items:center;gap:22px;flex-wrap:wrap">
+        <span onClick="{{ fueraAlcance }}" style="font-size:13.5px;font-weight:500;color:#5B5545;cursor:pointer;white-space:nowrap" style-hover="color:#0F172A">Tests</span>
+        <span onClick="{{ fueraAlcance }}" style="font-size:13.5px;font-weight:500;color:#5B5545;cursor:pointer;white-space:nowrap" style-hover="color:#0F172A">Para empresas</span>
+        <span onClick="{{ fueraAlcance }}" style="font-size:13.5px;font-weight:500;color:#5B5545;cursor:pointer;white-space:nowrap" style-hover="color:#0F172A">Cómo funciona</span>
+        <span onClick="{{ fueraAlcance }}" style="font-size:13.5px;font-weight:500;color:#5B5545;cursor:pointer;white-space:nowrap" style-hover="color:#0F172A">Precios</span>
+      </nav>
+      <div style="display:flex;align-items:center;gap:11px;margin-left:auto;flex-wrap:wrap">
+        <span onClick="{{ irAcceso }}" style="font-size:13px;font-weight:600;color:#1E3A8A;cursor:pointer;white-space:nowrap" style-hover="color:#0EA5E9">Tengo un código</span>
+        <button onClick="{{ irCatalogo }}" style="padding:10px 18px;border:none;border-radius:999px;background:#0F172A;color:#fff;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap;transition:transform .18s ease,background .18s ease" style-hover="background:#1E3A8A;transform:translateY(-1px)">Comprar un test</button>
+      </div>
+    </header>
+
+    <section style="display:grid;grid-template-columns:repeat(auto-fit,minmax(420px,1fr));gap:52px;align-items:center;padding:64px 0 40px">
+      <div>
+        <div style="display:inline-flex;align-items:center;gap:8px;padding:6px 13px 6px 9px;border-radius:999px;background:rgba(255,255,255,.8);border:1px solid #EBE5DA;box-shadow:0 6px 18px -12px rgba(15,23,42,.2)">
+          <span style="width:7px;height:7px;border-radius:50%;background:#38BDF8;animation:livePulse 2s ease-in-out infinite"></span>
+          <span style="font-size:11.5px;font-weight:600;color:#5B5545;white-space:nowrap">Sin registro · Tu informe llega a tu correo</span>
+        </div>
+
+        <h1 style="margin:20px 0 0;font-size:52px;line-height:1.06;letter-spacing:-.03em;text-wrap:balance">Descubre lo que llevas dentro.<span style="color:#1E3A8A"> O encuentra a quien lo tiene.</span></h1>
+
+        <div style="position:relative;display:inline-flex;margin:26px 0 0;padding:4px;border-radius:999px;background:#F1EDE4;border:1px solid #E5E0D8;max-width:100%">
+          <span style="position:absolute;top:4px;bottom:4px;left:4px;width:calc(50% - 4px);border-radius:999px;background:#fff;box-shadow:0 3px 10px -3px rgba(15,23,42,.18);transform:translateX({{ toggleX }});transition:transform .36s cubic-bezier(.4,0,.2,1)"></span>
+          <span onClick="{{ modoMi }}" style="position:relative;flex:1 1 0;text-align:center;padding:10px 20px;border-radius:999px;font-size:13px;cursor:pointer;white-space:nowrap;color:{{ modoMiColor }};font-weight:{{ modoMiPeso }};transition:color .2s ease">Para mí (Sin registro)</span>
+          <span onClick="{{ modoEmpresa }}" style="position:relative;flex:1 1 0;text-align:center;padding:10px 20px;border-radius:999px;font-size:13px;cursor:pointer;white-space:nowrap;color:{{ modoEmpColor }};font-weight:{{ modoEmpPeso }};transition:color .2s ease">Para mi Empresa (B2B)</span>
+        </div>
+
+        <p key="{{ heroTexto }}" style="margin:20px 0 0;font-size:17px;color:#5B5545;line-height:1.6;max-width:470px;text-wrap:pretty;animation:softIn .34s cubic-bezier(.22,.61,.36,1) both">{{ heroTexto }}</p>
+
+        <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-top:28px">
+          <button onClick="{{ heroCtaAccion }}" style="display:inline-flex;align-items:center;gap:10px;padding:16px 28px;border:none;border-radius:16px;background:#FF6B6B;color:#fff;font-size:15px;font-weight:600;cursor:pointer;box-shadow:0 12px 30px -12px rgba(255,107,107,.75);transition:transform .2s cubic-bezier(.34,1.4,.64,1),box-shadow .2s ease,background .2s ease" style-hover="background:#F4574F;transform:scale(1.05);box-shadow:0 18px 40px -12px rgba(255,107,107,.85)" style-active="transform:scale(.99)">
+            <span style="white-space:nowrap">{{ heroCta }}</span>
+            <svg width="16" height="16" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.9" style="flex:none"><path d="M3.4 9h11.2M10.4 4.8 14.6 9l-4.2 4.2"></path></svg>
+          </button>
+          <span onClick="{{ heroSecAccion }}" style="font-size:13.5px;font-weight:600;color:#1E3A8A;cursor:pointer;white-space:nowrap" style-hover="color:#0EA5E9">{{ heroSec }}</span>
+        </div>
+
+        <div style="display:flex;gap:22px;flex-wrap:wrap;margin-top:30px;padding-top:22px;border-top:1px solid #EBE5DA">
+          <div style="display:flex;align-items:center;gap:7px">
+            <svg width="15" height="15" viewBox="0 0 18 18" fill="none" stroke="#0369A1" stroke-width="1.6" style="flex:none"><circle cx="9" cy="9" r="6.6"></circle><path d="M9 5.4V9l2.5 1.8"></path></svg>
+            <span style="font-size:12.5px;color:#5B5545;white-space:nowrap">15–35 min</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:7px">
+            <svg width="15" height="15" viewBox="0 0 18 18" fill="none" stroke="#0369A1" stroke-width="1.6" style="flex:none"><path d="M2.6 4.4h12.8v9.2H2.6z"></path><path d="m3.4 5.2 5.6 4.2 5.6-4.2"></path></svg>
+            <span style="font-size:12.5px;color:#5B5545;white-space:nowrap">Informe PDF por correo</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:7px">
+            <svg width="15" height="15" viewBox="0 0 18 18" fill="none" stroke="#0369A1" stroke-width="1.6" style="flex:none"><rect x="3.4" y="7.8" width="11.2" height="7" rx="1.8"></rect><path d="M6.1 7.8V5.9a2.9 2.9 0 0 1 5.8 0v1.9"></path></svg>
+            <span style="font-size:12.5px;color:#5B5545;white-space:nowrap">Datos cifrados</span>
+          </div>
+        </div>
+      </div>
+
+      <div style="position:relative;min-height:430px;display:flex;align-items:center;justify-content:center">
+        <div style="position:relative;width:100%;max-width:430px;background:#fff;border:1px solid #EFE9DF;border-radius:26px;padding:26px;box-shadow:0 40px 80px -34px rgba(15,23,42,.32),0 10px 26px -18px rgba(15,23,42,.16);animation:floatCard 7.5s ease-in-out infinite">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:18px">
+            <span style="font-family:'JetBrains Mono',monospace;font-size:10.5px;font-weight:700;color:#0369A1;letter-spacing:.1em;white-space:nowrap">PREGUNTA 12 / 68</span>
+            <span style="display:flex;align-items:center;gap:6px">
+              <span style="width:6px;height:6px;border-radius:50%;background:#22C55E;animation:livePulse 2.2s ease-in-out infinite"></span>
+              <span style="font-size:10.5px;font-weight:600;color:#5B5545">Guardado</span>
+            </span>
+          </div>
+          <div style="height:5px;border-radius:99px;background:#F0EDE5;margin-bottom:20px;overflow:hidden">
+            <div style="height:100%;width:18%;border-radius:99px;background:#38BDF8"></div>
+          </div>
+          <h3 style="margin:0 0 18px;font-size:20px;line-height:1.35;letter-spacing:-.02em;text-wrap:pretty">¿Cómo prefieres resolver un conflicto complejo?</h3>
+          <div style="display:flex;flex-direction:column;gap:9px">
+            <sc-for list="{{ demoOpciones }}" as="o" hint-placeholder-count="3">
+              <div onClick="{{ o.onClick }}" style="display:flex;align-items:center;gap:12px;padding:13px 15px;border-radius:14px;border:1.5px solid {{ o.borde }};background:{{ o.fondo }};cursor:pointer;transition:border-color .18s ease,background .18s ease,transform .18s ease" style-hover="border-color:#38BDF8;transform:translateX(2px)">
+                <span style="width:21px;height:21px;flex:none;border-radius:50%;border:2px solid {{ o.aroBorde }};background:{{ o.aroFondo }};display:flex;align-items:center;justify-content:center;transition:background .18s ease,border-color .18s ease">
+                  <svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="{{ o.tick }}" stroke-width="2.6" stroke-linecap="round"><path d="M2.6 6.2 4.8 8.4l4.6-4.8"></path></svg>
+                </span>
+                <span style="flex:1;font-size:13.5px;color:#0F172A;font-weight:{{ o.peso }};line-height:1.45">{{ o.label }}</span>
+              </div>
+            </sc-for>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:20px">
+            <span style="font-size:11px;color:#6B6558">No hay respuestas correctas</span>
+            <span onClick="{{ irAcceso }}" style="display:inline-flex;align-items:center;gap:7px;padding:10px 16px;border-radius:14px;background:#FF6B6B;color:#fff;font-size:12.5px;font-weight:600;cursor:pointer;white-space:nowrap;transition:transform .18s ease,background .18s ease" style-hover="background:#F4574F;transform:translateX(2px)">
+              Siguiente
+              <svg width="13" height="13" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2.2" style="flex:none"><path d="M3.4 9h11.2M10.4 4.8 14.6 9l-4.2 4.2"></path></svg>
+            </span>
+          </div>
+        </div>
+
+        <div style="position:absolute;top:4px;left:-6px;display:flex;align-items:center;gap:10px;padding:11px 15px;border-radius:16px;background:#fff;border:1px solid #EFE9DF;box-shadow:0 22px 44px -22px rgba(15,23,42,.3);animation:floatBadge 6.4s ease-in-out infinite">
+          <span style="width:30px;height:30px;flex:none;border-radius:10px;background:#FFF1F1;display:flex;align-items:center;justify-content:center">
+            <svg width="16" height="16" viewBox="0 0 18 18" fill="none" stroke="#F4574F" stroke-width="1.7"><path d="M2.6 4.6h12.8v8.8H2.6z"></path><path d="m3.4 5.4 5.6 4.2 5.6-4.2"></path></svg>
+          </span>
+          <div>
+            <div style="font-size:12px;font-weight:600;color:#0F172A;white-space:nowrap">Diagnóstico enviado</div>
+            <div style="font-size:10.5px;color:#6B6558;white-space:nowrap">a tu correo · hace 2 s</div>
+          </div>
+        </div>
+
+        <div style="position:absolute;bottom:-6px;right:-8px;padding:14px 16px 12px;border-radius:20px;background:#fff;border:1px solid #EFE9DF;box-shadow:0 24px 48px -22px rgba(15,23,42,.32);animation:floatBadge 7.8s ease-in-out infinite;animation-delay:-2.6s">
+          <div style="display:flex;align-items:center;gap:7px;margin-bottom:6px">
+            <span style="width:6px;height:6px;border-radius:50%;background:#0EA5E9;animation:livePulse 1.8s ease-in-out infinite"></span>
+            <span style="font-size:10.5px;font-weight:700;color:#5B5545;letter-spacing:.06em;text-transform:uppercase;white-space:nowrap">Perfil en vivo</span>
+          </div>
+          <svg width="120" height="120" viewBox="0 0 120 120" fill="none">
+            <polygon points="60.0,16.0 101.8,46.4 85.9,95.6 34.1,95.6 18.2,46.4" stroke="#EDE9E0" stroke-width="1"></polygon>
+            <polygon points="60.0,31.0 87.6,51.0 77.1,83.5 42.9,83.5 32.4,51.0" stroke="#EDE9E0" stroke-width="1"></polygon>
+            <polygon points="60.0,45.0 74.3,55.4 68.8,72.1 51.2,72.1 45.7,55.4" stroke="#EDE9E0" stroke-width="1"></polygon>
+            <path d="M60 60 60 16M60 60 101.8 46.4M60 60 85.9 95.6M60 60 34.1 95.6M60 60 18.2 46.4" stroke="#F0EDE5" stroke-width="1"></path>
+            <polygon points="60.0,22.2 85.9,51.6 79.1,86.3 45.8,79.6 30.7,50.5" fill="rgba(56,189,248,.22)" stroke="#0EA5E9" stroke-width="2" stroke-linejoin="round" style="animation:polyCycle 8.4s ease-in-out infinite;animation-delay:0s"></polygon>
+            <polygon points="60.0,29.2 93.5,49.1 75.0,80.6 41.4,85.6 37.0,52.5" fill="rgba(56,189,248,.22)" stroke="#0EA5E9" stroke-width="2" stroke-linejoin="round" style="animation:polyCycle 8.4s ease-in-out infinite;animation-delay:-2.8s"></polygon>
+            <polygon points="60.0,25.7 83.0,52.5 82.0,90.3 44.0,82.1 26.5,49.1" fill="rgba(56,189,248,.22)" stroke="#0EA5E9" stroke-width="2" stroke-linejoin="round" style="animation:polyCycle 8.4s ease-in-out infinite;animation-delay:-5.6s"></polygon>
+          </svg>
+        </div>
+      </div>
+    </section>
+
+    <section style="padding:56px 0 0">
+      <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:20px;flex-wrap:wrap;margin-bottom:26px">
+        <div>
+          <div style="font-size:11px;font-weight:700;color:#0369A1;letter-spacing:.13em;text-transform:uppercase;margin-bottom:9px">Catálogo exprés</div>
+          <h2 style="margin:0;font-size:34px;line-height:1.15;letter-spacing:-.025em">Elige tu test y empieza hoy</h2>
+        </div>
+        <span onClick="{{ irCatalogo }}" style="font-size:13.5px;font-weight:600;color:#1E3A8A;cursor:pointer;white-space:nowrap" style-hover="color:#0EA5E9">Ver catálogo completo →</span>
+      </div>
+
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px">
+        <sc-for list="{{ homeTests }}" as="h" hint-placeholder-count="3">
+          <div style="display:flex;flex-direction:column;background:rgba(255,255,255,.72);border:1px solid rgba(255,255,255,.92);border-radius:24px;padding:24px;backdrop-filter:blur(14px);box-shadow:0 20px 44px -28px rgba(15,23,42,.28);transition:transform .22s ease,box-shadow .22s ease" style-hover="transform:translateY(-5px);box-shadow:0 32px 60px -28px rgba(15,23,42,.34)">
+            <div style="display:inline-flex;align-self:flex-start;align-items:center;gap:7px;padding:5px 11px;border-radius:999px;background:{{ h.tagFondo }};margin-bottom:15px">
+              <span style="width:5px;height:5px;border-radius:50%;background:{{ h.tagPunto }}"></span>
+              <span style="font-size:11px;font-weight:600;color:{{ h.tagTexto }};white-space:nowrap">{{ h.tag }}</span>
+            </div>
+            <h3 style="margin:0;font-size:19px;line-height:1.28">{{ h.titulo }}</h3>
+            <div style="display:flex;align-items:center;gap:9px;margin-top:11px">
+              <span style="font-size:12.5px;color:#5B5545;white-space:nowrap">{{ h.duracion }}</span>
+              <span style="width:3px;height:3px;border-radius:50%;background:#C9C2B4"></span>
+              <span style="font-size:12.5px;color:#5B5545;white-space:nowrap">{{ h.items }} reactivos</span>
+            </div>
+            <div style="display:flex;align-items:baseline;gap:4px;margin:18px 0 16px">
+              <span style="font-family:'Satoshi',sans-serif;font-size:29px;font-weight:700;color:#1E3A8A;letter-spacing:-.02em">{{ h.precio }}</span>
+              <span style="font-size:12px;color:#6B6558;white-space:nowrap">{{ h.precioNota }}</span>
+            </div>
+            <div style="display:flex;gap:9px;margin-top:auto;flex-wrap:wrap">
+              <button onClick="{{ h.previsualizar }}" style="flex:1 1 120px;padding:11px 14px;border-radius:12px;border:1px solid #E0D9CB;background:rgba(255,255,255,.9);font-size:12.5px;font-weight:600;color:#1E3A8A;cursor:pointer;white-space:nowrap;transition:border-color .18s ease,transform .18s ease" style-hover="border-color:#1E3A8A;transform:translateY(-1px)">Previsualizar test</button>
+              <button onClick="{{ h.comprar }}" style="flex:1 1 130px;padding:11px 14px;border:none;border-radius:12px;background:#FF6B6B;color:#fff;font-size:12.5px;font-weight:600;cursor:pointer;white-space:nowrap;box-shadow:0 10px 24px -14px rgba(255,107,107,.9);transition:transform .18s cubic-bezier(.34,1.4,.64,1),background .18s ease" style-hover="background:#F4574F;transform:scale(1.04)">Comprar en 1 clic</button>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+    </section>
+
+    <section style="padding:64px 0 0">
+      <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-bottom:24px">
+        <h2 style="margin:0;font-size:30px;line-height:1.2;letter-spacing:-.025em">Cómo funciona</h2>
+        <span style="display:inline-flex;align-items:center;gap:8px;padding:7px 14px;border-radius:999px;background:#FFF1F1;border:1px solid #FFD9D9">
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="#F4574F" stroke-width="1.9"><path d="M3.2 8.4 6 11.2l6.6-6.8"></path></svg>
+          <span style="font-size:12px;font-weight:600;color:#B93A34;white-space:nowrap">Sin crear cuenta. Cero fricción.</span>
+        </span>
+      </div>
+      <div style="position:relative;display:flex;gap:18px;flex-wrap:wrap">
+        <div style="position:absolute;top:44px;left:60px;right:60px;height:1px;border-top:1px dashed #DCD5C8;pointer-events:none"></div>
+        <div style="position:relative;flex:1 1 0;min-width:210px;display:flex;flex-direction:column;align-items:flex-start;gap:13px;padding:24px;border-radius:22px;background:rgba(255,255,255,.66);border:1px solid rgba(255,255,255,.9);transition:transform .22s ease,box-shadow .22s ease" style-hover="transform:translateY(-4px);box-shadow:0 22px 44px -26px rgba(15,23,42,.28)">
+          <div style="display:flex;align-items:center;gap:11px">
+            <span style="width:40px;height:40px;flex:none;border-radius:14px;background:#fff;border:1px solid #E5E0D8;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px -6px rgba(15,23,42,.18)">
+              <svg width="19" height="19" viewBox="0 0 20 20" fill="none" stroke="#0EA5E9" stroke-width="1.6"><path d="M3.4 5.2h13.2M3.4 10h8.6M3.4 14.8h5.6"></path><circle cx="15.4" cy="13.4" r="2.6"></circle></svg>
+            </span>
+            <span style="font-family:'JetBrains Mono',monospace;font-size:11.5px;font-weight:700;color:#857A66">01</span>
+          </div>
+          <div>
+            <h3 style="margin:0;font-size:16.5px;line-height:1.3">Eliges tu test</h3>
+            <p style="margin:6px 0 0;font-size:13px;color:#5B5545;line-height:1.55;text-wrap:pretty">Individual o por volumen para tu equipo. Pago en un clic, sin suscripción.</p>
+          </div>
+        </div>
+        <div style="position:relative;flex:1 1 0;min-width:210px;display:flex;flex-direction:column;align-items:flex-start;gap:13px;padding:24px;border-radius:22px;background:rgba(255,255,255,.66);border:1px solid rgba(255,255,255,.9);transition:transform .22s ease,box-shadow .22s ease" style-hover="transform:translateY(-4px);box-shadow:0 22px 44px -26px rgba(15,23,42,.28)">
+          <div style="display:flex;align-items:center;gap:11px">
+            <span style="width:40px;height:40px;flex:none;border-radius:14px;background:#fff;border:1px solid #E5E0D8;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px -6px rgba(15,23,42,.18)">
+              <svg width="19" height="19" viewBox="0 0 20 20" fill="none" stroke="#0EA5E9" stroke-width="1.6"><rect x="6.4" y="2.6" width="7.2" height="14.8" rx="2"></rect><path d="M9 15h2"></path></svg>
+            </span>
+            <span style="font-family:'JetBrains Mono',monospace;font-size:11.5px;font-weight:700;color:#857A66">02</span>
+          </div>
+          <div>
+            <h3 style="margin:0;font-size:16.5px;line-height:1.3">Respondes desde tu celular o laptop</h3>
+            <p style="margin:6px 0 0;font-size:13px;color:#5B5545;line-height:1.55;text-wrap:pretty">Se guarda solo, puedes pausar y retomar con el mismo enlace.</p>
+          </div>
+        </div>
+        <div style="position:relative;flex:1 1 0;min-width:210px;display:flex;flex-direction:column;align-items:flex-start;gap:13px;padding:24px;border-radius:22px;background:rgba(255,255,255,.66);border:1px solid rgba(255,255,255,.9);transition:transform .22s ease,box-shadow .22s ease" style-hover="transform:translateY(-4px);box-shadow:0 22px 44px -26px rgba(15,23,42,.28)">
+          <div style="display:flex;align-items:center;gap:11px">
+            <span style="width:40px;height:40px;flex:none;border-radius:14px;background:#fff;border:1px solid #E5E0D8;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px -6px rgba(15,23,42,.18)">
+              <svg width="19" height="19" viewBox="0 0 20 20" fill="none" stroke="#0EA5E9" stroke-width="1.6"><path d="M4.6 2.6h7l4 4v10.8H4.6z"></path><path d="M11.4 2.6v4h4"></path><path d="M7.4 11h5.2M7.4 13.8h3.4"></path></svg>
+            </span>
+            <span style="font-family:'JetBrains Mono',monospace;font-size:11.5px;font-weight:700;color:#857A66">03</span>
+          </div>
+          <div>
+            <h3 style="margin:0;font-size:16.5px;line-height:1.3">Recibes tu informe PDF</h3>
+            <p style="margin:6px 0 0;font-size:13px;color:#5B5545;line-height:1.55;text-wrap:pretty">Diagnóstico claro por dimensión, con conclusiones y recomendaciones.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-top:64px;padding-top:24px;border-top:1px solid #EBE5DA">
+      <div style="display:flex;align-items:center;gap:8px">
+        <img src="assets/strata-salamandra.png" alt="" style="width:20px;height:20px;object-fit:contain">
+        <span style="font-family:'Satoshi',sans-serif;font-size:12.5px;font-weight:600;color:#5B5545;letter-spacing:.06em">STRATA</span>
+      </div>
+      <span style="font-size:12px;color:#6B6558">Psicometría validada para Latinoamérica</span>
+      <div style="display:flex;align-items:center;gap:18px;margin-left:auto;flex-wrap:wrap">
+        <a href="#" style="font-size:12px;color:#5B5545">Aviso de privacidad</a>
+        <a href="#" style="font-size:12px;color:#5B5545">Soporte</a>
+        <span onClick="{{ irBuilderDatos }}" style="font-size:12px;color:#5B5545;cursor:pointer" style-hover="color:#1E3A8A">Acceso interno</span>
+        <span style="font-size:12px;color:#6B6558">© 2026</span>
+      </div>
+    </footer>
+
+  </div>
+</div>
+</sc-if>
+
+<!-- ═══ ROL 1 · SUPER ADMIN · TEST BUILDER ═══ -->
+<sc-if value="{{ esBuilder }}">
+<div style="width:100%;max-width:1200px;margin:0 auto;padding:48px 34px 88px;animation:screenIn .5s cubic-bezier(.22,.61,.36,1) both">
+  <div style="display:flex;align-items:flex-end;gap:20px;flex-wrap:wrap;margin-bottom:22px">
+    <div style="flex:1;min-width:260px">
+      <div style="display:flex;align-items:center;gap:9px;margin-bottom:8px">
+        <span style="font-size:11px;font-weight:700;color:#0369A1;letter-spacing:.13em;text-transform:uppercase">Test Builder</span>
+        <span style="display:inline-flex;align-items:center;gap:6px;padding:3px 9px;border-radius:999px;background:#F0EDE5;font-size:10.5px;font-weight:700;color:#6B6558"><span style="width:5px;height:5px;border-radius:50%;background:#A8A296"></span>Borrador · v0.4</span>
+      </div>
+      <h1 style="margin:0;font-size:46px;font-weight:700;letter-spacing:-.03em;line-height:1.06;text-wrap:balance">Liderazgo Situacional 360</h1>
+      <p style="margin:14px 0 0;font-size:17px;color:#5B5545;line-height:1.55">Última edición hace 12 min por Dr. Luis Ordóñez · 68 reactivos · 6 dimensiones</p>
+    </div>
+    <div style="display:flex;gap:9px;flex-wrap:wrap">
+      <button onClick="{{ guardarBorrador }}" style="padding:12px 17px;border-radius:14px;border:1px solid #D6CFC2;background:#fff;font-size:13px;font-weight:600;color:#1E3A8A;cursor:pointer" style-hover="border-color:#1E3A8A">Guardar borrador</button>
+      <button onClick="{{ publicarTest }}" style="display:flex;align-items:center;gap:8px;padding:12px 19px;border:none;border-radius:14px;background:#FF6B6B;color:#fff;font-size:13.5px;font-weight:600;cursor:pointer" style-hover="background:#F4574F">
+        <svg width="15" height="15" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M8 13V3M4.4 6.6 8 3l3.6 3.6"></path></svg>
+        Publicar al catálogo
+      </button>
+    </div>
+  </div>
+
+  <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:22px">
+    <sc-for list="{{ pasosBuilder }}" as="p" hint-placeholder-count="3">
+      <div onClick="{{ p.onClick }}" style="display:flex;align-items:center;gap:9px;padding:11px 16px;border-radius:12px;cursor:pointer;background:{{ p.fondo }};border:1px solid {{ p.borde }}">
+        <span style="width:20px;height:20px;flex:none;border-radius:50%;background:{{ p.numFondo }};color:{{ p.numTexto }};display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700">{{ p.n }}</span>
+        <span style="font-size:13px;font-weight:600;color:{{ p.texto }}">{{ p.label }}</span>
+      </div>
+    </sc-for>
+  </div>
+
+  <!-- Paso 1 · datos generales -->
+  <sc-if value="{{ builder1 }}">
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:18px;align-items:start">
+    <div style="background:rgba(255,255,255,.72);backdrop-filter:blur(14px);box-shadow:0 20px 44px -28px rgba(15,23,42,.28);border:1px solid rgba(255,255,255,.92);border-radius:24px;padding:24px">
+      <h3 style="margin:0 0 4px;font-size:16px;font-weight:700">Datos generales</h3>
+      <p style="margin:0 0 20px;font-size:12.5px;color:#6B6558">Lo que verá la empresa en el catálogo.</p>
+      <div style="display:flex;flex-direction:column;gap:15px">
+        <div>
+          <label style="display:block;font-size:11.5px;font-weight:700;color:#5B5545;margin-bottom:7px">Nombre del test</label>
+          <input value="{{ bNombre }}" onChange="{{ setBNombre }}" style="width:100%;padding:12px 14px;border-radius:14px;border:1px solid #E7E2D8;background:#FAF8F5;font-size:13.5px;outline:none">
+        </div>
+        <div style="display:flex;gap:12px;flex-wrap:wrap">
+          <div style="flex:1;min-width:130px">
+            <label style="display:block;font-size:11.5px;font-weight:700;color:#5B5545;margin-bottom:7px">Categoría</label>
+            <div style="display:flex;gap:6px;flex-wrap:wrap">
+              <sc-for list="{{ categoriasBuilder }}" as="c" hint-placeholder-count="4">
+                <div onClick="{{ c.onClick }}" style="padding:7px 12px;border-radius:9px;font-size:11.5px;font-weight:600;cursor:pointer;border:1px solid {{ c.borde }};background:{{ c.fondo }};color:{{ c.texto }}">{{ c.label }}</div>
+              </sc-for>
+            </div>
+          </div>
+        </div>
+        <div style="display:flex;gap:12px;flex-wrap:wrap">
+          <div style="flex:1;min-width:120px">
+            <label style="display:block;font-size:11.5px;font-weight:700;color:#5B5545;margin-bottom:7px">Precio por licencia</label>
+            <div style="display:flex;align-items:center;border:1px solid #E7E2D8;border-radius:14px;background:#FAF8F5;overflow:hidden">
+              <span style="padding:0 11px;font-size:13px;font-weight:700;color:#6B6558">{{ simboloMoneda }}</span>
+              <input value="{{ bPrecio }}" onChange="{{ setBPrecio }}" style="flex:1;min-width:0;padding:12px 12px 12px 0;border:none;background:transparent;font-size:13.5px;font-weight:600;outline:none">
+            </div>
+          </div>
+          <div style="flex:1;min-width:120px">
+            <label style="display:block;font-size:11.5px;font-weight:700;color:#5B5545;margin-bottom:7px">N.º de reactivos</label>
+            <input value="{{ bReactivos }}" onChange="{{ setBReactivos }}" style="width:100%;padding:12px 14px;border-radius:14px;border:1px solid #E7E2D8;background:#FAF8F5;font-size:13.5px;font-weight:600;outline:none">
+          </div>
+          <div style="flex:1;min-width:120px">
+            <label style="display:block;font-size:11.5px;font-weight:700;color:#5B5545;margin-bottom:7px">Duración estimada</label>
+            <input value="35 min" style="width:100%;padding:12px 14px;border-radius:14px;border:1px solid #E7E2D8;background:#FAF8F5;font-size:13.5px;font-weight:600;outline:none">
+          </div>
+        </div>
+        <div>
+          <label style="display:block;font-size:11.5px;font-weight:700;color:#5B5545;margin-bottom:7px">Descripción para el catálogo</label>
+          <textarea rows="3" style="width:100%;padding:12px 14px;border-radius:14px;border:1px solid #E7E2D8;background:#FAF8F5;font-size:13px;line-height:1.5;outline:none;resize:vertical">Mide estilo directivo, delegación y lectura de madurez del equipo en contextos de alta presión.</textarea>
+        </div>
+      </div>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:18px">
+      <div style="background:rgba(255,255,255,.72);backdrop-filter:blur(14px);box-shadow:0 20px 44px -28px rgba(15,23,42,.28);border:1px solid rgba(255,255,255,.92);border-radius:24px;padding:24px">
+        <h3 style="margin:0 0 4px;font-size:16px;font-weight:700">Dimensiones psicométricas</h3>
+        <p style="margin:0 0 16px;font-size:12.5px;color:#6B6558">Cada reactivo pondera sobre una de estas dimensiones.</p>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <sc-for list="{{ dimsBuilder }}" as="d" hint-placeholder-count="6">
+            <div style="display:flex;align-items:center;gap:8px;padding:8px 12px;border-radius:10px;background:#EFF9FE;border:1px solid #BAE6FD">
+              <span style="font-size:12px;font-weight:600;color:#075985">{{ d.nombre }}</span>
+              <span onClick="{{ d.quitar }}" style="cursor:pointer;color:#0369A1;font-size:14px;line-height:1;font-weight:600" style-hover="color:#FF6B6B">×</span>
+            </div>
+          </sc-for>
+          <div onClick="{{ anadirDimension }}" style="display:flex;align-items:center;gap:6px;padding:8px 12px;border-radius:10px;border:1px dashed #D6CFC2;background:#FAF8F5;cursor:pointer;font-size:12px;font-weight:600;color:#1E3A8A" style-hover="border-color:#1E3A8A">+ Añadir dimensión</div>
+        </div>
+      </div>
+      <div style="background:#0F172A;border-radius:18px;padding:24px">
+        <div style="font-size:10.5px;font-weight:700;color:#7DA2D9;letter-spacing:.12em;text-transform:uppercase;margin-bottom:14px">Vista previa en catálogo</div>
+        <div style="background:#fff;border-radius:14px;overflow:hidden">
+          <div style="background:#E6F6FE;padding:13px 16px;display:flex;align-items:center;justify-content:space-between;gap:10px">
+            <span style="font-size:9.5px;font-weight:700;color:#075985;letter-spacing:.12em;text-transform:uppercase">{{ bCategoria }}</span>
+            <span style="font-family:'JetBrains Mono',monospace;font-size:10.5px;color:#0369A1">LID-360</span>
+          </div>
+          <div style="padding:15px 16px 17px">
+            <div style="font-size:15px;font-weight:700;line-height:1.3">{{ bNombre }}</div>
+            <div style="display:flex;align-items:baseline;gap:4px;margin-top:11px">
+              <span style="font-size:21px;font-weight:800;color:#1E3A8A">{{ bPrecioFmt }}</span>
+              <span style="font-size:11px;color:#6B6558">/licencia · {{ bReactivos }} ítems</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  </sc-if>
+
+  <!-- Paso 2 · diseñador de reactivos -->
+  <sc-if value="{{ builder2 }}">
+  <div style="display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:18px;align-items:start">
+    <div style="background:rgba(255,255,255,.72);backdrop-filter:blur(14px);box-shadow:0 20px 44px -28px rgba(15,23,42,.28);border:1px solid rgba(255,255,255,.92);border-radius:24px;overflow:hidden">
+      <div style="display:flex;align-items:center;gap:10px;padding:16px 18px;border-bottom:1px solid #EDE9E0;flex-wrap:wrap">
+        <div>
+          <h3 style="margin:0;font-size:15.5px;font-weight:700">Reactivos</h3>
+          <span style="font-size:11.5px;color:#6B6558">{{ nReactivos }} de {{ bReactivos }} capturados</span>
+        </div>
+        <button onClick="{{ anadirReactivo }}" style="margin-left:auto;display:flex;align-items:center;gap:7px;padding:9px 14px;border-radius:10px;border:1px solid #D6CFC2;background:#fff;font-size:12.5px;font-weight:600;color:#1E3A8A;cursor:pointer" style-hover="border-color:#0EA5E9;color:#0369A1">
+          <svg width="13" height="13" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M7 2.6v8.8M2.6 7h8.8"></path></svg>
+          Añadir reactivo
+        </button>
+      </div>
+      <div style="max-height:520px;overflow-y:auto">
+        <sc-for list="{{ reactivos }}" as="r" hint-placeholder-count="6">
+          <div onClick="{{ r.onClick }}" style="display:flex;gap:13px;padding:14px 18px;border-bottom:1px solid #F0EDE5;cursor:pointer;background:{{ r.fondo }};border-left:3px solid {{ r.marca }}" style-hover="background:#FDFCFA">
+            <span style="width:26px;height:26px;flex:none;border-radius:8px;background:{{ r.numFondo }};color:{{ r.numTexto }};display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700">{{ r.n }}</span>
+            <div style="min-width:0;flex:1">
+              <div style="font-size:13px;font-weight:500;line-height:1.45;color:#0F172A">{{ r.texto }}</div>
+              <div style="display:flex;gap:7px;margin-top:8px;flex-wrap:wrap">
+                <span style="padding:3px 8px;border-radius:6px;background:#F0EDE5;font-size:10.5px;font-weight:600;color:#5B5545">{{ r.tipo }}</span>
+                <span style="padding:3px 8px;border-radius:6px;background:#EFF9FE;font-size:10.5px;font-weight:600;color:#0369A1">{{ r.dimension }}</span>
+                <span style="padding:3px 8px;border-radius:6px;background:#E8ECF7;font-family:'JetBrains Mono',monospace;font-size:10.5px;font-weight:700;color:#1E3A8A">×{{ r.peso }}</span>
+              </div>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:18px">
+      <div style="background:rgba(255,255,255,.72);backdrop-filter:blur(14px);box-shadow:0 20px 44px -28px rgba(15,23,42,.28);border:1px solid rgba(255,255,255,.92);border-radius:24px;padding:24px">
+        <div style="display:flex;align-items:center;gap:9px;margin-bottom:18px">
+          <h3 style="margin:0;font-size:15.5px;font-weight:700">Editar reactivo {{ rSelN }}</h3>
+          <span style="margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:10.5px;color:#0369A1;background:#E6F6FE;border-radius:6px;padding:3px 7px">ITEM-{{ rSelN }}</span>
+        </div>
+        <label style="display:block;font-size:11.5px;font-weight:700;color:#5B5545;margin-bottom:7px">Enunciado</label>
+        <textarea rows="3" value="{{ rSelTexto }}" onChange="{{ setRTexto }}" style="width:100%;padding:12px 14px;border-radius:14px;border:1px solid #E7E2D8;background:#FAF8F5;font-size:13px;line-height:1.5;outline:none;resize:vertical"></textarea>
+
+        <label style="display:block;font-size:11.5px;font-weight:700;color:#5B5545;margin:16px 0 8px">Tipo de respuesta</label>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <sc-for list="{{ tiposRespuesta }}" as="t" hint-placeholder-count="3">
+            <div onClick="{{ t.onClick }}" style="display:flex;align-items:center;gap:9px;padding:10px 13px;border-radius:14px;border:1.5px solid {{ t.borde }};background:{{ t.fondo }};cursor:pointer">
+              <span style="width:15px;height:15px;flex:none;border-radius:50%;border:2px solid {{ t.radioBorde }};display:flex;align-items:center;justify-content:center"><span style="width:6px;height:6px;border-radius:50%;background:{{ t.radioPunto }}"></span></span>
+              <span style="font-size:12.5px;font-weight:600">{{ t.label }}</span>
+            </div>
+          </sc-for>
+        </div>
+
+        <div style="display:flex;gap:14px;flex-wrap:wrap;margin-top:18px">
+          <div style="flex:1;min-width:170px">
+            <label style="display:block;font-size:11.5px;font-weight:700;color:#5B5545;margin-bottom:8px">Dimensión que pondera</label>
+            <div style="display:flex;gap:6px;flex-wrap:wrap">
+              <sc-for list="{{ dimsSelector }}" as="d" hint-placeholder-count="6">
+                <div onClick="{{ d.onClick }}" style="padding:7px 11px;border-radius:9px;font-size:11.5px;font-weight:600;cursor:pointer;border:1px solid {{ d.borde }};background:{{ d.fondo }};color:{{ d.texto }}">{{ d.nombre }}</div>
+              </sc-for>
+            </div>
+          </div>
+          <div style="flex:none">
+            <label style="display:block;font-size:11.5px;font-weight:700;color:#5B5545;margin-bottom:8px">Peso</label>
+            <div style="display:flex;align-items:center;border:1px solid #E7E2D8;border-radius:10px;overflow:hidden;background:#FAF8F5">
+              <div onClick="{{ pesoMenos }}" style="width:32px;height:38px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:16px;font-weight:600;color:#1E3A8A;user-select:none" style-hover="background:#EFF9FE">−</div>
+              <div style="width:48px;text-align:center;font-family:'JetBrains Mono',monospace;font-size:13.5px;font-weight:700">{{ rSelPeso }}</div>
+              <div onClick="{{ pesoMas }}" style="width:32px;height:38px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:16px;font-weight:600;color:#1E3A8A;user-select:none" style-hover="background:#EFF9FE">+</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div style="background:#FAF8F5;border:1px dashed #D6CFC2;border-radius:18px;padding:22px">
+        <div style="font-size:10.5px;font-weight:700;color:#6B6558;letter-spacing:.12em;text-transform:uppercase;margin-bottom:14px">Vista previa del candidato</div>
+        <div style="background:rgba(255,255,255,.85);border:1px solid #EFE9DF;border-radius:18px;padding:20px">
+          <div style="font-size:14.5px;font-weight:700;line-height:1.4;margin-bottom:14px">{{ rSelTexto }}</div>
+          <div style="display:flex;flex-direction:column;gap:7px">
+            <sc-for list="{{ vistaOpciones }}" as="o" hint-placeholder-count="5">
+              <div style="display:flex;align-items:center;gap:11px;padding:10px 13px;border-radius:10px;border:1px solid #E7E2D8;background:#FAF8F5">
+                <span style="width:15px;height:15px;flex:none;border-radius:50%;border:2px solid #D6CFC2"></span>
+                <span style="font-size:12.5px;color:#3D3A33">{{ o.label }}</span>
+                <span style="margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:10.5px;color:#6B6558">{{ o.valor }}</span>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  </sc-if>
+
+  <!-- Paso 3 · algoritmo -->
+  <sc-if value="{{ builder3 }}">
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:18px;align-items:start">
+    <div style="background:rgba(255,255,255,.72);backdrop-filter:blur(14px);box-shadow:0 20px 44px -28px rgba(15,23,42,.28);border:1px solid rgba(255,255,255,.92);border-radius:24px;overflow:hidden">
+      <div style="padding:18px 20px;border-bottom:1px solid #EDE9E0">
+        <h3 style="margin:0;font-size:15.5px;font-weight:700">Rangos de puntuación</h3>
+        <p style="margin:6px 0 0;font-size:12.5px;color:#6B6558;line-height:1.5">El sistema evalúa el índice global y redacta el diagnóstico con el texto del rango que corresponda.</p>
+      </div>
+      <div>
+        <sc-for list="{{ rangos }}" as="r" hint-placeholder-count="4">
+          <div onClick="{{ r.onClick }}" style="display:flex;gap:14px;padding:16px 20px;border-bottom:1px solid #F0EDE5;cursor:pointer;background:{{ r.fondo }};border-left:3px solid {{ r.color }}" style-hover="background:#FDFCFA">
+            <div style="flex:none;text-align:center;min-width:66px">
+              <div style="font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:700;color:{{ r.colorTexto }}">{{ r.rango }}</div>
+              <div style="font-size:9.5px;font-weight:600;color:#6B6558;letter-spacing:.08em;text-transform:uppercase;margin-top:2px">puntos</div>
+            </div>
+            <div style="min-width:0;flex:1">
+              <div style="font-size:13.5px;font-weight:700;color:#0F172A">{{ r.etiqueta }}</div>
+              <div style="font-size:12px;color:#6B6558;line-height:1.5;margin-top:4px">{{ r.texto }}</div>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+      <div onClick="{{ anadirRango }}" style="padding:14px 20px;display:flex;align-items:center;gap:8px;cursor:pointer;font-size:12.5px;font-weight:600;color:#1E3A8A;background:#FAF8F5" style-hover="color:#0EA5E9">+ Añadir rango de puntuación</div>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:18px">
+      <div style="background:rgba(255,255,255,.72);backdrop-filter:blur(14px);box-shadow:0 20px 44px -28px rgba(15,23,42,.28);border:1px solid rgba(255,255,255,.92);border-radius:24px;padding:24px">
+        <h3 style="margin:0 0 16px;font-size:15.5px;font-weight:700">Regla seleccionada</h3>
+        <div style="display:flex;gap:12px;flex-wrap:wrap">
+          <div style="flex:1;min-width:88px">
+            <label style="display:block;font-size:11.5px;font-weight:700;color:#5B5545;margin-bottom:7px">Desde</label>
+            <input value="{{ rangoMin }}" onChange="{{ setRangoMin }}" style="width:100%;padding:11px 13px;border-radius:10px;border:1px solid #E7E2D8;background:#FAF8F5;font-family:'JetBrains Mono',monospace;font-size:13.5px;font-weight:700;outline:none">
+          </div>
+          <div style="flex:1;min-width:88px">
+            <label style="display:block;font-size:11.5px;font-weight:700;color:#5B5545;margin-bottom:7px">Hasta</label>
+            <input value="{{ rangoMax }}" onChange="{{ setRangoMax }}" style="width:100%;padding:11px 13px;border-radius:10px;border:1px solid #E7E2D8;background:#FAF8F5;font-family:'JetBrains Mono',monospace;font-size:13.5px;font-weight:700;outline:none">
+          </div>
+          <div style="flex:2;min-width:150px">
+            <label style="display:block;font-size:11.5px;font-weight:700;color:#5B5545;margin-bottom:7px">Etiqueta del perfil</label>
+            <input value="{{ rangoEtiqueta }}" onChange="{{ setRangoEtiqueta }}" style="width:100%;padding:11px 13px;border-radius:10px;border:1px solid #E7E2D8;background:#FAF8F5;font-size:13.5px;font-weight:600;outline:none">
+          </div>
+        </div>
+        <label style="display:block;font-size:11.5px;font-weight:700;color:#5B5545;margin:16px 0 7px">Texto del reporte automático</label>
+        <textarea rows="4" value="{{ rangoTexto }}" onChange="{{ setRangoTexto }}" style="width:100%;padding:12px 14px;border-radius:14px;border:1px solid #E7E2D8;background:#FAF8F5;font-size:13px;line-height:1.55;outline:none;resize:vertical"></textarea>
+        <div style="display:flex;align-items:center;gap:8px;margin-top:12px;padding:11px 13px;border-radius:10px;background:#EFF9FE;border:1px solid #BAE6FD">
+          <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#075985">{{ variablesHint }}</span>
+          <span style="font-size:11px;color:#0369A1;margin-left:auto">Variables disponibles</span>
+        </div>
+      </div>
+
+      <div style="background:#0F172A;border-radius:18px;padding:24px">
+        <div style="font-size:10.5px;font-weight:700;color:#7DA2D9;letter-spacing:.12em;text-transform:uppercase;margin-bottom:14px">Simulador de diagnóstico</div>
+        <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:16px">
+          <span style="font-size:12px;color:#B6C4DC">Puntaje de prueba</span>
+          <div style="display:flex;align-items:center;gap:9px;flex:1;min-width:150px">
+            <div onClick="{{ simMenos }}" style="width:30px;height:30px;flex:none;border-radius:9px;background:rgba(255,255,255,.09);display:flex;align-items:center;justify-content:center;cursor:pointer;color:#fff;font-size:16px;user-select:none">−</div>
+            <div style="flex:1;height:7px;border-radius:99px;background:rgba(255,255,255,.14);overflow:hidden;min-width:40px"><div style="height:100%;background:#38BDF8;width:{{ simPct }}"></div></div>
+            <div onClick="{{ simMas }}" style="width:30px;height:30px;flex:none;border-radius:9px;background:rgba(255,255,255,.09);display:flex;align-items:center;justify-content:center;cursor:pointer;color:#fff;font-size:16px;user-select:none">+</div>
+          </div>
+          <span style="font-family:'JetBrains Mono',monospace;font-size:19px;font-weight:700;color:#fff;min-width:34px;text-align:right">{{ simValor }}</span>
+        </div>
+        <div style="background:#fff;border-radius:14px;padding:18px">
+          <div style="display:flex;align-items:center;gap:9px;margin-bottom:9px">
+            <span style="width:8px;height:8px;border-radius:50%;background:{{ simColor }}"></span>
+            <span style="font-size:14px;font-weight:700;color:#0F172A">{{ simEtiqueta }}</span>
+          </div>
+          <p style="margin:0;font-size:12.5px;color:#5B5545;line-height:1.6">{{ simTexto }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  </sc-if>
+</div>
+</sc-if>
+
+<!-- ═══ ROL 2 · CATÁLOGO Y CARRITO ═══ -->
+<sc-if value="{{ esCatalogo }}" hint-placeholder-val="{{ true }}">
+<div style="width:100%;max-width:1200px;margin:0 auto;padding:48px 34px 88px;animation:screenIn .5s cubic-bezier(.22,.61,.36,1) both">
+  <div style="display:flex;align-items:flex-end;gap:24px;flex-wrap:wrap;margin-bottom:22px">
+    <div style="flex:1;min-width:260px">
+      <div style="font-size:11px;font-weight:700;color:#0369A1;letter-spacing:.13em;text-transform:uppercase;margin-bottom:7px">Paso 1 de 3 · Adquirir licencias</div>
+      <h1 style="margin:0;font-size:46px;font-weight:700;letter-spacing:-.03em;line-height:1.06;text-wrap:balance">Catálogo de tests psicométricos</h1>
+      <p style="margin:14px 0 0;font-size:17px;color:#5B5545;max-width:560px;line-height:1.55;text-wrap:pretty">Instrumentos validados y baremados para población latinoamericana. Cada licencia habilita una aplicación individual, sin fecha de caducidad.</p>
+    </div>
+    <div style="display:flex;gap:9px">
+      <button onClick="{{ abrirCheckout }}" style="display:flex;align-items:center;gap:8px;padding:11px 16px;border-radius:14px;border:1px solid #D6CFC2;background:#fff;font-size:13px;font-weight:600;color:#1E3A8A;cursor:pointer" style-hover="border-color:#1E3A8A">
+        <svg width="16" height="16" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M2 2.6h2.2l2 8.6h7.4l1.8-6H5.2"></path><circle cx="7" cy="15" r="1.2"></circle><circle cx="13" cy="15" r="1.2"></circle></svg>
+        Carrito · {{ carritoCount }}
+      </button>
+    </div>
+  </div>
+
+  <div style="margin-bottom:22px">
+    <div style="display:inline-flex;align-items:center;gap:2px;padding:3px;border:1px solid #E5E0D8;border-radius:14px;background:#F1EDE4;flex-wrap:wrap">
+      <sc-for list="{{ filtros }}" as="f" hint-placeholder-count="5">
+        <div onClick="{{ f.onClick }}" style="padding:7px 14px;border-radius:8px;font-size:12.5px;cursor:pointer;white-space:nowrap;background:{{ f.fondo }};color:{{ f.texto }};font-weight:{{ f.peso }};box-shadow:{{ f.sombra }}">{{ f.label }}</div>
+      </sc-for>
+    </div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(292px,1fr));gap:18px">
+    <sc-for list="{{ testsVisibles }}" as="t" hint-placeholder-count="6">
+      <div style="background:rgba(255,255,255,.72);backdrop-filter:blur(14px);box-shadow:0 20px 44px -28px rgba(15,23,42,.28);border:1px solid rgba(255,255,255,.92);border-radius:24px;display:flex;flex-direction:column;transition:border-color .18s ease,transform .18s ease;animation:riseIn .5s cubic-bezier(.22,.61,.36,1) both;animation-delay:{{ t.anim }}" style-hover="border-color:#CBD5E1;transform:translateY(-2px)">
+        <div style="padding:17px 18px 0;flex:1">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:10px">
+            <div style="display:flex;align-items:center;gap:7px;min-width:0">
+              <span style="font-size:9.5px;font-weight:700;color:#1E3A8A;letter-spacing:.12em;text-transform:uppercase;white-space:nowrap">{{ t.categoria }}</span>
+              <span style="width:3px;height:3px;border-radius:50%;background:#C9C2B4;flex:none"></span>
+              <span style="font-family:'JetBrains Mono',monospace;font-size:10.5px;color:#6B6558;white-space:nowrap">{{ t.codigo }}</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:5px;border:1px solid #E2E8F0;border-radius:999px;padding:3px 9px;flex:none">
+              <span style="width:5px;height:5px;border-radius:50%;background:#0EA5E9"></span>
+              <span style="font-size:10.5px;font-weight:600;color:#475569;white-space:nowrap">{{ t.stock }} en saldo</span>
+            </div>
+          </div>
+          <h3 style="margin:13px 0 0;font-size:16.5px;font-weight:700;letter-spacing:-.02em;line-height:1.3">{{ t.nombre }}</h3>
+          <p style="margin:7px 0 0;font-size:12.5px;color:#6B6558;line-height:1.5;text-wrap:pretty">{{ t.desc }}</p>
+          <div style="display:flex;gap:14px;margin-top:14px;padding-top:13px;border-top:1px dashed #E7E2D8">
+            <div style="display:flex;align-items:center;gap:6px">
+              <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="#8B8574" stroke-width="1.6"><circle cx="8" cy="8" r="6"></circle><path d="M8 4.8V8l2.2 1.6"></path></svg>
+              <span style="font-size:11.5px;font-weight:600;color:#5B5545">{{ t.duracion }}</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:6px">
+              <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="#8B8574" stroke-width="1.6"><rect x="3" y="2" width="10" height="12" rx="1.8"></rect><path d="M5.6 6h4.8M5.6 9h3"></path></svg>
+              <span style="font-size:11.5px;font-weight:600;color:#5B5545">{{ t.preguntas }} ítems</span>
+            </div>
+          </div>
+        </div>
+        <div style="padding:15px 18px 18px">
+          <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:12px;margin-bottom:13px">
+            <div>
+              <div style="display:flex;align-items:baseline;gap:3px">
+                <span style="font-size:23px;font-weight:800;color:#1E3A8A;letter-spacing:-.02em">{{ t.precio }}</span>
+                <span style="font-size:11.5px;font-weight:500;color:#6B6558">/licencia</span>
+              </div>
+              <div style="font-size:10.5px;color:#6B6558;margin-top:2px">Desde 25 uds. {{ t.descuento }} dto.</div>
+            </div>
+            <div style="display:flex;align-items:center;border:1px solid #E7E2D8;border-radius:10px;overflow:hidden;flex:none;background:#FAF8F5">
+              <div onClick="{{ t.menos }}" style="width:30px;height:34px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:16px;font-weight:600;color:#1E3A8A;user-select:none" style-hover="background:#EFF9FE">−</div>
+              <div style="width:34px;text-align:center;font-size:13.5px;font-weight:700;font-family:'JetBrains Mono',monospace">{{ t.qty }}</div>
+              <div onClick="{{ t.mas }}" style="width:30px;height:34px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:16px;font-weight:600;color:#1E3A8A;user-select:none" style-hover="background:#EFF9FE">+</div>
+            </div>
+          </div>
+          <button onClick="{{ t.anadir }}" style="width:100%;padding:12px;border:none;border-radius:12px;background:#FF6B6B;color:#fff;font-size:13.5px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px" style-hover="background:#F4574F" style-active="transform:translateY(1px)">
+            Añadir · Comprar licencias
+          </button>
+        </div>
+      </div>
+    </sc-for>
+  </div>
+</div>
+</sc-if>
+
+<!-- ═══ ROL 2 · INVENTARIO DE LICENCIAS ═══ -->
+<sc-if value="{{ esInventario }}">
+<div style="width:100%;max-width:1200px;margin:0 auto;padding:48px 34px 88px;animation:screenIn .5s cubic-bezier(.22,.61,.36,1) both">
+  <div style="display:flex;align-items:flex-end;gap:24px;flex-wrap:wrap;margin-bottom:22px">
+    <div style="flex:1;min-width:260px">
+      <div style="font-size:11px;font-weight:700;color:#0369A1;letter-spacing:.13em;text-transform:uppercase;margin-bottom:7px">Paso 2 de 3 · Inventario generado</div>
+      <h1 style="margin:0;font-size:46px;font-weight:700;letter-spacing:-.03em;line-height:1.06;text-wrap:balance">Inventario de licencias</h1>
+      <p style="margin:14px 0 0;font-size:17px;color:#5B5545;max-width:600px;line-height:1.55;text-wrap:pretty">Cada compra genera códigos únicos cifrados y su enlace mágico. Un código habilita una sola aplicación y se invalida al enviarse el reporte.</p>
+    </div>
+    <button onClick="{{ abrirInvitacion }}" style="display:flex;align-items:center;gap:9px;padding:13px 19px;border:none;border-radius:12px;background:#FF6B6B;color:#fff;font-size:13.5px;font-weight:600;cursor:pointer" style-hover="background:#F4574F">
+      <svg width="16" height="16" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M11.4 6.6a2.6 2.6 0 1 1 3.7 3.7l-1.5 1.5"></path><path d="M6.6 11.4a2.6 2.6 0 1 0 3.7 3.7"></path><path d="M7.2 10.8 10.8 7.2"></path></svg>
+      Generar enlace / código
+    </button>
+  </div>
+
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:14px;margin-bottom:22px">
+    <sc-for list="{{ resumenLic }}" as="r" hint-placeholder-count="4">
+      <div style="background:rgba(255,255,255,.72);backdrop-filter:blur(14px);box-shadow:0 20px 44px -28px rgba(15,23,42,.28);border:1px solid rgba(255,255,255,.92);border-radius:24px;padding:16px;display:flex;align-items:center;gap:13px">
+        <span style="width:38px;height:38px;flex:none;border-radius:12px;background:{{ r.fondo }};display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:800;color:{{ r.color }}">{{ r.n }}</span>
+        <div>
+          <div style="font-size:12.5px;font-weight:700;color:#0F172A">{{ r.label }}</div>
+          <div style="font-size:11px;color:#6B6558;margin-top:2px">{{ r.detalle }}</div>
+        </div>
+      </div>
+    </sc-for>
+  </div>
+
+  <div style="background:rgba(255,255,255,.72);backdrop-filter:blur(14px);box-shadow:0 20px 44px -28px rgba(15,23,42,.28);border:1px solid rgba(255,255,255,.92);border-radius:24px;overflow:hidden">
+    <div style="display:flex;align-items:center;gap:10px;padding:15px 18px;border-bottom:1px solid #EDE9E0;flex-wrap:wrap">
+      <span style="font-size:14px;font-weight:700">Códigos emitidos</span>
+      <span style="font-size:11.5px;color:#6B6558">· orden LIC-2026-0914</span>
+      <div style="display:flex;gap:7px;margin-left:auto;flex-wrap:wrap">
+        <div style="display:inline-flex;align-items:center;gap:2px;padding:3px;border:1px solid #E5E0D8;border-radius:14px;background:#F1EDE4;flex-wrap:wrap">
+      <sc-for list="{{ filtrosLic }}" as="f" hint-placeholder-count="4">
+        <div onClick="{{ f.onClick }}" style="padding:6px 12px;border-radius:8px;font-size:11.5px;cursor:pointer;white-space:nowrap;background:{{ f.fondo }};color:{{ f.texto }};font-weight:{{ f.peso }};box-shadow:{{ f.sombra }}">{{ f.label }}</div>
+      </sc-for>
+    </div>
+      </div>
+    </div>
+    <div style="overflow-x:auto">
+      <table style="width:100%;border-collapse:collapse;min-width:900px">
+        <thead>
+          <tr style="background:rgba(247,245,240,.6)">
+            <th style="text-align:left;padding:11px 18px;font-size:10px;font-weight:700;color:#6B6558;letter-spacing:.1em;text-transform:uppercase">Código único</th>
+            <th style="text-align:left;padding:11px 14px;font-size:10px;font-weight:700;color:#6B6558;letter-spacing:.1em;text-transform:uppercase">Enlace mágico</th>
+            <th style="text-align:left;padding:11px 14px;font-size:10px;font-weight:700;color:#6B6558;letter-spacing:.1em;text-transform:uppercase">Test</th>
+            <th style="text-align:left;padding:11px 14px;font-size:10px;font-weight:700;color:#6B6558;letter-spacing:.1em;text-transform:uppercase">Estado</th>
+            <th style="text-align:left;padding:11px 14px;font-size:10px;font-weight:700;color:#6B6558;letter-spacing:.1em;text-transform:uppercase">Asignado a</th>
+            <th style="text-align:right;padding:11px 18px;font-size:10px;font-weight:700;color:#6B6558;letter-spacing:.1em;text-transform:uppercase">Acción</th>
+          </tr>
+        </thead>
+        <tbody>
+          <sc-for list="{{ licenciasVisibles }}" as="l" hint-placeholder-count="7">
+            <tr style="border-top:1px solid #F0EDE5;animation:rowIn .42s cubic-bezier(.22,.61,.36,1) both;animation-delay:{{ l.anim }}" style-hover="background:#FDFCFA">
+              <td style="padding:13px 18px">
+                <div style="display:flex;align-items:center;gap:9px">
+                  <span style="font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:700;color:#0F172A;letter-spacing:.04em">{{ l.codigo }}</span>
+                  <span onClick="{{ l.copiarCodigo }}" style="width:24px;height:24px;flex:none;border-radius:7px;border:1px solid #E7E2D8;display:flex;align-items:center;justify-content:center;cursor:pointer" style-hover="border-color:#0EA5E9;background:#EFF9FE">
+                    <svg width="12" height="12" viewBox="0 0 14 14" fill="none" stroke="#6B6558" stroke-width="1.5"><rect x="4.6" y="4.6" width="7.4" height="7.4" rx="1.4"></rect><path d="M9.4 2.4H3.2a1.2 1.2 0 0 0-1.2 1.2v6.2"></path></svg>
+                  </span>
+                </div>
+              </td>
+              <td style="padding:13px 14px">
+                <div style="display:flex;align-items:center;gap:8px">
+                  <span style="font-family:'JetBrains Mono',monospace;font-size:11.5px;color:#0369A1">{{ l.link }}</span>
+                  <span onClick="{{ l.copiarLink }}" style="font-size:11px;font-weight:700;color:#1E3A8A;cursor:pointer;flex:none" style-hover="color:#0EA5E9">Copiar</span>
+                </div>
+              </td>
+              <td style="padding:13px 14px;font-size:12.5px;color:#3D3A33;font-weight:500">{{ l.test }}</td>
+              <td style="padding:13px 14px">
+                <span style="display:inline-flex;align-items:center;gap:6px;padding:5px 10px;border-radius:999px;font-size:11.5px;font-weight:700;background:{{ l.estadoFondo }};color:{{ l.estadoTexto }}">
+                  <span style="width:6px;height:6px;border-radius:50%;background:{{ l.estadoPunto }}"></span>{{ l.estado }}
+                </span>
+              </td>
+              <td style="padding:13px 14px;font-size:12px;color:#6B6558">{{ l.asignado }}</td>
+              <td style="padding:13px 18px;text-align:right">
+                <button onClick="{{ l.accionFn }}" style="padding:7px 13px;border-radius:9px;border:1px solid #D6CFC2;background:#fff;font-size:12px;font-weight:600;color:#1E3A8A;cursor:pointer;white-space:nowrap" style-hover="border-color:#0EA5E9;color:#0369A1">{{ l.accion }}</button>
+              </td>
+            </tr>
+          </sc-for>
+        </tbody>
+      </table>
+    </div>
+    <div style="display:flex;align-items:center;gap:9px;padding:13px 18px;border-top:1px solid #EDE9E0;background:#FDFCFA">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="#8B8574" stroke-width="1.6"><rect x="2.6" y="6" width="8.8" height="6.2" rx="1.4"></rect><path d="M4.6 6V4.4a2.4 2.4 0 0 1 4.8 0V6"></path></svg>
+      <span style="font-size:11.5px;color:#6B6558">Códigos cifrados AES-256 · un solo uso · trazabilidad completa por candidato</span>
+    </div>
+  </div>
+</div>
+</sc-if>
+
+<!-- ═══ ROL 2 · DASHBOARD DE CONTROL ═══ -->
+<sc-if value="{{ esPanel }}">
+<div style="width:100%;max-width:1200px;margin:0 auto;padding:48px 34px 88px;animation:screenIn .5s cubic-bezier(.22,.61,.36,1) both">
+  <div style="display:flex;align-items:flex-end;gap:24px;flex-wrap:wrap;margin-bottom:24px">
+    <div style="flex:1;min-width:260px">
+      <div style="font-size:11px;font-weight:700;color:#0369A1;letter-spacing:.13em;text-transform:uppercase;margin-bottom:7px">Paso 3 de 3 · Asignación y seguimiento</div>
+      <h1 style="margin:0;font-size:46px;font-weight:700;letter-spacing:-.03em;line-height:1.06;text-wrap:balance">Candidatos y exámenes asignados</h1>
+      <p style="margin:14px 0 0;font-size:17px;color:#5B5545;line-height:1.55">{{ candidatosTotal }} procesos activos · estado en tiempo real</p>
+    </div>
+    <div style="display:flex;gap:9px;flex-wrap:wrap">
+      <button onClick="{{ abrirAsignar }}" style="padding:13px 17px;border-radius:12px;border:1px solid #D6CFC2;background:#fff;font-size:13px;font-weight:600;color:#1E3A8A;cursor:pointer" style-hover="border-color:#1E3A8A">Asignar por email</button>
+      <button onClick="{{ abrirInvitacion }}" style="display:flex;align-items:center;gap:9px;padding:13px 19px;border:none;border-radius:12px;background:#FF6B6B;color:#fff;font-size:13.5px;font-weight:600;cursor:pointer" style-hover="background:#F4574F">
+        <svg width="16" height="16" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 3.4v11.2M3.4 9h11.2"></path></svg>
+        Generar enlace / código de invitación
+      </button>
+    </div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(206px,1fr));gap:14px;margin-bottom:24px">
+    <sc-for list="{{ saldos }}" as="s" hint-placeholder-count="4">
+      <div style="background:rgba(255,255,255,.72);backdrop-filter:blur(14px);box-shadow:0 20px 44px -28px rgba(15,23,42,.28);border:1px solid rgba(255,255,255,.92);border-radius:24px;padding:16px">
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px">
+          <div style="font-size:12px;font-weight:600;color:#5B5545;line-height:1.35">{{ s.nombre }}</div>
+          <span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#0369A1;background:#E6F6FE;border-radius:5px;padding:2px 5px;flex:none">{{ s.codigo }}</span>
+        </div>
+        <div style="display:flex;align-items:baseline;gap:5px;margin:11px 0 9px">
+          <span style="font-size:27px;font-weight:800;color:#0F172A;line-height:1;letter-spacing:-.02em">{{ s.libres }}</span>
+          <span style="font-size:11.5px;color:#6B6558;font-weight:500">de {{ s.total }} libres</span>
+        </div>
+        <div style="height:6px;border-radius:99px;background:#EDE9E0;overflow:hidden">
+          <div style="height:100%;border-radius:99px;background:#0EA5E9;width:{{ s.pct }}"></div>
+        </div>
+        <div style="font-size:10.5px;color:#6B6558;margin-top:8px">{{ s.usadas }} aplicadas este mes</div>
+      </div>
+    </sc-for>
+  </div>
+
+  <div style="background:rgba(255,255,255,.72);backdrop-filter:blur(14px);box-shadow:0 20px 44px -28px rgba(15,23,42,.28);border:1px solid rgba(255,255,255,.92);border-radius:24px;overflow:hidden">
+    <div style="display:flex;align-items:center;gap:10px;padding:15px 18px;border-bottom:1px solid #EDE9E0;flex-wrap:wrap">
+      <span style="font-size:14px;font-weight:700">Todos los candidatos</span>
+      <span style="font-size:11.5px;color:#6B6558;font-weight:500">· actualizado hace 2 min</span>
+      <div style="display:flex;gap:7px;margin-left:auto;flex-wrap:wrap">
+        <div style="display:inline-flex;align-items:center;gap:2px;padding:3px;border:1px solid #E5E0D8;border-radius:14px;background:#F1EDE4;flex-wrap:wrap">
+      <sc-for list="{{ filtrosEstado }}" as="e" hint-placeholder-count="4">
+        <div onClick="{{ e.onClick }}" style="padding:6px 12px;border-radius:8px;font-size:11.5px;cursor:pointer;white-space:nowrap;background:{{ e.fondo }};color:{{ e.texto }};font-weight:{{ e.peso }};box-shadow:{{ e.sombra }}">{{ e.label }}</div>
+      </sc-for>
+    </div>
+      </div>
+    </div>
+    <div style="overflow-x:auto">
+      <table style="width:100%;border-collapse:collapse;min-width:900px">
+        <thead>
+          <tr style="background:rgba(247,245,240,.6)">
+            <th style="text-align:left;padding:11px 18px;font-size:10px;font-weight:700;color:#6B6558;letter-spacing:.1em;text-transform:uppercase">Candidato</th>
+            <th style="text-align:left;padding:11px 14px;font-size:10px;font-weight:700;color:#6B6558;letter-spacing:.1em;text-transform:uppercase">Examen asignado</th>
+            <th style="text-align:left;padding:11px 14px;font-size:10px;font-weight:700;color:#6B6558;letter-spacing:.1em;text-transform:uppercase">Estado</th>
+            <th style="text-align:left;padding:11px 14px;font-size:10px;font-weight:700;color:#6B6558;letter-spacing:.1em;text-transform:uppercase">Fecha</th>
+            <th style="text-align:left;padding:11px 14px;font-size:10px;font-weight:700;color:#6B6558;letter-spacing:.1em;text-transform:uppercase">Código usado</th>
+            <th style="text-align:right;padding:11px 18px;font-size:10px;font-weight:700;color:#6B6558;letter-spacing:.1em;text-transform:uppercase">Acción</th>
+          </tr>
+        </thead>
+        <tbody>
+          <sc-for list="{{ candidatosVisibles }}" as="c" hint-placeholder-count="7">
+            <tr style="border-top:1px solid #F0EDE5;animation:rowIn .42s cubic-bezier(.22,.61,.36,1) both;animation-delay:{{ c.anim }}" style-hover="background:#FDFCFA">
+              <td style="padding:{{ padFila }} 18px">
+                <div style="display:flex;align-items:center;gap:11px">
+                  <div style="width:33px;height:33px;flex:none;border-radius:10px;background:#EFF9FE;color:#0369A1;display:flex;align-items:center;justify-content:center;font-size:11.5px;font-weight:700">{{ c.iniciales }}</div>
+                  <div>
+                    <div style="font-size:13.5px;font-weight:600;line-height:1.3">{{ c.nombre }}</div>
+                    <div style="font-size:11px;color:#6B6558">{{ c.email }}</div>
+                  </div>
+                </div>
+              </td>
+              <td style="padding:{{ padFila }} 14px;font-size:12.5px;color:#3D3A33;font-weight:500">{{ c.test }}</td>
+              <td style="padding:{{ padFila }} 14px">
+                <span style="display:inline-flex;align-items:center;gap:6px;padding:5px 10px;border-radius:999px;font-size:11.5px;font-weight:700;background:{{ c.estadoFondo }};color:{{ c.estadoTexto }}">
+                  <span style="width:6px;height:6px;border-radius:50%;background:{{ c.estadoPunto }}"></span>{{ c.estado }}
+                </span>
+              </td>
+              <td style="padding:{{ padFila }} 14px;font-size:12.5px;color:#6B6558">{{ c.fecha }}</td>
+              <td style="padding:{{ padFila }} 14px;font-family:'JetBrains Mono',monospace;font-size:11.5px;color:#1E3A8A">{{ c.licencia }}</td>
+              <td style="padding:{{ padFila }} 18px;text-align:right">
+                <button onClick="{{ c.accionFn }}" style="padding:7px 13px;border-radius:9px;border:1px solid {{ c.accionBorde }};background:{{ c.accionFondo }};font-size:12px;font-weight:600;color:{{ c.accionColor }};cursor:pointer;white-space:nowrap" style-hover="border-color:#0EA5E9">{{ c.accion }}</button>
+              </td>
+            </tr>
+          </sc-for>
+        </tbody>
+      </table>
+    </div>
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:13px 18px;border-top:1px solid #EDE9E0;background:#FDFCFA;flex-wrap:wrap;gap:10px">
+      <span style="font-size:11.5px;color:#6B6558">Mostrando {{ candidatosCount }} de {{ candidatosTotal }} candidatos</span>
+      <div style="display:flex;gap:6px">
+        <div style="padding:6px 11px;border-radius:8px;border:1px solid #E7E2D8;background:#fff;font-size:12px;font-weight:600;color:#6B6558;cursor:not-allowed">Anterior</div>
+        <div style="padding:6px 11px;border-radius:8px;border:1px solid #E7E2D8;background:#fff;font-size:12px;font-weight:600;color:#1E3A8A;cursor:pointer" style-hover="border-color:#0EA5E9">Siguiente</div>
+      </div>
+    </div>
+  </div>
+</div>
+</sc-if>
+
+<!-- ═══ ROL 2 · DIAGNÓSTICO INTERACTIVO ═══ -->
+<sc-if value="{{ esResultados }}">
+<div style="width:100%;max-width:1200px;margin:0 auto;padding:48px 34px 88px;animation:screenIn .5s cubic-bezier(.22,.61,.36,1) both">
+  <div style="max-width:1080px">
+    <div style="display:flex;align-items:center;gap:16px;padding:17px 20px;border-radius:16px;background:#0F172A;margin-bottom:22px;flex-wrap:wrap">
+      <span style="width:36px;height:36px;flex:none;border-radius:50%;background:rgba(56,189,248,.16);display:flex;align-items:center;justify-content:center">
+        <svg width="19" height="19" viewBox="0 0 20 20" fill="none" stroke="#38BDF8" stroke-width="2.2"><path d="M4.6 10.4 8.2 14l7-7.4"></path></svg>
+      </span>
+      <div style="flex:1;min-width:200px">
+        <div style="font-size:15.5px;font-weight:700;color:#fff">Examen finalizado · Reporte generado</div>
+        <div style="font-size:12px;color:#8FA3C4;margin-top:2px">Valentina Ríos · Liderazgo Situacional · 09 sep 2026, 11:42 · Código 8F2A-4471</div>
+      </div>
+      <div onClick="{{ irPanel }}" style="font-size:12.5px;font-weight:600;color:#38BDF8;cursor:pointer;flex:none" style-hover="color:#fff">Volver al panel &rarr;</div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:18px;align-items:start">
+      <div style="background:#fff;border:1px solid #E2E8F0;border-radius:18px;padding:24px">
+        <div style="display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap">
+          <h3 style="margin:0;font-size:16px;font-weight:700">Perfil por dimensión</h3>
+          <span style="font-size:11px;color:#6B6558">Percentiles vs. norma LATAM</span>
+        </div>
+        <div style="display:flex;justify-content:center;margin-top:6px">
+          <svg viewBox="-14 0 308 300" style="width:100%;max-width:330px;height:auto">
+            <polygon points="140,30 235.26,85 235.26,195 140,250 44.74,195 44.74,85" fill="#F7FBFE" stroke="#DCE6EF" stroke-width="1"></polygon>
+            <polygon points="140,57.5 211.44,98.75 211.44,181.25 140,222.5 68.56,181.25 68.56,98.75" fill="none" stroke="#E7E2D8" stroke-width="1"></polygon>
+            <polygon points="140,85 187.63,112.5 187.63,167.5 140,195 92.37,167.5 92.37,112.5" fill="none" stroke="#E7E2D8" stroke-width="1"></polygon>
+            <polygon points="140,112.5 163.82,126.25 163.82,153.75 140,167.5 116.18,153.75 116.18,126.25" fill="none" stroke="#E7E2D8" stroke-width="1"></polygon>
+            <path d="M140 30V250M235.26 85 44.74 195M235.26 195 44.74 85" stroke="#E7E2D8" stroke-width="1"></path>
+            <polygon points="140,54.2 220.97,93.25 208.59,179.6 140,210.4 56.17,188.4 73.32,101.5" fill="rgba(14,165,233,.20)" stroke="#0EA5E9" stroke-width="2.2"></polygon>
+            <circle cx="140" cy="54.2" r="4" fill="#1E3A8A"></circle>
+            <circle cx="220.97" cy="93.25" r="4" fill="#1E3A8A"></circle>
+            <circle cx="208.59" cy="179.6" r="4" fill="#1E3A8A"></circle>
+            <circle cx="140" cy="210.4" r="4" fill="#1E3A8A"></circle>
+            <circle cx="56.17" cy="188.4" r="4" fill="#1E3A8A"></circle>
+            <circle cx="73.32" cy="101.5" r="4" fill="#1E3A8A"></circle>
+            <text x="140" y="18" text-anchor="middle" font-family="Plus Jakarta Sans" font-size="10.5" font-weight="600" fill="#5B5545">Dirección</text>
+            <text x="248" y="76" text-anchor="middle" font-family="Plus Jakarta Sans" font-size="10.5" font-weight="600" fill="#5B5545">Comunicación</text>
+            <text x="248" y="212" text-anchor="middle" font-family="Plus Jakarta Sans" font-size="10.5" font-weight="600" fill="#5B5545">Decisión</text>
+            <text x="140" y="268" text-anchor="middle" font-family="Plus Jakarta Sans" font-size="10.5" font-weight="600" fill="#5B5545">Adaptabilidad</text>
+            <text x="32" y="212" text-anchor="middle" font-family="Plus Jakarta Sans" font-size="10.5" font-weight="600" fill="#5B5545">Empatía</text>
+            <text x="34" y="76" text-anchor="middle" font-family="Plus Jakarta Sans" font-size="10.5" font-weight="600" fill="#5B5545">Resultados</text>
+          </svg>
+        </div>
+        <div style="display:flex;align-items:center;gap:16px;padding-top:14px;border-top:1px solid #F0EDE5;flex-wrap:wrap">
+          <div style="display:flex;align-items:center;gap:7px"><span style="width:11px;height:11px;border-radius:3px;background:#0EA5E9"></span><span style="font-size:11.5px;color:#6B6558">Candidata</span></div>
+          <div style="display:flex;align-items:center;gap:7px"><span style="width:11px;height:11px;border-radius:3px;background:#DCE6EF"></span><span style="font-size:11.5px;color:#6B6558">Rango esperado del puesto</span></div>
+        </div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:18px">
+        <div style="background:#fff;border:1px solid #E2E8F0;border-radius:18px;padding:24px">
+          <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:14px;flex-wrap:wrap">
+            <div>
+              <h3 style="margin:0;font-size:16px;font-weight:700">Puntuaciones</h3>
+              <span style="font-size:11px;color:#6B6558">Toca una dimensión para ver su interpretación</span>
+            </div>
+            <div style="text-align:right">
+              <div style="font-size:29px;font-weight:800;color:#1E3A8A;line-height:1;letter-spacing:-.02em">76</div>
+              <div style="font-size:10.5px;font-weight:600;color:#6B6558;letter-spacing:.06em;text-transform:uppercase;margin-top:3px">Índice global</div>
+            </div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:13px;margin-top:20px">
+            <sc-for list="{{ dimensiones }}" as="d" hint-placeholder-count="6">
+              <div onClick="{{ d.onClick }}" style="cursor:pointer;padding:8px 10px;margin:-8px -10px;border-radius:14px;background:{{ d.fondoSel }}">
+                <div style="display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin-bottom:6px">
+                  <span style="font-size:12.5px;font-weight:600;color:#3D3A33">{{ d.nombre }}</span>
+                  <span style="font-size:11.5px;font-weight:700;color:{{ d.colorTexto }}">{{ d.puntaje }} · {{ d.nivel }}</span>
+                </div>
+                <div style="height:8px;border-radius:99px;background:#F0EDE5;overflow:hidden">
+                  <div style="height:100%;border-radius:99px;background:{{ d.color }};width:{{ d.pct }}"></div>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+          <div style="margin-top:18px;padding:16px;border-radius:14px;background:#FAF8F5;border:1px solid #EDE9E0">
+            <div style="display:flex;align-items:center;gap:9px;margin-bottom:8px">
+              <span style="width:7px;height:7px;border-radius:50%;background:{{ dimSelColor }}"></span>
+              <span style="font-size:12.5px;font-weight:700">{{ dimSelNombre }} · {{ dimSelNivel }}</span>
+              <span style="margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:11px;color:#6B6558">{{ dimSelPuntaje }}/100</span>
+            </div>
+            <p style="margin:0;font-size:12.5px;color:#5B5545;line-height:1.6;text-wrap:pretty">{{ dimSelTexto }}</p>
+          </div>
+        </div>
+
+        <div style="background:#fff;border:1px solid #E2E8F0;border-radius:18px;padding:22px 24px">
+          <div style="display:flex;align-items:center;gap:9px">
+            <svg width="17" height="17" viewBox="0 0 18 18" fill="none" stroke="#0369A1" stroke-width="1.6"><rect x="1.8" y="3.4" width="14.4" height="11.2" rx="2"></rect><path d="m2.4 4.6 6.6 5 6.6-5"></path></svg>
+            <h3 style="margin:0;font-size:15px;font-weight:700">Envío automático del reporte</h3>
+          </div>
+          <p style="margin:8px 0 16px;font-size:12.5px;color:#6B6558;line-height:1.5">Enviar copia del reporte en PDF automáticamente a:</p>
+          <div style="display:flex;flex-direction:column;gap:9px">
+            <sc-for list="{{ envios }}" as="e" hint-placeholder-count="2">
+              <div onClick="{{ e.onClick }}" style="display:flex;align-items:center;gap:13px;padding:13px 15px;border-radius:13px;border:1px solid {{ e.borde }};background:{{ e.fondo }};cursor:pointer">
+                <div style="flex:1;min-width:0">
+                  <div style="font-size:11px;font-weight:600;color:#6B6558;letter-spacing:.06em;text-transform:uppercase">{{ e.rol }}</div>
+                  <div style="font-size:13px;font-weight:600;color:#0F172A;margin-top:3px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ e.email }}</div>
+                </div>
+                <div style="width:42px;height:24px;flex:none;border-radius:99px;background:{{ e.pista }};padding:3px;display:flex;justify-content:{{ e.justificar }};transition:background .2s">
+                  <span style="width:18px;height:18px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(15,23,42,.28)"></span>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;margin-top:14px;padding-top:14px;border-top:1px solid #F0EDE5">
+            <span style="width:6px;height:6px;border-radius:50%;background:#0EA5E9;flex:none"></span>
+            <span style="font-size:11.5px;color:#6B6558">{{ estadoEnvio }}</span>
+          </div>
+        </div>
+
+        <div style="display:flex;gap:11px;flex-wrap:wrap">
+          <button onClick="{{ descargar }}" style="flex:1;min-width:230px;display:flex;align-items:center;justify-content:center;gap:9px;padding:15px 22px;border:none;border-radius:12px;background:#FF6B6B;color:#fff;font-size:14px;font-weight:600;cursor:pointer" style-hover="background:#F4574F">
+            <svg width="17" height="17" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M9 2.6v9M5.4 8.4 9 12l3.6-3.6M3 14.8h12"></path></svg>
+            Descargar diagnóstico (PDF)
+          </button>
+          <button onClick="{{ irExamen }}" style="padding:15px 20px;border-radius:13px;border:1px solid #D6CFC2;background:#fff;font-size:13.5px;font-weight:600;color:#1E3A8A;cursor:pointer" style-hover="border-color:#1E3A8A">Ver respuestas</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</sc-if>
+
+<!-- ═══ ROL 3 · ACCESO DEL CANDIDATO (enlace mágico) ═══ -->
+<sc-if value="{{ esAcceso }}">
+<div style="min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:48px 24px;animation:screenIn .5s cubic-bezier(.22,.61,.36,1) both">
+  <div style="width:100%;max-width:600px">
+
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;row-gap:10px;margin-bottom:16px;padding:0 2px">
+      <div style="display:flex;align-items:center;gap:10px">
+        <span style="width:31px;height:31px;flex:none;border-radius:9px;background:#1E3A8A;color:#fff;display:flex;align-items:center;justify-content:center;font-family:'Satoshi',sans-serif;font-size:14.5px;font-weight:700">A</span>
+        <span style="font-family:'Satoshi',sans-serif;font-size:15.5px;font-weight:600;letter-spacing:-.02em;color:#0F172A;white-space:nowrap">{{ empresa }}</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:6px">
+        <span style="font-size:10.5px;color:#6B6558;white-space:nowrap">Powered by</span>
+        <img src="assets/strata-mark.png" alt="" style="width:15px;height:15px;object-fit:contain;border-radius:4px;opacity:.85">
+        <span style="font-family:'Satoshi',sans-serif;font-size:11.5px;font-weight:600;color:#6B6558;letter-spacing:.06em">STRATA</span>
+      </div>
+    </div>
+
+    <div style="background:#fff;border:1px solid #E5E0D8;border-radius:18px;overflow:hidden">
+
+      <sc-if value="{{ accesoPaso2 }}" hint-placeholder-val="{{ true }}">
+      <div style="background:#0F172A;padding:26px 34px 22px">
+        <div style="display:inline-flex;align-items:center;gap:7px;padding:5px 12px 5px 8px;border-radius:999px;border:1px solid rgba(134,239,172,.34);background:rgba(22,163,74,.18)">
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none" style="flex:none"><circle cx="8" cy="8" r="7" fill="#22C55E"></circle><path d="M4.9 8.2 6.9 10.2l4.2-4.4" stroke="#0F172A" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+          <span style="font-size:11.5px;font-weight:600;color:#BBF7D0;white-space:nowrap">Licencia verificada:</span>
+          <span style="font-family:'JetBrains Mono',monospace;font-size:11.5px;font-weight:700;color:#fff;letter-spacing:.02em;white-space:nowrap">{{ codigoValidado }}</span>
+        </div>
+        <h1 style="margin:15px 0 0;font-size:25px;line-height:1.32;letter-spacing:-.02em;color:#fff;text-wrap:pretty">{{ empresa }} te ha invitado a realizar la evaluación de Liderazgo Situacional</h1>
+        <div style="display:flex;align-items:center;gap:11px;margin-top:14px;flex-wrap:wrap">
+          <span style="font-size:11.5px;font-weight:600;color:#38BDF8;letter-spacing:.06em;text-transform:uppercase">Liderazgo Situacional</span>
+          <span style="width:3px;height:3px;border-radius:50%;background:#475569"></span>
+          <span style="font-size:12px;color:#CBD5E1">68 reactivos</span>
+          <span style="width:3px;height:3px;border-radius:50%;background:#475569"></span>
+          <span style="font-size:12px;color:#CBD5E1">Escala Likert 1–5</span>
+        </div>
+      </div>
+
+      <div style="padding:26px 34px 24px">
+        <div style="display:flex;align-items:baseline;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-bottom:18px">
+          <p style="margin:0;font-size:14px;color:#5B5545;line-height:1.6;text-wrap:pretty">Confirma tus datos para comenzar. No necesitas crear una cuenta ni contraseña.</p>
+          <span style="font-size:11px;font-weight:600;color:{{ pasosColor }};white-space:nowrap">{{ pasosTexto }}</span>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:16px">
+        <div>
+          <div style="display:flex;align-items:baseline;gap:8px;margin-bottom:7px">
+            <label style="font-size:11.5px;font-weight:600;color:#3D3A33;white-space:nowrap;letter-spacing:.01em">Nombre completo</label>
+            
+          </div>
+          <div style="position:relative">
+            <svg width="16" height="16" viewBox="0 0 18 18" fill="none" stroke="#8B8574" stroke-width="1.6" style="position:absolute;left:14px;top:15px;pointer-events:none"><circle cx="9" cy="6.4" r="2.9"></circle><path d="M3.4 15.2c0-2.7 2.5-4.4 5.6-4.4s5.6 1.7 5.6 4.4"></path></svg>
+            <input value="{{ nombreInput }}" onChange="{{ setNombre }}" placeholder="Valentina Ríos" style="width:100%;padding:14px 42px 14px 40px;border-radius:12px;border:1.5px solid {{ nombreBorde }};background:{{ nombreFondo }};font-size:14.5px;color:#0F172A;outline:none;transition:border-color .18s ease,background .18s ease,box-shadow .18s ease" style-focus="border-color:#0EA5E9;background:#ffffff;box-shadow:0 0 0 3px rgba(56,189,248,.16)">
+            <sc-if value="{{ nombreOk }}">
+              <span style="position:absolute;right:14px;top:15px;animation:popIn .3s cubic-bezier(.34,1.56,.64,1) both">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7" fill="#16A34A"></circle><path d="M4.9 8.2 6.9 10.2l4.2-4.4" stroke="#fff" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+              </span>
+            </sc-if>
+          </div>
+        </div>
+        <div>
+          <div style="display:flex;align-items:baseline;gap:8px;margin-bottom:7px">
+            <label style="font-size:11.5px;font-weight:600;color:#3D3A33;white-space:nowrap;letter-spacing:.01em">Correo electrónico</label>
+            <span style="font-size:11px;color:#6B6558;white-space:nowrap">recibirás tu copia del reporte</span>
+          </div>
+          <div style="position:relative">
+            <svg width="16" height="16" viewBox="0 0 18 18" fill="none" stroke="#8B8574" stroke-width="1.6" style="position:absolute;left:14px;top:15px;pointer-events:none"><rect x="2.4" y="4" width="13.2" height="10" rx="2.2"></rect><path d="m3.4 5.4 5.6 4.2 5.6-4.2"></path></svg>
+            <input value="{{ emailInput }}" onChange="{{ setEmailCand }}" placeholder="valentina@correo.com" type="email" style="width:100%;padding:14px 42px 14px 40px;border-radius:12px;border:1.5px solid {{ emailBorde }};background:{{ emailFondo }};font-size:14.5px;color:#0F172A;outline:none;transition:border-color .18s ease,background .18s ease,box-shadow .18s ease" style-focus="border-color:#0EA5E9;background:#ffffff;box-shadow:0 0 0 3px rgba(56,189,248,.16)">
+            <sc-if value="{{ emailOk }}">
+              <span style="position:absolute;right:14px;top:15px;animation:popIn .3s cubic-bezier(.34,1.56,.64,1) both">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7" fill="#16A34A"></circle><path d="M4.9 8.2 6.9 10.2l4.2-4.4" stroke="#fff" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+              </span>
+            </sc-if>
+          </div>
+        </div>
+
+          <div onClick="{{ toggleConsent }}" style="display:flex;align-items:flex-start;gap:11px;cursor:pointer;padding:13px 15px;border-radius:12px;background:{{ consentCajaFondo }};border:1px solid {{ consentCajaBorde }};transition:background .18s ease,border-color .18s ease">
+            <span style="width:19px;height:19px;flex:none;border-radius:6px;border:1.5px solid {{ consentBorde }};background:{{ consentFondo }};display:flex;align-items:center;justify-content:center;margin-top:1px;transition:background .18s ease,border-color .18s ease">
+              <svg width="11" height="11" viewBox="0 0 12 12" fill="none" stroke="{{ consentTick }}" stroke-width="2.4"><path d="M2.6 6.2 4.8 8.4l4.6-4.8"></path></svg>
+            </span>
+            <span style="font-size:12px;color:#5B5545;line-height:1.5">Acepto el tratamiento de mis respuestas con fines de evaluación laboral y el <a href="#">aviso de privacidad</a>.</span>
+          </div>
+        </div>
+
+        <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-top:22px">
+          <button onClick="{{ comenzarExamen }}" style="display:inline-flex;align-items:center;gap:9px;padding:14px 26px;border:none;border-radius:12px;background:#FF6B6B;color:#fff;font-size:14.5px;font-weight:600;cursor:pointer;box-shadow:0 6px 18px rgba(255,107,107,.24);transition:background .18s ease,transform .18s ease,box-shadow .18s ease" style-hover="background:#F4574F;transform:translateY(-1px);box-shadow:0 9px 22px rgba(255,107,107,.3)" style-active="transform:translateY(1px)">
+            <span style="white-space:nowrap">Iniciar Evaluación</span>
+            <svg width="15" height="15" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.9" style="flex:none"><path d="M3.4 9h11.2M10.4 4.8 14.6 9l-4.2 4.2"></path></svg>
+          </button>
+          <span style="font-size:11.5px;color:#6B6558">Podrás pausar en cualquier momento.</span>
+        </div>
+      </div>
+
+      <div style="background:#FAF8F5;border-top:1px solid #EDE9E0;padding:16px 30px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px 16px">
+        <div style="display:flex;align-items:center;gap:9px">
+          <span style="width:26px;height:26px;flex:none;border-radius:8px;background:#E6F6FE;display:flex;align-items:center;justify-content:center">
+            <svg width="14" height="14" viewBox="0 0 18 18" fill="none" stroke="#0369A1" stroke-width="1.6"><circle cx="9" cy="9" r="6.6"></circle><path d="M9 5.4V9l2.5 1.8"></path></svg>
+          </span>
+          <span style="font-size:11.5px;color:#5B5545;line-height:1.4">~35 minutos de duración estimada</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:9px">
+          <span style="width:26px;height:26px;flex:none;border-radius:8px;background:#E6F6FE;display:flex;align-items:center;justify-content:center">
+            <svg width="14" height="14" viewBox="0 0 18 18" fill="none" stroke="#0369A1" stroke-width="1.6"><path d="M3.2 4.6a1.4 1.4 0 0 1 1.4-1.4h6.6L14.8 6.6v6.8a1.4 1.4 0 0 1-1.4 1.4H4.6a1.4 1.4 0 0 1-1.4-1.4z"></path><path d="M6.2 3.2v4h5.4"></path></svg>
+          </span>
+          <span style="font-size:11.5px;color:#5B5545;line-height:1.4">Guardado automático de respuestas</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:9px">
+          <span style="width:26px;height:26px;flex:none;border-radius:8px;background:#E6F6FE;display:flex;align-items:center;justify-content:center">
+            <svg width="14" height="14" viewBox="0 0 18 18" fill="none" stroke="#0369A1" stroke-width="1.6"><rect x="3.4" y="7.8" width="11.2" height="7" rx="1.8"></rect><path d="M6.1 7.8V5.9a2.9 2.9 0 0 1 5.8 0v1.9"></path></svg>
+          </span>
+          <span style="font-size:11.5px;color:#5B5545;line-height:1.4">Tus datos viajan cifrados</span>
+        </div>
+      </div>
+      </sc-if>
+
+      <sc-if value="{{ accesoPaso1 }}">
+      <div style="padding:32px 34px 28px">
+        <h1 style="margin:0;font-size:24px;line-height:1.3;letter-spacing:-.02em">Ingresa tu código de licencia</h1>
+        <p style="margin:10px 0 22px;font-size:14px;color:#5B5545;line-height:1.6">Lo encontrarás en el correo de invitación de {{ empresa }}. Son 8 caracteres.</p>
+        <input value="{{ codigoInput }}" onChange="{{ setCodigo }}" placeholder="9B2X-88K1" style="width:100%;padding:16px 18px;border-radius:12px;border:1.5px solid #E5E0D8;background:#FCFBF9;font-family:'JetBrains Mono',monospace;font-size:20px;font-weight:700;letter-spacing:.14em;text-align:center;text-transform:uppercase;color:#0F172A;outline:none;transition:border-color .18s ease,box-shadow .18s ease" style-focus="border-color:#0EA5E9;background:#ffffff;box-shadow:0 0 0 3px rgba(56,189,248,.16)">
+        <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-top:18px">
+          <button onClick="{{ validarCodigo }}" style="display:inline-flex;align-items:center;gap:9px;padding:13px 24px;border:none;border-radius:12px;background:#FF6B6B;color:#fff;font-size:14px;font-weight:600;cursor:pointer;box-shadow:0 6px 18px rgba(255,107,107,.24)" style-hover="background:#F4574F">
+            Validar código
+            <svg width="15" height="15" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.9"><path d="M3.4 9h11.2M10.4 4.8 14.6 9l-4.2 4.2"></path></svg>
+          </button>
+          <span onClick="{{ entrarConLink }}" style="font-size:12.5px;font-weight:600;color:#1E3A8A;cursor:pointer" style-hover="color:#0EA5E9">Tengo un enlace de invitación</span>
+        </div>
+      </div>
+      </sc-if>
+
+    </div>
+
+    <div style="display:flex;align-items:center;justify-content:center;gap:10px;margin-top:16px;flex-wrap:wrap">
+      <sc-if value="{{ accesoPaso2 }}" hint-placeholder-val="{{ true }}">
+        <span onClick="{{ volverPaso1 }}" style="font-size:12px;font-weight:500;color:#1E3A8A;cursor:pointer" style-hover="color:#1E3A8A">Ingresar mi código manualmente</span>
+        <span style="width:3px;height:3px;border-radius:50%;background:#D2CBBD"></span>
+      </sc-if>
+      <a href="#" style="font-size:12px;font-weight:500;color:#1E3A8A" style-hover="color:#0EA5E9">Aviso de privacidad</a>
+      <span style="width:3px;height:3px;border-radius:50%;background:#D2CBBD"></span>
+      <span style="font-size:12px;color:#6B6558">Soporte: ayuda@strata.app</span>
+    </div>
+
+  </div>
+</div>
+</sc-if>
+
+<!-- ═══ ROL 3 · EXAMEN (FOCUS MODE) ═══ -->
+<sc-if value="{{ esExamen }}">
+<div style="min-height:100vh;display:flex;flex-direction:column;animation:screenIn .5s cubic-bezier(.22,.61,.36,1) both">
+  <div style="background:rgba(250,248,245,.8);backdrop-filter:blur(16px);position:sticky;top:0;z-index:10">
+    <div style="max-width:900px;margin:0 auto;padding:15px 28px;display:flex;align-items:center;gap:16px;flex-wrap:wrap">
+      <img src="assets/strata-salamandra.png" alt="Strata" style="width:30px;height:30px;object-fit:contain;flex:none">
+      <div style="flex:1;min-width:150px">
+        <div style="font-size:14px;font-weight:700;letter-spacing:-.01em">Liderazgo Situacional</div>
+        <div style="font-size:11px;color:#6B6558;margin-top:1px">{{ candidatoNombre }} · {{ empresa }}</div>
+      </div>
+      <sc-if value="{{ verTemporizador }}" hint-placeholder-val="{{ true }}">
+        <div style="display:flex;align-items:center;gap:7px;padding:7px 12px;border-radius:10px;background:#FAF8F5;border:1px solid #E7E2D8;flex:none">
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="#8B8574" stroke-width="1.6"><circle cx="8" cy="8" r="6"></circle><path d="M8 4.8V8l2.2 1.6"></path></svg>
+          <span style="font-family:'JetBrains Mono',monospace;font-size:12.5px;font-weight:500;color:#5B5545">{{ reloj }}</span>
+        </div>
+      </sc-if>
+      <div style="display:flex;align-items:center;gap:6px;flex:none">
+        <span style="width:6px;height:6px;border-radius:50%;background:#0EA5E9;animation:pulseDot 1.8s ease-in-out infinite"></span>
+        <span style="font-size:11px;color:#6B6558;font-weight:500">Guardado automático</span>
+      </div>
+    </div>
+    <div style="height:4px;background:#EDE9E0">
+      <div style="height:100%;background:#38BDF8;width:{{ progreso }};transition:width .35s cubic-bezier(.4,0,.2,1)"></div>
+    </div>
+  </div>
+
+  <div style="flex:1;display:flex;align-items:flex-start;justify-content:center;padding:44px 28px 64px">
+    <div style="width:100%;max-width:760px">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:18px;flex-wrap:wrap">
+        <span style="font-size:11.5px;font-weight:700;color:#0369A1;letter-spacing:.1em;text-transform:uppercase">Pregunta {{ nPregunta }} de {{ totalPreguntas }}</span>
+        <span style="font-size:11.5px;color:#6B6558">Sección: {{ seccion }}</span>
+      </div>
+      <div key="{{ nPregunta }}" style="background:#fff;border:1px solid #E2E8F0;border-radius:18px;padding:34px;animation:softIn .34s cubic-bezier(.22,.61,.36,1) both">
+        <p style="margin:0 0 5px;font-size:12px;font-weight:600;color:#6B6558">Indica qué tanto te describe la siguiente afirmación:</p>
+        <h2 style="margin:0 0 26px;font-size:23px;font-weight:700;line-height:1.4;letter-spacing:-.015em;text-wrap:pretty">{{ pregunta }}</h2>
+        <div style="display:flex;flex-direction:column;gap:9px">
+          <sc-for list="{{ opciones }}" as="o" hint-placeholder-count="5">
+            <div onClick="{{ o.onClick }}" style="display:flex;align-items:center;gap:14px;padding:15px 18px;border-radius:13px;border:1.5px solid {{ o.borde }};background:{{ o.fondo }};cursor:pointer" style-hover="border-color:#38BDF8">
+              <span style="width:20px;height:20px;flex:none;border-radius:50%;border:2px solid {{ o.radioBorde }};display:flex;align-items:center;justify-content:center">
+                <span style="width:9px;height:9px;border-radius:50%;background:{{ o.radioPunto }}"></span>
+              </span>
+              <span style="flex:1;font-size:14.5px;font-weight:{{ o.peso }};color:#0F172A">{{ o.label }}</span>
+              <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:#6B6558">{{ o.valor }}</span>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;gap:12px;margin-top:22px;flex-wrap:wrap">
+        <button onClick="{{ anterior }}" style="padding:12px 18px;border-radius:12px;border:1px solid #D6CFC2;background:#fff;font-size:13.5px;font-weight:600;color:#1E3A8A;cursor:pointer" style-hover="border-color:#1E3A8A">Anterior</button>
+        <span style="font-size:11.5px;color:#6B6558">No hay respuestas correctas ni incorrectas.</span>
+        <button onClick="{{ siguiente }}" style="margin-left:auto;display:flex;align-items:center;gap:9px;padding:14px 24px;border:none;border-radius:12px;background:#FF6B6B;color:#fff;font-size:14px;font-weight:600;cursor:pointer" style-hover="background:#F4574F">
+          {{ textoSiguiente }}
+          <svg width="16" height="16" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2"><path d="M3.4 9h11.2M10.4 4.8 14.6 9l-4.2 4.2"></path></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+</sc-if>
+
+<!-- ═══ ROL 3 · CONFIRMACIÓN FINAL ═══ -->
+<sc-if value="{{ esFin }}">
+<div style="min-height:100vh;display:flex;align-items:center;justify-content:center;padding:48px 28px;animation:screenIn .5s cubic-bezier(.22,.61,.36,1) both">
+  <div style="width:100%;max-width:560px;text-align:center">
+    <div style="width:76px;height:76px;margin:0 auto 26px;border-radius:26px;background:#0F172A;display:flex;align-items:center;justify-content:center;animation:popIn .38s cubic-bezier(.34,1.56,.64,1) both">
+      <svg width="36" height="36" viewBox="0 0 36 36" fill="none" stroke="#38BDF8" stroke-width="3.2"><path d="M9 18.6 15 24.6 27 12"></path></svg>
+    </div>
+    <h1 style="margin:0;font-size:32px;font-weight:800;letter-spacing:-.025em;line-height:1.2;text-wrap:pretty">¡Examen completado con éxito!</h1>
+    <p style="margin:14px auto 0;font-size:15px;color:#6B6558;line-height:1.6;max-width:440px;text-wrap:pretty">Tus resultados han sido enviados a la empresa evaluadora. Recibirás una copia del reporte en {{ emailFinal }}.</p>
+
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-top:32px;text-align:left">
+      <sc-for list="{{ resumenFinal }}" as="r" hint-placeholder-count="3">
+        <div style="background:rgba(255,255,255,.72);backdrop-filter:blur(14px);box-shadow:0 20px 44px -28px rgba(15,23,42,.28);border:1px solid rgba(255,255,255,.92);border-radius:24px;padding:16px">
+          <div style="font-size:10px;font-weight:700;color:#6B6558;letter-spacing:.1em;text-transform:uppercase">{{ r.label }}</div>
+          <div style="font-size:15px;font-weight:700;color:#0F172A;margin-top:7px">{{ r.valor }}</div>
+        </div>
+      </sc-for>
+    </div>
+
+    <div style="display:flex;align-items:center;gap:11px;margin-top:14px;padding:15px 17px;border-radius:14px;background:#EFF9FE;border:1px solid #BAE6FD;text-align:left">
+      <svg width="17" height="17" viewBox="0 0 18 18" fill="none" stroke="#0369A1" stroke-width="1.7" style="flex:none"><rect x="1.8" y="3.4" width="14.4" height="11.2" rx="2"></rect><path d="m2.4 4.6 6.6 5 6.6-5"></path></svg>
+      <span style="font-size:12.5px;color:#075985;line-height:1.5">El código <span style="font-family:'JetBrains Mono',monospace;font-weight:700">{{ codigoValidado }}</span> quedó consumido. No es necesario hacer nada más.</span>
+    </div>
+
+    <div style="display:flex;gap:11px;justify-content:center;margin-top:26px;flex-wrap:wrap">
+      <button onClick="{{ cerrarVentana }}" style="padding:14px 22px;border:none;border-radius:12px;background:#FF6B6B;color:#fff;font-size:14px;font-weight:600;cursor:pointer" style-hover="background:#F4574F">Cerrar ventana</button>
+      <button onClick="{{ fueraAlcance }}" style="padding:14px 20px;border-radius:13px;border:1px solid #D6CFC2;background:#fff;font-size:13.5px;font-weight:600;color:#1E3A8A;cursor:pointer" style-hover="border-color:#1E3A8A">Conocer Strata</button>
+    </div>
+  </div>
+</div>
+</sc-if>
+
+<sc-if value="{{ conShell }}">
+<footer style="width:100%;max-width:1200px;margin:0 auto;display:flex;align-items:center;gap:16px;flex-wrap:wrap;padding:24px 34px 36px;border-top:1px solid #EBE5DA">
+  <div style="display:flex;align-items:center;gap:8px">
+    <img src="assets/strata-salamandra.png" alt="" style="width:20px;height:20px;object-fit:contain">
+    <span style="font-family:'Satoshi',sans-serif;font-size:12.5px;font-weight:600;color:#5B5545;letter-spacing:.06em">STRATA</span>
+  </div>
+  <span style="font-size:12px;color:#6B6558">Psicometría validada para Latinoamérica</span>
+  <div style="display:flex;align-items:center;gap:18px;margin-left:auto;flex-wrap:wrap">
+    <a href="#" style="font-size:12px;color:#5B5545">Aviso de privacidad</a>
+    <a href="#" style="font-size:12px;color:#5B5545">Soporte</a>
+    <span style="font-size:12px;color:#6B6558">© 2026</span>
+  </div>
+</footer>
+</sc-if>
+
+</main>
+
+<!-- ═══ CHECKOUT ═══ -->
+<sc-if value="{{ checkoutAbierto }}">
+<div style="position:fixed;inset:0;z-index:60;display:flex;justify-content:flex-end">
+  <div onClick="{{ cerrarCheckout }}" style="position:absolute;inset:0;background:rgba(15,23,42,.42)"></div>
+  <div style="position:relative;width:408px;max-width:100%;background:#FAF8F5;height:100%;display:flex;flex-direction:column;box-shadow:-14px 0 40px rgba(15,23,42,.18);animation:slideIn .26s cubic-bezier(.32,.72,0,1) both">
+    <div style="display:flex;align-items:center;gap:12px;padding:20px 22px;background:#fff;border-bottom:1px solid #E7E2D8">
+      <div>
+        <div style="font-size:16px;font-weight:700">Resumen de compra</div>
+        <div style="font-size:11.5px;color:#6B6558;margin-top:2px">Los códigos se generan al confirmar</div>
+      </div>
+      <div onClick="{{ cerrarCheckout }}" style="margin-left:auto;width:32px;height:32px;border-radius:9px;border:1px solid #E7E2D8;display:flex;align-items:center;justify-content:center;cursor:pointer;color:#6B6558" style-hover="background:#F7F5F0">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3.5 3.5l7 7M10.5 3.5l-7 7"></path></svg>
+      </div>
+    </div>
+    <div style="flex:1;overflow-y:auto;padding:20px 22px;display:flex;flex-direction:column;gap:20px">
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <sc-if value="{{ carritoVacio }}">
+          <div style="padding:26px 18px;text-align:center;background:#fff;border:1px dashed #D6CFC2;border-radius:14px">
+            <div style="font-size:13px;font-weight:600;color:#5B5545">Aún no has añadido licencias</div>
+            <div style="font-size:11.5px;color:#6B6558;margin-top:4px">Elige un test del catálogo para continuar.</div>
+          </div>
+        </sc-if>
+        <sc-for list="{{ carrito }}" as="l" hint-placeholder-count="2">
+          <div style="background:rgba(255,255,255,.85);border:1px solid #EFE9DF;border-radius:18px;padding:14px">
+            <div style="display:flex;align-items:flex-start;gap:10px">
+              <div style="flex:1;min-width:0">
+                <div style="font-size:13.5px;font-weight:700;line-height:1.3">{{ l.nombre }}</div>
+                <div style="font-family:'JetBrains Mono',monospace;font-size:10.5px;color:#0369A1;margin-top:3px">{{ l.codigo }} · {{ l.qty }} × {{ l.precio }}</div>
+              </div>
+              <div style="text-align:right;flex:none">
+                <div style="font-size:14px;font-weight:700;color:#1E3A8A">{{ l.subtotal }}</div>
+                <div onClick="{{ l.quitar }}" style="font-size:11px;color:#6B6558;cursor:pointer;margin-top:3px" style-hover="color:#FF6B6B">Quitar</div>
+              </div>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+
+      <div>
+        <div style="font-size:11px;font-weight:700;color:#6B6558;letter-spacing:.1em;text-transform:uppercase;margin-bottom:10px">Método de pago</div>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <sc-for list="{{ metodos }}" as="m" hint-placeholder-count="3">
+            <div onClick="{{ m.onClick }}" style="display:flex;align-items:center;gap:12px;padding:13px 15px;border-radius:13px;border:1.5px solid {{ m.borde }};background:{{ m.fondo }};cursor:pointer">
+              <span style="width:18px;height:18px;flex:none;border-radius:50%;border:2px solid {{ m.radioBorde }};display:flex;align-items:center;justify-content:center">
+                <span style="width:8px;height:8px;border-radius:50%;background:{{ m.radioPunto }}"></span>
+              </span>
+              <div style="flex:1;min-width:0">
+                <div style="font-size:13px;font-weight:600">{{ m.nombre }}</div>
+                <div style="font-size:11px;color:#6B6558;margin-top:1px">{{ m.detalle }}</div>
+              </div>
+              <span style="font-family:'JetBrains Mono',monospace;font-size:9.5px;font-weight:500;color:#0369A1;background:#E6F6FE;border-radius:5px;padding:3px 6px;flex:none">{{ m.tag }}</span>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+
+      <div style="background:rgba(255,255,255,.85);border:1px solid #EFE9DF;border-radius:18px;padding:16px;display:flex;flex-direction:column;gap:9px">
+        <div style="display:flex;justify-content:space-between;font-size:12.5px;color:#6B6558"><span>Subtotal</span><span style="font-weight:600;color:#3D3A33">{{ subtotal }}</span></div>
+        <div style="display:flex;justify-content:space-between;font-size:12.5px;color:#6B6558"><span>Impuestos (16 %)</span><span style="font-weight:600;color:#3D3A33">{{ impuestos }}</span></div>
+        <div style="display:flex;justify-content:space-between;align-items:baseline;padding-top:9px;border-top:1px solid #F0EDE5">
+          <span style="font-size:13px;font-weight:700">Total</span>
+          <span style="font-size:20px;font-weight:800;color:#1E3A8A;letter-spacing:-.02em">{{ total }}</span>
+        </div>
+      </div>
+    </div>
+    <div style="padding:18px 22px;background:#fff;border-top:1px solid #E7E2D8">
+      <button onClick="{{ confirmarCompra }}" style="width:100%;padding:15px;border:none;border-radius:12px;background:#FF6B6B;color:#fff;font-size:14.5px;font-weight:600;cursor:pointer" style-hover="background:#F4574F">Pagar y generar códigos · {{ total }}</button>
+      <div style="display:flex;align-items:center;justify-content:center;gap:7px;margin-top:11px">
+        <svg width="13" height="13" viewBox="0 0 14 14" fill="none" stroke="#8B8574" stroke-width="1.6"><rect x="2.6" y="6" width="8.8" height="6.2" rx="1.4"></rect><path d="M4.6 6V4.4a2.4 2.4 0 0 1 4.8 0V6"></path></svg>
+        <span style="font-size:11px;color:#6B6558">Pago cifrado · factura fiscal automática</span>
+      </div>
+    </div>
+  </div>
+</div>
+</sc-if>
+
+<!-- ═══ MODAL · GENERAR ENLACE / CÓDIGO ═══ -->
+<sc-if value="{{ invitacionAbierta }}">
+<div style="position:fixed;inset:0;z-index:60;display:flex;align-items:center;justify-content:center;padding:24px">
+  <div onClick="{{ cerrarInvitacion }}" style="position:absolute;inset:0;background:rgba(15,23,42,.42)"></div>
+  <div style="position:relative;width:540px;max-width:100%;background:#fff;border-radius:20px;overflow:hidden;box-shadow:0 24px 60px rgba(15,23,42,.24);animation:fadeUp .22s ease both;max-height:92vh;display:flex;flex-direction:column">
+    <div style="padding:22px 24px 18px;border-bottom:1px solid #EDE9E0">
+      <div style="font-size:18px;font-weight:700;letter-spacing:-.01em">Enlace de invitación generado</div>
+      <div style="font-size:12.5px;color:#6B6558;margin-top:3px">Compártelo por el canal que prefieras. Se descuenta una licencia al registrarlo.</div>
+    </div>
+    <div style="padding:22px 24px;display:flex;flex-direction:column;gap:18px;overflow-y:auto">
+      <div style="background:#0F172A;border-radius:16px;padding:22px;text-align:center">
+        <div style="font-size:10.5px;font-weight:700;color:#7DA2D9;letter-spacing:.13em;text-transform:uppercase">Código único cifrado</div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:30px;font-weight:700;color:#fff;letter-spacing:.16em;margin:12px 0 14px">{{ codigoGenerado }}</div>
+        <div onClick="{{ copiarLinkGen }}" style="display:flex;align-items:center;gap:10px;padding:11px 14px;border-radius:14px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);cursor:pointer" style-hover="border-color:#38BDF8">
+          <span style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#38BDF8;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-align:left">{{ linkGenerado }}</span>
+          <span style="font-size:11.5px;font-weight:700;color:#fff;flex:none">Copiar</span>
+        </div>
+      </div>
+
+      <div>
+        <div style="font-size:11.5px;font-weight:700;color:#5B5545;margin-bottom:9px">Test vinculado</div>
+        <div style="display:flex;flex-direction:column;gap:7px">
+          <sc-for list="{{ testsAsignables }}" as="t" hint-placeholder-count="4">
+            <div onClick="{{ t.onClick }}" style="display:flex;align-items:center;gap:11px;padding:11px 14px;border-radius:14px;border:1.5px solid {{ t.borde }};background:{{ t.fondo }};cursor:pointer">
+              <span style="width:17px;height:17px;flex:none;border-radius:50%;border:2px solid {{ t.radioBorde }};display:flex;align-items:center;justify-content:center"><span style="width:7px;height:7px;border-radius:50%;background:{{ t.radioPunto }}"></span></span>
+              <span style="flex:1;font-size:13px;font-weight:600">{{ t.nombre }}</span>
+              <span style="font-size:11px;color:#6B6558">{{ t.stock }} libres</span>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+
+      <div>
+        <div style="font-size:11.5px;font-weight:700;color:#5B5545;margin-bottom:9px">Enviar por</div>
+        <div style="display:flex;gap:9px;flex-wrap:wrap">
+          <sc-for list="{{ canales }}" as="c" hint-placeholder-count="3">
+            <div onClick="{{ c.onClick }}" style="flex:1;min-width:132px;display:flex;align-items:center;gap:10px;padding:13px 14px;border-radius:12px;border:1px solid #E7E2D8;background:#FAF8F5;cursor:pointer" style-hover="border-color:#0EA5E9;background:#EFF9FE">
+              <span style="width:28px;height:28px;flex:none;border-radius:9px;background:#E6F6FE;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:#0369A1">{{ c.sigla }}</span>
+              <span style="font-size:12.5px;font-weight:600">{{ c.label }}</span>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </div>
+    <div style="display:flex;align-items:center;gap:11px;padding:18px 24px;background:#FAF8F5;border-top:1px solid #EDE9E0;flex-wrap:wrap">
+      <span style="font-size:11.5px;color:#6B6558;flex:1;min-width:120px">Vence en 14 días si no se inicia.</span>
+      <button onClick="{{ cerrarInvitacion }}" style="padding:11px 16px;border-radius:14px;border:1px solid #D6CFC2;background:#fff;font-size:13px;font-weight:600;color:#5B5545;cursor:pointer">Cerrar</button>
+      <button onClick="{{ registrarInvitacion }}" style="padding:11px 18px;border:none;border-radius:14px;background:#FF6B6B;color:#fff;font-size:13px;font-weight:600;cursor:pointer" style-hover="background:#F4574F">Registrar en candidatos</button>
+    </div>
+  </div>
+</div>
+</sc-if>
+
+<!-- ═══ MODAL · ASIGNAR POR EMAIL ═══ -->
+<sc-if value="{{ asignarAbierto }}">
+<div style="position:fixed;inset:0;z-index:60;display:flex;align-items:center;justify-content:center;padding:24px">
+  <div onClick="{{ cerrarAsignar }}" style="position:absolute;inset:0;background:rgba(15,23,42,.42)"></div>
+  <div style="position:relative;width:520px;max-width:100%;background:#fff;border-radius:20px;overflow:hidden;box-shadow:0 24px 60px rgba(15,23,42,.24);animation:fadeUp .22s ease both;max-height:92vh;display:flex;flex-direction:column">
+    <div style="padding:22px 24px 18px;border-bottom:1px solid #EDE9E0;flex:none">
+      <div style="font-size:18px;font-weight:700;letter-spacing:-.01em">Asignar test por email</div>
+      <div style="font-size:12.5px;color:#6B6558;margin-top:3px">Strata envía el código y el enlace mágico al candidato.</div>
+    </div>
+    <div style="padding:22px 24px;display:flex;flex-direction:column;gap:16px;overflow-y:auto">
+      <div>
+        <label style="display:block;font-size:11.5px;font-weight:700;color:#5B5545;margin-bottom:7px">Correo del candidato</label>
+        <input value="{{ formEmail }}" onChange="{{ setEmail }}" placeholder="nombre@empresa.com" style="width:100%;padding:12px 14px;border-radius:14px;border:1px solid #E7E2D8;background:#FAF8F5;font-size:13.5px;outline:none">
+      </div>
+      <div>
+        <label style="display:block;font-size:11.5px;font-weight:700;color:#5B5545;margin-bottom:7px">Test a aplicar</label>
+        <div style="display:flex;flex-direction:column;gap:7px">
+          <sc-for list="{{ testsAsignables }}" as="t" hint-placeholder-count="3">
+            <div onClick="{{ t.onClick }}" style="display:flex;align-items:center;gap:11px;padding:11px 14px;border-radius:14px;border:1.5px solid {{ t.borde }};background:{{ t.fondo }};cursor:pointer">
+              <span style="width:17px;height:17px;flex:none;border-radius:50%;border:2px solid {{ t.radioBorde }};display:flex;align-items:center;justify-content:center"><span style="width:7px;height:7px;border-radius:50%;background:{{ t.radioPunto }}"></span></span>
+              <span style="flex:1;font-size:13px;font-weight:600">{{ t.nombre }}</span>
+              <span style="font-size:11px;color:#6B6558">{{ t.stock }} libres</span>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <sc-for list="{{ modosEnvio }}" as="m" hint-placeholder-count="2">
+          <div onClick="{{ m.onClick }}" style="flex:1;min-width:180px;padding:13px 15px;border-radius:12px;border:1.5px solid {{ m.borde }};background:{{ m.fondo }};cursor:pointer">
+            <div style="font-size:12.5px;font-weight:700;color:#0F172A">{{ m.titulo }}</div>
+            <div style="font-size:11px;color:#6B6558;margin-top:3px;line-height:1.4">{{ m.detalle }}</div>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+    <div style="display:flex;align-items:center;gap:11px;padding:18px 24px;background:#FAF8F5;border-top:1px solid #EDE9E0;flex-wrap:wrap;flex:none">
+      <span style="font-size:11.5px;color:#6B6558;flex:1;min-width:120px">Vence en 14 días si no se inicia.</span>
+      <button onClick="{{ cerrarAsignar }}" style="padding:11px 16px;border-radius:14px;border:1px solid #D6CFC2;background:#fff;font-size:13px;font-weight:600;color:#5B5545;cursor:pointer">Cancelar</button>
+      <button onClick="{{ confirmarAsignar }}" style="padding:11px 18px;border:none;border-radius:14px;background:#FF6B6B;color:#fff;font-size:13px;font-weight:600;cursor:pointer" style-hover="background:#F4574F">Enviar invitación</button>
+    </div>
+  </div>
+</div>
+</sc-if>
+
+<sc-if value="{{ hayToast }}">
+<div style="position:fixed;bottom:26px;left:50%;transform:translateX(-50%);z-index:80;animation:softIn .3s cubic-bezier(.22,.61,.36,1) both;display:flex;align-items:center;gap:11px;padding:13px 20px;border-radius:13px;background:#0F172A;box-shadow:0 12px 34px rgba(15,23,42,.3);animation:fadeUp .2s ease both">
+  <span style="width:7px;height:7px;border-radius:50%;background:#38BDF8;flex:none"></span>
+  <span style="font-size:13px;font-weight:600;color:#fff">{{ toast }}</span>
+</div>
+</sc-if>
+
+<!-- ═══ SELECTOR DE ROL (chrome del prototipo) ═══ -->
+<sc-if value="{{ sinOverlay }}" hint-placeholder-val="{{ true }}">
+<div style="position:fixed;bottom:18px;right:18px;z-index:70;display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:999px;background:rgba(15,23,42,.94);box-shadow:0 10px 30px rgba(15,23,42,.28);backdrop-filter:blur(6px)">
+  <span style="font-size:9.5px;font-weight:700;color:#7DA2D9;letter-spacing:.12em;text-transform:uppercase;padding:0 4px">Rol</span>
+  <sc-for list="{{ roles }}" as="r" hint-placeholder-count="3">
+    <div onClick="{{ r.onClick }}" style="padding:7px 13px;border-radius:999px;cursor:pointer;font-size:11.5px;font-weight:700;color:{{ r.texto }};background:{{ r.fondo }};white-space:nowrap">{{ r.label }}</div>
+  </sc-for>
+</div>
+</sc-if>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;nombreEmpresa&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;Acme Talento&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Cuenta&quot;},&quot;moneda&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;USD&quot;,&quot;MXN&quot;,&quot;EUR&quot;],&quot;default&quot;:&quot;USD&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Cuenta&quot;},&quot;densidadTabla&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;Cómoda&quot;,&quot;Compacta&quot;],&quot;default&quot;:&quot;Cómoda&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Panel B2B&quot;},&quot;mostrarTemporizador&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Examen&quot;}}">
+class Component extends DCLogic {
+  tests = [
+    { id: 'lid', nombre: 'Liderazgo Situacional', codigo: 'LID-360', categoria: 'Liderazgo', desc: 'Mide estilo directivo, delegación y lectura de madurez del equipo.', duracion: '35 min', preguntas: 68, precio: 24, stock: 12, descuento: '15 %', tinte: '#E6F6FE' },
+    { id: 'ie', nombre: 'Inteligencia Emocional', codigo: 'EQ-i 2.0', categoria: 'Personalidad', desc: 'Autoconciencia, regulación emocional, empatía y manejo del estrés.', duracion: '25 min', preguntas: 52, precio: 18, stock: 5, descuento: '12 %', tinte: '#EFF9FE' },
+    { id: 'cog', nombre: 'Aptitud Cognitiva General', codigo: 'ACG-4', categoria: 'Cognitivos', desc: 'Razonamiento verbal, numérico y abstracto con ítems cronometrados.', duracion: '45 min', preguntas: 84, precio: 32, stock: 20, descuento: '18 %', tinte: '#E6F6FE' },
+    { id: 'disco', nombre: 'Perfil Conductual DISC', codigo: 'DISC-C', categoria: 'Conductuales', desc: 'Dominancia, influencia, estabilidad y cumplimiento en contexto laboral.', duracion: '20 min', preguntas: 40, precio: 15, stock: 3, descuento: '10 %', tinte: '#EFF9FE' },
+    { id: 'num', nombre: 'Razonamiento Numérico', codigo: 'RN-2', categoria: 'Cognitivos', desc: 'Interpretación de datos, tablas y proporciones bajo presión de tiempo.', duracion: '30 min', preguntas: 36, precio: 21, stock: 8, descuento: '12 %', tinte: '#E6F6FE' },
+    { id: 'int', nombre: 'Integridad Laboral', codigo: 'IL-70', categoria: 'Personalidad', desc: 'Confiabilidad, apego a normas y tolerancia a conductas contraproducentes.', duracion: '18 min', preguntas: 70, precio: 17, stock: 0, descuento: '10 %', tinte: '#EFF9FE' }
+  ];
+
+  preguntas = [
+    { seccion: 'Dirección de equipos', texto: 'Cuando el equipo enfrenta un plazo ajustado, prefiero fijar yo las prioridades antes de abrir la discusión al grupo.' },
+    { seccion: 'Dirección de equipos', texto: 'Delego tareas críticas incluso cuando sé que podría ejecutarlas más rápido por mi cuenta.' },
+    { seccion: 'Comunicación', texto: 'Cuando alguien de mi equipo comete un error, doy retroalimentación el mismo día, aunque sea incómodo.' },
+    { seccion: 'Toma de decisiones', texto: 'Ante información incompleta, prefiero decidir y corregir en el camino en lugar de esperar más datos.' },
+    { seccion: 'Adaptabilidad', texto: 'Cambio mi forma de acompañar a una persona según su nivel de experiencia en la tarea.' },
+    { seccion: 'Orientación a resultados', texto: 'Reviso indicadores de avance del equipo al menos una vez por semana.' }
+  ];
+
+  likert = ['Totalmente en desacuerdo', 'En desacuerdo', 'Neutral', 'De acuerdo', 'Totalmente de acuerdo'];
+  tiposDef = ['Escala Likert (1-5)', 'Opción múltiple', 'Elección forzada'];
+
+  dims = [
+    { nombre: 'Dirección de equipos', puntaje: 78, nivel: 'Alto', texto: 'Fija prioridades con claridad y sostiene el rumbo bajo presión. Tiende a asumir la conducción antes de consultar, lo que acelera la ejecución pero puede reducir la apropiación del equipo.' },
+    { nombre: 'Comunicación', puntaje: 85, nivel: 'Muy alto', texto: 'Da retroalimentación oportuna y directa, incluso en conversaciones incómodas. Es su recurso más fuerte para alinear expectativas.' },
+    { nombre: 'Toma de decisiones', puntaje: 72, nivel: 'Alto', texto: 'Decide con información parcial y corrige en el camino. Conviene acompañarla con revisiones de riesgo en decisiones de alto impacto.' },
+    { nombre: 'Adaptabilidad', puntaje: 64, nivel: 'Medio', texto: 'Ajusta su estilo según la madurez de cada persona, aunque con menos flexibilidad ante cambios de estructura o de prioridades externas.' },
+    { nombre: 'Empatía', puntaje: 88, nivel: 'Muy alto', texto: 'Lee con precisión el estado del equipo y adapta el tono de sus intervenciones. Base sólida para roles de liderazgo de personas.' },
+    { nombre: 'Orientación a resultados', puntaje: 70, nivel: 'Alto', texto: 'Da seguimiento sistemático a indicadores de avance. Su foco está en el cumplimiento más que en la mejora del proceso.' }
+  ];
+
+  reactivosDef = [
+    { texto: 'Cuando el equipo enfrenta un plazo ajustado, prefiero fijar yo las prioridades antes de abrir la discusión al grupo.', tipo: 'Escala Likert (1-5)', dimension: 'Dirección de equipos', peso: 1.2 },
+    { texto: 'Delego tareas críticas incluso cuando sé que podría ejecutarlas más rápido por mi cuenta.', tipo: 'Escala Likert (1-5)', dimension: 'Dirección de equipos', peso: 1.0 },
+    { texto: 'Cuando alguien de mi equipo comete un error, doy retroalimentación el mismo día, aunque sea incómodo.', tipo: 'Escala Likert (1-5)', dimension: 'Comunicación', peso: 1.4 },
+    { texto: 'Ante información incompleta, prefiero decidir y corregir en el camino en lugar de esperar más datos.', tipo: 'Elección forzada', dimension: 'Toma de decisiones', peso: 1.1 },
+    { texto: 'Cambio mi forma de acompañar a una persona según su nivel de experiencia en la tarea.', tipo: 'Escala Likert (1-5)', dimension: 'Adaptabilidad', peso: 1.3 },
+    { texto: '¿Qué haces primero cuando un proyecto se desvía del plan?', tipo: 'Opción múltiple', dimension: 'Orientación a resultados', peso: 0.9 }
+  ];
+
+  rangosDef = [
+    { min: 80, max: 100, etiqueta: 'Perfil de Liderazgo Alto', color: '#1E3A8A', texto: 'El evaluado muestra un patrón consolidado de liderazgo: dirige con claridad, comunica decisiones y sostiene el desempeño del equipo bajo presión. Recomendado para posiciones de jefatura con equipos a cargo.' },
+    { min: 60, max: 79, etiqueta: 'Perfil de Liderazgo Medio-Alto', color: '#0EA5E9', texto: 'El evaluado cuenta con las conductas base de liderazgo y las aplica de forma consistente en su ámbito conocido. Se recomienda acompañamiento en delegación y manejo de ambigüedad para roles de mayor alcance.' },
+    { min: 40, max: 59, etiqueta: 'Perfil en Desarrollo', color: '#38BDF8', texto: 'Se identifican conductas de liderazgo emergentes, con dependencia de instrucciones claras. Apto para roles de coordinación con supervisión cercana y plan de desarrollo formal.' },
+    { min: 0, max: 39, etiqueta: 'Perfil de Contribución Individual', color: '#A8A296', texto: 'El patrón de respuesta apunta a un desempeño más sólido en tareas de contribución individual que en la conducción de equipos. No se recomienda para posiciones con personal a cargo en el corto plazo.' }
+  ];
+
+  candidatosDef = [
+    { nombre: 'Valentina Ríos', email: 'v.rios@correo.com', test: 'Liderazgo Situacional', estado: 'Completado', fecha: '04 sep 2026', licencia: '8F2A-4471' },
+    { nombre: 'Andrés Molina', email: 'a.molina@correo.com', test: 'Perfil Conductual DISC', estado: 'En proceso', fecha: '05 sep 2026', licencia: '3C9D-2210' },
+    { nombre: 'Camila Ferrer', email: 'c.ferrer@correo.com', test: 'Inteligencia Emocional', estado: 'Código enviado', fecha: '06 sep 2026', licencia: '77B1-9032' },
+    { nombre: 'Joaquín Herrera', email: 'j.herrera@correo.com', test: 'Aptitud Cognitiva General', estado: 'Completado', fecha: '02 sep 2026', licencia: '1D4E-6650' },
+    { nombre: 'Sofía Navarro', email: 's.navarro@correo.com', test: 'Razonamiento Numérico', estado: 'En proceso', fecha: '06 sep 2026', licencia: 'A20C-3384' },
+    { nombre: 'Mateo Guzmán', email: 'm.guzman@correo.com', test: 'Integridad Laboral', estado: 'Código enviado', fecha: '07 sep 2026', licencia: 'B913-5527' },
+    { nombre: 'Lucía Paredes', email: 'l.paredes@correo.com', test: 'Liderazgo Situacional', estado: 'Completado', fecha: '01 sep 2026', licencia: '5E6F-1108' }
+  ];
+
+  licenciasDef = [
+    { codigo: '9B2X-88K1', test: 'Liderazgo Situacional', estado: 'Disponible', asignado: '—', creada: '08 sep 2026' },
+    { codigo: '4KQ7-31M9', test: 'Liderazgo Situacional', estado: 'Disponible', asignado: '—', creada: '08 sep 2026' },
+    { codigo: '77B1-9032', test: 'Inteligencia Emocional', estado: 'Enviada', asignado: 'c.ferrer@correo.com', creada: '06 sep 2026' },
+    { codigo: 'B913-5527', test: 'Integridad Laboral', estado: 'Enviada', asignado: 'm.guzman@correo.com', creada: '07 sep 2026' },
+    { codigo: '3C9D-2210', test: 'Perfil Conductual DISC', estado: 'En uso', asignado: 'a.molina@correo.com', creada: '05 sep 2026' },
+    { codigo: '8F2A-4471', test: 'Liderazgo Situacional', estado: 'Consumida', asignado: 'v.rios@correo.com', creada: '04 sep 2026' },
+    { codigo: '1D4E-6650', test: 'Aptitud Cognitiva General', estado: 'Consumida', asignado: 'j.herrera@correo.com', creada: '02 sep 2026' }
+  ];
+
+  state = {
+    pantalla: 'home', rol: 'visitante',
+    homeModo: 'mi', demoOpcion: 1, salaN: 0, salaVisible: false,
+    filtro: 'Todos', filtroEstado: 'Todos', filtroLic: 'Todos',
+    qty: {}, carrito: {}, stock: {},
+    checkout: false, metodo: 'tarjeta',
+    asignar: false, email: '', testAsignar: 'lid', modo: 'email',
+    invitacion: false, codigoGen: '9B2X-88K1',
+    qIndex: 0, respuestas: {}, seg: 1421,
+    envio: { candidato: true, rh: true },
+    dimSel: 1,
+    builderTab: 1, bNombre: 'Liderazgo Situacional 360', bCategoria: 'Liderazgo', bPrecio: '24', bReactivos: '68',
+    dimsBuilder: ['Dirección de equipos', 'Comunicación', 'Toma de decisiones', 'Adaptabilidad', 'Empatía', 'Orientación a resultados'],
+    reactivos: null, reactivoSel: 0,
+    rangos: null, rangoSel: 0, sim: 76,
+    accesoPaso: 2, codigoInput: '', codigoOk: '9B2X-88K1', nombreCand: '', emailCand: '', consent: true,
+    toast: '', extra: [], extraLic: []
+  };
+
+  componentDidMount() { this.sincronizarReloj(); }
+  componentDidUpdate() { this.sincronizarReloj(); }
+
+  sincronizarReloj() {
+    const activo = this.state.pantalla === 'examen';
+    if (activo && !this.timer) {
+      this.timer = setInterval(() => {
+        if (this.state.pantalla !== 'examen') return;
+        this.setState(s => ({ seg: Math.max(0, s.seg - 1) }));
+      }, 1000);
+    } else if (!activo && this.timer) {
+      clearInterval(this.timer);
+      this.timer = null;
+    }
+  }
+
+  lic(n) { return n + (n === 1 ? ' licencia' : ' licencias'); }
+
+  aviso(t) {
+    this.setState({ toast: t });
+    clearTimeout(this.tt);
+    this.tt = setTimeout(() => this.setState({ toast: '' }), 2600);
+  }
+  copiar(txt, msg) {
+    try { navigator.clipboard.writeText(txt); } catch (e) {}
+    this.aviso(msg);
+  }
+  nuevoCodigo() {
+    const a = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+    let s = '';
+    for (let i = 0; i < 8; i++) s += a[Math.floor(Math.random() * a.length)];
+    return s.slice(0, 4) + '-' + s.slice(4);
+  }
+
+  tasa() { return { USD: 1, MXN: 18, EUR: 0.92 }[this.props.moneda || 'USD']; }
+  simbolo() { return { USD: '$', MXN: 'MX$', EUR: '€' }[this.props.moneda || 'USD']; }
+  fmt(usd) { return this.simbolo() + Math.round(usd * this.tasa()).toLocaleString('es-MX'); }
+  stockDe(id) {
+    const s = this.state.stock[id];
+    return s === undefined ? this.tests.find(t => t.id === id).stock : s;
+  }
+  qtyDe(id) { return this.state.qty[id] === undefined ? 1 : this.state.qty[id]; }
+  reactivosList() { return this.state.reactivos || this.reactivosDef; }
+  rangosList() { return this.state.rangos || this.rangosDef; }
+
+  salaMsgs = [
+    'Hola, soy la salamandra de Strata. Bienvenido.',
+    'Tu test dura 15 minutos. Sin contraseñas ni registro.',
+    'Nosotras regeneramos lo que perdemos. Las personas también evolucionamos.',
+    'Tu informe llega en PDF a tu correo, con diagnóstico por dimensión.',
+    'Si vienes de una empresa, activa el modo B2B arriba.',
+    'Ninguna respuesta es incorrecta: responde lo que te describa.'
+  ];
+
+  componentWillUnmount() {
+    clearInterval(this.timer); clearTimeout(this.tt);
+    clearTimeout(this.salaTimer); this.pararMascota();
+  }
+
+  /* ── mascota: nado GSAP + reacción a clics ── */
+  GIRO = 90;
+  clavesMascota = ['comprar', 'tengo un código', 'para mí', 'para mi empresa', 'registrarse', 'previsualizar', 'ver catálogo', 'iniciar evaluación'];
+  clavesExactas = ['tests', 'para empresas', 'cómo funciona', 'precios'];
+
+  refMascota = (el) => {
+    if (el === this.mImg) return;
+    if (!el) { this.pausarMascota(); return; }
+    if (this.mImg) this.pararMascota();
+    this.mImg = el;
+    this.esperarGsap();
+  };
+  refBurbuja = (el) => { this.mBurbuja = el; if (el) this.colocarBurbuja(); };
+
+  pausarMascota() {
+    this.mImg = null;
+    clearTimeout(this.mEntrada); clearTimeout(this.mVolver);
+    window.removeEventListener('click', this.clicGlobal, true);
+    window.removeEventListener('resize', this.recalcularRuta);
+    if (window.gsap) {
+      window.gsap.ticker.remove(this.tick);
+      if (this.mNado) this.mNado.kill();
+      if (this.mFlex) this.mFlex.kill();
+    }
+    this.mNado = this.mFlex = null;
+    this.mOn = false;
+  }
+
+  esperarGsap() {
+    if (window.gsap && window.MotionPathPlugin) return this.iniciarMascota();
+    clearTimeout(this.mGsap);
+    this.mGsap = setTimeout(() => this.esperarGsap(), 120);
+  }
+
+  iniciarMascota() {
+    if (this.mOn || !this.mImg) return;
+    this.mOn = true;
+    this.mEnt = true;
+    const g = window.gsap;
+    g.registerPlugin(window.MotionPathPlugin);
+    g.set(this.mImg, { xPercent: -50, yPercent: -50, x: window.innerWidth + 160, y: window.innerHeight * 0.4, rotation: this.GIRO, opacity: 0, transformOrigin: '50% 50%' });
+
+    this.mT0 = performance.now();
+    this.mEntrado = false;
+    this.mEntrada = setTimeout(() => { if (!this.mEntrado && this.mImg) this.entrarEnEscena(); }, 6000);
+
+    window.addEventListener('click', this.clicGlobal, true);
+    window.addEventListener('resize', this.recalcularRuta);
+    g.ticker.remove(this.tick);
+    g.ticker.add(this.tick);
+  }
+
+  pararMascota() {
+    this.mOn = false;
+    clearTimeout(this.mEntrada); clearTimeout(this.mGsap); clearTimeout(this.mVolver);
+    window.removeEventListener('click', this.clicGlobal, true);
+    window.removeEventListener('resize', this.recalcularRuta);
+    if (window.gsap) {
+      window.gsap.ticker.remove(this.tick);
+      if (this.mNado) this.mNado.kill();
+      if (this.mFlex) this.mFlex.kill();
+    }
+    this.mNado = this.mFlex = null;
+  }
+
+  rutaMascota() {
+    const W = window.innerWidth, H = window.innerHeight;
+    const bx = Math.min(74, W * 0.07), by = 86;
+    return [
+      { x: W - bx, y: H * .28 }, { x: W - bx * .7, y: H * .62 }, { x: W * .80, y: H - by },
+      { x: W * .48, y: H - by * .7 }, { x: W * .16, y: H - by }, { x: bx * .7, y: H * .62 },
+      { x: bx, y: H * .26 }, { x: W * .22, y: by }, { x: W * .58, y: by * .8 }, { x: W - bx, y: H * .28 }
+    ];
+  }
+
+  nadarLibre() {
+    if (!this.mImg || !window.gsap) return;
+    if (this.mNado) this.mNado.kill();
+    this.mNado = window.gsap.to(this.mImg, {
+      duration: 42, repeat: -1, ease: 'none',
+      motionPath: { path: this.rutaMascota(), curviness: 1.35, autoRotate: this.GIRO },
+      onUpdate: this.latido
+    });
+  }
+
+  recalcularRuta = () => { if (this.mNado && this.mNado.isActive()) this.nadarLibre(); };
+
+  entrarEnEscena() {
+    const g = window.gsap, r = this.rutaMascota();
+    this.mEntrado = true;
+    clearTimeout(this.mEntrada);
+    g.ticker.wake();
+    g.to(this.mImg, { opacity: .8, duration: 1.4, ease: 'power2.out', onComplete: () => { this.mEnt = false; this.mOpac = .8; } });
+    g.to(this.mImg, { x: r[0].x, y: r[0].y, duration: 2.1, ease: 'power2.inOut', onUpdate: this.latido, onComplete: () => this.nadarLibre() });
+    this.mFlex = g.to(this.mImg, { scaleY: 1.04, scaleX: .97, duration: .4, yoyo: true, repeat: -1, ease: 'sine.inOut' });
+  }
+
+  colocarBurbuja = () => {
+    const b = this.mBurbuja, el = this.mImg;
+    if (!b || !el) return;
+    const r = el.getBoundingClientRect();
+    const izq = r.left + r.width / 2 < window.innerWidth * .5;
+    b.style.left = izq ? Math.round(r.right - 6) + 'px' : Math.round(Math.max(12, r.left - 226)) + 'px';
+    b.style.top = Math.round(Math.max(12, r.top - 52)) + 'px';
+  };
+
+  vigilarTitular() {
+    const el = this.mImg;
+    if (!el || !window.gsap) return;
+    const t = performance.now();
+    if (t - (this.mChk || 0) > 500) {
+      this.mChk = t;
+      const h = document.querySelector('#strata-mascot ~ div h1');
+      this.mTxt = h ? h.getBoundingClientRect() : null;
+    }
+    const q = this.mTxt, r = el.getBoundingClientRect();
+    const cx = r.left + r.width / 2, cy = r.top + r.height / 2;
+    const choca = q && cx > q.left - 70 && cx < q.right + 70 && cy > q.top - 50 && cy < q.bottom + 50;
+    const meta = choca ? .26 : .8;
+    if (!this.mEnt && this.mOpac !== meta) { this.mOpac = meta; window.gsap.to(el, { opacity: meta, duration: .7, overwrite: 'auto' }); }
+  }
+
+  latido = () => { this.colocarBurbuja(); this.vigilarTitular(); };
+
+  tick = () => {
+    if (!this.mImg || !window.gsap) return;
+    if (!this.mEntrado) {
+      if (performance.now() - this.mT0 > 6000) this.entrarEnEscena();
+      return;
+    }
+    this.latido();
+  };
+
+  clicGlobal = (ev) => {
+    if (!this.mImg || !this.mNado) return;
+    let el = ev.target;
+    for (let i = 0; i < 4 && el && el.getBoundingClientRect; i++) {
+      const txt = (el.textContent || '').trim().toLowerCase();
+      if (txt && txt.length < 64 && (this.clavesExactas.indexOf(txt) > -1 || this.clavesMascota.some(k => txt.indexOf(k) > -1))) {
+        this.correrHacia(el.getBoundingClientRect());
+        return;
+      }
+      el = el.parentElement;
+    }
+  };
+
+  correrHacia(r) {
+    const g = window.gsap, el = this.mImg;
+    if (!g || !el) return;
+    clearTimeout(this.mVolver);
+    if (this.mNado) this.mNado.pause();
+    const destX = Math.max(70, Math.min(window.innerWidth - 70, r.left + r.width / 2 + 66));
+    const destY = Math.max(70, Math.min(window.innerHeight - 70, r.top + r.height / 2 + 10));
+    const ahora = el.getBoundingClientRect();
+    const ang = Math.atan2(destY - (ahora.top + ahora.height / 2), destX - (ahora.left + ahora.width / 2)) * 180 / Math.PI;
+
+    g.timeline()
+      .to(el, { rotation: ang + this.GIRO, duration: .32, ease: 'power2.out' })
+      .to(el, { x: destX, y: destY, duration: 1.2, ease: 'power3.inOut', onUpdate: this.latido }, '-=.1')
+      .to(el, { rotation: '+=360', scale: 1.12, duration: .8, ease: 'power1.inOut' })
+      .to(el, { scale: 1, duration: .3 }, '-=.3')
+      .add(() => { this.mVolver = setTimeout(() => this.nadarLibre(), 400); });
+  }
+
+  brincarMascota() {
+    if (!window.gsap || !this.mImg) return;
+    this.colocarBurbuja();
+    window.gsap.timeline()
+      .to(this.mImg, { scale: 1.22, y: '-=26', duration: .26, ease: 'back.out(2.4)', onUpdate: this.latido })
+      .to(this.mImg, { scale: 1, y: '+=26', duration: .42, ease: 'bounce.out', onUpdate: this.latido });
+  }
+
+  chip(activo) {
+    return activo
+      ? { fondo: '#FFFFFF', texto: '#0F172A', peso: '600', sombra: '0 1px 2px rgba(15,23,42,.07)' }
+      : { fondo: 'transparent', texto: '#6B6558', peso: '500', sombra: 'none' };
+  }
+  chipSky(activo) {
+    return activo ? { fondo: '#0EA5E9', borde: '#0EA5E9', texto: '#ffffff' } : { fondo: '#FAF8F5', borde: '#E7E2D8', texto: '#5B5545' };
+  }
+  radio(activo) {
+    return activo
+      ? { borde: '#0EA5E9', fondo: '#EFF9FE', radioBorde: '#0EA5E9', radioPunto: '#0EA5E9', peso: '600' }
+      : { borde: '#E7E2D8', fondo: '#ffffff', radioBorde: '#D6CFC2', radioPunto: 'transparent', peso: '500' };
+  }
+  nav(activo) {
+    return activo
+      ? { c: '#0F172A', b: '#FF6B6B', w: '600' }
+      : { c: '#6B6558', b: 'transparent', w: '500' };
+  }
+
+  renderVals() {
+    const st = this.state;
+    const p = st.pantalla;
+    const empresa = this.props.nombreEmpresa || 'Acme Talento';
+    const compacta = (this.props.densidadTabla || 'Cómoda') === 'Compacta';
+    const saldoTotal = this.tests.reduce((a, t) => a + this.stockDe(t.id), 0);
+
+    const rolesDef = [
+      { id: 'admin', label: 'Super admin', pantalla: 'builder' },
+      { id: 'empresa', label: 'Empresa / RH', pantalla: 'catalogo' },
+      { id: 'candidato', label: 'Candidato', pantalla: 'acceso' },
+      { id: 'visitante', label: 'Inicio', pantalla: 'home' }
+    ];
+    const roles = rolesDef.map(r => ({
+      label: r.label,
+      fondo: st.rol === r.id ? '#38BDF8' : 'rgba(255,255,255,.08)',
+      texto: st.rol === r.id ? '#0F172A' : '#B6C4DC',
+      onClick: () => this.setState({ rol: r.id, pantalla: r.pantalla, accesoPaso: 2, codigoOk: '9B2X-88K1', qIndex: 0 })
+    }));
+
+    // ── catálogo
+    const cats = ['Todos', 'Liderazgo', 'Personalidad', 'Cognitivos', 'Conductuales'];
+    const filtros = cats.map(c => Object.assign({ label: c, onClick: () => this.setState({ filtro: c }) }, this.chip(st.filtro === c)));
+    const testsVisibles = this.tests
+      .filter(t => st.filtro === 'Todos' || t.categoria === st.filtro)
+      .map((t, i) => Object.assign({}, t, {
+        anim: (i * 55) + 'ms',
+        stock: this.stockDe(t.id), qty: this.qtyDe(t.id), precio: this.fmt(t.precio),
+        menos: () => this.setState(s => ({ qty: Object.assign({}, s.qty, { [t.id]: Math.max(1, this.qtyDe(t.id) - 1) }) })),
+        mas: () => this.setState(s => ({ qty: Object.assign({}, s.qty, { [t.id]: this.qtyDe(t.id) + 1 }) })),
+        anadir: () => {
+          const n = this.qtyDe(t.id);
+          this.setState(s => ({ carrito: Object.assign({}, s.carrito, { [t.id]: (s.carrito[t.id] || 0) + n }), checkout: true }));
+          this.aviso(this.lic(n) + ' de ' + t.nombre + ' en el carrito');
+        }
+      }));
+
+    const carrito = Object.keys(st.carrito).filter(k => st.carrito[k] > 0).map(k => {
+      const t = this.tests.find(x => x.id === k);
+      return {
+        nombre: t.nombre, codigo: t.codigo, qty: st.carrito[k], precio: this.fmt(t.precio), subtotal: this.fmt(t.precio * st.carrito[k]),
+        quitar: () => this.setState(s => { const c = Object.assign({}, s.carrito); delete c[k]; return { carrito: c }; })
+      };
+    });
+    const carritoCount = Object.keys(st.carrito).reduce((a, k) => a + st.carrito[k], 0);
+    const subUsd = Object.keys(st.carrito).reduce((a, k) => a + this.tests.find(x => x.id === k).precio * st.carrito[k], 0);
+
+    const metodosDef = [
+      { id: 'tarjeta', nombre: 'Tarjeta de crédito', detalle: 'Visa · Mastercard · Amex', tag: '•••• 4242' },
+      { id: 'stripe', nombre: 'Stripe', detalle: 'Cargo recurrente a la cuenta corporativa', tag: 'STRIPE' },
+      { id: 'paypal', nombre: 'PayPal', detalle: 'facturacion@acme.com', tag: 'PAYPAL' }
+    ];
+    const metodos = metodosDef.map(m => Object.assign({}, m, this.radio(st.metodo === m.id), { onClick: () => this.setState({ metodo: m.id }) }));
+
+    // ── inventario
+    const estadoLic = {
+      'Disponible': { estadoFondo: '#E8ECF7', estadoTexto: '#1E3A8A', estadoPunto: '#1E3A8A' },
+      'Enviada': { estadoFondo: '#E6F6FE', estadoTexto: '#075985', estadoPunto: '#0EA5E9' },
+      'En uso': { estadoFondo: '#EFF9FE', estadoTexto: '#0369A1', estadoPunto: '#38BDF8' },
+      'Consumida': { estadoFondo: '#F0EDE5', estadoTexto: '#6B6558', estadoPunto: '#A8A296' }
+    };
+    const todasLic = st.extraLic.concat(this.licenciasDef);
+    const estadosLic = ['Todos', 'Disponible', 'Enviada', 'Consumida'];
+    const filtrosLic = estadosLic.map(e => Object.assign({ label: e, onClick: () => this.setState({ filtroLic: e }) }, this.chip(st.filtroLic === e)));
+    const licenciasVisibles = todasLic
+      .filter(l => st.filtroLic === 'Todos' || l.estado === st.filtroLic)
+      .map((l, i) => Object.assign({}, l, estadoLic[l.estado], {
+        anim: (i * 28) + 'ms',
+        link: 'strata.app/test/' + l.codigo,
+        copiarCodigo: () => this.copiar(l.codigo, 'Código ' + l.codigo + ' copiado'),
+        copiarLink: () => this.copiar('https://strata.app/test/' + l.codigo, 'Enlace mágico copiado'),
+        accion: l.estado === 'Consumida' ? 'Ver reporte' : l.estado === 'Disponible' ? 'Enviar' : 'Reenviar',
+        accionFn: l.estado === 'Consumida'
+          ? () => this.setState({ pantalla: 'resultados' })
+          : () => this.setState({ invitacion: true, codigoGen: l.codigo })
+      }));
+    const cuenta = e => todasLic.filter(l => l.estado === e).length;
+    const resumenLic = [
+      { label: 'Disponibles', detalle: 'listas para enviar', n: cuenta('Disponible'), fondo: '#E8ECF7', color: '#1E3A8A' },
+      { label: 'Enviadas', detalle: 'esperando al candidato', n: cuenta('Enviada'), fondo: '#E6F6FE', color: '#075985' },
+      { label: 'En uso', detalle: 'examen en curso', n: cuenta('En uso'), fondo: '#EFF9FE', color: '#0369A1' },
+      { label: 'Consumidas', detalle: 'reporte generado', n: cuenta('Consumida'), fondo: '#F0EDE5', color: '#6B6558' }
+    ];
+
+    // ── panel
+    const saldos = this.tests.slice(0, 4).map(t => {
+      const libres = this.stockDe(t.id);
+      const total = t.stock + 18;
+      return { nombre: t.nombre, codigo: t.codigo, libres, total, usadas: Math.max(0, total - libres), pct: Math.round((libres / total) * 100) + '%' };
+    });
+    const estadoCand = {
+      'Completado': { estadoFondo: '#E8ECF7', estadoTexto: '#1E3A8A', estadoPunto: '#1E3A8A' },
+      'En proceso': { estadoFondo: '#E6F6FE', estadoTexto: '#075985', estadoPunto: '#0EA5E9' },
+      'Código enviado': { estadoFondo: '#F0EDE5', estadoTexto: '#6B6558', estadoPunto: '#A8A296' }
+    };
+    const estados = ['Todos', 'Código enviado', 'En proceso', 'Completado'];
+    const filtrosEstado = estados.map(e => Object.assign({ label: e, onClick: () => this.setState({ filtroEstado: e }) }, this.chip(st.filtroEstado === e)));
+    const todos = st.extra.concat(this.candidatosDef);
+    const candidatosVisibles = todos
+      .filter(c => st.filtroEstado === 'Todos' || c.estado === st.filtroEstado)
+      .map((c, i) => Object.assign({}, c, estadoCand[c.estado], {
+        anim: (i * 28) + 'ms',
+        iniciales: c.nombre.split(' ').map(w => w[0]).slice(0, 2).join(''),
+        accion: c.estado === 'Completado' ? 'Ver diagnóstico' : c.estado === 'En proceso' ? 'Ver avance' : 'Reenviar código',
+        accionBorde: c.estado === 'Completado' ? '#0EA5E9' : '#D6CFC2',
+        accionFondo: c.estado === 'Completado' ? '#EFF9FE' : '#ffffff',
+        accionColor: c.estado === 'Completado' ? '#0369A1' : '#1E3A8A',
+        accionFn: c.estado === 'Completado'
+          ? () => this.setState({ pantalla: 'resultados' })
+          : c.estado === 'En proceso'
+            ? () => this.setState({ pantalla: 'examen', rol: 'candidato' })
+            : () => this.copiar('https://strata.app/test/' + c.licencia, 'Código reenviado a ' + c.email)
+      }));
+
+    // ── builder
+    const pasosDef = [
+      { n: 1, label: 'Datos generales' },
+      { n: 2, label: 'Diseñador de reactivos' },
+      { n: 3, label: 'Algoritmo de diagnóstico' }
+    ];
+    const pasosBuilder = pasosDef.map(x => {
+      const on = st.builderTab === x.n;
+      return {
+        n: x.n, label: x.label, onClick: () => this.setState({ builderTab: x.n }),
+        fondo: on ? '#ffffff' : 'transparent', borde: on ? '#0EA5E9' : '#E7E2D8',
+        texto: on ? '#0F172A' : '#6B6558',
+        numFondo: on ? '#0EA5E9' : '#E7E2D8', numTexto: on ? '#ffffff' : '#5B5545'
+      };
+    });
+    const categoriasBuilder = ['Liderazgo', 'Personalidad', 'Cognitivos', 'Conductuales'].map(c =>
+      Object.assign({ label: c, onClick: () => this.setState({ bCategoria: c }) }, this.chipSky(st.bCategoria === c)));
+    const dimsBuilder = st.dimsBuilder.map((d, i) => ({
+      nombre: d,
+      quitar: () => this.setState(s => ({ dimsBuilder: s.dimsBuilder.filter((x, j) => j !== i) }))
+    }));
+
+    const reactivosArr = this.reactivosList();
+    const iSel = Math.min(st.reactivoSel, reactivosArr.length - 1);
+    const rSel = reactivosArr[iSel] || reactivosArr[0];
+    const reactivos = reactivosArr.map((r, i) => Object.assign({}, r, {
+      n: i + 1, onClick: () => this.setState({ reactivoSel: i }),
+      fondo: i === iSel ? '#F5FCFF' : '#ffffff',
+      marca: i === iSel ? '#0EA5E9' : 'transparent',
+      numFondo: i === iSel ? '#0EA5E9' : '#F0EDE5',
+      numTexto: i === iSel ? '#ffffff' : '#6B6558'
+    }));
+    const mutarReactivo = campo => valor => this.setState(s => {
+      const arr = (s.reactivos || this.reactivosDef).slice();
+      arr[iSel] = Object.assign({}, arr[iSel], { [campo]: valor });
+      return { reactivos: arr };
+    });
+    const tiposRespuesta = this.tiposDef.map(t => Object.assign({ label: t, onClick: () => mutarReactivo('tipo')(t) }, this.radio(rSel.tipo === t)));
+    const dimsSelector = st.dimsBuilder.map(d => Object.assign({ nombre: d, onClick: () => mutarReactivo('dimension')(d) }, this.chipSky(rSel.dimension === d)));
+    const vistaOpciones = rSel.tipo === 'Elección forzada'
+      ? [{ label: 'Decido de inmediato con lo que tengo', valor: 'A' }, { label: 'Espero a tener el panorama completo', valor: 'B' }]
+      : rSel.tipo === 'Opción múltiple'
+        ? [{ label: 'Reviso el plan con el equipo', valor: 'A' }, { label: 'Ajusto yo las prioridades', valor: 'B' }, { label: 'Escalo con mi jefatura', valor: 'C' }, { label: 'Espero el siguiente reporte', valor: 'D' }]
+        : this.likert.map((l, i) => ({ label: l, valor: i + 1 }));
+
+    const rangosArr = this.rangosList();
+    const gSel = Math.min(st.rangoSel, rangosArr.length - 1);
+    const gr = rangosArr[gSel];
+    const rangos = rangosArr.map((r, i) => Object.assign({}, r, {
+      rango: r.min + '–' + r.max, onClick: () => this.setState({ rangoSel: i }),
+      colorTexto: r.color === '#0EA5E9' ? '#075985' : r.color === '#38BDF8' ? '#0C4A6E' : r.color === '#A8A296' ? '#5B5545' : r.color,
+      fondo: i === gSel ? '#F5FCFF' : '#ffffff'
+    }));
+    const mutarRango = campo => valor => this.setState(s => {
+      const arr = (s.rangos || this.rangosDef).slice();
+      arr[gSel] = Object.assign({}, arr[gSel], { [campo]: valor });
+      return { rangos: arr };
+    });
+    const simMatch = rangosArr.find(r => st.sim >= r.min && st.sim <= r.max) || rangosArr[rangosArr.length - 1];
+
+    // ── examen
+    const q = this.preguntas[st.qIndex];
+    const opciones = this.likert.map((l, i) => Object.assign({ label: l, valor: i + 1, onClick: () => this.setState(s => ({ respuestas: Object.assign({}, s.respuestas, { [st.qIndex]: i }) })) }, this.radio(st.respuestas[st.qIndex] === i)));
+    const ultima = st.qIndex === this.preguntas.length - 1;
+    const mm = Math.floor(st.seg / 60), ss = st.seg % 60;
+
+    // ── diagnóstico
+    const dimensiones = this.dims.map((d, i) => Object.assign({}, d, {
+      pct: d.puntaje + '%',
+      color: d.puntaje >= 80 ? '#1E3A8A' : d.puntaje >= 70 ? '#0EA5E9' : '#38BDF8',
+      colorTexto: d.puntaje >= 80 ? '#1E3A8A' : d.puntaje >= 70 ? '#075985' : '#0C4A6E',
+      fondoSel: i === st.dimSel ? '#F5FCFF' : 'transparent',
+      onClick: () => this.setState({ dimSel: i })
+    }));
+    const dSel = this.dims[st.dimSel];
+
+    const enviosDef = [
+      { key: 'candidato', rol: 'Correo del candidato', email: 'v.rios@correo.com' },
+      { key: 'rh', rol: 'Correo de la empresa / RR. HH.', email: 'seleccion@acmetalento.com' }
+    ];
+    const envios = enviosDef.map(e => {
+      const on = st.envio[e.key];
+      return Object.assign({}, e, {
+        borde: on ? '#BAE6FD' : '#E7E2D8', fondo: on ? '#F5FCFF' : '#FAF8F5',
+        pista: on ? '#0EA5E9' : '#D6CFC2', justificar: on ? 'flex-end' : 'flex-start',
+        onClick: () => this.setState(s => ({ envio: Object.assign({}, s.envio, { [e.key]: !s.envio[e.key] }) }))
+      });
+    });
+    const activos = enviosDef.filter(e => st.envio[e.key]).length;
+
+    // ── asignación / invitación
+    const testsAsignables = this.tests.filter(t => this.stockDe(t.id) > 0).slice(0, 4).map(t =>
+      Object.assign({ nombre: t.nombre, stock: this.stockDe(t.id), onClick: () => this.setState({ testAsignar: t.id }) }, this.radio(st.testAsignar === t.id)));
+    const modosDef = [
+      { id: 'email', titulo: 'Invitación por email', detalle: 'Strata envía el enlace y recuerda a los 3 días.' },
+      { id: 'link', titulo: 'Link de licencia', detalle: 'Copias un enlace de un solo uso y lo compartes tú.' }
+    ];
+    const modosEnvio = modosDef.map(m => Object.assign({}, m, st.modo === m.id ? { borde: '#0EA5E9', fondo: '#EFF9FE' } : { borde: '#E7E2D8', fondo: '#FAF8F5' }, { onClick: () => this.setState({ modo: m.id }) }));
+    const linkGen = 'strata.app/test/' + st.codigoGen;
+    const canales = [
+      { sigla: '@', label: 'Correo', onClick: () => this.aviso('Borrador de correo abierto con el enlace') },
+      { sigla: 'WA', label: 'WhatsApp', onClick: () => this.aviso('Mensaje de WhatsApp preparado') },
+      { sigla: '⧉', label: 'Copiar link', onClick: () => this.copiar('https://' + linkGen, 'Enlace mágico copiado') }
+    ];
+
+    const avisosAcceso = [
+      { n: '01', titulo: 'Toma unos 35 minutos', detalle: 'Puedes pausar: tus respuestas se guardan solas.' },
+      { n: '02', titulo: 'Sin respuestas correctas', detalle: 'Responde lo que mejor te describa en el trabajo.' },
+      { n: '03', titulo: 'Un solo intento', detalle: 'El código se invalida cuando terminas el examen.' },
+      { n: '04', titulo: 'Recibes tu copia', detalle: 'Te enviamos el reporte al correo que registres.' }
+    ];
+
+    const nomOk = st.nombreCand.trim().length > 2;
+    const mailOk = /^[^@\s]+@[^@\s]+\.[a-z]{2,}$/i.test(st.emailCand.trim());
+    const listos = (nomOk ? 1 : 0) + (mailOk ? 1 : 0);
+
+    return {
+      empresa, saldoTotal, roles,
+      sinOverlay: !(st.checkout || st.invitacion || st.asignar) && p !== 'acceso' && p !== 'home',
+      rolEtiqueta: st.rol === 'admin' ? 'Super admin' : 'Portal RH',
+      esAdmin: st.rol === 'admin', esEmpresa: st.rol === 'empresa',
+      conShell: p === 'catalogo' || p === 'panel' || p === 'inventario' || p === 'resultados' || p === 'builder',
+      conTopbar: p === 'catalogo' || p === 'panel' || p === 'inventario' || p === 'resultados',
+      esCatalogo: p === 'catalogo', esPanel: p === 'panel', esInventario: p === 'inventario',
+      esExamen: p === 'examen', esResultados: p === 'resultados', esBuilder: p === 'builder',
+      esAcceso: p === 'acceso', esFin: p === 'fin', esHome: p === 'home',
+      irHome: () => this.setState({ pantalla: 'home', rol: 'visitante' }),
+      irAcceso: () => this.setState({ pantalla: 'acceso', rol: 'candidato', accesoPaso: 2, codigoOk: '9B2X-88K1' }),
+      toggleX: st.homeModo === 'mi' ? '0%' : '100%',
+      mascotRef: this.refMascota, mascotBurbuja: this.refBurbuja,
+      salaHablando: st.salaVisible,
+      salaMensaje: this.salaMsgs[(st.salaN - 1 + this.salaMsgs.length) % this.salaMsgs.length],
+      salaTocar: () => {
+        clearTimeout(this.salaTimer);
+        this.brincarMascota();
+        this.setState(s => ({ salaN: s.salaN + 1, salaVisible: true }));
+        this.salaTimer = setTimeout(() => this.setState({ salaVisible: false }), 5400);
+      },
+      modoMi: () => this.setState({ homeModo: 'mi' }),
+      modoEmpresa: () => this.setState({ homeModo: 'empresa' }),
+      modoMiColor: st.homeModo === 'mi' ? '#0F172A' : '#6B6558',
+      modoEmpColor: st.homeModo === 'empresa' ? '#0F172A' : '#6B6558',
+      modoMiPeso: st.homeModo === 'mi' ? '600' : '500',
+      modoEmpPeso: st.homeModo === 'empresa' ? '600' : '500',
+      heroTexto: st.homeModo === 'mi'
+        ? 'Realiza un test vocacional o de personalidad en 15 minutos. Sin contraseñas, directo a tu email.'
+        : 'Compra licencias por volumen, envía enlaces únicos a tus candidatos y compara diagnósticos desde un solo panel.',
+      heroCta: st.homeModo === 'mi' ? 'Comprar Test Individual — $15 USD' : 'Comprar licencias — desde $24 USD',
+      heroCtaAccion: () => this.setState({ pantalla: 'catalogo', rol: 'empresa' }),
+      heroSec: st.homeModo === 'mi' ? 'Ya tengo un código' : 'Entrar al portal de RR. HH.',
+      heroSecAccion: st.homeModo === 'mi'
+        ? () => this.setState({ pantalla: 'acceso', rol: 'candidato', accesoPaso: 2, codigoOk: '9B2X-88K1' })
+        : () => this.setState({ pantalla: 'panel', rol: 'empresa' }),
+      demoOpciones: [
+        'Escucho a las partes y busco el punto medio',
+        'Decido rápido con la información que tengo',
+        'Convoco al equipo y construimos la salida juntos'
+      ].map((label, i) => {
+        const on = st.demoOpcion === i;
+        return {
+          label, peso: on ? '600' : '500',
+          borde: on ? '#38BDF8' : '#EDE9E0', fondo: on ? '#F2FAFE' : '#FCFBF9',
+          aroBorde: on ? '#0EA5E9' : '#D6CFC2', aroFondo: on ? '#0EA5E9' : '#ffffff',
+          tick: on ? '#ffffff' : 'transparent',
+          onClick: () => this.setState({ demoOpcion: i })
+        };
+      }),
+      homeTests: [
+        { titulo: 'Test Vocacional & Enfoque de Carrera', tag: 'Ideal para jóvenes y profesionales', tagFondo: '#E6F6FE', tagTexto: '#075985', tagPunto: '#0EA5E9', duracion: '15 min', items: 48, precio: '$15', precioNota: 'pago único' },
+        { titulo: 'Inteligencia Emocional & Stress Management', tag: 'Autoconocimiento', tagFondo: '#FFF1F1', tagTexto: '#B93A34', tagPunto: '#FF6B6B', duracion: '20 min', items: 56, precio: '$18', precioNota: 'pago único' },
+        { titulo: 'Perfil de Liderazgo Situacional', tag: 'Empresas & Equipos', tagFondo: '#E8ECF7', tagTexto: '#1E3A8A', tagPunto: '#1E3A8A', duracion: '35 min', items: 68, precio: '$24', precioNota: '/licencia' }
+      ].map(t => Object.assign({}, t, {
+        previsualizar: () => this.aviso('Vista previa de ' + t.titulo + ' (3 reactivos de muestra)'),
+        comprar: () => { this.setState({ pantalla: 'catalogo', rol: 'empresa' }); this.aviso(t.titulo + ' añadido — completa el pago en el carrito'); }
+      })),
+      irCatalogo: () => this.setState({ pantalla: 'catalogo', rol: 'empresa' }),
+      irPanel: () => this.setState({ pantalla: 'panel', rol: 'empresa' }),
+      irInventario: () => this.setState({ pantalla: 'inventario', rol: 'empresa' }),
+      irExamen: () => this.setState({ pantalla: 'examen', rol: 'candidato' }),
+      irResultados: () => this.setState({ pantalla: 'resultados', rol: 'empresa' }),
+      irBuilderDatos: () => this.setState({ pantalla: 'builder', rol: 'admin', builderTab: 1 }),
+      irBuilderReactivos: () => this.setState({ pantalla: 'builder', rol: 'admin', builderTab: 2 }),
+      irBuilderAlgoritmo: () => this.setState({ pantalla: 'builder', rol: 'admin', builderTab: 3 }),
+      navCatalogo: this.nav(p === 'catalogo'), navPanel: this.nav(p === 'panel'),
+      navBuilderDatos: this.nav(p === 'builder' && st.builderTab === 1),
+      navBuilderReactivos: this.nav(p === 'builder' && st.builderTab === 2),
+      navBuilderAlgoritmo: this.nav(p === 'builder' && st.builderTab === 3),
+      navInventario: this.nav(p === 'inventario'), navResultados: this.nav(p === 'resultados'),
+      fueraAlcance: () => this.aviso('Módulo fuera del alcance de este prototipo'),
+
+      filtros, testsVisibles,
+      carrito, carritoCount, carritoTexto: this.lic(carritoCount), carritoVacio: carrito.length === 0,
+      subtotal: this.fmt(subUsd), impuestos: this.fmt(subUsd * 0.16), total: this.fmt(subUsd * 1.16),
+      metodos, checkoutAbierto: st.checkout,
+      abrirCheckout: () => this.setState({ checkout: true }),
+      cerrarCheckout: () => this.setState({ checkout: false }),
+      confirmarCompra: () => {
+        if (carritoCount === 0) { this.aviso('Añade licencias antes de comprar'); return; }
+        const nuevo = Object.assign({}, st.stock);
+        const nuevasLic = [];
+        Object.keys(st.carrito).forEach(k => {
+          nuevo[k] = this.stockDe(k) + st.carrito[k];
+          const t = this.tests.find(x => x.id === k);
+          for (let i = 0; i < Math.min(st.carrito[k], 4); i++) nuevasLic.push({ codigo: this.nuevoCodigo(), test: t.nombre, estado: 'Disponible', asignado: '—', creada: '09 sep 2026' });
+        });
+        this.setState({ stock: nuevo, carrito: {}, checkout: false, pantalla: 'inventario', extraLic: nuevasLic.concat(st.extraLic) });
+        this.aviso(this.lic(carritoCount) + ' acreditadas · códigos generados');
+      },
+
+      resumenLic, filtrosLic, licenciasVisibles,
+      saldos, filtrosEstado, candidatosVisibles, candidatosCount: candidatosVisibles.length, candidatosTotal: todos.length,
+      padFila: compacta ? '9px' : '14px',
+
+      asignarAbierto: st.asignar,
+      abrirAsignar: () => this.setState({ asignar: true }),
+      cerrarAsignar: () => this.setState({ asignar: false }),
+      formEmail: st.email, setEmail: e => this.setState({ email: e.target.value }),
+      testsAsignables, modosEnvio,
+      confirmarAsignar: () => {
+        const t = this.tests.find(x => x.id === st.testAsignar);
+        const mail = st.email || 'candidato@correo.com';
+        const nombre = mail.split('@')[0].replace(/[._]/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+        const cod = this.nuevoCodigo();
+        this.setState(s => ({
+          extra: [{ nombre, email: mail, test: t.nombre, estado: 'Código enviado', fecha: '09 sep 2026', licencia: cod }].concat(s.extra),
+          extraLic: [{ codigo: cod, test: t.nombre, estado: 'Enviada', asignado: mail, creada: '09 sep 2026' }].concat(s.extraLic),
+          stock: Object.assign({}, s.stock, { [t.id]: Math.max(0, this.stockDe(t.id) - 1) }),
+          asignar: false, email: '', pantalla: 'panel'
+        }));
+        this.aviso(st.modo === 'email' ? 'Invitación enviada a ' + mail : 'Link de licencia copiado al portapapeles');
+      },
+
+      invitacionAbierta: st.invitacion,
+      abrirInvitacion: () => this.setState({ invitacion: true, codigoGen: this.nuevoCodigo() }),
+      cerrarInvitacion: () => this.setState({ invitacion: false }),
+      codigoGenerado: st.codigoGen, linkGenerado: linkGen, canales,
+      copiarLinkGen: () => this.copiar('https://' + linkGen, 'Enlace mágico copiado'),
+      registrarInvitacion: () => {
+        const t = this.tests.find(x => x.id === st.testAsignar);
+        this.setState(s => ({
+          extra: [{ nombre: 'Invitación sin abrir', email: 'pendiente de registro', test: t.nombre, estado: 'Código enviado', fecha: '09 sep 2026', licencia: st.codigoGen }].concat(s.extra),
+          extraLic: [{ codigo: st.codigoGen, test: t.nombre, estado: 'Enviada', asignado: 'enlace compartido', creada: '09 sep 2026' }].concat(s.extraLic),
+          stock: Object.assign({}, s.stock, { [t.id]: Math.max(0, this.stockDe(t.id) - 1) }),
+          invitacion: false, pantalla: 'panel'
+        }));
+        this.aviso('Código ' + st.codigoGen + ' registrado en candidatos');
+      },
+
+      pasosBuilder, builder1: st.builderTab === 1, builder2: st.builderTab === 2, builder3: st.builderTab === 3,
+      bNombre: st.bNombre, setBNombre: e => this.setState({ bNombre: e.target.value }),
+      bCategoria: st.bCategoria, categoriasBuilder,
+      bPrecio: st.bPrecio, setBPrecio: e => this.setState({ bPrecio: e.target.value.replace(/[^0-9]/g, '') }),
+      bPrecioFmt: this.fmt(Number(st.bPrecio) || 0), simboloMoneda: this.simbolo(),
+      bReactivos: st.bReactivos, setBReactivos: e => this.setState({ bReactivos: e.target.value.replace(/[^0-9]/g, '') }),
+      dimsBuilder,
+      anadirDimension: () => this.setState(s => ({ dimsBuilder: s.dimsBuilder.concat('Nueva dimensión ' + (s.dimsBuilder.length + 1)) })),
+      reactivos, nReactivos: reactivosArr.length,
+      rSelN: iSel + 1, rSelTexto: rSel.texto, rSelPeso: rSel.peso.toFixed(1),
+      setRTexto: e => mutarReactivo('texto')(e.target.value),
+      tiposRespuesta, dimsSelector, vistaOpciones,
+      pesoMenos: () => mutarReactivo('peso')(Math.max(0.1, Math.round((rSel.peso - 0.1) * 10) / 10)),
+      pesoMas: () => mutarReactivo('peso')(Math.min(3, Math.round((rSel.peso + 0.1) * 10) / 10)),
+      anadirReactivo: () => this.setState(s => {
+        const arr = (s.reactivos || this.reactivosDef).slice();
+        arr.push({ texto: 'Nuevo reactivo sin redactar.', tipo: 'Escala Likert (1-5)', dimension: s.dimsBuilder[0] || 'General', peso: 1.0 });
+        return { reactivos: arr, reactivoSel: arr.length - 1 };
+      }),
+      rangos, rangoMin: String(gr.min), rangoMax: String(gr.max), rangoEtiqueta: gr.etiqueta, rangoTexto: gr.texto,
+      setRangoMin: e => mutarRango('min')(Number(e.target.value.replace(/[^0-9]/g, '')) || 0),
+      setRangoMax: e => mutarRango('max')(Number(e.target.value.replace(/[^0-9]/g, '')) || 0),
+      setRangoEtiqueta: e => mutarRango('etiqueta')(e.target.value),
+      setRangoTexto: e => mutarRango('texto')(e.target.value),
+      anadirRango: () => this.setState(s => ({ rangos: (s.rangos || this.rangosDef).concat({ min: 0, max: 0, etiqueta: 'Nuevo rango', color: '#A8A296', texto: 'Redacta aquí el texto que el sistema insertará en el reporte.' }) })),
+      variablesHint: '{{nombre}} · {{puntaje}} · {{dimension_alta}}',
+      simValor: st.sim, simPct: st.sim + '%', simEtiqueta: simMatch.etiqueta, simTexto: simMatch.texto, simColor: simMatch.color,
+      simMenos: () => this.setState(s => ({ sim: Math.max(0, s.sim - 4) })),
+      simMas: () => this.setState(s => ({ sim: Math.min(100, s.sim + 4) })),
+      guardarBorrador: () => this.aviso('Borrador guardado · v0.5'),
+      publicarTest: () => this.aviso(st.bNombre + ' publicado en el catálogo'),
+
+      accesoPaso1: st.accesoPaso === 1, accesoPaso2: st.accesoPaso === 2,
+      codigoInput: st.codigoInput, setCodigo: e => this.setState({ codigoInput: e.target.value.toUpperCase() }),
+      codigoValidado: st.codigoOk,
+      validarCodigo: () => {
+        const c = st.codigoInput.trim();
+        if (c.replace(/[^A-Z0-9]/g, '').length < 6) { this.aviso('Revisa el código: son 8 caracteres'); return; }
+        this.setState({ accesoPaso: 2, codigoOk: c });
+        this.aviso('Código válido · licencia de Liderazgo Situacional');
+      },
+      entrarConLink: () => this.setState({ accesoPaso: 2, codigoOk: '9B2X-88K1' }),
+      volverPaso1: () => this.setState({ accesoPaso: 1 }),
+      nombreInput: st.nombreCand, setNombre: e => this.setState({ nombreCand: e.target.value }),
+      emailInput: st.emailCand, setEmailCand: e => this.setState({ emailCand: e.target.value }),
+      nombreOk: nomOk, emailOk: mailOk,
+      nombreBorde: nomOk ? '#A7D8B8' : '#E5E0D8', nombreFondo: nomOk ? '#FAFDFB' : '#FCFBF9',
+      emailBorde: mailOk ? '#A7D8B8' : '#E5E0D8', emailFondo: mailOk ? '#FAFDFB' : '#FCFBF9',
+      pasosTexto: listos === 2 ? 'Todo listo para comenzar' : listos + ' de 2 datos confirmados',
+      pasosColor: listos === 2 ? '#16A34A' : '#6B6558',
+      consentCajaFondo: st.consent ? '#F2FAFE' : '#FAF8F5',
+      consentCajaBorde: st.consent ? '#BAE6FD' : '#EDE9E0',
+      consentBorde: st.consent ? '#0EA5E9' : '#C9C2B4', consentFondo: st.consent ? '#0EA5E9' : '#ffffff',
+      consentTick: st.consent ? '#ffffff' : 'transparent',
+      toggleConsent: () => this.setState(s => ({ consent: !s.consent })),
+      comenzarExamen: () => {
+        if (!st.consent) { this.aviso('Acepta el aviso de privacidad para continuar'); return; }
+        this.setState({ pantalla: 'examen', qIndex: 0, respuestas: {} });
+      },
+      avisosAcceso,
+      candidatoNombre: st.nombreCand || 'Valentina Ríos',
+
+      verTemporizador: this.props.mostrarTemporizador !== false,
+      reloj: (mm < 10 ? '0' : '') + mm + ':' + (ss < 10 ? '0' : '') + ss,
+      progreso: Math.round(((st.qIndex + 1) / this.preguntas.length) * 100) + '%',
+      nPregunta: st.qIndex + 1, totalPreguntas: this.preguntas.length,
+      seccion: q.seccion, pregunta: q.texto, opciones,
+      textoSiguiente: ultima ? 'Finalizar examen' : 'Siguiente pregunta',
+      siguiente: () => {
+        if (st.respuestas[st.qIndex] === undefined) { this.aviso('Selecciona una opción para continuar'); return; }
+        if (ultima) this.setState({ pantalla: 'fin' });
+        else this.setState(s => ({ qIndex: s.qIndex + 1 }));
+      },
+      anterior: () => this.setState(s => ({ qIndex: Math.max(0, s.qIndex - 1) })),
+
+      emailFinal: st.emailCand || 'v.rios@correo.com',
+      resumenFinal: [
+        { label: 'Test aplicado', valor: 'Liderazgo Situacional' },
+        { label: 'Reactivos respondidos', valor: this.preguntas.length + ' de ' + this.preguntas.length },
+        { label: 'Enviado a', valor: empresa }
+      ],
+      cerrarVentana: () => { this.setState({ rol: 'empresa', pantalla: 'resultados', accesoPaso: 2 }); this.aviso('Reporte disponible en el portal de la empresa'); },
+
+      dimensiones,
+      dimSelNombre: dSel.nombre, dimSelNivel: dSel.nivel, dimSelPuntaje: dSel.puntaje, dimSelTexto: dSel.texto,
+      dimSelColor: dSel.puntaje >= 80 ? '#1E3A8A' : dSel.puntaje >= 70 ? '#0EA5E9' : '#38BDF8',
+      envios,
+      estadoEnvio: activos === 0 ? 'Envío automático desactivado. El reporte queda solo en la plataforma.'
+        : 'El PDF se enviará a ' + activos + (activos === 1 ? ' destinatario' : ' destinatarios') + ' al cerrar esta vista.',
+      descargar: () => this.aviso('Diagnostico_Valentina_Rios_LID360.pdf descargado'),
+      hayToast: !!st.toast, toast: st.toast
+    };
+  }
+}
+</script>
+</body>
+</html>
