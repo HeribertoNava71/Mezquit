@@ -13,3 +13,15 @@
 .creditos__input, .creditos__textarea { padding: var(--sp-3) var(--sp-4); border: 1.5px solid var(--color-border); border-radius: var(--radius-sm); font-family: var(--font-body); font-size: var(--text-base); }
 .creditos__input:focus, .creditos__textarea:focus { border-color: var(--color-hunter); outline: none; }
 .creditos__ok { color: var(--color-success); font-size: var(--text-sm); }
+
+/* Transición hasta la Fase 4 (D-23: tablas a tarjetas por debajo de 640 px; QA de
+   la Fase 2). La tabla vieja no cabe en pantallas angostas: el desplazamiento
+   lateral queda dentro de la pantalla y no arrastra la página, la barra ni el
+   pie. El relleno, compensado con margen negativo, deja sitio al anillo de foco
+   que el recorte del desplazamiento cortaría en los bordes. */
+.creditos > :has(> .creditos__table) {
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  padding: calc(var(--focus-outline-width) + var(--focus-outline-offset));
+  margin: calc(-1 * (var(--focus-outline-width) + var(--focus-outline-offset)));
+}

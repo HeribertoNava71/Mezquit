@@ -1,0 +1,266 @@
+{
+  "//": ["Visitante sin sesión: GET /api/user responde 401.", "Catálogo de 18 pruebas en 4 categorías, como lo siembra CatalogSeeder (la prueba de demostración no se publica).", "Formas de src/api/catalog.ts y de CatalogController."],
+  "// rutas": [
+    "/",
+    "/pruebas",
+    "/pruebas/adaptabilidad (o cualquier slug del catálogo)",
+    "/pruebas/no-existe (404: prueba no encontrada)",
+    "/como-funciona",
+    "/precios",
+    "/demo",
+    "/ayuda",
+    "/login",
+    "/registro",
+    "/evaluar",
+    "/app, /admin y /perfil (sin sesión van a /login)"
+  ],
+  "// notas": "POST /api/login responde 422 «Credenciales incorrectas.»; POST /api/register, 422 por correo repetido, con el mensaje de Laravel en inglés (como en un backend sin traducciones; falta confirmarlo); POST /api/leads, 201.",
+
+  "GET /api/user": { "status": 401, "body": { "message": "Unauthenticated." } },
+  "POST /api/login": {
+    "status": 422,
+    "body": {
+      "message": "Credenciales incorrectas.",
+      "errors": { "email": ["Credenciales incorrectas."] }
+    }
+  },
+  "POST /api/register": {
+    "status": 422,
+    "body": {
+      "message": "The email has already been taken.",
+      "errors": { "email": ["The email has already been taken."] }
+    }
+  },
+  "POST /api/leads": { "status": 201, "body": { "message": "Tu solicitud fue recibida. Te contactamos en un día hábil." } },
+
+  "GET /api/catalog": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "personalidad",
+          "label": "Personalidad",
+          "count": 6,
+          "tests": [
+            { "id": 6, "slug": "adaptabilidad", "name": "Adaptabilidad", "description": "Evalúa flexibilidad ante cambios organizacionales.", "duration_min": 10, "item_count": 18 },
+            { "id": 4, "slug": "estilos-de-trabajo", "name": "Estilos de trabajo", "description": "Identifica preferencias en ambientes colaborativos.", "duration_min": 12, "item_count": 20 },
+            { "id": 5, "slug": "orientacion-a-resultados", "name": "Orientación a resultados", "description": "Mide tendencia al logro y tolerancia a la presión.", "duration_min": 10, "item_count": 18 },
+            { "id": 2, "slug": "perfil-de-conducta", "name": "Perfil de conducta", "description": "Evalúa cuatro dimensiones de comportamiento en el trabajo.", "duration_min": 15, "item_count": 24 },
+            { "id": 3, "slug": "rasgos-de-personalidad", "name": "Rasgos de personalidad", "description": "Mide estabilidad emocional, apertura y conciencia.", "duration_min": 20, "item_count": 40 },
+            { "id": 7, "slug": "trabajo-en-equipo", "name": "Trabajo en equipo", "description": "Mide preferencias de colaboración y roles grupales.", "duration_min": 12, "item_count": 20 }
+          ]
+        },
+        {
+          "id": "razonamiento",
+          "label": "Razonamiento",
+          "count": 4,
+          "tests": [
+            { "id": 11, "slug": "atencion-y-concentracion", "name": "Atención y concentración", "description": "Mide la capacidad de mantener el foco en tareas repetitivas.", "duration_min": 15, "item_count": 40 },
+            { "id": 8, "slug": "razonamiento-abstracto", "name": "Razonamiento abstracto", "description": "Evalúa la capacidad de identificar patrones y relaciones.", "duration_min": 25, "item_count": 30 },
+            { "id": 9, "slug": "razonamiento-numerico", "name": "Razonamiento numérico", "description": "Mide habilidad para interpretar datos cuantitativos.", "duration_min": 20, "item_count": 25 },
+            { "id": 10, "slug": "razonamiento-verbal", "name": "Razonamiento verbal", "description": "Evalúa comprensión de texto y argumentación lógica.", "duration_min": 20, "item_count": 25 }
+          ]
+        },
+        {
+          "id": "integridad",
+          "label": "Integridad",
+          "count": 3,
+          "tests": [
+            { "id": 13, "slug": "confiabilidad", "name": "Confiabilidad", "description": "Mide consistencia y cumplimiento de compromisos.", "duration_min": 12, "item_count": 24 },
+            { "id": 14, "slug": "etica-en-el-trabajo", "name": "Ética en el trabajo", "description": "Evalúa toma de decisiones en situaciones de dilema.", "duration_min": 18, "item_count": 20 },
+            { "id": 12, "slug": "honestidad-laboral", "name": "Honestidad laboral", "description": "Evalúa actitudes hacia normas y conducta en el trabajo.", "duration_min": 15, "item_count": 30 }
+          ]
+        },
+        {
+          "id": "intereses",
+          "label": "Intereses",
+          "count": 5,
+          "tests": [
+            { "id": 18, "slug": "ajuste-cultural", "name": "Ajuste cultural", "description": "Compara los valores del candidato con los de la organización.", "duration_min": 15, "item_count": 28 },
+            { "id": 19, "slug": "estilo-de-liderazgo", "name": "Estilo de liderazgo", "description": "Mide preferencias de dirección y toma de decisiones.", "duration_min": 18, "item_count": 30 },
+            { "id": 15, "slug": "intereses-vocacionales", "name": "Intereses vocacionales", "description": "Identifica áreas de motivación y afinidad profesional.", "duration_min": 20, "item_count": 45 },
+            { "id": 17, "slug": "motivadores-laborales", "name": "Motivadores laborales", "description": "Evalúa qué factores impulsan el desempeño individual.", "duration_min": 12, "item_count": 24 },
+            { "id": 16, "slug": "orientacion-de-carrera", "name": "Orientación de carrera", "description": "Mapea preferencias hacia áreas técnicas, sociales o gerenciales.", "duration_min": 15, "item_count": 30 }
+          ]
+        }
+      ]
+    }
+  },
+  "GET /api/catalog/adaptabilidad": {
+    "status": 200,
+    "body": { "data": { "id": 6, "slug": "adaptabilidad", "name": "Adaptabilidad", "category": "personalidad", "category_label": "Personalidad", "description": "Evalúa flexibilidad ante cambios organizacionales.", "duration_min": 10, "item_count": 18 } }
+  },
+  "GET /api/catalog/estilos-de-trabajo": {
+    "status": 200,
+    "body": {
+      "data": { "id": 4, "slug": "estilos-de-trabajo", "name": "Estilos de trabajo", "category": "personalidad", "category_label": "Personalidad", "description": "Identifica preferencias en ambientes colaborativos.", "duration_min": 12, "item_count": 20 }
+    }
+  },
+  "GET /api/catalog/orientacion-a-resultados": {
+    "status": 200,
+    "body": {
+      "data": {
+        "id": 5,
+        "slug": "orientacion-a-resultados",
+        "name": "Orientación a resultados",
+        "category": "personalidad",
+        "category_label": "Personalidad",
+        "description": "Mide tendencia al logro y tolerancia a la presión.",
+        "duration_min": 10,
+        "item_count": 18
+      }
+    }
+  },
+  "GET /api/catalog/perfil-de-conducta": {
+    "status": 200,
+    "body": {
+      "data": {
+        "id": 2,
+        "slug": "perfil-de-conducta",
+        "name": "Perfil de conducta",
+        "category": "personalidad",
+        "category_label": "Personalidad",
+        "description": "Evalúa cuatro dimensiones de comportamiento en el trabajo.",
+        "duration_min": 15,
+        "item_count": 24
+      }
+    }
+  },
+  "GET /api/catalog/rasgos-de-personalidad": {
+    "status": 200,
+    "body": {
+      "data": {
+        "id": 3,
+        "slug": "rasgos-de-personalidad",
+        "name": "Rasgos de personalidad",
+        "category": "personalidad",
+        "category_label": "Personalidad",
+        "description": "Mide estabilidad emocional, apertura y conciencia.",
+        "duration_min": 20,
+        "item_count": 40
+      }
+    }
+  },
+  "GET /api/catalog/trabajo-en-equipo": {
+    "status": 200,
+    "body": {
+      "data": { "id": 7, "slug": "trabajo-en-equipo", "name": "Trabajo en equipo", "category": "personalidad", "category_label": "Personalidad", "description": "Mide preferencias de colaboración y roles grupales.", "duration_min": 12, "item_count": 20 }
+    }
+  },
+  "GET /api/catalog/atencion-y-concentracion": {
+    "status": 200,
+    "body": {
+      "data": {
+        "id": 11,
+        "slug": "atencion-y-concentracion",
+        "name": "Atención y concentración",
+        "category": "razonamiento",
+        "category_label": "Razonamiento",
+        "description": "Mide la capacidad de mantener el foco en tareas repetitivas.",
+        "duration_min": 15,
+        "item_count": 40
+      }
+    }
+  },
+  "GET /api/catalog/razonamiento-abstracto": {
+    "status": 200,
+    "body": {
+      "data": {
+        "id": 8,
+        "slug": "razonamiento-abstracto",
+        "name": "Razonamiento abstracto",
+        "category": "razonamiento",
+        "category_label": "Razonamiento",
+        "description": "Evalúa la capacidad de identificar patrones y relaciones.",
+        "duration_min": 25,
+        "item_count": 30
+      }
+    }
+  },
+  "GET /api/catalog/razonamiento-numerico": {
+    "status": 200,
+    "body": {
+      "data": {
+        "id": 9,
+        "slug": "razonamiento-numerico",
+        "name": "Razonamiento numérico",
+        "category": "razonamiento",
+        "category_label": "Razonamiento",
+        "description": "Mide habilidad para interpretar datos cuantitativos.",
+        "duration_min": 20,
+        "item_count": 25
+      }
+    }
+  },
+  "GET /api/catalog/razonamiento-verbal": {
+    "status": 200,
+    "body": {
+      "data": { "id": 10, "slug": "razonamiento-verbal", "name": "Razonamiento verbal", "category": "razonamiento", "category_label": "Razonamiento", "description": "Evalúa comprensión de texto y argumentación lógica.", "duration_min": 20, "item_count": 25 }
+    }
+  },
+  "GET /api/catalog/confiabilidad": {
+    "status": 200,
+    "body": { "data": { "id": 13, "slug": "confiabilidad", "name": "Confiabilidad", "category": "integridad", "category_label": "Integridad", "description": "Mide consistencia y cumplimiento de compromisos.", "duration_min": 12, "item_count": 24 } }
+  },
+  "GET /api/catalog/etica-en-el-trabajo": {
+    "status": 200,
+    "body": {
+      "data": { "id": 14, "slug": "etica-en-el-trabajo", "name": "Ética en el trabajo", "category": "integridad", "category_label": "Integridad", "description": "Evalúa toma de decisiones en situaciones de dilema.", "duration_min": 18, "item_count": 20 }
+    }
+  },
+  "GET /api/catalog/honestidad-laboral": {
+    "status": 200,
+    "body": {
+      "data": { "id": 12, "slug": "honestidad-laboral", "name": "Honestidad laboral", "category": "integridad", "category_label": "Integridad", "description": "Evalúa actitudes hacia normas y conducta en el trabajo.", "duration_min": 15, "item_count": 30 }
+    }
+  },
+  "GET /api/catalog/ajuste-cultural": {
+    "status": 200,
+    "body": {
+      "data": { "id": 18, "slug": "ajuste-cultural", "name": "Ajuste cultural", "category": "intereses", "category_label": "Intereses", "description": "Compara los valores del candidato con los de la organización.", "duration_min": 15, "item_count": 28 }
+    }
+  },
+  "GET /api/catalog/estilo-de-liderazgo": {
+    "status": 200,
+    "body": {
+      "data": { "id": 19, "slug": "estilo-de-liderazgo", "name": "Estilo de liderazgo", "category": "intereses", "category_label": "Intereses", "description": "Mide preferencias de dirección y toma de decisiones.", "duration_min": 18, "item_count": 30 }
+    }
+  },
+  "GET /api/catalog/intereses-vocacionales": {
+    "status": 200,
+    "body": {
+      "data": {
+        "id": 15,
+        "slug": "intereses-vocacionales",
+        "name": "Intereses vocacionales",
+        "category": "intereses",
+        "category_label": "Intereses",
+        "description": "Identifica áreas de motivación y afinidad profesional.",
+        "duration_min": 20,
+        "item_count": 45
+      }
+    }
+  },
+  "GET /api/catalog/motivadores-laborales": {
+    "status": 200,
+    "body": {
+      "data": { "id": 17, "slug": "motivadores-laborales", "name": "Motivadores laborales", "category": "intereses", "category_label": "Intereses", "description": "Evalúa qué factores impulsan el desempeño individual.", "duration_min": 12, "item_count": 24 }
+    }
+  },
+  "GET /api/catalog/orientacion-de-carrera": {
+    "status": 200,
+    "body": {
+      "data": {
+        "id": 16,
+        "slug": "orientacion-de-carrera",
+        "name": "Orientación de carrera",
+        "category": "intereses",
+        "category_label": "Intereses",
+        "description": "Mapea preferencias hacia áreas técnicas, sociales o gerenciales.",
+        "duration_min": 15,
+        "item_count": 30
+      }
+    }
+  },
+  "GET /api/catalog/:slug": { "status": 404, "body": { "message": "" } }
+}

@@ -1,0 +1,7 @@
+/* Aviso de error de «Salir», alineado con la fila de la barra (1200 px y el
+   mismo margen lateral). */
+.st-error-salida {
+  max-width: var(--layout-max);
+  margin-inline: auto;
+  padding: 0 var(--layout-topbar-pad-x) var(--space-12);
+}

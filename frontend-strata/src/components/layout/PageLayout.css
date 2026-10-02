@@ -1,0 +1,168 @@
+/* ==========================================================================
+   PageLayout · lienzo de página
+   Fondo #FAF8F5 con tres halos radiales (Strata.dc.html:45-51) y contenedor
+   centrado de 1200 px con padding 48/34/88 (:333; PROMPT_CLAUDE_CODE.md:93).
+   La home usa su propio juego de halos, absoluto y más intenso, que se
+   desplaza con el contenido (:96-99; T-23).
+   ========================================================================== */
+
+.st-page {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  min-height: 100svh;
+  background-color: var(--color-bg);
+}
+
+/* ── Halos ─────────────────────────────────────────────────────────────── */
+/* Fijos detrás de todo el contenido; overflow hidden evita el scroll lateral. */
+.st-page__halos {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-halos);
+  overflow: hidden;
+  pointer-events: none;
+}
+
+/* Home: dentro del lienzo, se desplazan con la página (Strata.dc.html:96). */
+.st-page__halos--home {
+  position: absolute;
+}
+
+.st-page__halo {
+  position: absolute;
+  border-radius: var(--radius-round);
+  animation: var(--anim-glow-drift);
+}
+
+.st-page__halo--coral {
+  top: -240px;
+  right: -140px;
+  width: 660px;
+  height: 660px;
+  background: radial-gradient(circle, var(--halo-coral), transparent 70%);
+}
+
+.st-page__halo--sky {
+  top: 260px;
+  left: -260px;
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, var(--halo-sky), transparent 70%);
+}
+
+.st-page__halo--navy {
+  bottom: -320px;
+  left: 34%;
+  width: 720px;
+  height: 560px;
+  background: radial-gradient(circle, var(--halo-navy), transparent 70%);
+}
+
+/* Juego de la home: .26 / .24 / .12, con el celeste más arriba (Strata.dc.html:97-99). */
+.st-page__halos--home .st-page__halo--coral {
+  background: radial-gradient(circle, var(--halo-coral-home), transparent 70%);
+}
+
+.st-page__halos--home .st-page__halo--sky {
+  top: 200px;
+  background: radial-gradient(circle, var(--halo-sky-home), transparent 70%);
+}
+
+.st-page__halos--home .st-page__halo--navy {
+  background: radial-gradient(circle, var(--halo-navy-home), transparent 70%);
+}
+
+/* ── Contenido ─────────────────────────────────────────────────────────── */
+/* Por encima de los halos (Strata.dc.html:92). Crece para dejar el pie abajo
+   en las páginas cortas. */
+.st-page__main {
+  position: relative;
+  z-index: var(--z-content);
+  display: flex;
+  flex: 1 0 auto;
+  flex-direction: column;
+  min-width: 0;
+}
+
+/* Recibe el foco del enlace «Saltar al contenido»; no es un control. */
+.st-page__main:focus {
+  outline: none;
+}
+
+.st-page__content {
+  /* Transición (D-20): las pantallas viejas dibujan su propio contenedor con
+     padding-inline: var(--section-px). Aquí vale 0 para no duplicar el margen
+     lateral. Se retira con los alias en la Fase 8. */
+  --section-px: 0px;
+
+  width: 100%;
+  max-width: var(--layout-max);
+  margin-inline: auto;
+  padding: var(--layout-page-padding);
+}
+
+/* Candidato: cada pantalla pone su ancho y su padding (acceso, examen y fin);
+   el contenido crece para que una pantalla pueda centrarse en el alto. */
+.st-page__content--candidate {
+  display: flex;
+  flex: 1 0 auto;
+  flex-direction: column;
+  max-width: none;
+  padding: 0;
+}
+
+/* Home: el marco lleva el ancho y el padding, y contiene barra, contenido y
+   pie, como el contenedor de la home del prototipo (Strata.dc.html:108). */
+.st-page__frame {
+  position: relative;
+  z-index: var(--z-home-content);
+  display: flex;
+  flex: 1 0 auto;
+  flex-direction: column;
+  width: 100%;
+  max-width: var(--layout-max);
+  margin-inline: auto;
+  padding: var(--layout-home-padding);
+}
+
+.st-page__content--home {
+  max-width: none;
+  padding: 0;
+}
+
+.st-page__footer {
+  position: relative;
+  z-index: var(--z-content);
+}
+
+/* ── Movimiento reducido, alto contraste e impresión ───────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .st-page__halo {
+    animation: none;
+  }
+}
+
+@media (forced-colors: active) {
+  .st-page__halos {
+    display: none;
+  }
+}
+
+@media print {
+  .st-page {
+    min-height: 0;
+    background: none;
+  }
+
+  .st-page__halos {
+    display: none;
+  }
+
+  .st-page__content,
+  .st-page__frame {
+    max-width: none;
+    padding: 0;
+  }
+}

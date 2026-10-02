@@ -1,0 +1,145 @@
+/* ==========================================================================
+   Menú móvil de las barras (por debajo de 768 px)
+   El prototipo solo hace wrap de la barra (brechas.md, R-06). El botón usa la
+   superficie de la pastilla; el panel cubre el resto de la pantalla con el
+   lienzo #FAF8F5, así no hace falta un fondo aparte ni se tapa la barra.
+   ========================================================================== */
+.st-mobile-menu {
+  display: none;
+}
+
+@media (max-width: 767.98px) {
+  .st-mobile-menu {
+    display: flex;
+  }
+}
+
+/* La trampa de foco lo vuelve enfocable (tabindex -1), pero no es un control. */
+.st-mobile-menu:focus {
+  outline: none;
+}
+
+/* Botón de 44 px: objetivo táctil (--size-target). */
+.st-mobile-menu__toggle {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: var(--size-target);
+  height: var(--size-target);
+  border: var(--surface-pill-border);
+  border-radius: var(--radius-control);
+  background-color: var(--surface-pill-bg);
+  color: var(--color-text);
+}
+
+.st-mobile-menu__toggle:hover,
+.st-mobile-menu__toggle[aria-expanded='true'] {
+  border-color: var(--color-navy);
+}
+
+/* El panel cuelga de la barra (.st-topbar es su bloque contenedor) y llega al
+   fondo de la ventana: 100 % es el alto de la barra, que está pegada arriba. */
+.st-mobile-menu__panel {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  left: 0;
+  z-index: var(--z-dropdown);
+  height: calc(100vh - 100%);
+  height: calc(100dvh - 100%);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: var(--space-8) var(--layout-topbar-pad-x) var(--space-40);
+  border-top: var(--border-width) solid var(--color-border-subtle);
+  background-color: var(--color-bg);
+  animation: var(--anim-fade-up);
+}
+
+.st-mobile-menu__section + .st-mobile-menu__section {
+  margin-top: var(--space-8);
+  padding-top: var(--space-8);
+  border-top: var(--border-width) solid var(--color-border-divider);
+}
+
+.st-mobile-menu__list {
+  list-style: none;
+}
+
+/* Filas de 44 px. Inactivo en #6B6558 y 500; activo en tinta, 600 y con el
+   subrayado coral de 2 px de la barra (Strata.dc.html:1770-1774). */
+.st-mobile-menu__link {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  min-height: var(--size-target);
+  padding: var(--space-10) var(--space-4);
+  color: var(--color-text-tertiary);
+  font-size: var(--fs-body-sm);
+  font-weight: var(--fw-medium);
+  line-height: var(--lh-title);
+  text-align: left;
+  text-decoration-thickness: var(--border-width-thick);
+  text-underline-offset: var(--space-6);
+}
+
+.st-mobile-menu__link:hover {
+  color: var(--color-text);
+}
+
+.st-mobile-menu__link[aria-current='page'] {
+  color: var(--color-text);
+  font-weight: var(--fw-semibold);
+  text-decoration-line: underline;
+  text-decoration-color: var(--color-indicator-active);
+}
+
+/* «Tengo un código»: acción en color de enlace (Strata.dc.html:122) */
+.st-mobile-menu__link--accent {
+  color: var(--color-link);
+  font-weight: var(--fw-semibold);
+}
+
+.st-mobile-menu__link--accent:hover {
+  color: var(--color-link-hover);
+}
+
+.st-mobile-menu__link[aria-disabled='true'] {
+  color: var(--color-text-tertiary);
+  cursor: progress;
+}
+
+/* Quién tiene la sesión */
+.st-mobile-menu__who {
+  display: flex;
+  align-items: center;
+  gap: var(--space-12);
+  padding: var(--space-10) var(--space-4) var(--space-6);
+}
+
+.st-mobile-menu__identity {
+  min-width: 0;
+  line-height: var(--lh-normal);
+}
+
+.st-mobile-menu__name {
+  color: var(--color-text);
+  font-size: var(--fs-ui);
+  font-weight: var(--fw-semibold);
+}
+
+.st-mobile-menu__detail {
+  color: var(--color-text-tertiary);
+  font-size: var(--fs-small);
+  overflow-wrap: anywhere;
+}
+
+/* Entrar y Crear cuenta, a todo el ancho y con alto táctil */
+.st-mobile-menu__access {
+  display: grid;
+  gap: var(--space-10);
+}
+
+.st-mobile-menu .st-mobile-menu__access .st-btn {
+  min-height: var(--size-target);
+}

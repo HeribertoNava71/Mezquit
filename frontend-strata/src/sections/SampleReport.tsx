@@ -1,12 +1,13 @@
 import Report from '@/sections/Report'
 import type { ReportData } from '@/api/report'
+import { SITE } from '@/config/site'
 import './SampleReport.css'
 
 const SAMPLE: ReportData = {
   candidate: 'Ejemplo · Candidato',
   position: 'Ejecutivo de ventas',
   assessment: 'Evaluación de muestra',
-  organization: 'Mez',
+  organization: SITE.name,
   completed_at: 'Sep 2026',
   sample: true,
   interview_questions: ['Cuéntame de una situación reciente relacionada con «Orientación a resultados».'],

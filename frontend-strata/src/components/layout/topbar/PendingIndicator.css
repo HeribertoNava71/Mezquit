@@ -1,0 +1,42 @@
+/* Contador de la barra de super admin, con el estilo de «14 tests publicados»
+   (Strata.dc.html:81): 13 px, 500 y #5B5545 (7.00:1 sobre #FAF8F5). */
+.st-pending {
+  position: relative;
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  min-height: var(--space-24);
+  color: var(--color-text-secondary);
+  font-size: var(--fs-ui-sm);
+  font-weight: var(--fw-medium);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.st-pending:hover {
+  color: var(--color-text);
+}
+
+.st-pending__short {
+  display: none;
+}
+
+/* Teléfonos chicos: «N pendientes» a la vista; el texto completo sigue para
+   los lectores de pantalla (misma técnica que VisuallyHidden). */
+@media (max-width: 400px) {
+  .st-pending__full {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  .st-pending__short {
+    display: inline;
+  }
+}

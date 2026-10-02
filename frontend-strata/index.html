@@ -1,12 +1,16 @@
 <!doctype html>
-<html lang="es">
+<html lang="es-MX">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Mezquit — Pruebas psicométricas para empresas</title>
-    <meta name="description" content="Selecciona candidatos con pruebas estandarizadas. Reportes con interpretación en minutos." />
+    <!-- Marca (D-03): «Strata» repite SITE.name de src/config/site.ts, que este
+         archivo no puede leer. Si cambia el nombre, cámbialo en los dos lugares.
+         Textos sin afirmaciones de marketing ni promesas (D-16 y D-18). -->
+    <title>Strata · Evaluaciones psicométricas</title>
+    <meta name="description" content="Evaluaciones psicométricas para empresas: crea una evaluación, invita a tus candidatos con un enlace y consulta sus reportes en el portal de RR. HH." />
+    <meta name="theme-color" content="#FAF8F5" />
 
-    <!-- Favicons -->
+    <!-- Íconos: los genera scripts/generate-favicons.mjs desde public/brand/strata-mark.png. -->
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
@@ -20,11 +24,16 @@
     <link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=satoshi@400,500,600,700,800&display=swap" />
     <link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=general-sans@400,500,600,700&display=swap" />
 
-    <!-- Open Graph -->
+    <!-- Open Graph. og:image es relativa hasta que exista el dominio (SITE.domain [PENDIENTE]). -->
     <meta property="og:type" content="website" />
-    <meta property="og:title" content="Mezquit — Pruebas psicométricas para empresas" />
-    <meta property="og:description" content="Selecciona candidatos con pruebas estandarizadas. Reportes con interpretación en minutos." />
+    <meta property="og:site_name" content="Strata" />
+    <meta property="og:locale" content="es_MX" />
+    <meta property="og:title" content="Strata · Evaluaciones psicométricas" />
+    <meta property="og:description" content="Evaluaciones psicométricas para empresas: crea una evaluación, invita a tus candidatos con un enlace y consulta sus reportes en el portal de RR. HH." />
     <meta property="og:image" content="/og-image.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Emblema de Strata: una salamandra sobre capas en forma de S" />
     <meta name="twitter:card" content="summary_large_image" />
   </head>
   <body>

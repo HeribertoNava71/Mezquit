@@ -1,0 +1,273 @@
+{
+  "//": [
+    "Candidato con invitación pendiente: Comercializadora Río Claro, puesto «Ejecutivo de ventas», 2 pruebas (12 y 20 reactivos Likert; la segunda con allows_back false) y consented false.",
+    "Formas de src/api/candidate.ts y de CandidatePortalController."
+  ],
+  "// rutas": ["/evaluar/Lvpx1u6OcvNbil7ZnhYuLFbhCbZ1PGcQ42CVRM9p"],
+  "// notas": ["Cualquier token sirve (:token).", "El de la invitación 61 (Tomás Aguirre, evaluación 17) es Lvpx1u6OcvNbil7ZnhYuLFbhCbZ1PGcQ42CVRM9p.", "Una prueba que no es de la evaluación responde 404."],
+
+  "GET /api/user": { "status": 401, "body": { "message": "Unauthenticated." } },
+  "GET /api/evaluar/:token": {
+    "status": 200,
+    "body": {
+      "data": {
+        "status": "pendiente",
+        "organization": "Comercializadora Río Claro",
+        "position": "Ejecutivo de ventas",
+        "tests": [{ "id": 1, "name": "Prueba de demostración", "duration_min": 5, "item_count": 12, "allows_back": true }, { "id": 4, "name": "Estilos de trabajo", "duration_min": 12, "item_count": 20, "allows_back": false }],
+        "consented": false
+      }
+    }
+  },
+
+  "GET /api/evaluar/:token/pruebas/1": {
+    "status": 200,
+    "body": {
+      "data": {
+        "test": { "id": 1, "name": "Prueba de demostración", "allows_back": true },
+        "items": [
+          {
+            "id": 1,
+            "order": 1,
+            "prompt": "Me fijo metas ambiciosas en el trabajo.",
+            "options": [{ "label": "Totalmente en desacuerdo", "value": 1 }, { "label": "En desacuerdo", "value": 2 }, { "label": "Neutral", "value": 3 }, { "label": "De acuerdo", "value": 4 }, { "label": "Totalmente de acuerdo", "value": 5 }],
+            "answered": null
+          },
+          {
+            "id": 2,
+            "order": 2,
+            "prompt": "Disfruto medir mi avance con indicadores.",
+            "options": [{ "label": "Totalmente en desacuerdo", "value": 1 }, { "label": "En desacuerdo", "value": 2 }, { "label": "Neutral", "value": 3 }, { "label": "De acuerdo", "value": 4 }, { "label": "Totalmente de acuerdo", "value": 5 }],
+            "answered": null
+          },
+          {
+            "id": 3,
+            "order": 3,
+            "prompt": "Pospongo las tareas difíciles.",
+            "options": [{ "label": "Totalmente en desacuerdo", "value": 1 }, { "label": "En desacuerdo", "value": 2 }, { "label": "Neutral", "value": 3 }, { "label": "De acuerdo", "value": 4 }, { "label": "Totalmente de acuerdo", "value": 5 }],
+            "answered": null
+          },
+          {
+            "id": 4,
+            "order": 4,
+            "prompt": "Persisto aunque el resultado tarde.",
+            "options": [{ "label": "Totalmente en desacuerdo", "value": 1 }, { "label": "En desacuerdo", "value": 2 }, { "label": "Neutral", "value": 3 }, { "label": "De acuerdo", "value": 4 }, { "label": "Totalmente de acuerdo", "value": 5 }],
+            "answered": null
+          },
+          {
+            "id": 5,
+            "order": 5,
+            "prompt": "Comparto información con mi equipo sin que me la pidan.",
+            "options": [{ "label": "Totalmente en desacuerdo", "value": 1 }, { "label": "En desacuerdo", "value": 2 }, { "label": "Neutral", "value": 3 }, { "label": "De acuerdo", "value": 4 }, { "label": "Totalmente de acuerdo", "value": 5 }],
+            "answered": null
+          },
+          {
+            "id": 6,
+            "order": 6,
+            "prompt": "Prefiero trabajar solo que en equipo.",
+            "options": [{ "label": "Totalmente en desacuerdo", "value": 1 }, { "label": "En desacuerdo", "value": 2 }, { "label": "Neutral", "value": 3 }, { "label": "De acuerdo", "value": 4 }, { "label": "Totalmente de acuerdo", "value": 5 }],
+            "answered": null
+          },
+          {
+            "id": 7,
+            "order": 7,
+            "prompt": "Escucho las ideas de mis compañeros antes de decidir.",
+            "options": [{ "label": "Totalmente en desacuerdo", "value": 1 }, { "label": "En desacuerdo", "value": 2 }, { "label": "Neutral", "value": 3 }, { "label": "De acuerdo", "value": 4 }, { "label": "Totalmente de acuerdo", "value": 5 }],
+            "answered": null
+          },
+          {
+            "id": 8,
+            "order": 8,
+            "prompt": "Me cuesta pedir ayuda.",
+            "options": [{ "label": "Totalmente en desacuerdo", "value": 1 }, { "label": "En desacuerdo", "value": 2 }, { "label": "Neutral", "value": 3 }, { "label": "De acuerdo", "value": 4 }, { "label": "Totalmente de acuerdo", "value": 5 }],
+            "answered": null
+          },
+          {
+            "id": 9,
+            "order": 9,
+            "prompt": "Me adapto rápido a cambios de prioridad.",
+            "options": [{ "label": "Totalmente en desacuerdo", "value": 1 }, { "label": "En desacuerdo", "value": 2 }, { "label": "Neutral", "value": 3 }, { "label": "De acuerdo", "value": 4 }, { "label": "Totalmente de acuerdo", "value": 5 }],
+            "answered": null
+          },
+          {
+            "id": 10,
+            "order": 10,
+            "prompt": "Los cambios de última hora me estresan mucho.",
+            "options": [{ "label": "Totalmente en desacuerdo", "value": 1 }, { "label": "En desacuerdo", "value": 2 }, { "label": "Neutral", "value": 3 }, { "label": "De acuerdo", "value": 4 }, { "label": "Totalmente de acuerdo", "value": 5 }],
+            "answered": null
+          },
+          {
+            "id": 11,
+            "order": 11,
+            "prompt": "Pruebo formas nuevas de hacer las cosas.",
+            "options": [{ "label": "Totalmente en desacuerdo", "value": 1 }, { "label": "En desacuerdo", "value": 2 }, { "label": "Neutral", "value": 3 }, { "label": "De acuerdo", "value": 4 }, { "label": "Totalmente de acuerdo", "value": 5 }],
+            "answered": null
+          },
+          {
+            "id": 12,
+            "order": 12,
+            "prompt": "Prefiero que todo siga igual.",
+            "options": [{ "label": "Totalmente en desacuerdo", "value": 1 }, { "label": "En desacuerdo", "value": 2 }, { "label": "Neutral", "value": 3 }, { "label": "De acuerdo", "value": 4 }, { "label": "Totalmente de acuerdo", "value": 5 }],
+            "answered": null
+          }
+        ]
+      }
+    }
+  },
+  "GET /api/evaluar/:token/pruebas/4": {
+    "status": 200,
+    "body": {
+      "data": {
+        "test": { "id": 4, "name": "Estilos de trabajo", "allows_back": false },
+        "items": [
+          {
+            "id": 13,
+            "order": 1,
+            "prompt": "Organizo mi semana antes de empezarla.",
+            "options": [{ "label": "Totalmente en desacuerdo", "value": 1 }, { "label": "En desacuerdo", "value": 2 }, { "label": "Neutral", "value": 3 }, { "label": "De acuerdo", "value": 4 }, { "label": "Totalmente de acuerdo", "value": 5 }],
+            "answered": null
+          },
+          {
+            "id": 14,
+            "order": 2,
+            "prompt": "Trabajo bien sin supervisión constante.",
+            "options": [{ "label": "Totalmente en desacuerdo", "value": 1 }, { "label": "En desacuerdo", "value": 2 }, { "label": "Neutral", "value": 3 }, { "label": "De acuerdo", "value": 4 }, { "label": "Totalmente de acuerdo", "value": 5 }],
+            "answered": null
+          },
+          {
+            "id": 15,
+            "order": 3,
+            "prompt": "Reviso mi trabajo antes de entregarlo.",
+            "options": [{ "label": "Totalmente en desacuerdo", "value": 1 }, { "label": "En desacuerdo", "value": 2 }, { "label": "Neutral", "value": 3 }, { "label": "De acuerdo", "value": 4 }, { "label": "Totalmente de acuerdo", "value": 5 }],
+            "answered": null
+          },
+          {
+            "id": 16,
+            "order": 4,
+            "prompt": "Mantengo un buen ritmo aunque tenga varias tareas a la vez.",
+            "options": [{ "label": "Totalmente en desacuerdo", "value": 1 }, { "label": "En desacuerdo", "value": 2 }, { "label": "Neutral", "value": 3 }, { "label": "De acuerdo", "value": 4 }, { "label": "Totalmente de acuerdo", "value": 5 }],
+            "answered": null
+          },
+          {
+            "id": 17,
+            "order": 5,
+            "prompt": "Resuelvo los pendientes conforme llegan, sin un plan previo.",
+            "options": [{ "label": "Totalmente en desacuerdo", "value": 1 }, { "label": "En desacuerdo", "value": 2 }, { "label": "Neutral", "value": 3 }, { "label": "De acuerdo", "value": 4 }, { "label": "Totalmente de acuerdo", "value": 5 }],
+            "answered": null
+          },
+          {
+            "id": 18,
+            "order": 6,
+            "prompt": "Necesito que me confirmen cada paso antes de avanzar.",
+            "options": [{ "label": "Totalmente en desacuerdo", "value": 1 }, { "label": "En desacuerdo", "value": 2 }, { "label": "Neutral", "value": 3 }, { "label": "De acuerdo", "value": 4 }, { "label": "Totalmente de acuerdo", "value": 5 }],
+            "answered": null
+          },
+          {
+            "id": 19,
+            "order": 7,
+            "prompt": "Detecto errores pequeños que otros pasan por alto.",
+            "options": [{ "label": "Totalmente en desacuerdo", "value": 1 }, { "label": "En desacuerdo", "value": 2 }, { "label": "Neutral", "value": 3 }, { "label": "De acuerdo", "value": 4 }, { "label": "Totalmente de acuerdo", "value": 5 }],
+            "answered": null
+          },
+          {
+            "id": 20,
+            "order": 8,
+            "prompt": "Me cuesta retomar una tarea cuando me interrumpen.",
+            "options": [{ "label": "Totalmente en desacuerdo", "value": 1 }, { "label": "En desacuerdo", "value": 2 }, { "label": "Neutral", "value": 3 }, { "label": "De acuerdo", "value": 4 }, { "label": "Totalmente de acuerdo", "value": 5 }],
+            "answered": null
+          },
+          {
+            "id": 21,
+            "order": 9,
+            "prompt": "Divido los proyectos largos en etapas con fecha de entrega.",
+            "options": [{ "label": "Totalmente en desacuerdo", "value": 1 }, { "label": "En desacuerdo", "value": 2 }, { "label": "Neutral", "value": 3 }, { "label": "De acuerdo", "value": 4 }, { "label": "Totalmente de acuerdo", "value": 5 }],
+            "answered": null
+          },
+          {
+            "id": 22,
+            "order": 10,
+            "prompt": "Tomo decisiones de mi área sin esperar instrucciones.",
+            "options": [{ "label": "Totalmente en desacuerdo", "value": 1 }, { "label": "En desacuerdo", "value": 2 }, { "label": "Neutral", "value": 3 }, { "label": "De acuerdo", "value": 4 }, { "label": "Totalmente de acuerdo", "value": 5 }],
+            "answered": null
+          },
+          {
+            "id": 23,
+            "order": 11,
+            "prompt": "Me aburre revisar datos con cuidado.",
+            "options": [{ "label": "Totalmente en desacuerdo", "value": 1 }, { "label": "En desacuerdo", "value": 2 }, { "label": "Neutral", "value": 3 }, { "label": "De acuerdo", "value": 4 }, { "label": "Totalmente de acuerdo", "value": 5 }],
+            "answered": null
+          },
+          {
+            "id": 24,
+            "order": 12,
+            "prompt": "Termino mis pendientes dentro del horario previsto.",
+            "options": [{ "label": "Totalmente en desacuerdo", "value": 1 }, { "label": "En desacuerdo", "value": 2 }, { "label": "Neutral", "value": 3 }, { "label": "De acuerdo", "value": 4 }, { "label": "Totalmente de acuerdo", "value": 5 }],
+            "answered": null
+          },
+          {
+            "id": 25,
+            "order": 13,
+            "prompt": "Anoto mis compromisos para no olvidarlos.",
+            "options": [{ "label": "Totalmente en desacuerdo", "value": 1 }, { "label": "En desacuerdo", "value": 2 }, { "label": "Neutral", "value": 3 }, { "label": "De acuerdo", "value": 4 }, { "label": "Totalmente de acuerdo", "value": 5 }],
+            "answered": null
+          },
+          {
+            "id": 26,
+            "order": 14,
+            "prompt": "Busco por mi cuenta la información que me falta.",
+            "options": [{ "label": "Totalmente en desacuerdo", "value": 1 }, { "label": "En desacuerdo", "value": 2 }, { "label": "Neutral", "value": 3 }, { "label": "De acuerdo", "value": 4 }, { "label": "Totalmente de acuerdo", "value": 5 }],
+            "answered": null
+          },
+          {
+            "id": 27,
+            "order": 15,
+            "prompt": "Cuido que los documentos queden completos y en orden.",
+            "options": [{ "label": "Totalmente en desacuerdo", "value": 1 }, { "label": "En desacuerdo", "value": 2 }, { "label": "Neutral", "value": 3 }, { "label": "De acuerdo", "value": 4 }, { "label": "Totalmente de acuerdo", "value": 5 }],
+            "answered": null
+          },
+          {
+            "id": 28,
+            "order": 16,
+            "prompt": "Trabajo con energía constante durante toda la jornada.",
+            "options": [{ "label": "Totalmente en desacuerdo", "value": 1 }, { "label": "En desacuerdo", "value": 2 }, { "label": "Neutral", "value": 3 }, { "label": "De acuerdo", "value": 4 }, { "label": "Totalmente de acuerdo", "value": 5 }],
+            "answered": null
+          },
+          {
+            "id": 29,
+            "order": 17,
+            "prompt": "Cuando el día se complica, prefiero improvisar sobre la marcha.",
+            "options": [{ "label": "Totalmente en desacuerdo", "value": 1 }, { "label": "En desacuerdo", "value": 2 }, { "label": "Neutral", "value": 3 }, { "label": "De acuerdo", "value": 4 }, { "label": "Totalmente de acuerdo", "value": 5 }],
+            "answered": null
+          },
+          {
+            "id": 30,
+            "order": 18,
+            "prompt": "Me incomoda decidir sin consultar antes a mi jefe.",
+            "options": [{ "label": "Totalmente en desacuerdo", "value": 1 }, { "label": "En desacuerdo", "value": 2 }, { "label": "Neutral", "value": 3 }, { "label": "De acuerdo", "value": 4 }, { "label": "Totalmente de acuerdo", "value": 5 }],
+            "answered": null
+          },
+          {
+            "id": 31,
+            "order": 19,
+            "prompt": "Prefiero entregar rápido aunque queden detalles por corregir.",
+            "options": [{ "label": "Totalmente en desacuerdo", "value": 1 }, { "label": "En desacuerdo", "value": 2 }, { "label": "Neutral", "value": 3 }, { "label": "De acuerdo", "value": 4 }, { "label": "Totalmente de acuerdo", "value": 5 }],
+            "answered": null
+          },
+          {
+            "id": 32,
+            "order": 20,
+            "prompt": "Bajo mucho mi ritmo cuando el trabajo es repetitivo.",
+            "options": [{ "label": "Totalmente en desacuerdo", "value": 1 }, { "label": "En desacuerdo", "value": 2 }, { "label": "Neutral", "value": 3 }, { "label": "De acuerdo", "value": 4 }, { "label": "Totalmente de acuerdo", "value": 5 }],
+            "answered": null
+          }
+        ]
+      }
+    }
+  },
+  "GET /api/evaluar/:token/pruebas/:testId": { "status": 404, "body": { "message": "No query results for model [App\\Models\\Test]." } },
+
+  "POST /api/evaluar/:token/consent": { "status": 201, "body": { "ok": true } },
+  "POST /api/evaluar/:token/answers": { "status": 200, "body": { "ok": true } },
+  "POST /api/evaluar/:token/events": { "status": 201, "body": { "ok": true } },
+  "POST /api/evaluar/:token/complete": { "status": 200, "body": { "ok": true } }
+}

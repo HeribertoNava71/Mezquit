@@ -26,6 +26,14 @@ if (typeof window.matchMedia !== 'function') {
   })
 }
 
+// jsdom no implementa el scroll: window.scrollTo solo avisa «Not implemented»
+// y Element.scrollIntoView no existe. ScrollToTop (en PageLayout) los usa en
+// cada cambio de ruta. Una prueba puede espiarlos con vi.spyOn.
+window.scrollTo = (() => {}) as typeof window.scrollTo
+if (typeof Element.prototype.scrollIntoView !== 'function') {
+  Element.prototype.scrollIntoView = function scrollIntoView() {}
+}
+
 // jsdom define <dialog> pero no showModal, show ni close.
 if (typeof HTMLDialogElement !== 'undefined' && typeof HTMLDialogElement.prototype.showModal !== 'function') {
   HTMLDialogElement.prototype.show = function show(this: HTMLDialogElement) {

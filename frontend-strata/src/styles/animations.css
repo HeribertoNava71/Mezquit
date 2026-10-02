@@ -37,6 +37,13 @@
   to   { opacity: 1; transform: none; }
 }
 
+/* Entrada de pantalla que llega con #ancla (RouteTransition): solo fundido.
+   Sin transform, el salto al ancla cae en su lugar definitivo. */
+@keyframes st-fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
 /* Tarjetas escalonadas: .5s var(--ease-out), retardo i × var(--stagger-card) */
 @keyframes st-rise-in {
   from { opacity: 0; transform: translateY(9px); }

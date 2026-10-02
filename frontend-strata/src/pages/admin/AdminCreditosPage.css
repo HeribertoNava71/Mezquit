@@ -6,3 +6,15 @@
 .admincred__approve { color: var(--color-success); font-weight: 600; background: none; }
 .admincred__reject { color: var(--color-error); font-weight: 600; background: none; }
 .admincred__empty { opacity: 0.7; }
+
+/* Transición hasta la Fase 7 (D-23: tablas a tarjetas por debajo de 640 px; QA de
+   la Fase 2). La tabla vieja no cabe en pantallas angostas: el desplazamiento
+   lateral queda dentro de la pantalla y no arrastra la página, la barra ni el
+   pie. El relleno, compensado con margen negativo, deja sitio al anillo de foco
+   que el recorte del desplazamiento cortaría en los bordes. */
+.admincred {
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  padding: calc(var(--focus-outline-width) + var(--focus-outline-offset));
+  margin: calc(-1 * (var(--focus-outline-width) + var(--focus-outline-offset)));
+}

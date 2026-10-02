@@ -1,0 +1,25 @@
+/* Entrada de pantalla al cambiar de ruta (Strata.dc.html:31, screenIn):
+   fundido y elevación de 14 px en .5 s. El fill «backwards» no deja transform
+   al terminar, así que no cambia el contexto de position: fixed ni de sticky. */
+.st-route {
+  animation: var(--anim-screen-in);
+}
+
+/* Llega con #ancla: solo fundido, para que el salto al ancla no se corra. */
+.st-route--anchor {
+  animation: var(--anim-fade-in);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .st-route,
+  .st-route--anchor {
+    animation: none;
+  }
+}
+
+@media print {
+  .st-route,
+  .st-route--anchor {
+    animation: none;
+  }
+}

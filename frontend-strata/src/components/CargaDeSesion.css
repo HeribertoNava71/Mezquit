@@ -1,0 +1,14 @@
+/* Carga de las guardas de sesión: EstadoCarga centrado mientras llega
+   GET /api/user. El alto mínimo lo centra igual a pantalla completa que dentro
+   del contenido de un layout. Aparece con un fundido retrasado: si la sesión
+   responde rápido, no se alcanza a ver (con movimiento reducido, la regla
+   global de global.css lo muestra al instante). */
+.st-carga-sesion {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 60svh;
+  padding: var(--space-48) var(--space-24);
+  animation: var(--anim-fade-in);
+  animation-delay: var(--dur-pop);
+}

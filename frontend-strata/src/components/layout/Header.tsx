@@ -1,83 +1,127 @@
-import { useState, useEffect } from 'react'
-import { Link, NavLink, useLocation } from 'react-router-dom'
-import { SITE } from '@/config/site'
+import { Link } from 'react-router-dom'
+import { Button } from '@/components/ui'
 import { useAuth } from '@/context/AuthContext'
-import Button from '@/components/ui/Button'
-import UserDropdown from '@/components/ui/UserDropdown'
+import { Marca } from './Marca'
+import { TopBar, type TopBarVariant } from './TopBar'
+import { ErrorSalida } from './topbar/ErrorSalida'
+import { MobileMenu } from './topbar/MobileMenu'
+import {
+  ENLACE_AYUDA,
+  ENLACE_CODIGO,
+  ENLACES_PUBLICOS,
+  nombreVisible,
+  opcionesDeCuenta,
+  type CuentaMenu,
+} from './topbar/navegacion'
+import { NavLinks } from './topbar/NavLinks'
+import { UserMenu } from './topbar/UserMenu'
+import { useSalir } from './topbar/useSalir'
 import './Header.css'
 
-const NAV_LINKS = [
-  { to: '/pruebas', label: 'Pruebas' },
-  { to: '/como-funciona', label: 'Cómo funciona' },
-  { to: '/precios', label: 'Precios' },
-  { to: '/ayuda', label: 'Ayuda' },
-]
+const NAV_LABEL = 'Navegación principal'
 
-export default function Header() {
-  const [open, setOpen] = useState(false)
-  const { pathname } = useLocation()
+/** En el menú móvil, Ayuda se suma a la navegación (sale de la barra; mapa.md, V-2). */
+const ENLACES_MOVIL = [...ENLACES_PUBLICOS, ENLACE_AYUDA]
+const SECUNDARIOS_MOVIL = [ENLACE_CODIGO]
+
+export interface HeaderProps {
+  /**
+   * default: sticky y translúcida (páginas públicas, /perfil y 404).
+   * home: dentro del contenido de la home (Fase 6). Por defecto, default.
+   */
+  variant?: TopBarVariant
+}
+
+/**
+ * Barra pública (Strata.dc.html:110-125 con la barra del shell, :53-58;
+ * mapa.md, V-2 y sección 3):
+ * - Logo salamandra → «/».
+ * - Tests · Para empresas · Cómo funciona · Precios, y «Tengo un código» → /evaluar.
+ * - Sin sesión: «Entrar» (/login) y el botón tinta «Crear cuenta» (/registro),
+ *   que sustituye a «Comprar un test» porque no hay compra (PB-09).
+ * - Con sesión: la pastilla con el menú Mi perfil, Panel de RR. HH. (con
+ *   organización), Operación (con is_platform_admin) y Salir. Salir hace
+ *   POST /api/logout, setUser(null) y lleva al inicio, como antes.
+ * - Por debajo de 768 px, todo pasa al menú móvil, con Ayuda, Salir y Operación (R-06).
+ */
+export function Header({ variant = 'default' }: HeaderProps) {
   const { user, loading } = useAuth()
+  const salida = useSalir('/')
 
-  // eslint-disable-next-line react-hooks/set-state-in-effect -- reconstrucción: efecto del plan tal cual (cierra el menú al cambiar de ruta); ver docs/rediseno/reconstruccion.md
-  useEffect(() => { setOpen(false) }, [pathname])
+  let cuenta: CuentaMenu | null = null
+  if (user) {
+    const nombre = nombreVisible(user)
+    cuenta = {
+      nombre,
+      etiqueta: nombre,
+      detalle: user.email,
+      opciones: opcionesDeCuenta('publica', user),
+      onSalir: salida.salir,
+      saliendo: salida.saliendo,
+    }
+  }
+
+  // Mientras GET /api/user responde no se muestra nada de la sesión, para no
+  // ofrecer «Entrar» a quien ya la tiene abierta.
+  const sinSesion = !loading && !cuenta
 
   return (
-    <header className="header" role="banner">
-      <div className="header__inner">
-        <Link to="/" className="header__logo-link" aria-label={`${SITE.name} — inicio`}>
-          <img src="/logo.png" alt={SITE.name} className="header__logo-img" width={53} height={36} />
-          <span className="header__logo-name" aria-hidden="true">{SITE.name}</span>
+    <TopBar
+      variant={variant}
+      below={
+        salida.error && (
+          <ErrorSalida
+            tipo={salida.error}
+            onReintentar={salida.salir}
+            onDescartar={salida.descartarError}
+            reintentando={salida.saliendo}
+          />
+        )
+      }
+    >
+      <Marca to="/" />
+      <NavLinks label={NAV_LABEL} enlaces={ENLACES_PUBLICOS} />
+      <div className="st-topbar__actions">
+        <Link to={ENLACE_CODIGO.to} className="st-public-bar__code">
+          {ENLACE_CODIGO.label}
         </Link>
-
-        <nav className="header__nav" aria-label="Navegación principal">
-          {NAV_LINKS.map(({ to, label }) => (
-            <NavLink key={to} to={to} className={({ isActive }) => `header__nav-link${isActive ? ' header__nav-link--active' : ''}`}>
-              <span className="header__nav-text" aria-hidden="true">{label}</span>
-              <span className="header__nav-text--hover" aria-hidden="true">{label}</span>
-              <span className="sr-only">{label}</span>
-            </NavLink>
-          ))}
-        </nav>
-
         {!loading && (
-          <div className="header__auth">
-            {user ? (
-              <UserDropdown />
+          <div className="st-public-bar__session">
+            {cuenta ? (
+              <UserMenu cuenta={cuenta} />
             ) : (
               <>
-                <Link to="/login" className="header__login">Entrar</Link>
-                <Button to="/registro">Crear cuenta</Button>
+                <Link to="/login" className="st-public-bar__login">
+                  Entrar
+                </Link>
+                <Button variant="ink" to="/registro">
+                  Crear cuenta
+                </Button>
               </>
             )}
           </div>
         )}
-
-        <button className="header__burger" aria-label={open ? 'Cerrar menú' : 'Abrir menú'} aria-expanded={open} onClick={() => setOpen(v => !v)}>
-          <span className="header__burger-bar" />
-          <span className="header__burger-bar" />
-          <span className="header__burger-bar" />
-        </button>
+        <MobileMenu
+          navLabel={NAV_LABEL}
+          enlaces={ENLACES_MOVIL}
+          secundarios={SECUNDARIOS_MOVIL}
+          cuenta={loading ? null : cuenta}
+          pie={
+            sinSesion && (
+              <>
+                <Button variant="secondary" to="/login" fullWidth>
+                  Entrar
+                </Button>
+                <Button variant="ink" to="/registro" fullWidth>
+                  Crear cuenta
+                </Button>
+              </>
+            )
+          }
+        />
       </div>
-
-      {open && (
-        <div className="header__mobile" role="dialog" aria-label="Menú">
-          {NAV_LINKS.map(({ to, label }) => (
-            <NavLink key={to} to={to} className="header__mobile-link">{label}</NavLink>
-          ))}
-          <Link to="/evaluar" className="header__mobile-link header__mobile-link--muted">¿Te invitaron a una evaluación?</Link>
-          {!loading && user ? (
-            <>
-              <Link to="/perfil" className="header__mobile-link">Mi perfil</Link>
-              {user.organization_id && <Link to="/app" className="header__mobile-link">Panel de RH</Link>}
-            </>
-          ) : (
-            <>
-              <Link to="/login" className="header__mobile-link">Entrar</Link>
-              <Button to="/registro">Crear cuenta</Button>
-            </>
-          )}
-        </div>
-      )}
-    </header>
+    </TopBar>
   )
 }
+
+export default Header

@@ -1,0 +1,51 @@
+/* Marca de Strata: salamandra y nombre (Strata.dc.html:55-57 en la barra,
+   :1231-1234 y :313-316 en el pie). */
+.st-marca {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  gap: var(--space-9);
+  line-height: var(--lh-none);
+}
+
+.st-marca__logo {
+  width: var(--size-logo);
+  height: var(--size-logo);
+  object-fit: contain;
+}
+
+.st-marca__name {
+  font-family: var(--font-heading);
+  font-size: var(--fs-brand);
+  font-weight: var(--fw-bold);
+  letter-spacing: var(--tracking-heading);
+  color: var(--color-text);
+  white-space: nowrap;
+}
+
+/* Pie: salamandra de 20 px y «STRATA» en versales (12.5 px, 600, .06em). */
+.st-marca--sm {
+  gap: var(--space-8);
+}
+
+.st-marca--sm .st-marca__logo {
+  width: var(--size-logo-sm);
+  height: var(--size-logo-sm);
+}
+
+.st-marca--sm .st-marca__name {
+  font-size: var(--fs-meta);
+  font-weight: var(--fw-semibold);
+  letter-spacing: var(--tracking-caps-sm);
+  text-transform: uppercase;
+  color: var(--color-text-secondary);
+}
+
+/* Como enlace (barras): baja la opacidad al pasar el puntero (Strata.dc.html:55). */
+.st-marca--link {
+  border-radius: var(--radius-tag);
+}
+
+.st-marca--link:hover {
+  opacity: 0.75;
+}

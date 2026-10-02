@@ -18,7 +18,7 @@ const EMPRESA = [
 export default function AyudaPage() {
   return (
     <>
-      <PageHeader title="Ayuda" intro="Encuentra respuestas según cómo usas Mez." />
+      <PageHeader title="Ayuda" intro={`Encuentra respuestas según cómo usas ${SITE.name}.`} />
       <section className="ayuda">
         <div className="ayuda__inner">
           <div className="ayuda__group">

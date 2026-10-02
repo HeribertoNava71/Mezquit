@@ -1,0 +1,8 @@
+{
+  "//": ["Candidato sin conexión: toda petición a /api y /sanctum falla en la red (abortar), sin respuesta del servidor.", "Sirve para el estado «error de red con reintento» del portal."],
+  "// rutas": ["/evaluar/Lvpx1u6OcvNbil7ZnhYuLFbhCbZ1PGcQ42CVRM9p"],
+
+  "GET /api/*": { "abortar": "internetdisconnected" },
+  "POST /api/*": { "abortar": "internetdisconnected" },
+  "GET /sanctum/*": { "abortar": "internetdisconnected" }
+}

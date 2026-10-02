@@ -4,6 +4,12 @@ import { useAuth } from '@/context/AuthContext'
 import { logout } from '@/api/auth'
 import './UserDropdown.css'
 
+/**
+ * @deprecated Sin uso desde la Fase 2: la pastilla con menú accesible es
+ * UserMenu ('@/components/layout/topbar'), con las mismas opciones (Mi perfil,
+ * Panel de RR. HH., Operación y Salir). Queda para la propuesta de limpieza de
+ * código muerto de la Fase 8.
+ */
 export default function UserDropdown() {
   const { user, setUser } = useAuth()
   const navigate = useNavigate()

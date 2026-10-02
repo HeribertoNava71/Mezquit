@@ -1,125 +1,52 @@
-.header {
-  position: fixed;
-  top: 0;
-  inset-inline: 0;
-  height: var(--header-h);
-  background-color: var(--color-surface);
-  border-bottom: 1px solid var(--color-timberwolf);
-  z-index: 100;
+/* ==========================================================================
+   Barra pública (Strata.dc.html:110-125)
+   El marco, la navegación y el enlace activo vienen de TopBar.css; aquí solo
+   las acciones propias del sitio público. Por debajo de 768 px pasan al menú
+   móvil y en la barra quedan el logo y el botón del menú.
+   ========================================================================== */
+
+/* «Tengo un código»: 13 px, 600 y navy (Strata.dc.html:122). El hover #0EA5E9
+   del prototipo no cumple como texto: se usa --color-link-hover (#0369A1). */
+.st-public-bar__code {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--space-24);
+  color: var(--color-link);
+  font-size: var(--fs-ui-sm);
+  font-weight: var(--fw-semibold);
+  white-space: nowrap;
 }
 
-.header__inner {
+.st-public-bar__code:hover {
+  color: var(--color-link-hover);
+}
+
+/* Sesión: «Entrar» y «Crear cuenta», o la pastilla. */
+.st-public-bar__session {
   display: flex;
+  flex: none;
   align-items: center;
-  justify-content: space-between;
-  height: 100%;
-  max-width: var(--max-width);
-  margin-inline: auto;
-  padding-inline: var(--section-px);
-  gap: var(--sp-8);
+  gap: var(--space-14);
 }
 
-/* Logo */
-.header__logo-link {
-  display: flex;
+/* «Entrar»: no está en el prototipo; acción de texto en tinta junto al botón. */
+.st-public-bar__login {
+  display: inline-flex;
   align-items: center;
-  gap: var(--sp-3);
-  flex-shrink: 0;
-}
-.header__logo-img {
-  height: 36px;
-  width: auto;
-}
-.header__logo-name {
-  font-family: var(--font-display);
-  font-size: var(--text-xl);
-  font-weight: 600;
-  color: var(--color-brunswick);
-  line-height: 1;
+  min-height: var(--space-24);
+  color: var(--color-text);
+  font-size: var(--fs-ui-sm);
+  font-weight: var(--fw-semibold);
+  white-space: nowrap;
 }
 
-/* Nav */
-.header__nav {
-  display: none;
-  align-items: center;
-  gap: var(--sp-8);
+.st-public-bar__login:hover {
+  color: var(--color-link);
 }
 
-@media (min-width: 768px) {
-  .header__nav { display: flex; }
+@media (max-width: 767.98px) {
+  .st-public-bar__code,
+  .st-public-bar__session {
+    display: none;
+  }
 }
-
-/* Nav link con hover slide */
-.header__nav-link {
-  position: relative;
-  display: inline-block;
-  overflow: hidden;
-  height: 1.3em;
-  line-height: 1.3;
-  font-size: var(--text-sm);
-  font-weight: 500;
-  color: var(--color-ink);
-}
-.header__nav-text,
-.header__nav-text--hover {
-  display: block;
-  transition: transform var(--t-base);
-}
-.header__nav-text--hover {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  color: var(--color-hunter);
-}
-.header__nav-link:hover .header__nav-text,
-.header__nav-link:hover .header__nav-text--hover {
-  transform: translateY(-100%);
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .header__nav-text,
-  .header__nav-text--hover { transition: none; }
-  .header__nav-text--hover { display: none; }
-}
-
-/* CTA agenda */
-.header__cta {
-  flex-shrink: 0;
-}
-
-.header__nav-link--active .header__nav-text {
-  color: var(--color-hunter);
-  border-bottom: 2px solid var(--color-hunter);
-}
-
-/* Menú móvil */
-.header__burger { display: inline-flex; flex-direction: column; gap: 5px; width: 44px; height: 44px; align-items: center; justify-content: center; }
-.header__burger-bar { width: 22px; height: 2px; background: var(--color-brunswick); border-radius: 2px; }
-@media (min-width: 768px) { .header__burger { display: none; } }
-
-.header__mobile { display: flex; flex-direction: column; gap: var(--sp-2); padding: var(--sp-4) var(--section-px) var(--sp-6); background: var(--color-surface); border-bottom: 1px solid var(--color-timberwolf); animation: mobileDrop 200ms ease; }
-.header__mobile-link { padding: var(--sp-3) 0; font-size: var(--text-lg); font-weight: 500; color: var(--color-ink); border-bottom: 1px solid var(--color-timberwolf); }
-.header__mobile-link--muted { color: var(--color-hunter); font-size: var(--text-base); }
-@media (min-width: 768px) { .header__mobile { display: none; } }
-
-@keyframes mobileDrop { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: none; } }
-@media (prefers-reduced-motion: reduce) { .header__mobile { animation: none; } }
-
-@media (max-width: 767px) { .header__cta { display: none; } }
-
-.header__auth {
-  display: flex;
-  align-items: center;
-  gap: var(--sp-3);
-  flex-shrink: 0;
-}
-
-.header__login {
-  font-size: var(--text-sm);
-  font-weight: 500;
-  color: var(--color-brunswick);
-  transition: color var(--t-fast);
-}
-.header__login:hover { color: var(--color-hunter); }
-
-@media (max-width: 767px) { .header__auth { display: none; } }

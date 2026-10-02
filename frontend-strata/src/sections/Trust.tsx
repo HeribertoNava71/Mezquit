@@ -1,3 +1,4 @@
+import { SITE } from '@/config/site'
 import './Trust.css'
 
 const CLAIMS = [
@@ -27,7 +28,7 @@ export default function Trust() {
   return (
     <section className="trust" aria-labelledby="trust-title">
       <div className="trust__inner">
-        <h2 className="trust__title" id="trust-title">Por qué Mezquit</h2>
+        <h2 className="trust__title" id="trust-title">Por qué {SITE.name}</h2>
         <div className="trust__grid">
           {CLAIMS.map((claim, i) => (
             <div key={i} className="trust-card">

@@ -1,0 +1,28 @@
+{
+  "//": "Invitación completada: el portal la bloquea. consent, answers y complete responden 409.",
+  "// rutas": ["/evaluar/qjiK6mB4UN3VvExM1mez4KN5UAV7xJmbeUssAeME"],
+  "// notas": [
+    "Cualquier token sirve (:token).",
+    "El de la invitación 41 (Valentina Ríos, evaluación 13) es qjiK6mB4UN3VvExM1mez4KN5UAV7xJmbeUssAeME.",
+    "No trae GET /pruebas/{id}: con la invitación bloqueada el portal no debe pedir reactivos (si los pide, el script avisa en consola)."
+  ],
+
+  "GET /api/user": { "status": 401, "body": { "message": "Unauthenticated." } },
+  "GET /api/evaluar/:token": {
+    "status": 200,
+    "body": {
+      "data": {
+        "status": "completada",
+        "organization": "Comercializadora Río Claro",
+        "position": "Coordinador de almacén",
+        "tests": [{ "id": 1, "name": "Prueba de demostración", "duration_min": 5, "item_count": 12, "allows_back": true }, { "id": 4, "name": "Estilos de trabajo", "duration_min": 12, "item_count": 20, "allows_back": false }],
+        "consented": true
+      }
+    }
+  },
+
+  "POST /api/evaluar/:token/consent": { "status": 409, "body": { "message": "La evaluación ya no admite respuestas." } },
+  "POST /api/evaluar/:token/answers": { "status": 409, "body": { "message": "La evaluación ya no admite respuestas." } },
+  "POST /api/evaluar/:token/events": { "status": 201, "body": { "ok": true } },
+  "POST /api/evaluar/:token/complete": { "status": 409, "body": { "message": "La evaluación ya no admite respuestas." } }
+}

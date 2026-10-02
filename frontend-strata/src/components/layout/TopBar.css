@@ -1,0 +1,105 @@
+/* ==========================================================================
+   Barra superior común (Strata.dc.html:53-71 y 74-87; PROMPT_CLAUDE_CODE.md:94-98)
+   Sticky y translúcida. La usan las barras pública, de RR. HH. y de super
+   admin, así ninguna depende del .css de otra (riesgo 19 de la auditoría).
+   Tiene que ser hija directa de .st-page: PageLayout la monta ahí (prop topbar).
+   ========================================================================== */
+.st-topbar {
+  position: sticky;
+  top: 0;
+  z-index: var(--z-topbar);
+  background-color: var(--color-topbar-bg);
+  -webkit-backdrop-filter: blur(var(--blur-topbar));
+  backdrop-filter: blur(var(--blur-topbar));
+}
+
+/* Sin backdrop-filter, el fondo translúcido dejaría leer el texto de abajo. */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .st-topbar {
+    background-color: var(--color-bg);
+  }
+}
+
+/* Fila centrada: gap de 30 px y de 12 px entre filas al envolver (Strata.dc.html:54). */
+.st-topbar__inner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-12) var(--space-30);
+  max-width: var(--layout-max);
+  margin-inline: auto;
+  padding: var(--layout-topbar-padding);
+}
+
+/* ── Navegación de texto (Strata.dc.html:60-64; estilos de nav(), :1770-1774) ── */
+.st-topbar__nav {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-24);
+}
+
+/* Alto de 32 px como en el prototipo (line-height normal de General Sans a
+   14 px ≈ 18 px; con --lh-title, 18.2 px), así el subrayado coral queda a la
+   misma altura y no 2 px más abajo por el interlineado heredado del body. */
+.st-topbar__link {
+  display: flex;
+  align-items: center;
+  padding: var(--space-6) var(--space-1);
+  border-bottom: var(--border-width-thick) solid transparent;
+  font-size: var(--fs-ui-md);
+  font-weight: var(--fw-medium);
+  line-height: var(--lh-title);
+  color: var(--color-text-tertiary);
+  white-space: nowrap;
+}
+
+.st-topbar__link:hover {
+  color: var(--color-text);
+}
+
+/* Activo: tinta, 600 y subrayado coral de 2 px (D-19). NavLink pone
+   aria-current="page" solo; --active sirve para los casos que se calculan a mano. */
+.st-topbar__link--active,
+.st-topbar__link[aria-current='page'] {
+  border-bottom-color: var(--color-indicator-active);
+  font-weight: var(--fw-semibold);
+  color: var(--color-text);
+}
+
+/* Acciones a la derecha: saldo, contador y pastilla (Strata.dc.html:66).
+   El alto mínimo es el de la pastilla: las tres barras miden 80 px, como en el
+   prototipo, también sin sesión («Crear cuenta» mide 38) y mientras carga la
+   sesión, así la barra no crece al llegar GET /api/user. */
+.st-topbar__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-14);
+  min-height: var(--size-topbar-row);
+  margin-left: auto;
+}
+
+/* ── Home: dentro del contenido, sin sticky ni fondo (D-06; Strata.dc.html:110) ── */
+.st-topbar--home {
+  position: relative;
+  z-index: auto;
+  background: none;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+
+.st-topbar--home .st-topbar__inner {
+  gap: var(--space-12) var(--space-26);
+  max-width: none;
+  padding: var(--space-22) 0 0;
+}
+
+/* Alto contraste: el subrayado activo es un borde y se conserva. */
+@media (forced-colors: active) {
+  .st-topbar {
+    border-bottom: var(--border-width) solid CanvasText;
+  }
+}
+
+/* Impresión: global.css oculta .st-topbar (lista única de lo que no se imprime). */

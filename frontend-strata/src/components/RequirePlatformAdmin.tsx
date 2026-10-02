@@ -1,11 +1,14 @@
-import { Navigate } from 'react-router-dom'
-import { useAuth } from '@/context/AuthContext'
 import type { ReactNode } from 'react'
+import { Navigate } from 'react-router-dom'
+import { GuardaDeSesion } from './GuardaDeSesion'
 
+/**
+ * Guarda de /admin/*. Sin sesión manda a /login con la ruta de origen
+ * (D-07, punto 6); sin is_platform_admin, a /app, como siempre. El backend
+ * repite el control con el middleware platform_admin.
+ */
 export default function RequirePlatformAdmin({ children }: { children: ReactNode }) {
-  const { user, loading } = useAuth()
-  if (loading) return <p style={{ padding: '2rem' }}>Cargando…</p>
-  if (!user) return <Navigate to="/login" replace />
-  if (!user.is_platform_admin) return <Navigate to="/app" replace />
-  return <>{children}</>
+  return (
+    <GuardaDeSesion>{(user) => (user.is_platform_admin ? children : <Navigate to="/app" replace />)}</GuardaDeSesion>
+  )
 }

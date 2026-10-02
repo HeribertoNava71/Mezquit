@@ -1,0 +1,157 @@
+/* ==========================================================================
+   Pastilla de usuario con menú (Strata.dc.html:68-71 y 82-85)
+   La pastilla es del prototipo: fondo blanco al 80 %, borde #EBE5DA, avatar
+   navy de 30 px y texto de 13 px en 600; al pasar el puntero, borde navy.
+   El menú no existe en el prototipo (allí la pastilla no hace nada): se dibuja
+   con las superficies del sistema, una tarjeta blanca sobre la barra.
+   ========================================================================== */
+.st-user-menu {
+  position: relative;
+  display: flex;
+  flex: none;
+  min-width: 0;
+}
+
+.st-user-menu__trigger {
+  display: flex;
+  align-items: center;
+  gap: var(--space-9);
+  min-width: 0;
+  padding: var(--space-4) var(--space-14) var(--space-4) var(--space-4);
+  border: var(--surface-pill-border);
+  border-radius: var(--surface-pill-radius);
+  background-color: var(--surface-pill-bg);
+  color: var(--color-text);
+  font-size: var(--fs-ui-sm);
+  font-weight: var(--fw-semibold);
+  line-height: var(--lh-title);
+  text-align: left;
+}
+
+.st-user-menu__trigger:hover,
+.st-user-menu__trigger[aria-expanded='true'] {
+  border-color: var(--color-navy);
+}
+
+/* Organizaciones o nombres largos: una línea con puntos suspensivos; el
+   nombre completo queda en el menú y en el nombre accesible. */
+.st-user-menu__label {
+  max-width: 16rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Mientras llega el nombre de la organización (GET /api/user/profile). */
+.st-user-menu__label--loading {
+  width: var(--space-88);
+  height: var(--space-10);
+  border-radius: var(--radius-pill);
+  background-color: var(--color-surface-muted);
+  animation: var(--anim-pulse-dot);
+}
+
+/* ── Menú ──────────────────────────────────────────────────────────────── */
+.st-user-menu__panel {
+  position: absolute;
+  top: calc(100% + var(--space-8));
+  right: 0;
+  z-index: var(--z-dropdown);
+  min-width: max(100%, 15rem);
+  max-width: min(22rem, calc(100vw - 2 * var(--layout-topbar-pad-x)));
+  padding: var(--space-6);
+  border: var(--border-width) solid var(--color-border-card);
+  border-radius: var(--radius-control);
+  background-color: var(--color-surface-white);
+  box-shadow: var(--shadow-float);
+  animation: var(--anim-fade-up);
+}
+
+/* Quién tiene la sesión: nombre, organización y correo */
+.st-user-menu__who {
+  margin-bottom: var(--space-6);
+  padding: var(--space-8) var(--space-12) var(--space-10);
+  border-bottom: var(--border-width) solid var(--color-border-divider);
+  line-height: var(--lh-normal);
+}
+
+.st-user-menu__name {
+  color: var(--color-text);
+  font-size: var(--fs-ui);
+  font-weight: var(--fw-semibold);
+}
+
+.st-user-menu__org {
+  color: var(--color-text-secondary);
+  font-size: var(--fs-meta);
+}
+
+.st-user-menu__detail {
+  color: var(--color-text-tertiary);
+  font-size: var(--fs-small);
+  overflow-wrap: anywhere;
+}
+
+.st-user-menu__list {
+  list-style: none;
+}
+
+.st-user-menu__item {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  min-height: var(--space-40);
+  padding: var(--space-8) var(--space-12);
+  border-radius: var(--radius-tab);
+  color: var(--color-text);
+  font-size: var(--fs-ui);
+  font-weight: var(--fw-medium);
+  line-height: var(--lh-title);
+  text-align: left;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+/* Puntero y teclado resaltan igual; el aro de foco va por dentro para que el
+   borde de la tarjeta no lo recorte. */
+.st-user-menu__item:hover,
+.st-user-menu__item:focus-visible {
+  background-color: var(--color-bg-alt);
+}
+
+.st-user-menu__item:focus-visible {
+  outline-offset: calc(-1 * var(--focus-outline-width));
+}
+
+.st-user-menu__item[aria-current='page'] {
+  font-weight: var(--fw-semibold);
+}
+
+.st-user-menu__item[aria-disabled='true'] {
+  color: var(--color-text-tertiary);
+  cursor: progress;
+}
+
+.st-user-menu__separator {
+  height: var(--border-width);
+  margin: var(--space-6) var(--space-4);
+  background-color: var(--color-border-divider);
+}
+
+/* Por debajo de 768 px la pastilla se oculta: sus opciones van al menú móvil. */
+@media (max-width: 767.98px) {
+  .st-user-menu {
+    display: none;
+  }
+}
+
+@media (forced-colors: active) {
+  .st-user-menu__item:hover {
+    outline: var(--border-width) solid CanvasText;
+    outline-offset: calc(-1 * var(--border-width));
+  }
+
+  .st-user-menu__separator {
+    background-color: CanvasText;
+  }
+}

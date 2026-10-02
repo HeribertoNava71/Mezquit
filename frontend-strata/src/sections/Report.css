@@ -20,9 +20,9 @@
   .report__badge { border-color: #000; }
 }
 
+/* Barras, pie, halos y .no-print se ocultan en el layout (global.css y los
+   .css de components/layout). Aquí solo queda lo del reporte; su pie legal
+   (.report__foot) se imprime. */
 @media print {
-  .no-print, .header, .applayout__bar, .footer { display: none !important; }
-  body { padding-top: 0 !important; }
-  .applayout__main { padding: 0 !important; }
   .report { gap: 1rem; }
 }

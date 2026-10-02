@@ -1,0 +1,8 @@
+{
+  "//": "Token que no existe: todas las rutas del portal responden 404 (Invitation::firstOrFail).",
+  "// rutas": ["/evaluar/token-inexistente", "/evaluar/Lvpx1u6OcvNbil7ZnhYu"],
+
+  "GET /api/user": { "status": 401, "body": { "message": "Unauthenticated." } },
+  "GET /api/evaluar/*": { "status": 404, "body": { "message": "No query results for model [App\\Models\\Invitation]." } },
+  "POST /api/evaluar/*": { "status": 404, "body": { "message": "No query results for model [App\\Models\\Invitation]." } }
+}

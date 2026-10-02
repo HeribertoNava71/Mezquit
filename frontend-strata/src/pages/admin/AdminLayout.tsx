@@ -1,20 +1,18 @@
-import { Outlet, useNavigate } from 'react-router-dom'
-import { logout } from '@/api/auth'
-import { useAuth } from '@/context/AuthContext'
-import './AdminLayout.css'
+import { Footer } from '@/components/layout/Footer'
+import { PageLayout } from '@/components/layout/PageLayout'
+import { RouteTransition } from '@/components/layout/RouteTransition'
+import { BarraAdmin } from '@/components/layout/topbar/BarraAdmin'
 
+/**
+ * Layout de operación (/admin/*): barra de super admin (BarraAdmin), el mismo
+ * lienzo, transición y pie que el resto (PageLayout, RouteTransition y Footer).
+ * Ya no depende de AppLayout.css (riesgo 19). El acceso lo controla
+ * RequirePlatformAdmin en App.tsx.
+ */
 export default function AdminLayout() {
-  const { setUser } = useAuth()
-  const navigate = useNavigate()
-  async function handleLogout() { await logout(); setUser(null); navigate('/login') }
-
   return (
-    <div className="admin">
-      <header className="admin__bar">
-        <span className="admin__brand">Mez <span className="admin__tag">· operación</span></span>
-        <button className="applayout__logout" onClick={handleLogout}>Salir</button>
-      </header>
-      <main className="admin__main"><Outlet /></main>
-    </div>
+    <PageLayout topbar={<BarraAdmin />} footer={<Footer />}>
+      <RouteTransition />
+    </PageLayout>
   )
 }

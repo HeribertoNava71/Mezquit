@@ -1,23 +1,55 @@
+// Genera los íconos y la imagen para compartir a partir del emblema de Strata (D-03).
+//
+// Uso (desde cualquier carpeta): node scripts/generate-favicons.mjs
+//
+// Origen: public/brand/strata-mark.png, copiado del prototipo aprobado
+// (Plataforma Strata de evaluaciones psicométricas/assets/). Si cambia el
+// emblema, reemplaza ese archivo y vuelve a correr el script.
+//
+// Salida en public/: logo.png, favicon-16.png, favicon-32.png,
+// apple-touch-icon.png y og-image.png (1200 × 630).
 import sharp from 'sharp'
-import { mkdirSync } from 'fs'
+import { mkdirSync } from 'node:fs'
+import path from 'node:path'
+import { fileURLToPath } from 'node:url'
 
-const SRC = '../backend/img/mezquite.png'
-const OUT = './public'
+const RAIZ = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
+const SRC = path.join(RAIZ, 'public/brand/strata-mark.png')
+const OUT = path.join(RAIZ, 'public')
+
+// Fondo del propio emblema (#F8F5ED). Rellenar con él evita que se note el
+// recuadro del PNG, que es opaco. iOS necesita el ícono opaco.
+const FONDO = { r: 248, g: 245, b: 237, alpha: 1 }
 
 mkdirSync(OUT, { recursive: true })
 
-// Copiar logo a public (para referencia en CSS/JS)
-await sharp(SRC).toFile(`${OUT}/logo.png`)
+// El emblema sin el margen beige del archivo, para que llene cada ícono.
+const emblema = await sharp(SRC).trim({ threshold: 18 }).toBuffer()
 
-// Favicons
-await sharp(SRC).resize(16, 16, { fit: 'contain', background: { r: 0, g: 0, b: 0, alpha: 0 } }).toFile(`${OUT}/favicon-16.png`)
-await sharp(SRC).resize(32, 32, { fit: 'contain', background: { r: 0, g: 0, b: 0, alpha: 0 } }).toFile(`${OUT}/favicon-32.png`)
-await sharp(SRC).resize(180, 180, { fit: 'contain', background: { r: 218, g: 215, b: 205, alpha: 1 } }).toFile(`${OUT}/apple-touch-icon.png`)
+/** Ícono cuadrado: el emblema centrado con un margen del mismo fondo. */
+async function cuadrado(lado, margen, archivo) {
+  const interior = lado - margen * 2
+  await sharp(emblema)
+    .resize(interior, interior, { fit: 'contain', background: FONDO })
+    .extend({ top: margen, bottom: margen, left: margen, right: margen, background: FONDO })
+    .png()
+    .toFile(path.join(OUT, archivo))
+}
 
-// OG image 1200×630 fondo timberwolf + logo centrado
-const logoBuffer = await sharp(SRC).resize(380, 257, { fit: 'inside' }).toBuffer()
-await sharp({
-  create: { width: 1200, height: 630, channels: 4, background: { r: 218, g: 215, b: 205, alpha: 1 } }
-}).composite([{ input: logoBuffer, gravity: 'centre' }]).png().toFile(`${OUT}/og-image.png`)
+// Logo de referencia: lo usan las pantallas que aún no se rediseñan
+// (/logo.png en Login y Registro). Las barras y el pie nuevos usan
+// public/brand/strata-salamandra.png a través de SITE.brand.
+await sharp(SRC).png().toFile(path.join(OUT, 'logo.png'))
 
-console.log('Favicons generados en public/')
+await cuadrado(16, 1, 'favicon-16.png')
+await cuadrado(32, 2, 'favicon-32.png')
+await cuadrado(180, 20, 'apple-touch-icon.png')
+
+// Imagen para compartir (Open Graph): emblema centrado sobre su mismo fondo.
+const emblemaOg = await sharp(emblema).resize(300, 330, { fit: 'inside' }).toBuffer()
+await sharp({ create: { width: 1200, height: 630, channels: 4, background: FONDO } })
+  .composite([{ input: emblemaOg, gravity: 'centre' }])
+  .png()
+  .toFile(path.join(OUT, 'og-image.png'))
+
+console.log('Íconos generados en public/: logo.png, favicon-16.png, favicon-32.png, apple-touch-icon.png y og-image.png')

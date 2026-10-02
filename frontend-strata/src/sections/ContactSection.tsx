@@ -1,7 +1,7 @@
 import { useState, type FormEvent, type ChangeEvent } from 'react'
 import { SITE } from '@/config/site'
 import Button from '@/components/ui/Button'
-import api from '@/api/axios'
+import api, { csrf } from '@/api/axios'
 import './ContactSection.css'
 
 interface FormState {
@@ -41,6 +41,7 @@ export default function ContactSection() {
     setLoading(true)
     setErrors({})
     try {
+      await csrf() // /demo no hace ningún GET propio: sin esto el POST depende de la cookie de otra petición (riesgo 10)
       await api.post('/api/leads', form)
       setSent(true)
     } catch (err: unknown) {

@@ -1,0 +1,19 @@
+/* Saldo de la barra de RR. HH. (Strata.dc.html:67): 13 px, 600, navy y punto
+   celeste de 7 px. El hover #0EA5E9 del prototipo no cumple como texto: se
+   usa --color-link-hover (#0369A1). */
+.st-balance {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  gap: var(--space-7);
+  min-height: var(--space-24);
+  color: var(--color-link);
+  font-size: var(--fs-ui-sm);
+  font-weight: var(--fw-semibold);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.st-balance:hover {
+  color: var(--color-link-hover);
+}

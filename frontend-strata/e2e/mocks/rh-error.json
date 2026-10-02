@@ -1,0 +1,89 @@
+{
+  "//": [
+    "RR. HH. con fallas del servidor: la sesión y el perfil de Mariana Solís cargan, pero las listas y los detalles responden 500.",
+    "Las acciones responden su error de negocio: 422 al crear (saldo) y al solicitar créditos, 409 al reenviar y 422 en el perfil y la contraseña."
+  ],
+  "// rutas": ["/app", "/app/evaluaciones", "/app/creditos", "/app/pruebas", "/app/evaluaciones/13", "/app/evaluaciones/13/comparar", "/app/candidatos/41/reporte", "/app/evaluaciones/nueva", "/perfil"],
+
+  "GET /api/user": {
+    "status": 200,
+    "body": {
+      "id": 34,
+      "organization_id": 4,
+      "name": "Mariana",
+      "last_name": "Solís",
+      "phone": "55 0142 8890",
+      "birth_date": "1987-04-23T00:00:00.000000Z",
+      "position": "Gerente de Talento y Cultura",
+      "privacy_accepted_at": "2026-09-02T10:15:02.000000Z",
+      "email": "mariana.solis@example.com",
+      "email_verified_at": null,
+      "role": "admin",
+      "is_platform_admin": false,
+      "created_at": "2026-09-02T10:15:02.000000Z",
+      "updated_at": "2026-09-12T17:40:19.000000Z"
+    }
+  },
+  "GET /api/user/profile": {
+    "status": 200,
+    "body": {
+      "data": {
+        "id": 34,
+        "organization_id": 4,
+        "name": "Mariana",
+        "last_name": "Solís",
+        "phone": "55 0142 8890",
+        "birth_date": "1987-04-23T00:00:00.000000Z",
+        "position": "Gerente de Talento y Cultura",
+        "privacy_accepted_at": "2026-09-02T10:15:02.000000Z",
+        "email": "mariana.solis@example.com",
+        "email_verified_at": null,
+        "role": "admin",
+        "is_platform_admin": false,
+        "created_at": "2026-09-02T10:15:02.000000Z",
+        "updated_at": "2026-09-12T17:40:19.000000Z",
+        "organization": { "id": 4, "name": "Comercializadora Río Claro", "sector": "comercio", "size": "51-250", "created_at": "2026-09-02T10:15:01.000000Z", "updated_at": "2026-09-02T10:15:01.000000Z" }
+      }
+    }
+  },
+  "PUT /api/user/profile": {
+    "status": 422,
+    "body": {
+      "message": "The last name field is required.",
+      "errors": { "last_name": ["The last name field is required."] }
+    }
+  },
+  "PUT /api/user/password": {
+    "status": 422,
+    "body": {
+      "message": "La contraseña actual es incorrecta.",
+      "errors": { "current_password": ["La contraseña actual es incorrecta."] }
+    }
+  },
+  "POST /api/logout": { "status": 204 },
+
+  "GET /api/credits": { "status": 500, "body": { "message": "Server Error" } },
+  "POST /api/credit-requests": {
+    "status": 422,
+    "body": {
+      "message": "The requested amount field must be at least 1.",
+      "errors": { "requested_amount": ["The requested amount field must be at least 1."] }
+    }
+  },
+  "GET /api/assessments": { "status": 500, "body": { "message": "Server Error" } },
+  "POST /api/assessments": { "status": 422, "body": { "message": "Créditos insuficientes: necesitas 3, tienes 2" } },
+  "GET /api/assessments/:id": { "status": 500, "body": { "message": "Server Error" } },
+  "GET /api/assessments/:id/compare": { "status": 500, "body": { "message": "Server Error" } },
+  "GET /api/invitations/:id/report": { "status": 500, "body": { "message": "Server Error" } },
+  "POST /api/invitations/:id/resend": { "status": 409, "body": { "message": "La evaluación ya fue completada." } },
+
+  "GET /api/catalog": { "status": 500, "body": { "message": "Server Error" } },
+  "GET /api/catalog/:slug": { "status": 500, "body": { "message": "Server Error" } },
+  "POST /api/leads": { "status": 201, "body": { "message": "Tu solicitud fue recibida. Te contactamos en un día hábil." } },
+
+  "GET /api/admin/*": { "status": 403, "body": { "message": "" } },
+  "POST /api/admin/*": { "status": 403, "body": { "message": "" } },
+  "PUT /api/admin/*": { "status": 403, "body": { "message": "" } },
+  "PATCH /api/admin/*": { "status": 403, "body": { "message": "" } },
+  "DELETE /api/admin/*": { "status": 403, "body": { "message": "" } }
+}

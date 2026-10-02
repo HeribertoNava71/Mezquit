@@ -43,7 +43,7 @@ Sistema de diseño del rediseño STRATA, definido en la Fase 1. Reemplaza la pal
     - El escalonado se escribe `animation-delay: calc(var(--i) * var(--stagger-card))` (o `--stagger-row`), con `style={{ '--i': index }}`.
     - Con prefers-reduced-motion, la regla global anula animaciones, transiciones y retardos. Lo que se anima con JS consulta `useReducedMotion()`; la mascota queda quieta u oculta.
 16. **Capas.** Solo `--z-*`. Los menús de la barra usan `--z-dropdown`; modales, drawer y su fondo, `--z-overlay`. El toast queda encima de todo.
-17. **Móvil (640 px o menos).** Los tokens de layout se reducen solos; por ejemplo, el padding lateral pasa de 34 a 20 px. Desde ese mismo ancho, las tablas pasan a tarjetas (D-23). Los breakpoints no pueden ser variables CSS: son 640 px y 768 px (menú móvil).
+17. **Móvil (640 px o menos).** Los tokens de layout se reducen solos, por pasos: el padding de página pasa de 48/34/88 a 32/20/64 px y, a 400 px o menos, a 24/16/56 px (margen lateral de 16 px en teléfonos chicos). Desde 640 px, las tablas pasan a tarjetas (D-23). Los breakpoints no pueden ser variables CSS: son 400 px, 640 px y 768 px (menú móvil).
 
 ## Recetas
 
@@ -319,6 +319,7 @@ Son ejemplos; los nombres de clase son ilustrativos.
 | `--fs-figure-lg` | `1.6875rem` | 27 px: saldo |
 | `--fs-figure` | `1.4375rem` | 23 px: precio del catálogo |
 | `--fs-figure-sm` | `1.3125rem` | 21 px: vista previa |
+| `--fs-brand` | `1.0625rem` | 17 px: nombre de la marca en las barras (Strata.dc.html:57) |
 | `--fs-lead` | `1.0625rem` | 17 px: entradilla |
 | `--fs-body` | `1rem` | 16 px: cuerpo base del documento |
 | `--fs-body-sm` | `0.9375rem` | 15 px: cuerpo compacto, CTA grande |
@@ -378,6 +379,9 @@ Son ejemplos; los nombres de clase son ilustrativos.
 | `--border-width-thick` | `2px` | Aro de radio, subrayado activo |
 | `--size-target` | `44px` | Objetivo táctil mínimo en el flujo del candidato |
 | `--size-avatar` | `30px` | Avatar de iniciales de la barra y marca de la empresa (Strata.dc.html:69, 1001) |
+| `--size-topbar-row` | `40px` | Alto mínimo de la fila de acciones de la barra: el de la pastilla (avatar de 30 px, 4 px arriba y abajo y borde de 1 px; Strata.dc.html:68). Las tres barras miden 80 px, también sin sesión y mientras carga GET /api/user (QA de la Fase 2) |
+| `--size-logo` | `30px` | Salamandra de las barras (Strata.dc.html:56, 1144) |
+| `--size-logo-sm` | `20px` | Salamandra del pie (Strata.dc.html:314, 1232) |
 | `--size-avatar-lg` | `33px` | Avatar cuadrado de la tabla de candidatos (Strata.dc.html:838) |
 | `--size-stat-badge` | `38px` | Cuadro numérico de la tarjeta de resumen (Strata.dc.html:699) |
 
@@ -507,6 +511,7 @@ Son ejemplos; los nombres de clase son ilustrativos.
 | `--stagger-row` | `28ms` | Entre filas de tabla |
 | `--transition-state` | `background-color var(--dur-state) var(--ease-base), border-color var(--dur-state) var(--ease-base), color var(--dur-state) var(--ease-base), box-shadow var(--dur-state) var(--ease-base), opacity var(--dur-state) var(--ease-base)` | Transición de hover y estado (regla global en button, a, input, td y th) |
 | `--anim-screen-in` | `st-screen-in var(--dur-screen) var(--ease-out) backwards` | Entrada de pantalla |
+| `--anim-fade-in` | `st-fade-in var(--dur-screen) var(--ease-out) backwards` | Entrada de una pantalla que llega con #ancla: solo fundido, para que el salto al ancla no se corra (RouteTransition) |
 | `--anim-rise-in` | `st-rise-in var(--dur-screen) var(--ease-out) backwards` | Tarjetas escalonadas (retardo i × --stagger-card) |
 | `--anim-soft-in` | `st-soft-in var(--dur-soft) var(--ease-out) backwards` | Entradilla del hero y tarjeta de pregunta |
 | `--anim-row-in` | `st-row-in var(--dur-row) var(--ease-out) backwards` | Filas de tabla (retardo i × --stagger-row) |
@@ -528,20 +533,20 @@ Son ejemplos; los nombres de clase son ilustrativos.
 | Token | Valor | Uso |
 |---|---|---|
 | `--layout-max` | `1200px` | Ancho máximo de página, barra y pie |
-| `--layout-page-pad-top` | `48px` · móvil (≤640 px): `32px` | Padding superior de página interna |
-| `--layout-page-pad-x` | `34px` · móvil (≤640 px): `20px` | Padding lateral de página y home |
-| `--layout-page-pad-bottom` | `88px` · móvil (≤640 px): `64px` | Padding inferior de página interna |
+| `--layout-page-pad-top` | `48px` · ≤640 px: `32px` · ≤400 px: `24px` | Padding superior de página interna |
+| `--layout-page-pad-x` | `34px` · ≤640 px: `20px` · ≤400 px: `16px` | Padding lateral de página, home y pie |
+| `--layout-page-pad-bottom` | `88px` · ≤640 px: `64px` · ≤400 px: `56px` | Padding inferior de página interna |
 | `--layout-page-padding` | `var(--layout-page-pad-top) var(--layout-page-pad-x) var(--layout-page-pad-bottom)` | Padding de página interna (48 34 88) |
 | `--layout-topbar-pad-y` | `20px` · móvil (≤640 px): `14px` | Padding vertical de la barra |
-| `--layout-topbar-pad-x` | `34px` · móvil (≤640 px): `20px` | Padding lateral de la barra |
+| `--layout-topbar-pad-x` | `34px` · ≤640 px: `20px` · ≤400 px: `16px` | Padding lateral de la barra |
 | `--layout-topbar-padding` | `var(--layout-topbar-pad-y) var(--layout-topbar-pad-x)` | Padding de la barra (20 34) |
 | `--layout-home-padding` | `0 var(--layout-page-pad-x) 72px` | Padding de la home |
 | `--layout-section-pad-y` | `64px` · móvil (≤640 px): `48px` | Separación entre secciones de la home |
-| `--layout-access-padding` | `48px 24px` · móvil (≤640 px): `32px 20px` | Padding del acceso del candidato |
-| `--layout-exam-padding` | `44px 28px 64px` · móvil (≤640 px): `32px 20px 48px` | Padding del cuerpo del examen |
-| `--layout-exam-bar-padding` | `15px 28px` · móvil (≤640 px): `12px 20px` | Padding de la barra del examen |
-| `--layout-end-padding` | `48px 28px` · móvil (≤640 px): `32px 20px` | Padding de la pantalla de fin |
-| `--layout-scroll-offset` | `96px` | scroll-padding-top: el foco no queda bajo la barra fija |
+| `--layout-access-padding` | `48px 24px` · ≤640 px: `32px 20px` · ≤400 px: `24px 16px` | Padding del acceso del candidato |
+| `--layout-exam-padding` | `44px 28px 64px` · ≤640 px: `32px 20px 48px` · ≤400 px: `24px 16px 40px` | Padding del cuerpo del examen |
+| `--layout-exam-bar-padding` | `15px 28px` · ≤640 px: `12px 20px` · ≤400 px: `12px 16px` | Padding de la barra del examen |
+| `--layout-end-padding` | `48px 28px` · ≤640 px: `32px 20px` · ≤400 px: `24px 16px` | Padding de la pantalla de fin |
+| `--layout-scroll-offset` | `96px` | scroll-padding-top: anclas y foco no quedan bajo la barra sticky |
 | `--width-report` | `1080px` | Reporte |
 | `--width-exam-bar` | `900px` | Barra del examen |
 | `--width-table-min` | `900px` | Tabla en modo tabla; por debajo de 640 px pasa a tarjetas (D-23) |
@@ -680,8 +685,8 @@ Los nombres del sistema anterior siguen definidos, pero apuntan a su equivalente
 | `--sp-1` … `--sp-24` | N × 4 px | `--space-4` … `--space-88` | sp-20 y sp-24 (sin uso) van a 72 y 88 px. |
 | `--radius-sm` · `--radius-md` · `--radius-lg` | 4 · 8 · 16 px | `--radius-control` (14) · `--radius-card` (18) · `--radius-glass` (24) | Botones e inputs, tarjetas, tarjeta de auth. |
 | `--t-fast` · `--t-base` | 150 ms · 250 ms ease | `--dur-state` (.18s) · `--dur-lift` (.22s), ambos con `--ease-base` | |
-| `--max-width` · `--section-px` · `--section-py` | 1200 px · fluido · fluido | `--layout-max` · `--layout-page-pad-x` · `--layout-section-pad-y` | |
-| `--header-h` | 64 px | Se conserva en 64 px | Barra fija vieja y padding-top del body. Se retira en la Fase 2. |
+| `--max-width` · `--section-px` · `--section-py` | 1200 px · fluido · fluido | `--layout-max` · `--layout-page-pad-x` · `--layout-section-pad-y` | Dentro de `.st-page__content` (PageLayout), `--section-px` vale 0 para que las pantallas viejas no dupliquen el margen lateral del contenedor nuevo. |
+| `--header-h` | 64 px | Se conserva en 64 px | El padding-top del body se retiró en la Fase 2 (las barras son sticky). Solo lo usan los min-height de Hero.css y NotFoundPage.css (Header.css se reescribió y AppLayout.css y AdminLayout.css se borraron en la Fase 2); se retira cuando esas pantallas se rediseñen (Fases 6 y 7). |
 | `--disc-d` · `--disc-i` · `--disc-s` · `--disc-c` | Sin cambio | — | Sin uso. No necesitan alias y se retiran en la Fase 8. |
 
 ## Decisiones de la Fase 1
@@ -710,5 +715,5 @@ Los nombres del sistema anterior siguen definidos, pero apuntan a su equivalente
 - polyCycle con movimiento reducido deja visibles los tres polígonos del radar de la home; la Fase 6 debe ocultar dos.
 - Halos de la home (Fase 6). En el centro del halo coral de la home (rgba(255,107,107,.26) sobre #FAF8F5, que compone #FBD3D1), el texto terciario baja a 4.24:1, el de éxito a 3.97:1 y el foco a 3.00:1. El secundario se mantiene en 5.44:1. Esos textos van dentro de una superficie o en secundario (regla 13).
 - Pesos de Satoshi. El CDN de Fontshare solo trae 300, 400, 500, 700 y 900, así que `--fw-semibold` y `--fw-extrabold` se pintan en 700 en los títulos, igual que en el prototipo. Las cifras de datos van en General Sans, que llega hasta 700 (QA visual de la Fase 1). Si se quiere un peso más grueso para las cifras, hay que pedir Satoshi 900 (decisión del dueño).
-- El enlace para saltar al contenido ya tiene estilos (`.st-skip-link`), pero el elemento se agrega a los layouts en la Fase 2.
-- `--header-h` y el padding-top del body se retiran en la Fase 2. Los alias, las fuentes Cormorant Garamond y DM Sans y los `--disc-*` se retiran en la Fase 8.
+- El enlace para saltar al contenido (`.st-skip-link`) lo monta PageLayout desde la Fase 2, cuando la pantalla tiene barra superior. Su capa (`--z-skip-link`, 90) queda por encima de las tres barras, que ya son `.st-topbar` (`--z-topbar`, 30); la barra fija vieja (z-index 100) ya no existe.
+- El padding-top del body se retiró en la Fase 2. `--header-h` queda mientras Hero.css y NotFoundPage.css lo usen. Los alias, las fuentes Cormorant Garamond y DM Sans y los `--disc-*` se retiran en la Fase 8.

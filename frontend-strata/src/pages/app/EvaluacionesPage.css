@@ -7,3 +7,15 @@
 .evals__progress { font-variant-numeric: tabular-nums; }
 .evals__link { color: var(--color-hunter); font-weight: 500; }
 .evals__empty { font-size: var(--text-base); opacity: 0.7; }
+
+/* Transición hasta la Fase 4 (D-23: tablas a tarjetas por debajo de 640 px; QA de
+   la Fase 2). La tabla vieja no cabe en pantallas angostas: el desplazamiento
+   lateral queda dentro de la pantalla y no arrastra la página, la barra ni el
+   pie. El relleno, compensado con margen negativo, deja sitio al anillo de foco
+   que el recorte del desplazamiento cortaría en los bordes. */
+.evals {
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  padding: calc(var(--focus-outline-width) + var(--focus-outline-offset));
+  margin: calc(-1 * (var(--focus-outline-width) + var(--focus-outline-offset)));
+}

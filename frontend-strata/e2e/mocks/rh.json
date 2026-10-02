@@ -1,0 +1,885 @@
+{
+  "//": ["Escenario RR. HH.: Mariana Solís (usuario 34), administradora de Comercializadora Río Claro (organización 4).", "Formas de src/api (rh.ts, report.ts, assessments.ts, profile.ts) y de los controladores del backend."],
+  "// rutas": [
+    "/app (5 evaluaciones; 4 activas porque tienen invitaciones sin completar)",
+    "/app/pruebas y /pruebas (catálogo)",
+    "/app/creditos (saldo 37; compra, consumo, cortesía y ajuste con referencia null)",
+    "/app/evaluaciones",
+    "/app/evaluaciones/13 (6 candidatos en los cuatro estados; 2 pruebas)",
+    "/app/evaluaciones/17 (sin completadas: comparativa vacía)",
+    "/app/evaluaciones/13/comparar (3 completadas, 7 escalas)",
+    "/app/candidatos/41/reporte (2 pruebas de 3 y 4 escalas, integridad y 4 preguntas)",
+    "/app/candidatos/24/reporte (1 prueba, 3 pérdidas de foco)",
+    "/app/candidatos/44/reporte (409: no completada)",
+    "/app/candidatos/50/reporte y /app/evaluaciones/15 (403: de otra empresa)",
+    "/app/candidatos/999/reporte y /app/evaluaciones/999 (404)",
+    "/app/evaluaciones/nueva",
+    "/perfil"
+  ],
+  "// datos": [
+    "Evaluaciones 4, 6, 9, 13 y 17 (más reciente: 17).",
+    "Invitaciones completadas, con reporte: 14, 23 a 27 y 41 a 43; las demás responden 409 al pedir el reporte.",
+    "Reenviar responde 409 en las completadas.",
+    "Los enlaces usan FRONTEND_URL de desarrollo (http://localhost:5173)."
+  ],
+
+  "GET /api/user": {
+    "status": 200,
+    "body": {
+      "id": 34,
+      "organization_id": 4,
+      "name": "Mariana",
+      "last_name": "Solís",
+      "phone": "55 0142 8890",
+      "birth_date": "1987-04-23T00:00:00.000000Z",
+      "position": "Gerente de Talento y Cultura",
+      "privacy_accepted_at": "2026-09-02T10:15:02.000000Z",
+      "email": "mariana.solis@example.com",
+      "email_verified_at": null,
+      "role": "admin",
+      "is_platform_admin": false,
+      "created_at": "2026-09-02T10:15:02.000000Z",
+      "updated_at": "2026-09-12T17:40:19.000000Z"
+    }
+  },
+  "GET /api/user/profile": {
+    "status": 200,
+    "body": {
+      "data": {
+        "id": 34,
+        "organization_id": 4,
+        "name": "Mariana",
+        "last_name": "Solís",
+        "phone": "55 0142 8890",
+        "birth_date": "1987-04-23T00:00:00.000000Z",
+        "position": "Gerente de Talento y Cultura",
+        "privacy_accepted_at": "2026-09-02T10:15:02.000000Z",
+        "email": "mariana.solis@example.com",
+        "email_verified_at": null,
+        "role": "admin",
+        "is_platform_admin": false,
+        "created_at": "2026-09-02T10:15:02.000000Z",
+        "updated_at": "2026-09-12T17:40:19.000000Z",
+        "organization": { "id": 4, "name": "Comercializadora Río Claro", "sector": "comercio", "size": "51-250", "created_at": "2026-09-02T10:15:01.000000Z", "updated_at": "2026-09-02T10:15:01.000000Z" }
+      }
+    }
+  },
+  "PUT /api/user/profile": {
+    "status": 200,
+    "body": {
+      "data": {
+        "id": 34,
+        "organization_id": 4,
+        "name": "Mariana",
+        "last_name": "Solís",
+        "phone": "55 0142 8890",
+        "birth_date": "1987-04-23T00:00:00.000000Z",
+        "position": "Gerente de Talento y Cultura",
+        "privacy_accepted_at": "2026-09-02T10:15:02.000000Z",
+        "email": "mariana.solis@example.com",
+        "email_verified_at": null,
+        "role": "admin",
+        "is_platform_admin": false,
+        "created_at": "2026-09-02T10:15:02.000000Z",
+        "updated_at": "2026-09-12T17:40:19.000000Z"
+      }
+    }
+  },
+  "PUT /api/user/password": { "status": 200, "body": { "ok": true } },
+  "POST /api/logout": { "status": 204 },
+
+  "GET /api/credits": {
+    "status": 200,
+    "body": {
+      "data": {
+        "balance": 37,
+        "transactions": [
+          { "type": "consumo", "amount": -4, "reference": "assessment:17", "created_at": "2026-09-29 09:30" },
+          { "type": "compra", "amount": 20, "reference": "request:7", "created_at": "2026-09-26 16:10" },
+          { "type": "ajuste", "amount": 2, "reference": null, "created_at": "2026-09-18 13:45" },
+          { "type": "consumo", "amount": -6, "reference": "assessment:13", "created_at": "2026-09-16 10:02" },
+          { "type": "consumo", "amount": -5, "reference": "assessment:9", "created_at": "2026-09-09 11:20" },
+          { "type": "compra", "amount": 25, "reference": "request:3", "created_at": "2026-09-08 17:30" },
+          { "type": "consumo", "amount": -3, "reference": "assessment:6", "created_at": "2026-09-05 12:05" },
+          { "type": "consumo", "amount": -2, "reference": "assessment:4", "created_at": "2026-09-03 09:40" },
+          { "type": "cortesia", "amount": 10, "reference": "registro", "created_at": "2026-09-02 10:15" }
+        ]
+      }
+    }
+  },
+  "POST /api/credit-requests": { "status": 201, "body": { "message": "Solicitud registrada. Un asesor la revisará." } },
+  "GET /api/assessments": {
+    "status": 200,
+    "body": {
+      "data": [
+        { "id": 17, "name": "Ejecutivos de ventas · Q4", "position": "Ejecutivo de ventas", "deadline": "2026-10-15", "status": "activa", "counts": { "total": 4, "pendiente": 3, "iniciada": 1, "completada": 0 }, "created_at": "2026-09-29" },
+        { "id": 13, "name": "Coordinación de almacén · septiembre", "position": "Coordinador de almacén", "deadline": "2026-09-30", "status": "activa", "counts": { "total": 6, "pendiente": 1, "iniciada": 1, "completada": 3 }, "created_at": "2026-09-16" },
+        { "id": 9, "name": "Atención a clientes · turno matutino", "position": "Asesor de atención a clientes", "deadline": null, "status": "activa", "counts": { "total": 5, "pendiente": 0, "iniciada": 0, "completada": 5 }, "created_at": "2026-09-09" },
+        { "id": 6, "name": "Analista de crédito y cobranza", "position": "Analista de crédito", "deadline": "2026-09-19", "status": "activa", "counts": { "total": 3, "pendiente": 2, "iniciada": 0, "completada": 1 }, "created_at": "2026-09-05" },
+        { "id": 4, "name": "Prácticas profesionales 2026", "position": null, "deadline": null, "status": "activa", "counts": { "total": 2, "pendiente": 2, "iniciada": 0, "completada": 0 }, "created_at": "2026-09-03" }
+      ]
+    }
+  },
+  "POST /api/assessments": {
+    "status": 201,
+    "body": {
+      "data": {
+        "id": 18,
+        "name": "Auxiliares contables",
+        "invitations": [
+          { "id": 62, "candidate": "Karla Estrada", "email": "karla.estrada@example.com", "status": "pendiente", "link": "http://localhost:5173/evaluar/8LtNq9s6T87PtfN6O5iQDAxrr5rRcxrN2YFvuxha" },
+          { "id": 63, "candidate": "Luis Fernando Ortiz", "email": "luisfernando.ortiz@example.com", "status": "pendiente", "link": "http://localhost:5173/evaluar/rxyecmkRjMt9jeLJ2L3zN2m42yoelhXCyxwfHJWn" }
+        ]
+      }
+    }
+  },
+  "GET /api/assessments/4": {
+    "status": 200,
+    "body": {
+      "data": {
+        "id": 4,
+        "name": "Prácticas profesionales 2026",
+        "position": null,
+        "invitations": [
+          { "id": 9, "candidate": "Renata Olvera", "email": "renata.olvera@example.com", "status": "pendiente", "link": "http://localhost:5173/evaluar/TJD9YD8QzgLVBGgTAGqqte0shE2N12VaBvVCZlpH" },
+          { "id": 10, "candidate": "Santiago Méndez", "email": "santiago.mendez@example.com", "status": "pendiente", "link": "http://localhost:5173/evaluar/oa7hNKOnzztyVy9v44hGWB1LR4WvGiVECz89ixgh" }
+        ]
+      }
+    }
+  },
+  "GET /api/assessments/6": {
+    "status": 200,
+    "body": {
+      "data": {
+        "id": 6,
+        "name": "Analista de crédito y cobranza",
+        "position": "Analista de crédito",
+        "invitations": [
+          { "id": 14, "candidate": "Héctor Domínguez", "email": "hector.dominguez@example.com", "status": "completada", "link": "http://localhost:5173/evaluar/ZVqK9LWy4UmjEpmp4BJ5PxC5ApFAv38AT0SoAeZr" },
+          { "id": 15, "candidate": "Alejandra Ibarra", "email": "alejandra.ibarra@example.com", "status": "pendiente", "link": "http://localhost:5173/evaluar/knPMIP7MJEh32Ee0omuNBv7LpKTDEw0ify10da2Y" },
+          { "id": 16, "candidate": "Gabriel Castillo", "email": "gabriel.castillo@example.com", "status": "pendiente", "link": "http://localhost:5173/evaluar/HX8jfECKrPTCMj15Qn7eDUTZzOhBejWZkaC1wHjx" }
+        ]
+      }
+    }
+  },
+  "GET /api/assessments/9": {
+    "status": 200,
+    "body": {
+      "data": {
+        "id": 9,
+        "name": "Atención a clientes · turno matutino",
+        "position": "Asesor de atención a clientes",
+        "invitations": [
+          { "id": 23, "candidate": "Ximena Fuentes", "email": "ximena.fuentes@example.com", "status": "completada", "link": "http://localhost:5173/evaluar/PJf0f9XlkIS7LzgczBblguSMfJEojcubhXNHDJcm" },
+          { "id": 24, "candidate": "Diego Ramírez", "email": "diego.ramirez@example.com", "status": "completada", "link": "http://localhost:5173/evaluar/4THjTVY7lwjzGnTJHivLDjT32TY24EzJxCt0DLh0" },
+          { "id": 25, "candidate": "Fernanda Lozano", "email": "fernanda.lozano@example.com", "status": "completada", "link": "http://localhost:5173/evaluar/palN41GKgdbOiTe6wM1YH0FJf8SGHrVq0wYnewiR" },
+          { "id": 26, "candidate": "Ricardo Peña", "email": "ricardo.pena@example.com", "status": "completada", "link": "http://localhost:5173/evaluar/M3qpSlNBOK9FSMPfwlex1aaB1WtcHvRlJ7dVO7U2" },
+          { "id": 27, "candidate": "Paola Medina", "email": "paola.medina@example.com", "status": "completada", "link": "http://localhost:5173/evaluar/Kof0mbnjTEqISm9BPdcBkBsFIc8odyBhKDiLUwUQ" }
+        ]
+      }
+    }
+  },
+  "GET /api/assessments/13": {
+    "status": 200,
+    "body": {
+      "data": {
+        "id": 13,
+        "name": "Coordinación de almacén · septiembre",
+        "position": "Coordinador de almacén",
+        "invitations": [
+          { "id": 41, "candidate": "Valentina Ríos", "email": "valentina.rios@example.com", "status": "completada", "link": "http://localhost:5173/evaluar/qjiK6mB4UN3VvExM1mez4KN5UAV7xJmbeUssAeME" },
+          { "id": 42, "candidate": "Joaquín Herrera", "email": "joaquin.herrera@example.com", "status": "completada", "link": "http://localhost:5173/evaluar/iff5Efp8Htmqk8BcwZBz3NMBWLZAfj4w5Am2IVaP" },
+          { "id": 43, "candidate": "Lucía Paredes", "email": "lucia.paredes@example.com", "status": "completada", "link": "http://localhost:5173/evaluar/1R1gsKasXUthjEJd8ZCHrdfDD2SP9cOeUK1Y0Nkt" },
+          { "id": 44, "candidate": "Sofía Navarro", "email": "sofia.navarro@example.com", "status": "iniciada", "link": "http://localhost:5173/evaluar/tft6Nh3Xas2pNlr14n6PF7LHkQLZsxCmx9DTOYun" },
+          { "id": 45, "candidate": "Andrés Molina", "email": "andres.molina@example.com", "status": "pendiente", "link": "http://localhost:5173/evaluar/Ph9KUD09gtdH9BLDjnSye1WSvBiOCv7Z5CrkRODD" },
+          { "id": 46, "candidate": "Mateo Guzmán", "email": "mateo.guzman@example.com", "status": "expirada", "link": "http://localhost:5173/evaluar/OgpzND7tD3NaZsGIjV5KPVCu8wMuqenvIJCL8pj8" }
+        ]
+      }
+    }
+  },
+  "GET /api/assessments/17": {
+    "status": 200,
+    "body": {
+      "data": {
+        "id": 17,
+        "name": "Ejecutivos de ventas · Q4",
+        "position": "Ejecutivo de ventas",
+        "invitations": [
+          { "id": 58, "candidate": "Abril Cortés", "email": "abril.cortes@example.com", "status": "iniciada", "link": "http://localhost:5173/evaluar/ZhHwe34SEscc4zaPFEK512IHnEygYZJa4TXXj92e" },
+          { "id": 59, "candidate": "Emilio Vargas", "email": "emilio.vargas@example.com", "status": "pendiente", "link": "http://localhost:5173/evaluar/USbSnRzivnUKyUaV7bqmy2ZqQidqhAPnrD73UHqu" },
+          { "id": 60, "candidate": "Regina Salazar", "email": "regina.salazar@example.com", "status": "pendiente", "link": "http://localhost:5173/evaluar/b9xsw2YJDGq1nbQUVz13qSz1CGHtO0u71Puq9YAN" },
+          { "id": 61, "candidate": "Tomás Aguirre", "email": "tomas.aguirre@example.com", "status": "pendiente", "link": "http://localhost:5173/evaluar/Lvpx1u6OcvNbil7ZnhYuLFbhCbZ1PGcQ42CVRM9p" }
+        ]
+      }
+    }
+  },
+  "GET /api/assessments/15": { "status": 403, "body": { "message": "" } },
+  "GET /api/assessments/:id": { "status": 404, "body": { "message": "No query results for model [App\\Models\\Assessment]." } },
+  "GET /api/assessments/4/compare": {
+    "status": 200,
+    "body": {
+      "data": {
+        "assessment": { "id": 4, "name": "Prácticas profesionales 2026" },
+        "scales": [{ "code": "RES", "name": "Orientación a resultados" }, { "code": "COL", "name": "Colaboración" }, { "code": "ADA", "name": "Adaptabilidad" }],
+        "rows": []
+      }
+    }
+  },
+  "GET /api/assessments/6/compare": {
+    "status": 200,
+    "body": {
+      "data": {
+        "assessment": { "id": 6, "name": "Analista de crédito y cobranza" },
+        "scales": [{ "code": "RES", "name": "Orientación a resultados" }, { "code": "COL", "name": "Colaboración" }, { "code": "ADA", "name": "Adaptabilidad" }],
+        "rows": [
+          {
+            "invitation_id": 14,
+            "candidate": "Héctor Domínguez",
+            "status": "completada",
+            "scores": { "RES": { "category": "medio", "percentile": 56, "normalized": 56.25 }, "COL": { "category": "medio", "percentile": 50, "normalized": 50 }, "ADA": { "category": "bajo", "percentile": 13, "normalized": 12.5 } }
+          }
+        ]
+      }
+    }
+  },
+  "GET /api/assessments/9/compare": {
+    "status": 200,
+    "body": {
+      "data": {
+        "assessment": { "id": 9, "name": "Atención a clientes · turno matutino" },
+        "scales": [{ "code": "RES", "name": "Orientación a resultados" }, { "code": "COL", "name": "Colaboración" }, { "code": "ADA", "name": "Adaptabilidad" }],
+        "rows": [
+          {
+            "invitation_id": 23,
+            "candidate": "Ximena Fuentes",
+            "status": "completada",
+            "scores": { "RES": { "category": "medio", "percentile": 63, "normalized": 62.5 }, "COL": { "category": "alto", "percentile": 94, "normalized": 93.75 }, "ADA": { "category": "medio", "percentile": 50, "normalized": 50 } }
+          },
+          {
+            "invitation_id": 24,
+            "candidate": "Diego Ramírez",
+            "status": "completada",
+            "scores": { "RES": { "category": "alto", "percentile": 88, "normalized": 87.5 }, "COL": { "category": "medio", "percentile": 38, "normalized": 37.5 }, "ADA": { "category": "bajo", "percentile": 31, "normalized": 31.25 } }
+          },
+          {
+            "invitation_id": 25,
+            "candidate": "Fernanda Lozano",
+            "status": "completada",
+            "scores": { "RES": { "category": "medio", "percentile": 44, "normalized": 43.75 }, "COL": { "category": "alto", "percentile": 75, "normalized": 75 }, "ADA": { "category": "alto", "percentile": 69, "normalized": 68.75 } }
+          },
+          {
+            "invitation_id": 26,
+            "candidate": "Ricardo Peña",
+            "status": "completada",
+            "scores": { "RES": { "category": "bajo", "percentile": 19, "normalized": 18.75 }, "COL": { "category": "medio", "percentile": 56, "normalized": 56.25 }, "ADA": { "category": "medio", "percentile": 56, "normalized": 56.25 } }
+          },
+          {
+            "invitation_id": 27,
+            "candidate": "Paola Medina",
+            "status": "completada",
+            "scores": { "RES": { "category": "alto", "percentile": 75, "normalized": 75 }, "COL": { "category": "alto", "percentile": 69, "normalized": 68.75 }, "ADA": { "category": "alto", "percentile": 81, "normalized": 81.25 } }
+          }
+        ]
+      }
+    }
+  },
+  "GET /api/assessments/13/compare": {
+    "status": 200,
+    "body": {
+      "data": {
+        "assessment": { "id": 13, "name": "Coordinación de almacén · septiembre" },
+        "scales": [
+          { "code": "RES", "name": "Orientación a resultados" },
+          { "code": "COL", "name": "Colaboración" },
+          { "code": "ADA", "name": "Adaptabilidad" },
+          { "code": "PLA", "name": "Planeación" },
+          { "code": "AUT", "name": "Autonomía" },
+          { "code": "DET", "name": "Atención al detalle" },
+          { "code": "RIT", "name": "Ritmo de trabajo" }
+        ],
+        "rows": [
+          {
+            "invitation_id": 41,
+            "candidate": "Valentina Ríos",
+            "status": "completada",
+            "scores": {
+              "RES": { "category": "alto", "percentile": 81, "normalized": 81.25 },
+              "COL": { "category": "alto", "percentile": 69, "normalized": 68.75 },
+              "ADA": { "category": "medio", "percentile": 44, "normalized": 43.75 },
+              "PLA": { "category": "alto", "percentile": 80, "normalized": 80 },
+              "AUT": { "category": "medio", "percentile": 55, "normalized": 55 },
+              "DET": { "category": "bajo", "percentile": 30, "normalized": 30 },
+              "RIT": { "category": "medio", "percentile": 65, "normalized": 65 }
+            }
+          },
+          {
+            "invitation_id": 42,
+            "candidate": "Joaquín Herrera",
+            "status": "completada",
+            "scores": {
+              "RES": { "category": "medio", "percentile": 50, "normalized": 50 },
+              "COL": { "category": "alto", "percentile": 88, "normalized": 87.5 },
+              "ADA": { "category": "medio", "percentile": 63, "normalized": 62.5 },
+              "PLA": { "category": "medio", "percentile": 40, "normalized": 40 },
+              "AUT": { "category": "alto", "percentile": 75, "normalized": 75 },
+              "DET": { "category": "medio", "percentile": 50, "normalized": 50 },
+              "RIT": { "category": "bajo", "percentile": 20, "normalized": 20 }
+            }
+          },
+          {
+            "invitation_id": 43,
+            "candidate": "Lucía Paredes",
+            "status": "completada",
+            "scores": {
+              "RES": { "category": "bajo", "percentile": 25, "normalized": 25 },
+              "COL": { "category": "medio", "percentile": 56, "normalized": 56.25 },
+              "ADA": { "category": "alto", "percentile": 88, "normalized": 87.5 },
+              "PLA": { "category": "medio", "percentile": 65, "normalized": 65 },
+              "AUT": { "category": "bajo", "percentile": 25, "normalized": 25 },
+              "DET": { "category": "alto", "percentile": 85, "normalized": 85 },
+              "RIT": { "category": "medio", "percentile": 45, "normalized": 45 }
+            }
+          }
+        ]
+      }
+    }
+  },
+  "GET /api/assessments/17/compare": {
+    "status": 200,
+    "body": {
+      "data": {
+        "assessment": { "id": 17, "name": "Ejecutivos de ventas · Q4" },
+        "scales": [
+          { "code": "RES", "name": "Orientación a resultados" },
+          { "code": "COL", "name": "Colaboración" },
+          { "code": "ADA", "name": "Adaptabilidad" },
+          { "code": "PLA", "name": "Planeación" },
+          { "code": "AUT", "name": "Autonomía" },
+          { "code": "DET", "name": "Atención al detalle" },
+          { "code": "RIT", "name": "Ritmo de trabajo" }
+        ],
+        "rows": []
+      }
+    }
+  },
+  "GET /api/assessments/15/compare": { "status": 403, "body": { "message": "" } },
+  "GET /api/assessments/:id/compare": { "status": 404, "body": { "message": "No query results for model [App\\Models\\Assessment]." } },
+  "GET /api/invitations/9/report": { "status": 409, "body": { "message": "La evaluación no está completada." } },
+  "GET /api/invitations/10/report": { "status": 409, "body": { "message": "La evaluación no está completada." } },
+  "GET /api/invitations/14/report": {
+    "status": 200,
+    "body": {
+      "data": {
+        "candidate": "Héctor Domínguez",
+        "position": "Analista de crédito",
+        "assessment": "Analista de crédito y cobranza",
+        "organization": "Comercializadora Río Claro",
+        "completed_at": "08/09/2026",
+        "tests": [
+          {
+            "name": "Prueba de demostración",
+            "integrity": { "blur_count": 0 },
+            "scales": [
+              { "code": "RES", "name": "Orientación a resultados", "normalized": 56.25, "percentile": 56, "category": "medio", "interpretation": "Puntaje medio en Orientación a resultados: dentro del promedio esperado." },
+              { "code": "COL", "name": "Colaboración", "normalized": 50, "percentile": 50, "category": "medio", "interpretation": "Puntaje medio en Colaboración: dentro del promedio esperado." },
+              { "code": "ADA", "name": "Adaptabilidad", "normalized": 12.5, "percentile": 13, "category": "bajo", "interpretation": "Puntaje bajo en Adaptabilidad: podría ser un área a explorar en entrevista." }
+            ]
+          }
+        ],
+        "interview_questions": ["Cuéntame de una situación reciente relacionada con «Adaptabilidad»."]
+      }
+    }
+  },
+  "GET /api/invitations/15/report": { "status": 409, "body": { "message": "La evaluación no está completada." } },
+  "GET /api/invitations/16/report": { "status": 409, "body": { "message": "La evaluación no está completada." } },
+  "GET /api/invitations/23/report": {
+    "status": 200,
+    "body": {
+      "data": {
+        "candidate": "Ximena Fuentes",
+        "position": "Asesor de atención a clientes",
+        "assessment": "Atención a clientes · turno matutino",
+        "organization": "Comercializadora Río Claro",
+        "completed_at": "10/09/2026",
+        "tests": [
+          {
+            "name": "Prueba de demostración",
+            "integrity": { "blur_count": 0 },
+            "scales": [
+              { "code": "RES", "name": "Orientación a resultados", "normalized": 62.5, "percentile": 63, "category": "medio", "interpretation": "Puntaje medio en Orientación a resultados: dentro del promedio esperado." },
+              { "code": "COL", "name": "Colaboración", "normalized": 93.75, "percentile": 94, "category": "alto", "interpretation": "Puntaje alto en Colaboración: es una fortaleza marcada del candidato." },
+              { "code": "ADA", "name": "Adaptabilidad", "normalized": 50, "percentile": 50, "category": "medio", "interpretation": "Puntaje medio en Adaptabilidad: dentro del promedio esperado." }
+            ]
+          }
+        ],
+        "interview_questions": ["Cuéntame de una situación reciente relacionada con «Colaboración»."]
+      }
+    }
+  },
+  "GET /api/invitations/24/report": {
+    "status": 200,
+    "body": {
+      "data": {
+        "candidate": "Diego Ramírez",
+        "position": "Asesor de atención a clientes",
+        "assessment": "Atención a clientes · turno matutino",
+        "organization": "Comercializadora Río Claro",
+        "completed_at": "10/09/2026",
+        "tests": [
+          {
+            "name": "Prueba de demostración",
+            "integrity": { "blur_count": 3 },
+            "scales": [
+              { "code": "RES", "name": "Orientación a resultados", "normalized": 87.5, "percentile": 88, "category": "alto", "interpretation": "Puntaje alto en Orientación a resultados: es una fortaleza marcada del candidato." },
+              { "code": "COL", "name": "Colaboración", "normalized": 37.5, "percentile": 38, "category": "medio", "interpretation": "Puntaje medio en Colaboración: dentro del promedio esperado." },
+              { "code": "ADA", "name": "Adaptabilidad", "normalized": 31.25, "percentile": 31, "category": "bajo", "interpretation": "Puntaje bajo en Adaptabilidad: podría ser un área a explorar en entrevista." }
+            ]
+          }
+        ],
+        "interview_questions": ["Cuéntame de una situación reciente relacionada con «Orientación a resultados».", "Cuéntame de una situación reciente relacionada con «Adaptabilidad»."]
+      }
+    }
+  },
+  "GET /api/invitations/25/report": {
+    "status": 200,
+    "body": {
+      "data": {
+        "candidate": "Fernanda Lozano",
+        "position": "Asesor de atención a clientes",
+        "assessment": "Atención a clientes · turno matutino",
+        "organization": "Comercializadora Río Claro",
+        "completed_at": "11/09/2026",
+        "tests": [
+          {
+            "name": "Prueba de demostración",
+            "integrity": { "blur_count": 0 },
+            "scales": [
+              { "code": "RES", "name": "Orientación a resultados", "normalized": 43.75, "percentile": 44, "category": "medio", "interpretation": "Puntaje medio en Orientación a resultados: dentro del promedio esperado." },
+              { "code": "COL", "name": "Colaboración", "normalized": 75, "percentile": 75, "category": "alto", "interpretation": "Puntaje alto en Colaboración: es una fortaleza marcada del candidato." },
+              { "code": "ADA", "name": "Adaptabilidad", "normalized": 68.75, "percentile": 69, "category": "alto", "interpretation": "Puntaje alto en Adaptabilidad: es una fortaleza marcada del candidato." }
+            ]
+          }
+        ],
+        "interview_questions": ["Cuéntame de una situación reciente relacionada con «Colaboración».", "Cuéntame de una situación reciente relacionada con «Adaptabilidad»."]
+      }
+    }
+  },
+  "GET /api/invitations/26/report": {
+    "status": 200,
+    "body": {
+      "data": {
+        "candidate": "Ricardo Peña",
+        "position": "Asesor de atención a clientes",
+        "assessment": "Atención a clientes · turno matutino",
+        "organization": "Comercializadora Río Claro",
+        "completed_at": "12/09/2026",
+        "tests": [
+          {
+            "name": "Prueba de demostración",
+            "integrity": { "blur_count": 1 },
+            "scales": [
+              { "code": "RES", "name": "Orientación a resultados", "normalized": 18.75, "percentile": 19, "category": "bajo", "interpretation": "Puntaje bajo en Orientación a resultados: podría ser un área a explorar en entrevista." },
+              { "code": "COL", "name": "Colaboración", "normalized": 56.25, "percentile": 56, "category": "medio", "interpretation": "Puntaje medio en Colaboración: dentro del promedio esperado." },
+              { "code": "ADA", "name": "Adaptabilidad", "normalized": 56.25, "percentile": 56, "category": "medio", "interpretation": "Puntaje medio en Adaptabilidad: dentro del promedio esperado." }
+            ]
+          }
+        ],
+        "interview_questions": ["Cuéntame de una situación reciente relacionada con «Orientación a resultados»."]
+      }
+    }
+  },
+  "GET /api/invitations/27/report": {
+    "status": 200,
+    "body": {
+      "data": {
+        "candidate": "Paola Medina",
+        "position": "Asesor de atención a clientes",
+        "assessment": "Atención a clientes · turno matutino",
+        "organization": "Comercializadora Río Claro",
+        "completed_at": "15/09/2026",
+        "tests": [
+          {
+            "name": "Prueba de demostración",
+            "integrity": { "blur_count": 0 },
+            "scales": [
+              { "code": "RES", "name": "Orientación a resultados", "normalized": 75, "percentile": 75, "category": "alto", "interpretation": "Puntaje alto en Orientación a resultados: es una fortaleza marcada del candidato." },
+              { "code": "COL", "name": "Colaboración", "normalized": 68.75, "percentile": 69, "category": "alto", "interpretation": "Puntaje alto en Colaboración: es una fortaleza marcada del candidato." },
+              { "code": "ADA", "name": "Adaptabilidad", "normalized": 81.25, "percentile": 81, "category": "alto", "interpretation": "Puntaje alto en Adaptabilidad: es una fortaleza marcada del candidato." }
+            ]
+          }
+        ],
+        "interview_questions": ["Cuéntame de una situación reciente relacionada con «Orientación a resultados».", "Cuéntame de una situación reciente relacionada con «Colaboración».", "Cuéntame de una situación reciente relacionada con «Adaptabilidad»."]
+      }
+    }
+  },
+  "GET /api/invitations/41/report": {
+    "status": 200,
+    "body": {
+      "data": {
+        "candidate": "Valentina Ríos",
+        "position": "Coordinador de almacén",
+        "assessment": "Coordinación de almacén · septiembre",
+        "organization": "Comercializadora Río Claro",
+        "completed_at": "18/09/2026",
+        "tests": [
+          {
+            "name": "Prueba de demostración",
+            "integrity": { "blur_count": 0 },
+            "scales": [
+              { "code": "RES", "name": "Orientación a resultados", "normalized": 81.25, "percentile": 81, "category": "alto", "interpretation": "Puntaje alto en Orientación a resultados: es una fortaleza marcada del candidato." },
+              { "code": "COL", "name": "Colaboración", "normalized": 68.75, "percentile": 69, "category": "alto", "interpretation": "Puntaje alto en Colaboración: es una fortaleza marcada del candidato." },
+              { "code": "ADA", "name": "Adaptabilidad", "normalized": 43.75, "percentile": 44, "category": "medio", "interpretation": "Puntaje medio en Adaptabilidad: dentro del promedio esperado." }
+            ]
+          },
+          {
+            "name": "Estilos de trabajo",
+            "integrity": { "blur_count": 2 },
+            "scales": [
+              { "code": "PLA", "name": "Planeación", "normalized": 80, "percentile": 80, "category": "alto", "interpretation": "Puntaje alto en Planeación: es una fortaleza marcada del candidato." },
+              { "code": "AUT", "name": "Autonomía", "normalized": 55, "percentile": 55, "category": "medio", "interpretation": "Puntaje medio en Autonomía: dentro del promedio esperado." },
+              { "code": "DET", "name": "Atención al detalle", "normalized": 30, "percentile": 30, "category": "bajo", "interpretation": "Puntaje bajo en Atención al detalle: podría ser un área a explorar en entrevista." },
+              { "code": "RIT", "name": "Ritmo de trabajo", "normalized": 65, "percentile": 65, "category": "medio", "interpretation": "Puntaje medio en Ritmo de trabajo: dentro del promedio esperado." }
+            ]
+          }
+        ],
+        "interview_questions": [
+          "Cuéntame de una situación reciente relacionada con «Orientación a resultados».",
+          "Cuéntame de una situación reciente relacionada con «Colaboración».",
+          "Cuéntame de una situación reciente relacionada con «Planeación».",
+          "Cuéntame de una situación reciente relacionada con «Atención al detalle»."
+        ]
+      }
+    }
+  },
+  "GET /api/invitations/42/report": {
+    "status": 200,
+    "body": {
+      "data": {
+        "candidate": "Joaquín Herrera",
+        "position": "Coordinador de almacén",
+        "assessment": "Coordinación de almacén · septiembre",
+        "organization": "Comercializadora Río Claro",
+        "completed_at": "20/09/2026",
+        "tests": [
+          {
+            "name": "Prueba de demostración",
+            "integrity": { "blur_count": 1 },
+            "scales": [
+              { "code": "RES", "name": "Orientación a resultados", "normalized": 50, "percentile": 50, "category": "medio", "interpretation": "Puntaje medio en Orientación a resultados: dentro del promedio esperado." },
+              { "code": "COL", "name": "Colaboración", "normalized": 87.5, "percentile": 88, "category": "alto", "interpretation": "Puntaje alto en Colaboración: es una fortaleza marcada del candidato." },
+              { "code": "ADA", "name": "Adaptabilidad", "normalized": 62.5, "percentile": 63, "category": "medio", "interpretation": "Puntaje medio en Adaptabilidad: dentro del promedio esperado." }
+            ]
+          },
+          {
+            "name": "Estilos de trabajo",
+            "integrity": { "blur_count": 0 },
+            "scales": [
+              { "code": "PLA", "name": "Planeación", "normalized": 40, "percentile": 40, "category": "medio", "interpretation": "Puntaje medio en Planeación: dentro del promedio esperado." },
+              { "code": "AUT", "name": "Autonomía", "normalized": 75, "percentile": 75, "category": "alto", "interpretation": "Puntaje alto en Autonomía: es una fortaleza marcada del candidato." },
+              { "code": "DET", "name": "Atención al detalle", "normalized": 50, "percentile": 50, "category": "medio", "interpretation": "Puntaje medio en Atención al detalle: dentro del promedio esperado." },
+              { "code": "RIT", "name": "Ritmo de trabajo", "normalized": 20, "percentile": 20, "category": "bajo", "interpretation": "Puntaje bajo en Ritmo de trabajo: podría ser un área a explorar en entrevista." }
+            ]
+          }
+        ],
+        "interview_questions": ["Cuéntame de una situación reciente relacionada con «Colaboración».", "Cuéntame de una situación reciente relacionada con «Autonomía».", "Cuéntame de una situación reciente relacionada con «Ritmo de trabajo»."]
+      }
+    }
+  },
+  "GET /api/invitations/43/report": {
+    "status": 200,
+    "body": {
+      "data": {
+        "candidate": "Lucía Paredes",
+        "position": "Coordinador de almacén",
+        "assessment": "Coordinación de almacén · septiembre",
+        "organization": "Comercializadora Río Claro",
+        "completed_at": "24/09/2026",
+        "tests": [
+          {
+            "name": "Prueba de demostración",
+            "integrity": { "blur_count": 0 },
+            "scales": [
+              { "code": "RES", "name": "Orientación a resultados", "normalized": 25, "percentile": 25, "category": "bajo", "interpretation": "Puntaje bajo en Orientación a resultados: podría ser un área a explorar en entrevista." },
+              { "code": "COL", "name": "Colaboración", "normalized": 56.25, "percentile": 56, "category": "medio", "interpretation": "Puntaje medio en Colaboración: dentro del promedio esperado." },
+              { "code": "ADA", "name": "Adaptabilidad", "normalized": 87.5, "percentile": 88, "category": "alto", "interpretation": "Puntaje alto en Adaptabilidad: es una fortaleza marcada del candidato." }
+            ]
+          },
+          {
+            "name": "Estilos de trabajo",
+            "integrity": { "blur_count": 0 },
+            "scales": [
+              { "code": "PLA", "name": "Planeación", "normalized": 65, "percentile": 65, "category": "medio", "interpretation": "Puntaje medio en Planeación: dentro del promedio esperado." },
+              { "code": "AUT", "name": "Autonomía", "normalized": 25, "percentile": 25, "category": "bajo", "interpretation": "Puntaje bajo en Autonomía: podría ser un área a explorar en entrevista." },
+              { "code": "DET", "name": "Atención al detalle", "normalized": 85, "percentile": 85, "category": "alto", "interpretation": "Puntaje alto en Atención al detalle: es una fortaleza marcada del candidato." },
+              { "code": "RIT", "name": "Ritmo de trabajo", "normalized": 45, "percentile": 45, "category": "medio", "interpretation": "Puntaje medio en Ritmo de trabajo: dentro del promedio esperado." }
+            ]
+          }
+        ],
+        "interview_questions": [
+          "Cuéntame de una situación reciente relacionada con «Orientación a resultados».",
+          "Cuéntame de una situación reciente relacionada con «Adaptabilidad».",
+          "Cuéntame de una situación reciente relacionada con «Autonomía».",
+          "Cuéntame de una situación reciente relacionada con «Atención al detalle»."
+        ]
+      }
+    }
+  },
+  "GET /api/invitations/44/report": { "status": 409, "body": { "message": "La evaluación no está completada." } },
+  "GET /api/invitations/45/report": { "status": 409, "body": { "message": "La evaluación no está completada." } },
+  "GET /api/invitations/46/report": { "status": 409, "body": { "message": "La evaluación no está completada." } },
+  "GET /api/invitations/58/report": { "status": 409, "body": { "message": "La evaluación no está completada." } },
+  "GET /api/invitations/59/report": { "status": 409, "body": { "message": "La evaluación no está completada." } },
+  "GET /api/invitations/60/report": { "status": 409, "body": { "message": "La evaluación no está completada." } },
+  "GET /api/invitations/61/report": { "status": 409, "body": { "message": "La evaluación no está completada." } },
+  "GET /api/invitations/50/report": { "status": 403, "body": { "message": "" } },
+  "GET /api/invitations/:id/report": { "status": 404, "body": { "message": "No query results for model [App\\Models\\Invitation]." } },
+  "POST /api/invitations/14/resend": { "status": 409, "body": { "message": "La evaluación ya fue completada." } },
+  "POST /api/invitations/23/resend": { "status": 409, "body": { "message": "La evaluación ya fue completada." } },
+  "POST /api/invitations/24/resend": { "status": 409, "body": { "message": "La evaluación ya fue completada." } },
+  "POST /api/invitations/25/resend": { "status": 409, "body": { "message": "La evaluación ya fue completada." } },
+  "POST /api/invitations/26/resend": { "status": 409, "body": { "message": "La evaluación ya fue completada." } },
+  "POST /api/invitations/27/resend": { "status": 409, "body": { "message": "La evaluación ya fue completada." } },
+  "POST /api/invitations/41/resend": { "status": 409, "body": { "message": "La evaluación ya fue completada." } },
+  "POST /api/invitations/42/resend": { "status": 409, "body": { "message": "La evaluación ya fue completada." } },
+  "POST /api/invitations/43/resend": { "status": 409, "body": { "message": "La evaluación ya fue completada." } },
+  "POST /api/invitations/50/resend": { "status": 403, "body": { "message": "" } },
+  "POST /api/invitations/:id/resend": { "status": 200, "body": { "ok": true } },
+
+  "GET /api/catalog": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "id": "personalidad",
+          "label": "Personalidad",
+          "count": 6,
+          "tests": [
+            { "id": 6, "slug": "adaptabilidad", "name": "Adaptabilidad", "description": "Evalúa flexibilidad ante cambios organizacionales.", "duration_min": 10, "item_count": 18 },
+            { "id": 4, "slug": "estilos-de-trabajo", "name": "Estilos de trabajo", "description": "Identifica preferencias en ambientes colaborativos.", "duration_min": 12, "item_count": 20 },
+            { "id": 5, "slug": "orientacion-a-resultados", "name": "Orientación a resultados", "description": "Mide tendencia al logro y tolerancia a la presión.", "duration_min": 10, "item_count": 18 },
+            { "id": 2, "slug": "perfil-de-conducta", "name": "Perfil de conducta", "description": "Evalúa cuatro dimensiones de comportamiento en el trabajo.", "duration_min": 15, "item_count": 24 },
+            { "id": 3, "slug": "rasgos-de-personalidad", "name": "Rasgos de personalidad", "description": "Mide estabilidad emocional, apertura y conciencia.", "duration_min": 20, "item_count": 40 },
+            { "id": 7, "slug": "trabajo-en-equipo", "name": "Trabajo en equipo", "description": "Mide preferencias de colaboración y roles grupales.", "duration_min": 12, "item_count": 20 }
+          ]
+        },
+        {
+          "id": "razonamiento",
+          "label": "Razonamiento",
+          "count": 4,
+          "tests": [
+            { "id": 11, "slug": "atencion-y-concentracion", "name": "Atención y concentración", "description": "Mide la capacidad de mantener el foco en tareas repetitivas.", "duration_min": 15, "item_count": 40 },
+            { "id": 8, "slug": "razonamiento-abstracto", "name": "Razonamiento abstracto", "description": "Evalúa la capacidad de identificar patrones y relaciones.", "duration_min": 25, "item_count": 30 },
+            { "id": 9, "slug": "razonamiento-numerico", "name": "Razonamiento numérico", "description": "Mide habilidad para interpretar datos cuantitativos.", "duration_min": 20, "item_count": 25 },
+            { "id": 10, "slug": "razonamiento-verbal", "name": "Razonamiento verbal", "description": "Evalúa comprensión de texto y argumentación lógica.", "duration_min": 20, "item_count": 25 }
+          ]
+        },
+        {
+          "id": "integridad",
+          "label": "Integridad",
+          "count": 3,
+          "tests": [
+            { "id": 13, "slug": "confiabilidad", "name": "Confiabilidad", "description": "Mide consistencia y cumplimiento de compromisos.", "duration_min": 12, "item_count": 24 },
+            { "id": 14, "slug": "etica-en-el-trabajo", "name": "Ética en el trabajo", "description": "Evalúa toma de decisiones en situaciones de dilema.", "duration_min": 18, "item_count": 20 },
+            { "id": 12, "slug": "honestidad-laboral", "name": "Honestidad laboral", "description": "Evalúa actitudes hacia normas y conducta en el trabajo.", "duration_min": 15, "item_count": 30 }
+          ]
+        },
+        {
+          "id": "intereses",
+          "label": "Intereses",
+          "count": 5,
+          "tests": [
+            { "id": 18, "slug": "ajuste-cultural", "name": "Ajuste cultural", "description": "Compara los valores del candidato con los de la organización.", "duration_min": 15, "item_count": 28 },
+            { "id": 19, "slug": "estilo-de-liderazgo", "name": "Estilo de liderazgo", "description": "Mide preferencias de dirección y toma de decisiones.", "duration_min": 18, "item_count": 30 },
+            { "id": 15, "slug": "intereses-vocacionales", "name": "Intereses vocacionales", "description": "Identifica áreas de motivación y afinidad profesional.", "duration_min": 20, "item_count": 45 },
+            { "id": 17, "slug": "motivadores-laborales", "name": "Motivadores laborales", "description": "Evalúa qué factores impulsan el desempeño individual.", "duration_min": 12, "item_count": 24 },
+            { "id": 16, "slug": "orientacion-de-carrera", "name": "Orientación de carrera", "description": "Mapea preferencias hacia áreas técnicas, sociales o gerenciales.", "duration_min": 15, "item_count": 30 }
+          ]
+        }
+      ]
+    }
+  },
+  "GET /api/catalog/adaptabilidad": {
+    "status": 200,
+    "body": { "data": { "id": 6, "slug": "adaptabilidad", "name": "Adaptabilidad", "category": "personalidad", "category_label": "Personalidad", "description": "Evalúa flexibilidad ante cambios organizacionales.", "duration_min": 10, "item_count": 18 } }
+  },
+  "GET /api/catalog/estilos-de-trabajo": {
+    "status": 200,
+    "body": {
+      "data": { "id": 4, "slug": "estilos-de-trabajo", "name": "Estilos de trabajo", "category": "personalidad", "category_label": "Personalidad", "description": "Identifica preferencias en ambientes colaborativos.", "duration_min": 12, "item_count": 20 }
+    }
+  },
+  "GET /api/catalog/orientacion-a-resultados": {
+    "status": 200,
+    "body": {
+      "data": {
+        "id": 5,
+        "slug": "orientacion-a-resultados",
+        "name": "Orientación a resultados",
+        "category": "personalidad",
+        "category_label": "Personalidad",
+        "description": "Mide tendencia al logro y tolerancia a la presión.",
+        "duration_min": 10,
+        "item_count": 18
+      }
+    }
+  },
+  "GET /api/catalog/perfil-de-conducta": {
+    "status": 200,
+    "body": {
+      "data": {
+        "id": 2,
+        "slug": "perfil-de-conducta",
+        "name": "Perfil de conducta",
+        "category": "personalidad",
+        "category_label": "Personalidad",
+        "description": "Evalúa cuatro dimensiones de comportamiento en el trabajo.",
+        "duration_min": 15,
+        "item_count": 24
+      }
+    }
+  },
+  "GET /api/catalog/rasgos-de-personalidad": {
+    "status": 200,
+    "body": {
+      "data": {
+        "id": 3,
+        "slug": "rasgos-de-personalidad",
+        "name": "Rasgos de personalidad",
+        "category": "personalidad",
+        "category_label": "Personalidad",
+        "description": "Mide estabilidad emocional, apertura y conciencia.",
+        "duration_min": 20,
+        "item_count": 40
+      }
+    }
+  },
+  "GET /api/catalog/trabajo-en-equipo": {
+    "status": 200,
+    "body": {
+      "data": { "id": 7, "slug": "trabajo-en-equipo", "name": "Trabajo en equipo", "category": "personalidad", "category_label": "Personalidad", "description": "Mide preferencias de colaboración y roles grupales.", "duration_min": 12, "item_count": 20 }
+    }
+  },
+  "GET /api/catalog/atencion-y-concentracion": {
+    "status": 200,
+    "body": {
+      "data": {
+        "id": 11,
+        "slug": "atencion-y-concentracion",
+        "name": "Atención y concentración",
+        "category": "razonamiento",
+        "category_label": "Razonamiento",
+        "description": "Mide la capacidad de mantener el foco en tareas repetitivas.",
+        "duration_min": 15,
+        "item_count": 40
+      }
+    }
+  },
+  "GET /api/catalog/razonamiento-abstracto": {
+    "status": 200,
+    "body": {
+      "data": {
+        "id": 8,
+        "slug": "razonamiento-abstracto",
+        "name": "Razonamiento abstracto",
+        "category": "razonamiento",
+        "category_label": "Razonamiento",
+        "description": "Evalúa la capacidad de identificar patrones y relaciones.",
+        "duration_min": 25,
+        "item_count": 30
+      }
+    }
+  },
+  "GET /api/catalog/razonamiento-numerico": {
+    "status": 200,
+    "body": {
+      "data": {
+        "id": 9,
+        "slug": "razonamiento-numerico",
+        "name": "Razonamiento numérico",
+        "category": "razonamiento",
+        "category_label": "Razonamiento",
+        "description": "Mide habilidad para interpretar datos cuantitativos.",
+        "duration_min": 20,
+        "item_count": 25
+      }
+    }
+  },
+  "GET /api/catalog/razonamiento-verbal": {
+    "status": 200,
+    "body": {
+      "data": { "id": 10, "slug": "razonamiento-verbal", "name": "Razonamiento verbal", "category": "razonamiento", "category_label": "Razonamiento", "description": "Evalúa comprensión de texto y argumentación lógica.", "duration_min": 20, "item_count": 25 }
+    }
+  },
+  "GET /api/catalog/confiabilidad": {
+    "status": 200,
+    "body": { "data": { "id": 13, "slug": "confiabilidad", "name": "Confiabilidad", "category": "integridad", "category_label": "Integridad", "description": "Mide consistencia y cumplimiento de compromisos.", "duration_min": 12, "item_count": 24 } }
+  },
+  "GET /api/catalog/etica-en-el-trabajo": {
+    "status": 200,
+    "body": {
+      "data": { "id": 14, "slug": "etica-en-el-trabajo", "name": "Ética en el trabajo", "category": "integridad", "category_label": "Integridad", "description": "Evalúa toma de decisiones en situaciones de dilema.", "duration_min": 18, "item_count": 20 }
+    }
+  },
+  "GET /api/catalog/honestidad-laboral": {
+    "status": 200,
+    "body": {
+      "data": { "id": 12, "slug": "honestidad-laboral", "name": "Honestidad laboral", "category": "integridad", "category_label": "Integridad", "description": "Evalúa actitudes hacia normas y conducta en el trabajo.", "duration_min": 15, "item_count": 30 }
+    }
+  },
+  "GET /api/catalog/ajuste-cultural": {
+    "status": 200,
+    "body": {
+      "data": { "id": 18, "slug": "ajuste-cultural", "name": "Ajuste cultural", "category": "intereses", "category_label": "Intereses", "description": "Compara los valores del candidato con los de la organización.", "duration_min": 15, "item_count": 28 }
+    }
+  },
+  "GET /api/catalog/estilo-de-liderazgo": {
+    "status": 200,
+    "body": {
+      "data": { "id": 19, "slug": "estilo-de-liderazgo", "name": "Estilo de liderazgo", "category": "intereses", "category_label": "Intereses", "description": "Mide preferencias de dirección y toma de decisiones.", "duration_min": 18, "item_count": 30 }
+    }
+  },
+  "GET /api/catalog/intereses-vocacionales": {
+    "status": 200,
+    "body": {
+      "data": {
+        "id": 15,
+        "slug": "intereses-vocacionales",
+        "name": "Intereses vocacionales",
+        "category": "intereses",
+        "category_label": "Intereses",
+        "description": "Identifica áreas de motivación y afinidad profesional.",
+        "duration_min": 20,
+        "item_count": 45
+      }
+    }
+  },
+  "GET /api/catalog/motivadores-laborales": {
+    "status": 200,
+    "body": {
+      "data": { "id": 17, "slug": "motivadores-laborales", "name": "Motivadores laborales", "category": "intereses", "category_label": "Intereses", "description": "Evalúa qué factores impulsan el desempeño individual.", "duration_min": 12, "item_count": 24 }
+    }
+  },
+  "GET /api/catalog/orientacion-de-carrera": {
+    "status": 200,
+    "body": {
+      "data": {
+        "id": 16,
+        "slug": "orientacion-de-carrera",
+        "name": "Orientación de carrera",
+        "category": "intereses",
+        "category_label": "Intereses",
+        "description": "Mapea preferencias hacia áreas técnicas, sociales o gerenciales.",
+        "duration_min": 15,
+        "item_count": 30
+      }
+    }
+  },
+  "GET /api/catalog/:slug": { "status": 404, "body": { "message": "" } },
+  "POST /api/leads": { "status": 201, "body": { "message": "Tu solicitud fue recibida. Te contactamos en un día hábil." } },
+
+  "GET /api/admin/*": { "status": 403, "body": { "message": "" } },
+  "POST /api/admin/*": { "status": 403, "body": { "message": "" } },
+  "PUT /api/admin/*": { "status": 403, "body": { "message": "" } },
+  "PATCH /api/admin/*": { "status": 403, "body": { "message": "" } },
+  "DELETE /api/admin/*": { "status": 403, "body": { "message": "" } }
+}

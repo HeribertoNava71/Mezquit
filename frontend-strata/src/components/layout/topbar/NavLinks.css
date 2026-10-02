@@ -1,0 +1,22 @@
+/* Navegación de escritorio de la barra (Strata.dc.html:60-64). La fila, los
+   enlaces y el estado activo vienen de TopBar.css (.st-topbar__nav y
+   .st-topbar__link); aquí solo la lista y el paso al menú móvil. */
+.st-nav-links {
+  display: flex;
+  min-width: 0;
+}
+
+.st-nav-links__list {
+  list-style: none;
+}
+
+.st-nav-links__item {
+  display: flex;
+}
+
+/* Por debajo de 768 px los enlaces viven en el menú móvil (mapa.md, sección 3). */
+@media (max-width: 767.98px) {
+  .st-nav-links {
+    display: none;
+  }
+}

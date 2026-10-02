@@ -1,59 +1,123 @@
-.footer {
-  background-color: var(--color-brunswick);
-  color: #ffffff;
-  padding-block: var(--sp-12);
-}
-
-.footer__inner {
-  max-width: var(--max-width);
-  margin-inline: auto;
-  padding-inline: var(--section-px);
+/* ==========================================================================
+   Pie de página (Strata.dc.html:1230-1243; en la home, :312-324; fila del
+   candidato, :1122-1132). Sin fondo: se ve el lienzo. Texto terciario
+   #6B6558 (5.46:1 sobre #FAF8F5; ≈4.6:1 en el centro del halo navy) y
+   enlaces secundarios #5B5545 (7.00:1).
+   ========================================================================== */
+.st-footer {
   display: flex;
-  flex-direction: column;
-  gap: var(--sp-8);
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-16); /* filas y columnas (Strata.dc.html:1231) */
+  width: 100%;
+  max-width: var(--layout-max);
+  margin-inline: auto;
+  padding: var(--space-24) var(--layout-page-pad-x) var(--space-36);
+  border-top: var(--border-width) solid var(--color-border-subtle);
+  font-size: var(--fs-small);
+  line-height: var(--lh-normal);
+  color: var(--color-text-tertiary);
 }
 
-@media (min-width: 768px) {
-  .footer__inner {
-    flex-direction: row;
-    align-items: flex-start;
-    justify-content: space-between;
+/* Enlaces y © a la derecha; al envolver, quedan debajo. 18 px entre enlaces
+   y entre filas (Strata.dc.html:1237). */
+.st-footer__end {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-18);
+  margin-left: auto;
+}
+
+.st-footer__links {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-18);
+  list-style: none;
+}
+
+/* Objetivo táctil de 24 px aunque el texto sea de 12 px (WCAG 2.5.8). El
+   margen negativo lo compensa: la fila mide lo que la marca (20 px) y el pie
+   conserva el alto del prototipo (81 px). */
+.st-footer__link {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--space-24);
+  margin-block: calc((var(--size-logo-sm) - var(--space-24)) / 2);
+  color: var(--color-text-secondary);
+}
+
+.st-footer__link:hover {
+  color: var(--color-link-hover);
+}
+
+/* ── Home: dentro del marco de la home, sin padding lateral (Strata.dc.html:312) ── */
+.st-footer--home {
+  max-width: none;
+  margin-top: var(--space-64);
+  padding: var(--space-24) 0 0;
+}
+
+.st-footer__link--internal:hover {
+  color: var(--color-link);
+}
+
+/* ── Compacto: fila centrada del acceso del candidato (Strata.dc.html:1122-1132) ── */
+.st-footer--compact {
+  justify-content: center;
+  max-width: none;
+  margin-top: var(--space-16);
+  padding: 0;
+  border-top: 0;
+}
+
+.st-footer__row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-4) var(--space-10);
+  list-style: none;
+}
+
+.st-footer__item {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-10);
+}
+
+/* Punto separador de 3 px (decorativo; DotSeparator tone="soft"). */
+.st-footer__item + .st-footer__item::before {
+  content: '';
+  flex: none;
+  width: var(--space-3);
+  height: var(--space-3);
+  border-radius: var(--radius-round);
+  background-color: var(--color-dot-soft);
+}
+
+.st-footer--compact .st-footer__link {
+  font-weight: var(--fw-medium);
+  color: var(--color-link);
+}
+
+.st-footer--compact .st-footer__link:hover {
+  color: var(--color-link-hover);
+}
+
+/* ── Móvil, alto contraste e impresión ─────────────────────────────────── */
+@media (max-width: 640px) {
+  .st-footer__end {
+    margin-left: 0;
   }
 }
 
-.footer__brand {
-  display: flex;
-  align-items: center;
-  gap: var(--sp-3);
-}
-.footer__logo {
-  height: 32px;
-  width: auto;
-  filter: brightness(0) invert(1);
-  opacity: 0.8;
-}
-.footer__name {
-  font-family: var(--font-display);
-  font-size: var(--text-xl);
-  font-weight: 600;
-  color: #ffffff;
+@media (forced-colors: active) {
+  .st-footer__item + .st-footer__item::before {
+    forced-color-adjust: none;
+    background-color: CanvasText;
+  }
 }
 
-.footer__links {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--sp-4) var(--sp-6);
-  list-style: none;
-}
-.footer__link {
-  font-size: var(--text-sm);
-  color: rgba(255, 255, 255, 0.75);
-  transition: color var(--t-fast);
-}
-.footer__link:hover { color: #ffffff; }
-
-.footer__legal {
-  font-size: var(--text-xs);
-  color: rgba(255, 255, 255, 0.5);
-  line-height: 1.6;
-}
+/* Impresión: global.css oculta .st-footer (lista única de lo que no se imprime). */

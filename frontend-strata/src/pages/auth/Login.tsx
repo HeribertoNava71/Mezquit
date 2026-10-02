@@ -1,7 +1,9 @@
 import { useState, type FormEvent } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { login } from '@/api/auth'
 import { useAuth } from '@/context/AuthContext'
+import { AvisoDeRuta } from '@/components/AvisoDeRuta'
+import { destinoTrasLogin, leerEstadoDeRuta } from '@/components/rutasDeSesion'
 import Button from '@/components/ui/Button'
 import FloatingInput from '@/components/ui/FloatingInput'
 import { SITE } from '@/config/site'
@@ -10,6 +12,7 @@ import './Auth.css'
 export default function Login() {
   const { setUser } = useAuth()
   const navigate = useNavigate()
+  const location = useLocation()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
@@ -22,7 +25,10 @@ export default function Login() {
     try {
       const user = await login(email, password)
       setUser(user)
-      navigate(user.organization_id ? '/app' : '/perfil')
+      // D-07, punto 6: vuelve a la ruta de origen (state.from) si es interna y el
+      // usuario puede abrirla; si no, /app con empresa o /perfil sin ella. replace:
+      // «Atrás» no regresa al formulario.
+      navigate(destinoTrasLogin(user, leerEstadoDeRuta(location.state).from), { replace: true })
     } catch {
       setError('Correo o contraseña incorrectos.')
     } finally {
@@ -39,6 +45,8 @@ export default function Login() {
         </div>
         <h1 className="auth__title">Entrar</h1>
 
+        {/* Aviso de la guarda o de SessionWatcher, p. ej. «Tu sesión expiró. Vuelve a entrar.» */}
+        <AvisoDeRuta />
         {error && <p className="auth__error-global">{error}</p>}
 
         <FloatingInput id="email" type="email" label="Correo electrónico" autoComplete="email"

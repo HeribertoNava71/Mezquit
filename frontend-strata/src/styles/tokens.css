@@ -230,6 +230,7 @@
   --fs-figure-sm: 1.3125rem; /* 21 px: vista previa */
 
   /* Tipografía · texto */
+  --fs-brand:    1.0625rem;  /* 17 px: nombre de la marca en las barras (Strata.dc.html:57) */
   --fs-lead:     1.0625rem;  /* 17 px: entradilla */
   --fs-body:     1rem;       /* 16 px: cuerpo base del documento */
   --fs-body-sm:  0.9375rem;  /* 15 px: cuerpo compacto, CTA grande */
@@ -330,6 +331,9 @@
   --border-width-thick:   2px;   /* aro de radio, subrayado activo */
   --size-target:          44px;  /* objetivo táctil mínimo en el flujo del candidato */
   --size-avatar:          30px;  /* avatar de iniciales de la barra y marca de la empresa (Strata.dc.html:69, 1001) */
+  --size-topbar-row:      40px;  /* fila de la barra: la pastilla (avatar de 30 px, 4 px arriba y abajo y borde de 1 px; Strata.dc.html:68) */
+  --size-logo:            30px;  /* salamandra de las barras (Strata.dc.html:56, 1144) */
+  --size-logo-sm:         20px;  /* salamandra del pie (Strata.dc.html:314, 1232) */
   --size-avatar-lg:       33px;  /* avatar cuadrado de la tabla de candidatos (Strata.dc.html:838) */
   --size-stat-badge:      38px;  /* cuadro numérico de la tarjeta de resumen (Strata.dc.html:699) */
 
@@ -469,6 +473,8 @@
   /* Animaciones listas (keyframes en animations.css). Las entradas usan fill
      «backwards» para no fijar transform y no romper el transform del hover. */
   --anim-screen-in:   st-screen-in var(--dur-screen) var(--ease-out) backwards;
+  /* Entrada de una pantalla que llega con #ancla: solo fundido, sin desplazar (RouteTransition) */
+  --anim-fade-in:     st-fade-in var(--dur-screen) var(--ease-out) backwards;
   --anim-rise-in:     st-rise-in var(--dur-screen) var(--ease-out) backwards;
   --anim-soft-in:     st-soft-in var(--dur-soft) var(--ease-out) backwards;
   --anim-row-in:      st-row-in var(--dur-row) var(--ease-out) backwards;
@@ -503,7 +509,7 @@
   --layout-exam-padding:    44px 28px 64px;
   --layout-exam-bar-padding: 15px 28px;
   --layout-end-padding:     48px 28px;
-  --layout-scroll-offset:   96px; /* scroll-padding-top: el foco no queda bajo la barra fija */
+  --layout-scroll-offset:   96px; /* scroll-padding-top: anclas y foco no quedan bajo la barra sticky */
 
   /* Anchos máximos */
   --width-report:    1080px;
@@ -530,7 +536,9 @@
 }
 
 /* Adaptación a móvil (desktop-first, usable a 360 px). Los breakpoints no
-   pueden ser variables CSS: 640 px (tablas a tarjetas, D-23) y 768 px (menú móvil). */
+   pueden ser variables CSS: 640 px (tablas a tarjetas, D-23), 768 px (menú
+   móvil) y 400 px (teléfonos chicos: margen lateral de 16 px). Los márgenes
+   bajan por pasos: 48/34/88 → 32/20/64 → 24/16/56. */
 @media (max-width: 640px) {
   :root {
     --layout-page-pad-top:  32px;
@@ -543,6 +551,19 @@
     --layout-exam-padding:  32px 20px 48px;
     --layout-exam-bar-padding: 12px 20px;
     --layout-end-padding:   32px 20px;
+  }
+}
+
+@media (max-width: 400px) {
+  :root {
+    --layout-page-pad-top:  24px;
+    --layout-page-pad-x:    16px;
+    --layout-page-pad-bottom: 56px;
+    --layout-topbar-pad-x:  16px;
+    --layout-access-padding: 24px 16px;
+    --layout-exam-padding:  24px 16px 40px;
+    --layout-exam-bar-padding: 12px 16px;
+    --layout-end-padding:   24px 16px;
   }
 }
 
@@ -610,8 +631,11 @@
   --t-fast: var(--dur-state) var(--ease-base);
   --t-base: var(--dur-lift) var(--ease-base);
 
-  /* Layout. --header-h se conserva (barra fija vieja y padding-top del body)
-     hasta que la Fase 2 los retire. */
+  /* Layout. El padding-top del body se retiró en la Fase 2 (las barras nuevas
+     son sticky). --header-h queda para lo viejo que aún lo usa: los min-height
+     de Hero.css y NotFoundPage.css (Fases 6 y 7).
+     --section-px vale 0 dentro de .st-page__content (PageLayout.css) para
+     no duplicar el margen lateral de las pantallas viejas. */
   --max-width:  var(--layout-max);
   --section-px: var(--layout-page-pad-x);
   --section-py: var(--layout-section-pad-y);
